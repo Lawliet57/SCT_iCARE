@@ -1,0 +1,456 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SCTiCareModelStoreContainer" CdmEntityContainer="SCTiCareEntities1">
+    <EntitySetMapping Name="Menu">
+      <EntityTypeMapping TypeName="SCTiCareModel.Menu">
+        <MappingFragment StoreEntitySet="Menu">
+          <ScalarProperty Name="idMenu" ColumnName="idMenu" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Controlador" ColumnName="Controlador" />
+          <ScalarProperty Name="Action" ColumnName="Action" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="SCTiCareModel.Roles">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="RolMenu">
+      <EntityTypeMapping TypeName="SCTiCareModel.RolMenu">
+        <MappingFragment StoreEntitySet="RolMenu">
+          <ScalarProperty Name="idRolMenu" ColumnName="idRolMenu" />
+          <ScalarProperty Name="idMenu" ColumnName="idMenu" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Usuarios">
+      <EntityTypeMapping TypeName="SCTiCareModel.Usuarios">
+        <MappingFragment StoreEntitySet="Usuarios">
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Consultorios">
+      <EntityTypeMapping TypeName="SCTiCareModel.Consultorios">
+        <MappingFragment StoreEntitySet="Consultorios">
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="NoConsultorio" ColumnName="NoConsultorio" />
+          <ScalarProperty Name="Consultorio" ColumnName="Consultorio" />
+          <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="CP" ColumnName="CP" />
+          <ScalarProperty Name="Colonia" ColumnName="Colonia" />
+          <ScalarProperty Name="Direccion" ColumnName="Direccion" />
+          <ScalarProperty Name="Cedula" ColumnName="Cedula" />
+          <ScalarProperty Name="CURP" ColumnName="CURP" />
+          <ScalarProperty Name="RFC" ColumnName="RFC" />
+          <ScalarProperty Name="NombreDoctor" ColumnName="NombreDoctor" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Orden">
+      <EntityTypeMapping TypeName="SCTiCareModel.Orden">
+        <MappingFragment StoreEntitySet="Orden">
+          <ScalarProperty Name="idConsultorio" ColumnName="idConsultorio" />
+          <ScalarProperty Name="CheckoutRequestName" ColumnName="CheckoutRequestName" />
+          <ScalarProperty Name="LinkPago" ColumnName="LinkPago" />
+          <ScalarProperty Name="ReferenciaOxxo" ColumnName="ReferenciaOxxo" />
+          <ScalarProperty Name="idOrdenConekta" ColumnName="idOrdenConekta" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+          <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+          <ScalarProperty Name="idCargo" ColumnName="idCargo" />
+          <ScalarProperty Name="MetodoPago" ColumnName="MetodoPago" />
+          <ScalarProperty Name="FechaCita" ColumnName="FechaCita" />
+          <ScalarProperty Name="Concepto" ColumnName="Concepto" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+          <ScalarProperty Name="Producto" ColumnName="Producto" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrdenConekta">
+      <EntityTypeMapping TypeName="SCTiCareModel.OrdenConekta">
+        <MappingFragment StoreEntitySet="OrdenConekta">
+          <ScalarProperty Name="Asignacion" ColumnName="Asignacion" />
+          <ScalarProperty Name="idConsultorio" ColumnName="idConsultorio" />
+          <ScalarProperty Name="CheckoutRequestName" ColumnName="CheckoutRequestName" />
+          <ScalarProperty Name="LinkPago" ColumnName="LinkPago" />
+          <ScalarProperty Name="ReferenciaOxxo" ColumnName="ReferenciaOxxo" />
+          <ScalarProperty Name="idOrdenConekta" ColumnName="idOrdenConekta" />
+          <ScalarProperty Name="Total" ColumnName="Total" />
+          <ScalarProperty Name="FechaActualizacion" ColumnName="FechaActualizacion" />
+          <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+          <ScalarProperty Name="idCargo" ColumnName="idCargo" />
+          <ScalarProperty Name="MetodoPago" ColumnName="MetodoPago" />
+          <ScalarProperty Name="FechaCita" ColumnName="FechaCita" />
+          <ScalarProperty Name="Concepto" ColumnName="Concepto" />
+          <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+          <ScalarProperty Name="FechaCreacion" ColumnName="FechaCreacion" />
+          <ScalarProperty Name="Producto" ColumnName="Producto" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idOrden" ColumnName="idOrden" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Ciudades">
+      <EntityTypeMapping TypeName="SCTiCareModel.Ciudades">
+        <MappingFragment StoreEntitySet="Ciudades">
+          <ScalarProperty Name="Estado" ColumnName="Estado" />
+          <ScalarProperty Name="Ciudad" ColumnName="Ciudad" />
+          <ScalarProperty Name="idCiudad" ColumnName="idCiudad" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Doctores">
+      <EntityTypeMapping TypeName="SCTiCareModel.Doctores">
+        <MappingFragment StoreEntitySet="Doctores">
+          <ScalarProperty Name="idSucursal" ColumnName="idSucursal" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idDoctor" ColumnName="idDoctor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Sucursales">
+      <EntityTypeMapping TypeName="SCTiCareModel.Sucursales">
+        <MappingFragment StoreEntitySet="Sucursales">
+          <ScalarProperty Name="ContadorFecha" ColumnName="ContadorFecha" />
+          <ScalarProperty Name="Contador" ColumnName="Contador" />
+          <ScalarProperty Name="SUC" ColumnName="SUC" />
+          <ScalarProperty Name="idCiudad" ColumnName="idCiudad" />
+          <ScalarProperty Name="Colonia" ColumnName="Colonia" />
+          <ScalarProperty Name="Calle" ColumnName="Calle" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idSucursal" ColumnName="idSucursal" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SkeedaPK">
+      <EntityTypeMapping TypeName="SCTiCareModel.SkeedaPK">
+        <MappingFragment StoreEntitySet="SkeedaPK">
+          <ScalarProperty Name="DrLindavis__Custom_field_23_" ColumnName="DrLindavis (Custom field 23)" />
+          <ScalarProperty Name="DrSatelite__Custom_field_22_" ColumnName="DrSatelite (Custom field 22)" />
+          <ScalarProperty Name="DrVeracruz__Custom_field_21_" ColumnName="DrVeracruz (Custom field 21)" />
+          <ScalarProperty Name="CheckCita__Custom_field_20_" ColumnName="CheckCita (Custom field 20)" />
+          <ScalarProperty Name="Otro___Custom_field_19_" ColumnName="Otro: (Custom field 19)" />
+          <ScalarProperty Name="Referido__Custom_field_18_" ColumnName="Referido (Custom field 18)" />
+          <ScalarProperty Name="Embarazo__Custom_field_17_" ColumnName="Embarazo (Custom field 17)" />
+          <ScalarProperty Name="EnfCronica__Custom_field_16_" ColumnName="EnfCronica (Custom field 16)" />
+          <ScalarProperty Name="Audicion__Custom_field_15_" ColumnName="Audicion (Custom field 15)" />
+          <ScalarProperty Name="Hipertens__Custom_field_14_" ColumnName="Hipertens (Custom field 14)" />
+          <ScalarProperty Name="Diabetes__Custom_field_13_" ColumnName="Diabetes (Custom field 13)" />
+          <ScalarProperty Name="Tiroides__Custom_field_12_" ColumnName="Tiroides (Custom field 12)" />
+          <ScalarProperty Name="Visión__Custom_field_11_" ColumnName="Visión (Custom field 11)" />
+          <ScalarProperty Name="Ciudad__Custom_field_10_" ColumnName="Ciudad (Custom field 10)" />
+          <ScalarProperty Name="Estado__Custom_field_9_" ColumnName="Estado (Custom field 9)" />
+          <ScalarProperty Name="FecNac__Custom_field_8_" ColumnName="FecNac (Custom field 8)" />
+          <ScalarProperty Name="Ord_Num__Custom_field_7_" ColumnName="Ord_Num (Custom field 7)" />
+          <ScalarProperty Name="RefPagoOxx__Custom_field_6_" ColumnName="RefPagoOxx (Custom field 6)" />
+          <ScalarProperty Name="TipoPago__Custom_field_5_" ColumnName="TipoPago (Custom field 5)" />
+          <ScalarProperty Name="TipoTramit__Custom_field_4_" ColumnName="TipoTramit (Custom field 4)" />
+          <ScalarProperty Name="TipoLicenc__Custom_field_3_" ColumnName="TipoLicenc (Custom field 3)" />
+          <ScalarProperty Name="Tel__Custom_field_2_" ColumnName="Tel (Custom field 2)" />
+          <ScalarProperty Name="Mail__Custom_field_1_" ColumnName="Mail (Custom field 1)" />
+          <ScalarProperty Name="Spaces" ColumnName="Spaces" />
+          <ScalarProperty Name="Gateway_charge_reference" ColumnName="Gateway charge reference" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Holder_tags" ColumnName="Holder tags" />
+          <ScalarProperty Name="Holder_email" ColumnName="Holder email" />
+          <ScalarProperty Name="Holder_telephone" ColumnName="Holder telephone" />
+          <ScalarProperty Name="Holder_organization" ColumnName="Holder organization" />
+          <ScalarProperty Name="Holder_last_name" ColumnName="Holder last name" />
+          <ScalarProperty Name="Holder_first_name" ColumnName="Holder first name" />
+          <ScalarProperty Name="Payment_status" ColumnName="Payment status" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Spaces_count" ColumnName="Spaces count" />
+          <ScalarProperty Name="Duration__minutes_" ColumnName="Duration (minutes)" />
+          <ScalarProperty Name="End" ColumnName="End" />
+          <ScalarProperty Name="Scheduled_start" ColumnName="Scheduled start" />
+          <ScalarProperty Name="idSkeeda" ColumnName="idSkeeda" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ConektaPK">
+      <EntityTypeMapping TypeName="SCTiCareModel.ConektaPK">
+        <MappingFragment StoreEntitySet="ConektaPK">
+          <ScalarProperty Name="item_description" ColumnName="item_description" />
+          <ScalarProperty Name="item_name" ColumnName="item_name" />
+          <ScalarProperty Name="customer_custom_reference" ColumnName="customer_custom_reference" />
+          <ScalarProperty Name="checkout_request_name" ColumnName="checkout_request_name" />
+          <ScalarProperty Name="checkout_request_type" ColumnName="checkout_request_type" />
+          <ScalarProperty Name="checkout_request_id" ColumnName="checkout_request_id" />
+          <ScalarProperty Name="canal" ColumnName="canal" />
+          <ScalarProperty Name="referencia_oxxo" ColumnName="referencia_oxxo" />
+          <ScalarProperty Name="auth_code" ColumnName="auth_code" />
+          <ScalarProperty Name="fecha_devolucion" ColumnName="fecha_devolucion" />
+          <ScalarProperty Name="fecha_contracargo" ColumnName="fecha_contracargo" />
+          <ScalarProperty Name="id_orden" ColumnName="id_orden" />
+          <ScalarProperty Name="id_subscripcion" ColumnName="id_subscripcion" />
+          <ScalarProperty Name="id_cliente" ColumnName="id_cliente" />
+          <ScalarProperty Name="direccion_de_envio" ColumnName="direccion_de_envio" />
+          <ScalarProperty Name="reglas_antifraude_disparadas" ColumnName="reglas_antifraude_disparadas" />
+          <ScalarProperty Name="decision_bancaria" ColumnName="decision_bancaria" />
+          <ScalarProperty Name="decision_antifraude" ColumnName="decision_antifraude" />
+          <ScalarProperty Name="checkout_id" ColumnName="checkout_id" />
+          <ScalarProperty Name="livemode" ColumnName="livemode" />
+          <ScalarProperty Name="id_recibo" ColumnName="id_recibo" />
+          <ScalarProperty Name="id_transaccion" ColumnName="id_transaccion" />
+          <ScalarProperty Name="meses_sin_intereses" ColumnName="meses_sin_intereses" />
+          <ScalarProperty Name="fecha_deposito" ColumnName="fecha_deposito" />
+          <ScalarProperty Name="referencia_deposito" ColumnName="referencia_deposito" />
+          <ScalarProperty Name="id_deposito" ColumnName="id_deposito" />
+          <ScalarProperty Name="ip_ciudad" ColumnName="ip_ciudad" />
+          <ScalarProperty Name="sucursal" ColumnName="sucursal" />
+          <ScalarProperty Name="pago_efectivo" ColumnName="pago_efectivo" />
+          <ScalarProperty Name="tipo_tarjeta" ColumnName="tipo_tarjeta" />
+          <ScalarProperty Name="tipo" ColumnName="tipo" />
+          <ScalarProperty Name="pais_tarjeta" ColumnName="pais_tarjeta" />
+          <ScalarProperty Name="marca_tarjeta" ColumnName="marca_tarjeta" />
+          <ScalarProperty Name="banco" ColumnName="banco" />
+          <ScalarProperty Name="numero_tarjeta" ColumnName="numero_tarjeta" />
+          <ScalarProperty Name="nombre_tarjetahabiente" ColumnName="nombre_tarjetahabiente" />
+          <ScalarProperty Name="ip" ColumnName="ip" />
+          <ScalarProperty Name="telefono" ColumnName="telefono" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+          <ScalarProperty Name="id_referencia" ColumnName="id_referencia" />
+          <ScalarProperty Name="tipo_cambio" ColumnName="tipo_cambio" />
+          <ScalarProperty Name="moneda_original" ColumnName="moneda_original" />
+          <ScalarProperty Name="cantidad_original" ColumnName="cantidad_original" />
+          <ScalarProperty Name="moneda" ColumnName="moneda" />
+          <ScalarProperty Name="monto_deposito" ColumnName="monto_deposito" />
+          <ScalarProperty Name="comision" ColumnName="comision" />
+          <ScalarProperty Name="monto_cargo" ColumnName="monto_cargo" />
+          <ScalarProperty Name="codigo_antifraude" ColumnName="codigo_antifraude" />
+          <ScalarProperty Name="codigo_falla" ColumnName="codigo_falla" />
+          <ScalarProperty Name="mensaje_error" ColumnName="mensaje_error" />
+          <ScalarProperty Name="estatus" ColumnName="estatus" />
+          <ScalarProperty Name="metodo_pago" ColumnName="metodo_pago" />
+          <ScalarProperty Name="tipo_transaccion" ColumnName="tipo_transaccion" />
+          <ScalarProperty Name="id_cargo" ColumnName="id_cargo" />
+          <ScalarProperty Name="fecha_pago" ColumnName="fecha_pago" />
+          <ScalarProperty Name="fecha_creacion" ColumnName="fecha_creacion" />
+          <ScalarProperty Name="idConekta" ColumnName="idConekta" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Recepcionista">
+      <EntityTypeMapping TypeName="SCTiCareModel.Recepcionista">
+        <MappingFragment StoreEntitySet="Recepcionista">
+          <ScalarProperty Name="idSucursal" ColumnName="idSucursal" />
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="idRecepcionista" ColumnName="idRecepcionista" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Archivo">
+      <EntityTypeMapping TypeName="SCTiCareModel.Archivo">
+        <MappingFragment StoreEntitySet="Archivo">
+          <ScalarProperty Name="NombreArchivo" ColumnName="NombreArchivo" />
+          <ScalarProperty Name="Archivo1" ColumnName="Archivo" />
+          <ScalarProperty Name="idArchivo" ColumnName="idArchivo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EPI">
+      <EntityTypeMapping TypeName="SCTiCareModel.EPI">
+        <MappingFragment StoreEntitySet="EPI">
+          <ScalarProperty Name="Capturista" ColumnName="Capturista" />
+          <ScalarProperty Name="Dictamen" ColumnName="Dictamen" />
+          <ScalarProperty Name="Usuario" ColumnName="Usuario" />
+          <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+          <ScalarProperty Name="Doctor" ColumnName="Doctor" />
+          <ScalarProperty Name="FinalCaptura" ColumnName="FinalCaptura" />
+          <ScalarProperty Name="InicioCaptura" ColumnName="InicioCaptura" />
+          <ScalarProperty Name="FechaExpediente" ColumnName="FechaExpediente" />
+          <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+          <ScalarProperty Name="TipoEPI" ColumnName="TipoEPI" />
+          <ScalarProperty Name="NoFolio" ColumnName="NoFolio" />
+          <ScalarProperty Name="BytesArchivo" ColumnName="BytesArchivo" />
+          <ScalarProperty Name="NombrePaciente" ColumnName="NombrePaciente" />
+          <ScalarProperty Name="idEPI" ColumnName="idEPI" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EstatusFactura">
+      <EntityTypeMapping TypeName="SCTiCareModel.EstatusFactura">
+        <MappingFragment StoreEntitySet="EstatusFactura">
+          <ScalarProperty Name="Estatus" ColumnName="Estatus" />
+          <ScalarProperty Name="idEstatusFactura" ColumnName="idEstatusFactura" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Facturacion">
+      <EntityTypeMapping TypeName="SCTiCareModel.Facturacion">
+        <MappingFragment StoreEntitySet="Facturacion">
+          <ScalarProperty Name="idEstatusFactura" ColumnName="idEstatusFactura" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="MontoPagado" ColumnName="MontoPagado" />
+          <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="RFC" ColumnName="RFC" />
+          <ScalarProperty Name="RazonSocial" ColumnName="RazonSocial" />
+          <ScalarProperty Name="idFactura" ColumnName="idFactura" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CERTIFICADO">
+      <EntityTypeMapping TypeName="SCTiCareModel.CERTIFICADO">
+        <MappingFragment StoreEntitySet="CERTIFICADO">
+          <ScalarProperty Name="Sexo" ColumnName="Sexo" />
+          <ScalarProperty Name="FechaToma" ColumnName="FechaToma" />
+          <ScalarProperty Name="FechaNacimiento" ColumnName="FechaNacimiento" />
+          <ScalarProperty Name="Respuesta" ColumnName="Respuesta" />
+          <ScalarProperty Name="Pasaporte" ColumnName="Pasaporte" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idCertificado" ColumnName="idCertificado" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Incidencias">
+      <EntityTypeMapping TypeName="SCTiCareModel.Incidencias">
+        <MappingFragment StoreEntitySet="Incidencias">
+          <ScalarProperty Name="idEPI" ColumnName="idEPI" />
+          <ScalarProperty Name="FechaIncidencia" ColumnName="FechaIncidencia" />
+          <ScalarProperty Name="Incidencia" ColumnName="Incidencia" />
+          <ScalarProperty Name="Capturista" ColumnName="Capturista" />
+          <ScalarProperty Name="Expediente" ColumnName="Expediente" />
+          <ScalarProperty Name="NombrePaciente" ColumnName="NombrePaciente" />
+          <ScalarProperty Name="idIncidencia" ColumnName="idIncidencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Aptitud">
+      <EntityTypeMapping TypeName="SCTiCareModel.Aptitud">
+        <MappingFragment StoreEntitySet="Aptitud">
+          <ScalarProperty Name="MotivoAptitud" ColumnName="MotivoAptitud" />
+          <ScalarProperty Name="Aptitud1" ColumnName="Aptitud" />
+          <ScalarProperty Name="idAptitud" ColumnName="idAptitud" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Canal">
+      <EntityTypeMapping TypeName="SCTiCareModel.Canal">
+        <MappingFragment StoreEntitySet="Canal">
+          <ScalarProperty Name="Canal1" ColumnName="Canal" />
+          <ScalarProperty Name="idCanal" ColumnName="idCanal" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Captura">
+      <EntityTypeMapping TypeName="SCTiCareModel.Captura">
+        <MappingFragment StoreEntitySet="Captura">
+          <ScalarProperty Name="FechaExpediente" ColumnName="FechaExpediente" />
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+          <ScalarProperty Name="Capturista" ColumnName="Capturista" />
+          <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+          <ScalarProperty Name="Doctor" ColumnName="Doctor" />
+          <ScalarProperty Name="FinalCaptura" ColumnName="FinalCaptura" />
+          <ScalarProperty Name="InicioCaptura" ColumnName="InicioCaptura" />
+          <ScalarProperty Name="EstatusCaptura" ColumnName="EstatusCaptura" />
+          <ScalarProperty Name="TipoTramite" ColumnName="TipoTramite" />
+          <ScalarProperty Name="NoExpediente" ColumnName="NoExpediente" />
+          <ScalarProperty Name="NombrePaciente" ColumnName="NombrePaciente" />
+          <ScalarProperty Name="idCaptura" ColumnName="idCaptura" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cita">
+      <EntityTypeMapping TypeName="SCTiCareModel.Cita">
+        <MappingFragment StoreEntitySet="Cita">
+          <ScalarProperty Name="Asistencia" ColumnName="Asistencia" />
+          <ScalarProperty Name="CC" ColumnName="CC" />
+          <ScalarProperty Name="Canal1" ColumnName="Canal" />
+          <ScalarProperty Name="Referencia" ColumnName="Referencia" />
+          <ScalarProperty Name="TipoTramite" ColumnName="TipoTramite" />
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+          <ScalarProperty Name="Folio" ColumnName="Folio" />
+          <ScalarProperty Name="idCanal" ColumnName="idCanal" />
+          <ScalarProperty Name="Recepcionista" ColumnName="Recepcionista" />
+          <ScalarProperty Name="Doctor" ColumnName="Doctor" />
+          <ScalarProperty Name="Sucursal" ColumnName="Sucursal" />
+          <ScalarProperty Name="FechaCita" ColumnName="FechaCita" />
+          <ScalarProperty Name="NoExpediente" ColumnName="NoExpediente" />
+          <ScalarProperty Name="TipoLicencia" ColumnName="TipoLicencia" />
+          <ScalarProperty Name="EstatusPago" ColumnName="EstatusPago" />
+          <ScalarProperty Name="NoOrden" ColumnName="NoOrden" />
+          <ScalarProperty Name="FechaReferencia" ColumnName="FechaReferencia" />
+          <ScalarProperty Name="TipoPago" ColumnName="TipoPago" />
+          <ScalarProperty Name="idCita" ColumnName="idCita" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Dictamen">
+      <EntityTypeMapping TypeName="SCTiCareModel.Dictamen">
+        <MappingFragment StoreEntitySet="Dictamen">
+          <ScalarProperty Name="idAptitud" ColumnName="idAptitud" />
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+          <ScalarProperty Name="Dictamen1" ColumnName="Dictamen" />
+          <ScalarProperty Name="idDictamen" ColumnName="idDictamen" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Expedientes">
+      <EntityTypeMapping TypeName="SCTiCareModel.Expedientes">
+        <MappingFragment StoreEntitySet="Expedientes">
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+          <ScalarProperty Name="Recepcionista" ColumnName="Recepcionista" />
+          <ScalarProperty Name="Expediente" ColumnName="Expediente" />
+          <ScalarProperty Name="idExpediente" ColumnName="idExpediente" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="IncidenciaDictamen">
+      <EntityTypeMapping TypeName="SCTiCareModel.IncidenciaDictamen">
+        <MappingFragment StoreEntitySet="IncidenciaDictamen">
+          <ScalarProperty Name="idCaptura" ColumnName="idCaptura" />
+          <ScalarProperty Name="FechaIncidencia" ColumnName="FechaIncidencia" />
+          <ScalarProperty Name="Incidencia" ColumnName="Incidencia" />
+          <ScalarProperty Name="Capturista" ColumnName="Capturista" />
+          <ScalarProperty Name="NoExpediente" ColumnName="NoExpediente" />
+          <ScalarProperty Name="idIncidencia" ColumnName="idIncidencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Paciente">
+      <EntityTypeMapping TypeName="SCTiCareModel.Paciente">
+        <MappingFragment StoreEntitySet="Paciente">
+          <ScalarProperty Name="CURP" ColumnName="CURP" />
+          <ScalarProperty Name="Folio" ColumnName="Folio" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReferenciasSB">
+      <EntityTypeMapping TypeName="SCTiCareModel.ReferenciasSB">
+        <MappingFragment StoreEntitySet="ReferenciasSB">
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+          <ScalarProperty Name="EstatusReferencia" ColumnName="EstatusReferencia" />
+          <ScalarProperty Name="ReferenciaSB" ColumnName="ReferenciaSB" />
+          <ScalarProperty Name="idReferencia" ColumnName="idReferencia" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
