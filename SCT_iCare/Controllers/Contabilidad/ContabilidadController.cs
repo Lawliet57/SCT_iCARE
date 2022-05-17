@@ -18,7 +18,7 @@ namespace SCT_iCare.Controllers.Contabilidad
         // GET: Maqueta
         public ActionResult Index(string canal, string cuenta, string sucursal, DateTime? fechaInicio, DateTime? fechaFinal, string tipoPago, int? referido, string conciliadooo, int? id)
         {//id nos indica si es 1 son Conciliados y si es 2 son NoConciliados
-                var Referido = db.Referido.Find(referido);
+            var Referido = db.Referido.Find(referido);
 
             if (conciliadooo == "" || conciliadooo == null)
             {
@@ -98,7 +98,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
         public ActionResult Conciliados(string canal, string cuenta, string sucursal, DateTime? fechaInicio, DateTime? fechaFinal, string tipoPago, int? referido)
         {
-             var Referido = db.Referido.Find(referido);
+            var Referido = db.Referido.Find(referido);
 
             if (sucursal == "" || sucursal == null)
             {
@@ -244,7 +244,7 @@ namespace SCT_iCare.Controllers.Contabilidad
         }
 
 
-        public ActionResult CambiarCuenta(int? id, string cuenta, string cuenta2, string comentario, string usuario, string canal, string sucursal, 
+        public ActionResult CambiarCuenta(int? id, string cuenta, string cuenta2, string comentario, string usuario, string canal, string sucursal,
             DateTime? fechaInicio, DateTime? fechaFinal, DateTime? fechaContable, string pago, int? idGestor, string usarSaldo, string FormadePago)
         {
             var cita = db.Cita.Find(id);
@@ -278,14 +278,14 @@ namespace SCT_iCare.Controllers.Contabilidad
         {
             var cita = db.PacienteESP.Find(id);
 
-            string historico = cita.CuentaComentario == null ? "" : cita.CuentaComentario + "+"; 
+            string historico = cita.CuentaComentario == null ? "" : cita.CuentaComentario + "+";
             string cuentaAnterior = cita.Cuenta == null ? "" : " PROVIENE DE " + cita.Cuenta;
             cita.CuentaComentario = historico + comentario + cuentaAnterior + " " + DateTime.Today.ToString("dd-MM-yy") + " POR " + usuario;
             cita.Cuenta = cuenta;
             cita.FechaContable = fechaContable == null ? DateTime.Now : fechaContable;
             cita.FormaPago = FormadePago;
 
-            if(pago != null || pago != "")
+            if (pago != null || pago != "")
             {
                 cita.TipoPago = pago;
             }
@@ -303,9 +303,9 @@ namespace SCT_iCare.Controllers.Contabilidad
 
         public ActionResult AbrirTicket(int? idTicket, string cuenta, string canal, string sucursal, string tiporeferido, string tipopago,
             DateTime? fechaInicio, DateTime? fechaFinal)
-        {                                          
+        {
             if (idTicket != null)
-            {                
+            {
                 TempData["ID"] = idTicket;
                 return RedirectToAction("Index", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal, sucursal = sucursal, cuenta = cuenta, canal = canal, referido = tiporeferido, tipopago = tipopago });
             }
@@ -335,7 +335,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
         }
 
-     
+
 
         public ActionResult AbrirTicket2(int id)
         {
@@ -423,8 +423,8 @@ namespace SCT_iCare.Controllers.Contabilidad
                 db.PagosGestores.Add(pagosGestores);
                 db.SaveChanges();
             }
-            
-            return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal});
+
+            return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal });
         }
 
 
