@@ -73,37 +73,38 @@
 
     var gestores = db.Referido.Where(w => w.Tipo == "GESTOR");
 
-    int? metaTotal = 0;
-    int? realizadoTotal = 0;
-    int? realizadoTotalMesAnterior = 0;
+    int metaTotal = 0;
+    int metaVisual = 0;
+    int realizadoTotal = 0;
+    int realizadoTotalMesAnterior = 0;
 
     int realizadoHoyRevaloracion = 0;
     int realizadoHoyNoRevaloracion = 0;
     int realizadoTotalRevaloracion = 0;
 
-    int? realizadoTotalCalculo = 0;
-    int? realizadoTotalCalculoMesAnterior = 0;
+    int realizadoTotalCalculo = 0;
+    int realizadoTotalCalculoMesAnterior = 0;
 
-    int? realizadoHoy = 0;
-    int? realizadoHoyMesAnterior = 0;
-    int? realizadoHoyMesAnteriorDiferencia = 0;
+    int realizadoHoy = 0;
+    int realizadoHoyMesAnterior = 0;
+    int realizadoHoyMesAnteriorDiferencia = 0;
 
-    int? realizadoTotalMesAnteriorFooter = 0;
-    int? planTotalMesAnteriorFooter = 0;
+    int realizadoTotalMesAnteriorFooter = 0;
+    int planTotalMesAnteriorFooter = 0;
 
-    double? metaPorcentaje = 0.00;
-    double? metaPorcentajeMesAnterior = 0.00;
-    double? metaPorcentajeMesAnteriorDiferencia = 0.00;
-    double? metaPorcentajeMesAnteriorDiferenciaFooter = 0.00;
+    double metaPorcentaje = 0.00;
+    double metaPorcentajeMesAnterior = 0.00;
+    double metaPorcentajeMesAnteriorDiferencia = 0.00;
+    double metaPorcentajeMesAnteriorDiferenciaFooter = 0.00;
 
     //COMENTADO PARA USAR DESPUES
     int? consulta = (from i in db.Canales where i.NombreCanal == "GESTOR" select i.Meta).FirstOrDefault();
-    metaTotal = consulta;
+    metaTotal = Convert.ToInt32(consulta);
 
     var realizadosTOTAL = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
 .Where(w => w.M.FinalCaptura != null);
 
-    int? realizadoGENERAL = 0;
+    int realizadoGENERAL = 0;
 
     foreach (var item in gestores)
     {
@@ -123,7 +124,7 @@
         realizadoTotalCalculoMesAnterior += realizadoHoyMesAnterior;
     }
 
-    int? Meta = metaTotal / db.Referido.Where(w => w.Tipo == "GESTOR").Count();
+    int Meta = metaTotal / db.Referido.Where(w => w.Tipo == "GESTOR").Count();
     double metaAs = db.Referido.Where(w => w.Tipo == "GESTOR").Count();
 }
 
@@ -237,8 +238,12 @@
             foreach (var item in gestores)
             {
                 <tr>
+
+                    @*AÑO ANTERIOR*@
                     <td style="text-align:center">
                     </td>
+
+                    @*MES ANTERIOR*@
                     <td style="border-right: none">
                         @{
                             realizadoHoyMesAnterior = realizadosTOTAL.Where(w => w.M.FechaExpdiente >= fecha3 && w.M.FechaExpdiente < fecha4 && w.N.ReferidoPor == item.Nombre && w.N.CanalTipo == item.Tipo).Count();
@@ -265,12 +270,14 @@
                     </td>
 
 
+                    @*PLAN*@
                     <td style="text-align: center; border-right: none">
                         @{
                             metaMuestra = (Convert.ToDouble(Convert.ToDouble(metaTotal) / 30) * fechaPlan.Day);
                             metaPorcentaje = 100 / metaAs;
+                            metaVisual = Convert.ToInt32((Convert.ToInt32(metaMuestra) / metaAs));
                         }
-                        <b class="pull-right">@Convert.ToInt32((Convert.ToInt32(metaMuestra) / metaAs))</b>@*<span class="pull-right" style="font-size:small">@metaPorcentaje.ToString("##.##")%</span>*@
+                        <b class="pull-right">@metaVisual</b>@*<span class="pull-right" style="font-size:small">@metaPorcentaje.ToString("##.##")%</span>*@
 
                     </td>
 
@@ -279,6 +286,8 @@
                         <span class="pull-right" style="font-size:small">&#37;</span>
                     </td>
 
+
+                    @*REAL*@
                     <td style="text-align: center; border-right: none">
                         <span class="field-tip">
                             @{
@@ -291,7 +300,7 @@
                                 metaPorcentajeMesAnteriorDiferencia = metaPorcentaje - metaPorcentajeMesAnterior;
                                 metaPorcentajeMesAnteriorDiferenciaFooter += metaPorcentajeMesAnteriorDiferencia;
 
-                                int? planDiferencia = realizadoHoy - Convert.ToInt32((Convert.ToInt32(Meta) / 30) * fechaPlan.Day);
+                                int planDiferencia = realizadoHoy - metaVisual;
 
                                 planTotalMesAnteriorFooter += planDiferencia;
 
@@ -311,10 +320,13 @@
                     </td>
 
 
+                    @*SUCURSAL*@
                     <td class="bg-info" style="text-align:center">
                         <b>@item.Nombre</b>
                     </td>
 
+
+                    @*PLAN VS REAL*@
                     <td style="text-align:center; border-right: none; border-left: none">
 
                         @if (planDiferencia > 0)
@@ -329,9 +341,7 @@
                         }
 
                         @{
-                            //double porcentajePlanDiferencia = Convert.ToDouble((100 * Convert.ToDouble(item.Meta)) / db.Canales.Sum(s => s.Meta));
-                            //double porcentajePlanDiferencia = metaPorcentaje - ((Convert.ToDouble(item.Meta)) * 100 / Convert.ToDouble(metaTotal));
-                            double? porcentajePlanDiferencia = (planDiferencia * 100) / Convert.ToDouble((Convert.ToDouble(Meta) / 30) * fechaPlan.Day);
+                            double? porcentajePlanDiferencia = (planDiferencia * 100) / metaVisual;
                             porcentajePlanDiferencia = realizadoHoy == 0 ? 0 : porcentajePlanDiferencia;
 
                             if (porcentajePlanDiferencia > 0)
@@ -364,7 +374,7 @@
 
                         @{
                             double Span = 0;
-                            double? diferenciaMeta = realizadoHoy - @Convert.ToInt32((Convert.ToInt32(Meta) / 30) * fechaPlan.Day);
+                            int diferenciaMeta = realizadoHoy - metaVisual; ;
                             diferenciaMeta = realizadoHoy == 0 ? 0 : diferenciaMeta;
                             string texto3 = "";
                             string parentesisDerechoAng = "";
@@ -389,14 +399,7 @@
                         }
 
                         @{
-                            double? porcentajeSpanPlanvsReal = (diferenciaMeta * (Span)) * (100) / @Convert.ToInt32((Convert.ToInt32(Meta) / 30) * fechaPlan.Day);
-                        }
-
-                        @if (realizadoTotal == 0 || @Convert.ToInt32((Convert.ToInt32(Meta) / 30) * fechaPlan.Day) == 0)
-                        {
-
-                            porcentajeSpanPlanvsReal = 0;
-
+                            double? porcentajeSpanPlanvsReal = (diferenciaMeta * (Span)) * (100) / metaVisual;
                         }
 
                         <span class="@texto3">@parentesisIZquierdoAng@Convert.ToDouble(porcentajeSpanPlanvsReal).ToString("##.##")@parentesisDerechoAng&zwnj;</span>
@@ -553,11 +556,13 @@
                 <b>TOTAL</b>
             </td>
 
+
+             @*TOTAL PLAN VS REAL*@
             <td class="bg-info" style="text-align: center; border-right: none">
                 @{
-                    int? planDiferenciaFooter = realizadoTotal - metaTotal;
+                    int planDiferenciaFooter = realizadoTotal - Convert.ToInt32(metaMuestra);
                     int spanPvsR = planDiferenciaFooter < 0 ? -1 : 1;
-                    int? mostradoPvsR = planDiferenciaFooter * spanPvsR;
+                    int mostradoPvsR = planDiferenciaFooter * spanPvsR;
 
                     if (planDiferenciaFooter > 0)
                     {
@@ -604,7 +609,7 @@
 
                 @{
                     double SpanPlanTotal = 0;
-                    double? diferenciaPantvsPact = realizadoTotal - metaTotal;
+                    double? diferenciaPantvsPact = realizadoTotal - metaMuestra;
                     diferenciaPantvsPact = realizadoTotal == 0 ? 0 : diferenciaPantvsPact;
                     string textoAngPt = "";
                     string parentesisDerechoAng1Pt = "";

@@ -33,6 +33,8 @@
     int saldo = 0;
     int saldoMesN = 0;
     int saldoMesA = 0;
+    int saldoTotalA = 0;
+    int saldoTotalN = 0;
     int pago = 0;
     int pagoAereos = 0;
     int pagoTotal = 0;
@@ -43,6 +45,9 @@
     string tipoReferido = "";
     int ingresoActual = 0;
     int ingresoActualAlt = 0;
+    int ingresosTotalesA = 0;
+    int ingresosTotalesN = 0;
+
 
 
     if (ViewBag.FechaInicio != null)
@@ -354,7 +359,6 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                 <th>Saldo del Mes</th>
                 <th>Ingresos Totales</th>
                 <th>Saldo Total</th>
-                <th>Saldo</th>
                 <th>Estatus</th>
                 <th></th>
             </tr>
@@ -486,10 +490,10 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                 </td>
                                 <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
 
-                            }
+                                                }
 
-                            else
-                            {
+                                                else
+                                                {
 
                                 <td>
                                     <span class="field-tip">
@@ -531,7 +535,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                 </td>
                                 <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
 
-                            }
+                                                }
 
                         }
 
@@ -646,67 +650,71 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                          saldoMesN = saldoMesN * (-1);
 
                                         <span>($@saldoMesN.ToString("###,###,###,###"))</span>
-                                    }
+                                     }
 
-                                    else
-                                    {
+                                     else
+                                     {
                                         <span>$@saldoMesN.ToString("###,###,###,###")</span>
 
-                                    }
+                                     }
 
-                                }
+                                 }
 
-                                ingresoActualAlt = 0;
+                                 ingresoActualAlt = 0;
 
                             }
                         </td>
 
                         @*INGRESOS TOTALES*@
                         <td>
+                            @{
+                                var ingresosTotalesAlt = (from i in db.Referido where i.idReferido == itemd.idReferido select i);
 
+                                foreach (var ingresosTALT in ingresosTotalesAlt)
+                                {
+
+                                    ingresosTotalesA = Convert.ToInt32(ingresosTALT.Efectivo);
+
+                                }
+
+                                <span>$@ingresosTotalesA.ToString("###,###,###,###")</span>
+                                }
                         </td>
 
                         @*SALDO TOTAL*@
                         <td>
-                        </td>
-
-
-                        <td>
-
                             @{
-                                saldo = pagoTotal + ingresoActualAlt - deudaTotal;
+                                saldoTotalA = pagoTotal1 + ingresosTotalesA - deudaTotal1;
 
                                 if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
                                 {
 
-                                    saldo = 0;
+                                    saldoTotalA = 0;
 
-                                    <span>$@saldo.ToString("###,###,###,###")</span>
+                                    <span>$@saldoTotalA.ToString("###,###,###,###")</span>
 
                                 }
 
                                 else
                                 {
-                                    if (saldo < 0)
+                                    if (saldoTotalA < 0)
                                     {
-                                        saldo = saldo * (-1);
+                                        saldoTotalA = saldoTotalA * (-1);
 
-                                        <span>($@saldo.ToString("###,###,###,###"))</span>
-                                    }
+                                        <span>($@saldoTotalA.ToString("###,###,###,###"))</span>
+                                     }
 
-                                    else
-                                    {
-                                        <span>$@saldo.ToString("###,###,###,###")</span>
+                                     else
+                                     {
+                                        <span>$@saldoTotalA.ToString("###,###,###,###")</span>
 
-                                    }
+                                     }
 
-                                }
-
-                                ingresoActualAlt = 0;
+                                 }
 
                             }
-
                         </td>
+
                         <td>
 
                             @{
@@ -1140,6 +1148,8 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 
                         </td>
 
+
+                        @*INGRESO DEL MES*@
                         <td>
                             @{
 
@@ -1157,43 +1167,32 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                             }
                         </td>
 
+                        @*SALDO DEL MES*@
                         <td>
-                        </td>
-
-                        <td>
-                        </td>
-
-                        <td>
-                        </td>
-
-
-
-                        <td>
-
                             @{
-                                saldo = pagoTotal + ingresoActual - deudaTotal;
+                                 saldoMesA = pagoTotal + ingresoActual - deudaTotal;
 
-                                if (item.Tipo == "MEDIOS DIGITALES" || item.Tipo == "CALL CENTER" || item.Tipo == "OTRO")
-                                {
+                                 if (item.Tipo == "MEDIOS DIGITALES" || item.Tipo == "CALL CENTER" || item.Tipo == "OTRO")
+                                 {
 
-                                    saldo = 0;
+                                     saldoMesA = 0;
 
-                                    <span>$@saldo.ToString("###,###,###,###")</span>
+                                    <span>$@saldoMesA.ToString("###,###,###,###")</span>
 
                                 }
 
                                 else
                                 {
-                                    if (saldo < 0)
+                                    if (saldoMesA < 0)
                                     {
-                                        saldo = saldo * (-1);
+                                        saldoMesA = saldoMesA * (-1);
 
-                                        <span>($@saldo.ToString("###,###,###,###"))</span>
+                                        <span>($@saldoMesA.ToString("###,###,###,###"))</span>
                                     }
 
                                     else
                                     {
-                                        <span>$@saldo.ToString("###,###,###,###")</span>
+                                        <span>$@saldoMesA.ToString("###,###,###,###")</span>
 
                                     }
 
@@ -1202,43 +1201,61 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                 ingresoActual = 0;
 
                             }
-
-
-                            @*@{
-                                    int saldoGestor = (from i in db.Cita where i.CanalTipo == item.Tipo && i.ReferidoPor == item.Nombre && i.TipoPago == "Pendiente de Pago" && i.FechaCita >= fecha1 && i.FechaCita < fecha2 select i).Count();
-
-                                    saldo = item.PrecioNormalconIVA == null ? saldoGestor * Convert.ToInt32(item.PrecioNormal) : saldoGestor * Convert.ToInt32(item.PrecioNormalconIVA);
-
-                                    if (saldoGestor != 0)
-                                    {
-                                        if (saldo < 0)
-                                        {
-                                            <span><b>+$@saldo.ToString("###,###,###,###")</b></span>
-
-                                            if (item.PrecioNormalconIVA != null)
-                                            {
-                                                var episDisponibles = saldo / Convert.ToInt32(item.PrecioNormalconIVA);
-                                                <span style="font-size: xx-small">( @episDisponibles epis)</span>
-                                            }
-                                            else
-                                            {
-                                                var episDisponibles = saldo / Convert.ToInt32(item.PrecioNormal);
-                                                <span style="font-size: xx-small">( @episDisponibles epis)</span>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <span>$@saldo.ToString("###,###,###,###")</span>
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        <span>$0.00</span>
-                                    }
-                                }*@
-
                         </td>
+                               
+
+                         @*INGRESOS TOTALES NORMALES*@
+                        <td>
+                             @{
+                                    var ingresosTotalesNormales = (from i in db.Referido where i.idReferido == item.idReferido select i);
+
+                                    foreach (var ingresosTN in ingresosTotalesNormales)
+                                    {
+
+                                        ingresosTotalesN = Convert.ToInt32(ingresosTN.Efectivo);
+
+                                    }
+
+                                    <span>$@ingresosTotalesN.ToString("###,###,###,###")</span>
+
+                                }
+                        </td>
+
+
+                        @*SALDO TOTAL*@
+                        <td>
+                            @{
+                                saldoTotalN = pagoTotal1 + ingresosTotalesN - deudaTotal1;
+
+                                if (item.Tipo == "MEDIOS DIGITALES" || item.Tipo == "CALL CENTER" || item.Tipo == "OTRO")
+                                {
+
+                                    saldoTotalN = 0;
+
+                                    <span>$@saldoTotalN.ToString("###,###,###,###")</span>
+
+                                }
+
+                                else
+                                {
+                                    if (saldoTotalN < 0)
+                                    {
+                                        saldoTotalN = saldoTotalN * (-1);
+
+                                        <span>($@saldoTotalN.ToString("###,###,###,###"))</span>
+                                     }
+
+                                     else
+                                     {
+                                        <span>$@saldoTotalN.ToString("###,###,###,###")</span>
+
+                                     }
+
+                                 }
+
+                            }
+                        </td>
+
                         <td>
 
                             @{

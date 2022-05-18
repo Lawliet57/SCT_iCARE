@@ -359,7 +359,6 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                 <th>Saldo del Mes</th>
                 <th>Ingresos Totales</th>
                 <th>Saldo Total</th>
-                <th>Saldo</th>
                 <th>Estatus</th>
                 <th></th>
             </tr>
@@ -714,9 +713,6 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                  }
 
                             }
-                        </td>
-
-                        <td>
                         </td>
 
                         <td>
@@ -1260,46 +1256,6 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                             }
                         </td>
 
-
-
-                        <td>
-
-
-                            @*@{
-                                    int saldoGestor = (from i in db.Cita where i.CanalTipo == item.Tipo && i.ReferidoPor == item.Nombre && i.TipoPago == "Pendiente de Pago" && i.FechaCita >= fecha1 && i.FechaCita < fecha2 select i).Count();
-
-                                    saldo = item.PrecioNormalconIVA == null ? saldoGestor * Convert.ToInt32(item.PrecioNormal) : saldoGestor * Convert.ToInt32(item.PrecioNormalconIVA);
-
-                                    if (saldoGestor != 0)
-                                    {
-                                        if (saldo < 0)
-                                        {
-                                            <span><b>+$@saldo.ToString("###,###,###,###")</b></span>
-
-                                            if (item.PrecioNormalconIVA != null)
-                                            {
-                                                var episDisponibles = saldo / Convert.ToInt32(item.PrecioNormalconIVA);
-                                                <span style="font-size: xx-small">( @episDisponibles epis)</span>
-                                            }
-                                            else
-                                            {
-                                                var episDisponibles = saldo / Convert.ToInt32(item.PrecioNormal);
-                                                <span style="font-size: xx-small">( @episDisponibles epis)</span>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <span>$@saldo.ToString("###,###,###,###")</span>
-                                        }
-
-                                    }
-                                    else
-                                    {
-                                        <span>$0.00</span>
-                                    }
-                                }*@
-
-                        </td>
                         <td>
 
                             @{
