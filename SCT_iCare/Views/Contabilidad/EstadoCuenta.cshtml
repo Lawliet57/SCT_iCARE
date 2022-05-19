@@ -1,0 +1,961 @@
+﻿@*XLSX *@
+<script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+
+
+@{
+    ViewBag.Title = "EstadoCuenta";
+
+    GMIEntities db = new GMIEntities();
+    var oUser = (Usuarios)HttpContext.Current.Session["User"];
+
+
+    //Fecha del mes.
+
+    int inicioMes = 1;
+
+    int diaMes = DateTime.Today.Day;
+    int MES = DateTime.Today.Month;
+    int ANIO = DateTime.Today.Year;
+    DateTime fechaInicio = DateTime.Today;
+    DateTime fechaFinal = DateTime.Today;
+
+
+    DateTime FECHAI = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), inicioMes);
+    DateTime FECHAF = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), diaMes);
+    DateTime FECHAFS = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), diaMes);
+    TimeSpan difFechas = FECHAF - fechaInicio;
+
+
+    int deuda = 0;
+    int deudaAereos = 0;
+    int deudaTotal = 0;
+    int deuda1 = 0;
+    int deudaAereos1 = 0;
+    int deudaTotal1 = 0;
+    int saldo = 0;
+    int pago = 0;
+    int pagoAereos = 0;
+    int pagoTotal = 0;
+    int pago1 = 0;
+    int pagoAereos1 = 0;
+    int pagoTotal1 = 0;
+    string canal = "";
+    string referido = "";
+    string tipoReferido = "";
+    string filtroMes = "";
+    string sucursal = "";
+    string cuenta = null;
+    string conciliado = null;
+    int ingresoActual = 0;
+    int ingresoActualAlt = 0;
+    int pagosGesTAV = 0;
+    int pagosGesTNV = 0;
+    int ingresosTotalesA = 0;
+    int ingresosTotalesN = 0;
+
+
+
+
+    string nombreExcel = "Conciliacion";
+
+    int flag = 1;
+
+    if (ViewBag.FechaInicio != null)
+    {
+        fechaInicio = Convert.ToDateTime(ViewBag.FechaInicio);
+        DateTime parset = fechaInicio.AddMonths(1).AddDays(-1);
+
+        fechaFinal = parset;
+        FECHAF = fechaFinal;
+        FECHAFS = FECHAF;
+    }
+
+    else
+    {
+
+        fechaInicio = FECHAI;
+        fechaFinal = FECHAF;
+        FECHAFS = FECHAF;
+        fechaFinal = fechaFinal.AddDays(1);
+
+    }
+
+    if (ViewBag.FechaFinal != null)
+    {
+        fechaFinal = Convert.ToDateTime(ViewBag.FechaFinal);
+        FECHAFS = fechaFinal;
+        fechaFinal = fechaFinal.AddDays(1);
+    }
+
+    else
+    {
+
+        fechaFinal = FECHAF;
+        FECHAFS = FECHAF;
+        fechaFinal = fechaFinal.AddDays(1);
+
+    }
+
+    //QUERYS TABLA REGISTROS
+
+    var modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+    Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+    && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
+
+
+    var modelo1 = db.PacienteESP.
+        Where(s =>  s.EstatusCaptura == "Terminado"
+        && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
+
+
+    var modeloExcel = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+        Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+        Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+        && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
+
+    var modeloExcel1 = db.PacienteESP.
+        Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.EstatusCaptura == "Terminado"
+        && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
+
+
+    //QUERY PARA GESTORES
+
+    //if (ViewBag.Conciliados == true)
+    //{
+    //    modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+    //Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    //Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+    //&& s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado != null).OrderBy(o => o.A.M.Cuenta);
+
+
+    //    modelo1 = db.PacienteESP.
+    //       Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
+    //       && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado != null).OrderBy(o => o.Cuenta);
+
+
+    //    modeloExcel = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+    //       Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    //       Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+    //       && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado != null).OrderBy(o => o.A.M.Cuenta);
+
+    //    modeloExcel1 = db.PacienteESP.
+    //       Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
+    //       && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado != null).OrderBy(o => o.Cuenta);
+
+    //}
+    //else if (ViewBag.NoConciliados == true)
+    //{
+    //    modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+    //Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    //Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+    //&& s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
+
+
+    //    modelo1 = db.PacienteESP.
+    //       Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
+    //       && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado == null).OrderBy(o => o.Cuenta);
+
+
+    //    modeloExcel = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+    //       Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    //       Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+    //       && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
+
+    //    modeloExcel1 = db.PacienteESP.
+    //       Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
+    //       && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado == null).OrderBy(o => o.Cuenta);
+
+
+    //}
+
+
+
+
+    //QUERYS FILTROS
+
+    if (ViewBag.Canal != "")
+    {
+        canal = ViewBag.Canal;
+
+        modelo = modelo.Where(w => w.A.M.CanalTipo.Contains(canal)).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.CanalTipo.Contains(canal)).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.CanalTipo.Contains(canal)).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.CanalTipo.Contains(canal)).OrderBy(o => o.Cuenta);
+    }
+
+    int idReferido = ViewBag.idReferido;
+
+    if (ViewBag.Referido != "" && ViewBag.idReferido != 0)
+    {
+        referido = ViewBag.Referido;
+
+        modelo = modelo.Where(w => w.A.M.ReferidoPor.Contains(referido)).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.ReferidoPor.Contains(referido)).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.ReferidoPor.Contains(referido)).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.ReferidoPor.Contains(referido)).OrderBy(o => o.Cuenta);
+
+        var Tipo = (from i in db.Referido where i.idReferido == idReferido select i).FirstOrDefault();
+        tipoReferido = Tipo.Tipo;
+    }
+
+
+
+}
+
+@*Referencia estilos para ambas tablas*@
+
+<link rel="stylesheet" type="text/css" href="~/estilos.css">
+
+
+<br />
+<h2 style="color: white"> Estado de Cuenta</h2>
+@*<h5 style="color:yellow">Resultados del día @fechaInicio.ToString("dd-MMMM-yyyy") al día @FECHAFS.ToString("dd-MMMM-yyyy")</h5>*@
+<br />
+
+<form class="form-inline" method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EstadoCuenta")">
+    <div>
+
+        <select name="canal" style="font-size:1.5vh; width: 100px" class="form-control">
+            @{
+                if (ViewBag.Canal == "")
+                {
+                    <option value="">CANAL</option>
+                }
+                else
+                {
+                    <option value="@canal">@canal.ToUpper()</option>
+                }
+            }
+            @{
+                foreach (var item in db.Canales)
+                {
+                    <option value="@item.NombreCanal">@item.NombreCanal</option>
+                }
+            }
+            <option value="">TODOS</option>
+        </select>
+
+
+
+        <select name="referido" style="font-size: 1.5vh; width: 130px" class="form-control">
+            @{
+                if (ViewBag.Referido == "" || ViewBag.Referido == null)
+                {
+                    <option value="">REFERIDO POR</option>
+                }
+                else
+                {
+                    <option value="@referido">@referido</option>
+                }
+            }
+            @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
+            {
+                <option value="@item.idReferido">@item.Nombre -- @item.Tipo</option>
+            }
+            <option value="">TODOS</option>
+        </select>
+
+
+
+
+
+
+        @*FILTROS DE FECHA POR MES*@
+
+        @{
+
+            DateTime ViewBagFechaInicio = Convert.ToDateTime(ViewBag.fechaInicio);
+            var SetFechaInicio = ViewBagFechaInicio.Date.ToString("yyyy-MM");
+
+            if (ViewBag.fechaInicio != null)
+            {
+
+                <input type="month" name="fechaInicio" class="form-control" value="@SetFechaInicio" style="width: 160px;" />
+
+            }
+
+            else
+
+            {
+
+                <input type="month" name="fechaInicio" class="form-control" value="" style="width: 160px;" />
+
+            }
+
+        }
+
+        @{
+
+            DateTime ViewBagFechaFinal = Convert.ToDateTime(ViewBag.fechaFinal);
+            var SetFechaFinal = ViewBagFechaFinal.Date.ToString("yyyy-MM-dd");
+
+            if (ViewBag.fechaFinal != null)
+            {
+
+                <input type="hidden" name="fechaFinal" class="form-control" value="@SetFechaFinal" style="width: 160px;" />
+
+            }
+
+            else
+
+            {
+
+                <input type="hidden" name="fechaFinal" class="form-control" value="" style="width: 160px;" />
+
+            }
+
+        }
+
+
+
+        <input type="submit" class="btn btn-info" value="Enviar" />
+
+        <a href="~/Contabilidad/EstadoCuenta">
+            <span type="button" class="btn btn-success">Limpiar</span>
+        </a>
+
+    </div>
+
+
+</form>
+
+
+@*EXPORTAR PDF Y REGRESO A PAGOS*@
+<script>
+
+    function ExportToExcel(type, fn, dl) {
+        var elt = document.getElementById('tbl_exporttable_to_xls');
+        var wb = XLSX.utils.table_to_book(elt, { sheet: "sheet1" });
+        return dl ?
+            XLSX.write(wb, { bookType: type, bookSST: true, type: 'base64' }) :
+            XLSX.writeFile(wb, fn || ('@nombreExcel' + ' del @Convert.ToDateTime(fechaInicio).ToString("dd-MM-yy")' + ' al @Convert.ToDateTime(fechaFinal).AddDays(-1).ToString("dd-MM-yy").' + (type || 'xlsx')));
+    }
+
+</script>
+
+@*<div class="col-lg-3" id="barras" style="margin: 10px 0 0 10px; display:inline-grid">
+        <div class="input-group">
+            <input type="text" class="form-control input-g" id="buscador" name="dato" placeholder="Paciente o Expediente">
+            <span class="input-group-btn">
+                <button class="btn btn-info buscar" id="buscar" type="button"><span class="glyphicon glyphicon-search"></span></button>
+            </span>
+        </div>
+    </div>*@
+
+
+
+
+
+
+
+
+
+
+|   <div>
+    <a href="~/Contabilidad/Pagos">
+        <span type="button" class="btn btn-success" style="background-color:Highlight">Regresar a control Pagos</span>
+    </a>
+    @*<button style="background-color:limegreen" class="btn btn-info dropdown-toggle" onclick="ExportToExcel('xlsx')">Descargar reporte </button>*@
+</div>
+
+
+
+
+
+
+<div class="tablaScroll3" style="width:100%; display:inline-block; min-width:340px; margin:2%">
+    <br />
+    @*<h3 style="color:white">Resumen Estado de Cuenta</h3>*@
+<table style="color: limegreen; width: 100%; min-width: 400px">
+    <thead style="color:white">
+        <tr class="bg-primary">
+
+            <th>
+                <h4>Nombre de Gestor</h4>
+            </th>
+            <th>
+               
+                <h4> Total EPIs</h4>
+            </th>
+            <th>
+               
+                <h4> Total Importe</h4>
+            </th>
+            <th>
+                <h4>Saldo Actual</h4>
+            </th>
+            <th>
+                <h4>Periodo de fecha</h4>
+                </th>
+            <th>
+                
+                <h4>Días del Periodo</h4>
+            </th>
+           
+            <th>
+                <h4>Total Abonado</h4>
+            </th>
+            <th>
+                <h4>Última fecha Importe</h4>
+            </th>
+            <th>
+                <h4>Última fecha Abono</h4>
+            </th>
+        </tr>
+    </thead>
+
+
+
+    @{
+        foreach (var itemd in db.Referido.OrderBy(o => o.Orden).ThenBy(o => o.Tipo).ThenBy(o => o.Nombre))
+        {
+            int gestoresNoNullosAlt = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
+            var angelosval = 0;
+
+            if (gestoresNoNullosAlt != 0)
+            {
+
+        <tr>
+            <td>
+                <b>@itemd.Nombre</b><span style="font-size:xx-small"> @itemd.Tipo</span>
+            </td>
+
+            @{
+                //NUMERO DE EPIS NO AEREOS DENTRO DEL RANGO DE FECHA CON IVA
+                int deudaGestor = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.TipoLicencia != "AEREO" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
+
+                //NUMERO DE EPIS NO AEREOS DENTRO DEL RANGO DE FECHA SIN IVA
+                int deudaGestorSIVA = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.TipoLicencia != "AEREO" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
+
+                //NUMERO DE EPIS AEREOS DENTRO DEL RANGO DE FECHA
+                int deudaGestorAereo = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.TipoLicencia == "AEREO" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
+
+                //NUMERO DE EPIS TOTALES, AEREOS Y NO AEREOS DENTRO DEL RANGO DE FECHA
+                int deudaGestorTotal = deudaGestor + deudaGestorAereo;
+
+
+                //NUMERO DE EPIS NO AEREOS FUERA DEL RANGO DE FECHA
+                int deudaGestor1 = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.TipoLicencia != "AEREO" select i).Count();
+
+                //NUMERO DE EPIS AEREOS FUERA DEL RANGO DE FECHA
+                int deudaGestorAereo1 = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.TipoLicencia == "AEREO" select i).Count();
+
+                //NUMERO DE EPIS TOTALES, AEREOS Y NO AEREOS FUERA DEL RANGO DE FECHA
+                int deudaGestorTotal1 = deudaGestor1 + deudaGestorAereo1;
+
+
+                //DINERO DE EPIS NO AEREOS DENTRO DEL RANGO DE FECHA
+                deuda = itemd.PrecioNormalconIVA == null || itemd.PrecioNormalconIVA == "0" ? deudaGestor * Convert.ToInt32(itemd.PrecioNormal) : deudaGestor * Convert.ToInt32(itemd.PrecioNormalconIVA);
+
+                //DINERO DE EPIS AEREOS DENTRO DEL RANGO DE FECHA
+
+                if (itemd.PrecioAereo == null || itemd.PrecioAereo == "0")
+                {
+                    deudaAereos = deudaGestorAereo * 3480;
+                }
+
+                else
+                {
+                    deudaAereos = deudaGestorAereo * Convert.ToInt32(itemd.PrecioAereo);
+                }
+
+                //DINERO DE EPIS TOTALES, AEREOS Y NO AEREOS DENTRO DEL RANGO DE FECHA
+                deudaTotal = deuda + deudaAereos;
+
+
+                //DINERO DE EPIS NO AEREOS FUERA DEL RANGO DE FECHA
+                deuda1 = itemd.PrecioNormalconIVA == null || itemd.PrecioNormalconIVA == "0" ? deudaGestor1 * Convert.ToInt32(itemd.PrecioNormal) : deudaGestor1 * Convert.ToInt32(itemd.PrecioNormalconIVA);
+
+                //DINERO DE EPIS AEREOS FUERA DEL RANGO DE FECHA
+
+                if (itemd.PrecioAereo != null || itemd.PrecioAereo != "0")
+                {
+                    deudaAereos1 = deudaGestorAereo1 * 3480;
+                }
+
+                else
+                {
+                    deudaAereos1 = deudaGestorAereo1 * Convert.ToInt32(itemd.PrecioAereo);
+                }
+
+                //DINERO DE EPIS TOTALES, AEREOS Y NO AEREOS FUERA DEL RANGO DE FECHA
+                deudaTotal1 = deuda1 + deudaAereos1;
+
+                if (deudaGestorAereo != 0)
+                {
+                    deudaTotal = deuda + deudaAereos;
+                    deudaTotal1 = deuda1 + deudaAereos1;
+                    <td>
+                        <span class="field-tip">
+                            <b>@deudaGestorTotal</b>
+                            <span class="tip-content">
+                                @{
+
+                                    if (deudaGestor != 0)
+                                    {
+                                        if (itemd.PrecioNormalconIVA != "0" && itemd.PrecioNormalconIVA != null)
+                                        {
+                                            <span><b>No. Epis: @deudaGestor</b></span><br />
+                                            <span>Precio de epi con IVA: $@itemd.PrecioNormalconIVA</span><br />
+                                        }
+
+                                        else
+                                        {
+                                            <span><b>No. Epis: @deudaGestor</b></span><br />
+                                            <span>Precio de epi sin IVA: $@itemd.PrecioNormal</span><br />
+                                        }
+
+                                    }
+
+                                }
+                                @{
+                                    if (deudaGestorAereo != 0)
+                                    {
+
+                                        if (itemd.PrecioAereo == null || itemd.PrecioAereo == "0")
+                                        {
+                                            <span><b>No. Epis AEREOS: @deudaGestorAereo</b></span><br />
+                                            <span>Precio de epi: $3480</span><br />
+                                        }
+
+                                        else
+                                        {
+                                            <span><b>No. Epis AEREOS: @deudaGestorAereo</b></span><br />
+                                            <span>Precio de epi: $@itemd.PrecioAereo</span><br />
+                                        }
+
+                                    }
+
+                                }
+                            </span>
+                        </span>
+                    </td>
+                    <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
+
+                }
+
+                else
+                {
+
+                    <td>
+                        <span class="field-tip">
+                            <b>@deudaGestorTotal</b>
+                            <span class="tip-content">
+                                <span><b>No. Epis: @deudaGestor</b></span><br />
+                                @{
+                                    if (itemd.PrecioNormalconIVA != "0" && itemd.PrecioNormalconIVA != null)
+                                    {
+                                        <span>Precio de epi con IVA: $@itemd.PrecioNormalconIVA</span><br />
+                                    }
+
+                                    else
+                                    {
+                                        <span>Precio de epi sin IVA: $@itemd.PrecioNormal</span><br />
+                                    }
+                                }
+                                @{
+                                    if (deudaGestorAereo != 0)
+                                    {
+
+                                        if (itemd.PrecioAereo == null || itemd.PrecioAereo == "0")
+                                        {
+                                            <span><b>No. Epis AEREOS: @deudaGestorAereo</b></span><br />
+                                            <span>Precio de epi: $3480</span><br />
+                                        }
+
+                                        else
+                                        {
+                                            <span><b>No. Epis AEREOS: @deudaGestorAereo</b></span><br />
+                                            <span>Precio de epi: $@itemd.PrecioAereo</span><br />
+                                        }
+
+                                    }
+
+                                }
+                            </span>
+                        </span>
+                    </td>
+                    <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
+
+                }
+
+            }
+
+
+
+
+            @*periodo fecha*@
+            <td style="color:white">
+                @fechaInicio.ToString("dd-MMMM-yyyy") al @fechaFinal.ToString("dd-MMMM-yyyy")>
+            </td>
+
+
+
+
+
+            @*dias del periodo*@
+            <td style="color:white">
+                @{
+                    difFechas = fechaFinal - fechaInicio;
+                    <span>@difFechas.Days</span>
+                }
+            </td>
+
+
+
+
+
+            @*saldo actual*@
+            <td>
+                @{
+
+                    var pGTN = (from i in db.Referido where i.idReferido == i.idReferido select i);
+
+                    foreach (var pagosGesTN in pGTN)
+                    {
+
+                        pagosGesTNV += Convert.ToInt32(pagosGesTN.Efectivo);
+
+                    }
+
+                    <span>$@pagosGesTNV.ToString("###,###,###,###")</span>
+
+                    pagosGesTNV = 0;
+
+                }
+            </td>
+
+
+
+
+
+            @*total abonado*@
+            <td>
+                @{
+                    var ingresosTotalesNormales = (from i in db.Referido where i.idReferido == itemd.idReferido select i);
+
+                    foreach (var ingresosTN in ingresosTotalesNormales)
+                    {
+
+                        ingresosTotalesN = Convert.ToInt32(ingresosTN.Efectivo);
+
+                    }
+
+                    <span>$@ingresosTotalesN.ToString("###,###,###,###")</span>
+
+                }
+            </td>
+
+
+
+
+            @*ultima fecha importe*@
+            <td>
+                @{
+                    foreach (var item in modelo)
+                    {
+
+
+                        <span>@Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yyyy")</span><br />
+
+                    }
+                }
+            </td>
+
+
+
+
+
+
+            @*ultima fecha abono*@
+            <td>
+                @{
+                    foreach (var item in modelo)
+                    {
+
+
+
+                        if (item.A.M.FechaContable == null)
+                        {
+                            <span><mark style="background-color: #FFFF00; padding:5px; border-radius:7px">---------</mark></span><br />
+                        }
+                        else
+                        {
+                            @Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MMMM-yyyy")
+
+                        }
+                    }
+                }
+
+            </td>
+
+
+
+
+
+
+        </tr>
+          }
+        }
+     }
+
+
+   </table>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*TABLA ESTADO CUENTA*@
+<br />
+
+<div class="datagrid" id="col1">
+
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nombre Paciente</th>
+                <th>Referencia</th>
+                <th>Importe</th>
+                <th>Pago</th>
+                <th>Fecha de Operación</th>
+                <th>Fecha de Pago</th>
+            </tr>
+        <tbody>
+            </thead>
+
+            @{
+                foreach (var item in modelo)
+                {
+                    <tr class="alt">
+                        <td>
+                            @flag
+                        </td>
+                        <td>
+                            @{
+                                string[] historico = item.A.M.CuentaComentario != null ? item.A.M.CuentaComentario.Split('+') : null;
+                                int flag0 = 1;
+
+                                if (item.A.M.CuentaComentario == null)
+                                {
+                                    <b>@item.A.N.Nombre</b>
+                                }
+                                else
+                                {
+                                    <span class="field-tip">
+                                        <b>@item.A.N.Nombre</b>
+                                        <span class="tip-content">
+                                            @{
+                                                foreach (var i in historico)
+                                                {
+                                                    <span>@flag0 @i</span><br />
+                                                    flag0++;
+                                                }
+                                            }
+                                        </span>
+                                    </span>
+                                }
+                            }
+                        </td>
+
+                        <td style="font-size:smaller">
+                            @item.A.M.Referencia
+                        </td>
+
+
+                        <td>
+                            @{
+
+                                //OPCION CON PRECIO EN TABLA CAPTURA
+                                @*var costo = (from i in db.Captura where i.idPaciente == item.A.M.idPaciente select i).FirstOrDefault();
+
+                                    <span><b>$@costo.PrecioEpi</b></span>*@
+
+
+                                //OPCION CON PRECIO DE REFERIDO
+                                var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+
+                                if (item.A.M.TipoLicencia != "AEREO")
+                                {
+
+                                    if (costo?.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
+                                    }
+                                    else
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo?.PrecioNormal).ToString("####.##")</b></span>
+                                    }
+                                }
+                                else
+                                {
+
+                                    if (costo?.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                                    }
+                                    else
+                                    {
+                                        <span><b>$3480</b></span>
+                                    }
+
+                                }
+                            }
+
+                        </td>
+
+
+
+
+
+
+
+                        <td>
+                        </td>
+
+
+                        <td>
+                            @Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yyyy")
+                        </td>
+
+                        <td>
+                            @if (item.A.M.FechaContable == null)
+                            {
+                                <span><mark style="background-color: #FFFF00; padding:5px; border-radius:7px">---------</mark></span>
+                            }
+                            else
+                            {
+                                @Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MMMM-yyyy")
+
+                            }
+                        </td>
+
+                    </tr>
+                    flag++;
+                }
+            }
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+@*<tfoot>
+        <tr>
+            <td colspan="6"><div id="paging"><ul><li><a href="#"><span>Anterior</span></a></li><li><a href="#" class="active"><span>1</span></a></li><li><a href="#"><span>2</span></a></li><li><a href="#"><span>3</span></a></li><li><a href="#"><span>4</span></a></li><li><a href="#"><span>5</span></a></li><li><a href="#"><span>Siguiente</span></a></li></ul></div>
+        </tr>
+    </tfoot>*@
+@*<tbody>
+        <tr>
+            <td>#</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="alt">
+            <td>#</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>#</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr class="alt">
+            <td>#</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>#</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tbody>*@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
