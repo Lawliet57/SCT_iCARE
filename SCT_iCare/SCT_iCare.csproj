@@ -511,6 +511,7 @@
     <Content Include="Estilos CSS\TablaSucursales.css" />
     <Content Include="Estilos CSS\TablaAcumuladoALT.css" />
     <Content Include="Estilos CSS\TablaMetasDiarias.css" />
+    <Content Include="estilos.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />

@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <History>True|2022-05-18T19:57:46.0421583Z;False|2022-05-18T14:57:35.4990000-05:00;</History>
+    <History>False|2022-05-19T23:35:05.7937306Z;True|2022-05-18T14:57:46.0421583-05:00;False|2022-05-18T14:57:35.4990000-05:00;</History>
     <_PublishTargetUrl>C:\Users\punks\OneDrive - DEVWARE\Escritorio\DEVWARE\Gifs\Dev</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
