@@ -640,6 +640,15 @@ namespace SCT_iCare.Controllers.Admin
             return View();
         }
 
+        public ActionResult Sucursales8Columnas(DateTime? fechaInicio, DateTime? fechaFinal)
+        {
+
+            ViewBag.FechaInicio = fechaInicio != null ? fechaInicio : null;
+            ViewBag.FechaFinal = fechaFinal != null ? fechaFinal : null;
+
+            return View();
+        }
+
         public ActionResult Gestores8Columnas(DateTime? fechaInicio, DateTime? fechaFinal)
         {
             ViewBag.FechaInicio = fechaInicio != null ? fechaInicio : null;

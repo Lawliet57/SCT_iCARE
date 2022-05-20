@@ -850,7 +850,11 @@
     <Content Include="Views\Contabilidad\Conciliacion.cshtml" />
     <Content Include="Views\Contabilidad\Pagos.cshtml" />
     <Content Include="Views\Admin\General8Columnas.cshtml" />
+<<<<<<< HEAD
     <Content Include="Views\Contabilidad\EstadoCuenta.cshtml" />
+=======
+    <Content Include="Views\Admin\Sucursales8Columnas.cshtml" />
+>>>>>>> Angel
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

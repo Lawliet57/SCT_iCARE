@@ -841,7 +841,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 
 
                                 @*ALERT PARA CONCILIAR CON INGRESOS*@
-                                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
+                                @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
                                     @Html.AntiForgeryToken()
                                     <div class="modal fade" id="Conciliar_@itemd.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -875,7 +875,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </form>*@
                             </div>
 
                         </td>
@@ -1386,7 +1386,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 
 
                                 @*ALERT PARA CONCILIAR CON INGRESOS*@
-                                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
+                                @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
                                     @Html.AntiForgeryToken()
                                     <div class="modal fade" id="Conciliar_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
@@ -1420,7 +1420,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                             </div>
                                         </div>
                                     </div>
-                                </form>
+                                </form>*@
                             </div>
                         </td>
                     </tr>
