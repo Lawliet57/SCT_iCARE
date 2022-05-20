@@ -511,7 +511,6 @@
     <Content Include="Estilos CSS\TablaSucursales.css" />
     <Content Include="Estilos CSS\TablaAcumuladoALT.css" />
     <Content Include="Estilos CSS\TablaMetasDiarias.css" />
-    <Content Include="estilos.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -850,11 +849,7 @@
     <Content Include="Views\Contabilidad\Conciliacion.cshtml" />
     <Content Include="Views\Contabilidad\Pagos.cshtml" />
     <Content Include="Views\Admin\General8Columnas.cshtml" />
-<<<<<<< HEAD
-    <Content Include="Views\Contabilidad\EstadoCuenta.cshtml" />
-=======
     <Content Include="Views\Admin\Sucursales8Columnas.cshtml" />
->>>>>>> Angel
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
