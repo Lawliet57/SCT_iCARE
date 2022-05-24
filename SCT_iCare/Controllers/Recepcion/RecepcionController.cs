@@ -502,7 +502,7 @@ namespace SCT_iCare.Controllers.Recepcion
                 //    cita.CC = referidoTipo;
                 //}
 
-                cita.Cuenta = pago == "Pendiente de Pago" ? "CUENTAS X COBRAR" : null;
+                cita.Cuenta = pago == "Pendiente de Pago" && (referido != 4 && referido != 5 && referido != 6) ? "CUENTAS X COBRAR" : null;
 
                 var referidoTipo = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
                 cita.CC = referidoTipo.Tipo;

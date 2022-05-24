@@ -18,6 +18,7 @@
     string referido = "";
     string tipoReferido = "";
     string conciliado = null;
+    string fila = "";
 
     string nombreExcel = "Conciliacion";
 
@@ -149,6 +150,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
     }
 
 
+    //FILTROS EN GENERAL
 
     if (ViewBag.Sucursal != "")
     {
@@ -460,7 +462,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
 
 <br />
-<div class="tablaScroll" style="min-height: 1000px">
+<div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
     <table class="table  table-hover tablas" style="color: #000000">
         <thead style="color:white">
             <tr>
@@ -500,9 +502,17 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         </thead>
 
         @{
-            foreach (var item in modelo)
+            foreach (var item in modelo.OrderBy(o => o.A.M.FechaCita))
             {
-                <tr>
+                if (item.A.M.TipoLicencia == "AEREO")
+                {
+                fila = "#D1C4E9";
+            }
+                else
+            {
+                fila = "white";
+            }
+                <tr style="background-color:@fila">
                     <td>
                         @flag
                     </td>
@@ -732,7 +742,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                     </div>
                                 }
 
-                                else if (item.A.M.Conciliado != null)
+                                else if (item.A.M.Conciliado != null  && (item.A.M.Cuenta == "BANCOS" || item.A.M.Cuenta == "CONEKTA" ))
                                 {
                                     <b style="font-size:x-small">CONCILIADO </b><span class="glyphicon glyphicon-ok" style="font-size:x-small"></span>
                                 }
@@ -752,7 +762,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
                                                 }
                                             }*@
-                                        <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b>Prueba</b></a>
+                                        <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
                                         <div class="dropdown-divider"></div>
@@ -1335,7 +1345,15 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         @{
             foreach (var item in modelo1)
             {
-                <tr>
+                if (item.TipoLicencia == "AEREO")
+                {
+                    fila = "#D1C4E9";
+                }
+                else
+                {
+                    fila = "white";
+                }
+                <tr style="@fila">
                     <td>
                         @flag
                     </td>
@@ -1909,14 +1927,20 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     TipoPago
                 </th>
                 <th>
+                    TipoLicencia
+                </th>
+                <th>
+                    TipoTramite
+                </th>
+                <th>
                     Fecha Cita de Epi
                 </th>
                 <th>
                     FechaContable
                 </th>
                 @*<th>
-                        Comisión
-                    </th>*@
+            Comisión
+        </th>*@
                 <th>
                     Precio
                 </th>
@@ -1924,8 +1948,8 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     Recepcionista
                 </th>
                 @*<th>
-                        Contabilidad
-                    </th>*@
+            Contabilidad
+        </th>*@
                 <th>
                     Cuenta
                 </th>
@@ -1936,7 +1960,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         </thead>
 
         @{
-            foreach (var item in modeloExcel)
+            foreach (var item in modeloExcel.OrderBy(q => q.A.M.FechaCita))
             {
                 <tr>
 
@@ -1983,6 +2007,16 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         }
                     </td>
 
+                    @*TIPO LICENCIA*@
+                    <td>
+                        @item.A.M.TipoLicencia
+                    </td>
+
+                    @*TIPO TRAMITE*@
+                    <td>
+                        @item.A.M.TipoTramite
+                    </td>
+
                     @*FECHA DE PAGO*@
                     <td>
                         @Convert.ToDateTime(item.A.M.FechaCita).AddDays(1).ToString("dd-MMMM-yyyy");
@@ -2002,7 +2036,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                     @*COMISION*@
                     <!--<td>
-                    </td>-->
+    </td>-->
                     @*PRECIO*@
                     <td>
                         @{
@@ -2074,7 +2108,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                     @*CONTABILIDAD*@
                     <!--<td>
-                    </td>-->
+    </td>-->
                     @*CUENTA*@
                     <td>
                         @{
@@ -2099,7 +2133,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         }
 
         @{
-            foreach (var item in modeloExcel1)
+            foreach (var item in modeloExcel1.OrderBy(z => z.FechaCita))
             {
                 <tr>
 
@@ -2133,6 +2167,16 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         @item.TipoPago
                     </td>
 
+                    @*TIPO LICENCIA*@
+                    <td>
+                        @item.TipoLicencia
+                    </td>
+
+                    @*TIPO TRAMITE*@
+                    <td>
+                        @item.TipoTramite
+                    </td>
+
                     @*FECHA PAGO*@
                     <td>
                         @Convert.ToDateTime(item.FechaCaptura).AddDays(1).ToString("dd-MMMM-yyyy")
@@ -2152,7 +2196,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                     @*COMISION*@
                     <!--<td>
-                    </td>-->
+    </td>-->
                     @*PRECIO EPI*@
                     <td>
                         @{
@@ -2191,7 +2235,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                     @*CONTABILIDAD*@
                     @*<td>
-                        </td>*@
+        </td>*@
 
                     @*COMENTARIO CUENTA*@
                     <td>

@@ -219,7 +219,13 @@
     <Compile Include="Archivos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="AudioGA.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Biometricos.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CadenaSplit.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="CallCenter.cs">
@@ -237,6 +243,9 @@
     <Compile Include="CapturaIncidencia.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Cardiologo.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="CarruselMedico.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -249,6 +258,9 @@
     <Compile Include="Cita.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="CitaDS.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Ciudades.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -258,6 +270,7 @@
     <Compile Include="Controllers\Admin\AdminController.cs" />
     <Compile Include="Controllers\Admin\DoctoresController.cs" />
     <Compile Include="Controllers\Admin\LogGestoresController.cs" />
+    <Compile Include="Controllers\Admin\MetasIndividualesController.cs" />
     <Compile Include="Controllers\Admin\SucursalesController.cs" />
     <Compile Include="Controllers\Admin\UsuariosController.cs" />
     <Compile Include="Controllers\ArchivoClinico\ArchivoClinicoController.cs" />
@@ -300,6 +313,9 @@
     <Compile Include="DoctorModulo.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="DoctorModuloDS.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentosESP.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -334,6 +350,9 @@
     <Compile Include="EPI_ExploracionFisica.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="EPI_GA.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="EPI_Laboratorio.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -352,12 +371,18 @@
     <Compile Include="Expedientes.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Farmacia.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Filters\AuthorizeUser.cs" />
     <Compile Include="Filters\VerificarSession.cs" />
     <Compile Include="FirmaESP.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="FotoPacienteESP.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Fotos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -399,6 +424,9 @@
     <Compile Include="log_Movimientos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="MedicinaInterna.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Menu.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -411,10 +439,22 @@
     <Compile Include="MovimientosAudio.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="Nutriologo.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Oftalmologo.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Paciente.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="PacienteDS.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="PacienteESP.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PacienteGA.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="PagosGestores.cs">
@@ -422,6 +462,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recepcionista.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="RecepcionistaDS.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ReferenciasSB.cs">
@@ -436,7 +479,16 @@
     <Compile Include="RolMenu.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="SignosVitalesDS.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SucursalDS.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Sucursales.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="sysdiagrams.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Tickets.cs">
@@ -850,6 +902,8 @@
     <Content Include="Views\Contabilidad\Pagos.cshtml" />
     <Content Include="Views\Admin\General8Columnas.cshtml" />
     <Content Include="Views\Admin\Sucursales8Columnas.cshtml" />
+    <Content Include="Views\Contabilidad\EstadoCuenta.cshtml" />
+    <Content Include="Views\MetasIndividuales\MetasIndividuales.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

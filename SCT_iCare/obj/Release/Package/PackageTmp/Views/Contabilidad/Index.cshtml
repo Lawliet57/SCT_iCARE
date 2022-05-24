@@ -114,10 +114,10 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         nombreExcel += "-" + conciliado;
 
-        modelo = modelo.Where(w => w.A.M.Conciliado != null).OrderBy(o => o.A.M.Cuenta);
-        modelo1 = modelo1.Where(w => w.Conciliado != null).OrderBy(o => o.Cuenta);
-        modeloExcel = modeloExcel.Where(w => w.A.M.Conciliado != null).OrderBy(o => o.A.M.Cuenta);
-        modeloExcel1 = modeloExcel1.Where(w => w.Conciliado != null).OrderBy(o => o.Cuenta);
+        modelo = modelo.Where(w => w.A.M.Conciliado != null && (w.A.M.Cuenta == "BANCOS" || w.A.M.Cuenta == "CONEKTA")).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.Conciliado != null && (w.Cuenta == "BANCOS" || w.Cuenta == "CONEKTA")).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.Conciliado != null && (w.A.M.Cuenta == "BANCOS" || w.A.M.Cuenta == "CONEKTA")).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.Conciliado != null && (w.Cuenta == "BANCOS" || w.Cuenta == "CONEKTA")).OrderBy(o => o.Cuenta);
 
     }
 
@@ -127,10 +127,10 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         nombreExcel += "-" + conciliado;
 
-        modelo = modelo.Where(w => w.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
-        modelo1 = modelo1.Where(w => w.Conciliado == null).OrderBy(o => o.Cuenta);
-        modeloExcel = modeloExcel.Where(w => w.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
-        modeloExcel1 = modeloExcel1.Where(w => w.Conciliado == null).OrderBy(o => o.Cuenta);
+        modelo = modelo.Where(w => w.A.M.Conciliado == null || (w.A.M.Cuenta != "BANCOS" && w.A.M.Cuenta != "CONEKTA")).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.Conciliado == null || (w.Cuenta != "BANCOS" && w.Cuenta != "CONEKTA")).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.Conciliado == null || (w.A.M.Cuenta != "BANCOS" && w.A.M.Cuenta != "CONEKTA")).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.Conciliado == null || (w.Cuenta != "BANCOS" && w.Cuenta != "CONEKTA")).OrderBy(o => o.Cuenta);
 
     }
 
@@ -449,25 +449,18 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
 
 
-    <div>
-        <button style="background-color:limegreen" class="btn btn-info dropdown-toggle" onclick="ExportToExcel('xlsx')">Exportar Datos a XLSX</button>
+<div>
+    <button style="background-color:limegreen" class="btn btn-info dropdown-toggle" onclick="ExportToExcel('xlsx')">Exportar Datos a XLSX</button>
 
-        @*<button style="background-color:cadetblue" class="btn btn-info dropdown-toggle" onclick="" id="IdBotonUno">General</button>*@
-        <a style="background-color:Highlight" class="btn btn-info dropdown-toggle" href="/Contabilidad/Index">General</a>
-        @*<button style="background-color:Highlight" class="btn btn-info dropdown-toggle" onclick="" id="IdBotonDos">Conciliados</button>*@
-        <a style="background-color:forestgreen" class="btn btn-info dropdown-toggle" href="/Contabilidad/Index/1">Conciliados</a>
-        @*<button style="background-color:red" class="btn btn-info dropdown-toggle" onclick="" id="IdBotonTres">No conciliados</button>*@
-        <a style="background-color:red" class="btn btn-info dropdown-toggle" href="/Contabilidad/Index/2">No conciliados</a>
-        @*<a href="~/Contabilidad/Conciliados">*@
-        <!--<span class="btn btn-info">Ir a Conciliados</span>-->
-        @*</a>*@
+    @*<a style="background-color:Highlight" class="btn btn-info dropdown-toggle" href="/Contabilidad/Index">General</a>
+    <a style="background-color:forestgreen" class="btn btn-info dropdown-toggle" href="/Contabilidad/Index/1">Conciliados</a>
+    <a style="background-color:red" class="btn btn-info dropdown-toggle" href="/Contabilidad/Index/2">No conciliados</a>*@
 
-
-    </div>
+</div>
 
 
 <br />
-<div class="tablaScroll" style="min-height: 1000px">
+<div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
     <table class="table  table-hover tablas" style="color: #000000">
         <thead style="color:white">
             <tr>
@@ -591,15 +584,38 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         @Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MM-yy")
                     </td>
                     <td>
-                        @if (item.A.M.FechaContable == null)
-                        {
-                            <span><mark style="background-color: #FFFF00; padding:5px; border-radius:7px">---------</mark></span>
-                        }
-                        else
-                        {
-                            @Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MM-yy")
-                          
-                        }
+                        <span class="field-tip">
+                            @{
+                                if (item.A.M.Cuenta == "BANCOS" || item.A.M.Cuenta == "CONEKTA")
+                                {
+                                    @Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MM-yy")
+                                }
+
+                                else
+                                {
+                                    <span><mark style="background-color: #FFFF00; padding:5px; border-radius:7px">---------</mark></span>
+
+                                }
+                            }
+                            <span class="tip-content">
+
+                                @{
+                                    if (item.A.M.FechaContable != null)
+                                    {
+                                        <b>Ultimo Movimiento Contable:</b>
+                                        <b>@Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MMMM-yy")</b>
+                                    }
+
+                                    else
+                                    {
+                                        <span>
+                                            <b>No hay Movimientos Contables</b>
+                                        </span>                                        
+                                    }
+                                }
+
+                            </span>
+                        </span>
                     </td>
                     <td>
                         @{
@@ -607,7 +623,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             //OPCION CON PRECIO EN TABLA CAPTURA
                             @*var costo = (from i in db.Captura where i.idPaciente == item.A.M.idPaciente select i).FirstOrDefault();
 
-            <span><b>$@costo.PrecioEpi</b></span>*@
+                                <span><b>$@costo.PrecioEpi</b></span>*@
 
 
                             //OPCION CON PRECIO DE REFERIDO
@@ -651,7 +667,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 {
 
                                     <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-                                    
+
                                 }
                                 else
                                 {
@@ -688,13 +704,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                     <div class="dropdown-menu" style="padding:10px">
                                         @*@{
-                        var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                        if (consultaTicket != 0)
-                        {
-                            <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                        }
-                    }*@
+                                                if (consultaTicket != 0)
+                                                {
+                                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                                }
+                                            }*@
                                         <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
@@ -706,17 +722,17 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                         <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                    <div class="dropdown-divider"></div>*@
+                                            <div class="dropdown-divider"></div>*@
                                         <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                    <div class="dropdown-divider"></div>*@
+                                            <div class="dropdown-divider"></div>*@
                                     </div>
                                 }
 
-                                else if (item.A.M.Conciliado != null)
+                                else if (item.A.M.Conciliado != null  && (item.A.M.Cuenta == "BANCOS" || item.A.M.Cuenta == "CONEKTA" ))
                                 {
                                     <b style="font-size:x-small">CONCILIADO </b><span class="glyphicon glyphicon-ok" style="font-size:x-small"></span>
                                 }
@@ -729,13 +745,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                     <div class="dropdown-menu" style="padding:10px">
                                         @*@{
-                        var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                        if (consultaTicket != 0)
-                        {
-                            <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                        }
-                    }*@
+                                                if (consultaTicket != 0)
+                                                {
+                                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                                }
+                                            }*@
                                         <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b>Prueba</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
@@ -747,13 +763,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                         <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                    <div class="dropdown-divider"></div>*@
+                                            <div class="dropdown-divider"></div>*@
                                         <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                    <div class="dropdown-divider"></div>*@
+                                            <div class="dropdown-divider"></div>*@
 
                                     </div>
                                 }
@@ -847,11 +863,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 </div>
                             </form>
 
-                    
-
-
-
-
                             <!-- Efectivo -->
                             <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuenta")">
                                 @Html.AntiForgeryToken()
@@ -880,7 +891,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
                                                         <option value="Referencía BanBajío">Referencía BanBajío</option>
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
@@ -890,18 +900,18 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
-                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
 
                                                     @*CAMPO REQUERIDO PARA SELECTORES*@
                                                     <br />
                                                     <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="form-select" required>Usar Saldo a Favor?</label>
-                                                        <select name="usarSaldo" id="usarSaldo1" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                                        <label for="recipient-name" class="form-select" required>Indique Forma de Pago</label>
+                                                        <select name="FormadePago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
                                                             <option disabled selected value="">Seleccione una opcion</option>
-                                                            <option value="Si">Si</option>
-                                                            <option value="No">No</option>
+                                                            <option value="EFECTIVO">Efectivo</option>
+                                                            <option value="TRANSFERENCIA">Transferencia</option>
+                                                            <option value="TARJETA">Tarjeta</option>
                                                         </select>
                                                     </div>
 
@@ -932,6 +942,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <input type="hidden" name="cuenta2" value="@cuenta" />
                                                     <input type="hidden" name="canal" value="@canal" />
                                                     <input type="hidden" name="sucursal" value="@sucursal" />
+                                                    <input type="hidden" name="conciliado" value="@conciliado" />
                                                     @{
                                                         if (idReferido == 0)
                                                         {
@@ -982,30 +993,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
                                                         <option value="Referencia OXXO">Referencia OXXO</option>
-                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                        <option value="Banorte">Banorte</option>
-                                                        <option value="Santander">Santander</option>
-                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                        <option value="BanCoppel LC">BanCoppel LC</option>
-                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                        <option value="Cuenta Externa">Cuenta Externa</option>
-                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
+                                                        <option value="Pago con Tarjeta">Pago con Tarjeta</option>
                                                     </select>
                                                     <br />
-
-                                                    @*CAMPO REQUERIDO PARA SELECTORES*@
-                                                    <br />
-                                                    <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="form-select" required>Usar Saldo a Favor?</label>
-                                                        <select name="usarSaldo" id="usarSaldo1" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-                                                            <option disabled selected value="">Seleccione una opcion</option>
-                                                            <option value="Si">Si</option>
-                                                            <option value="No">No</option>
-                                                        </select>
-                                                    </div>
-
                                                     <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
                                                     <input type="date" class="form-control" name="fechaContable" />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
@@ -1044,7 +1034,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 </div>
                             </form>
 
-                            <!-- OXXO -->
+                            <!-- ANTICIPOS -->
                             <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuenta")">
                                 @Html.AntiForgeryToken()
                                 <div class="modal fade" id="Anticipos_@item.A.M.idCita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1072,7 +1062,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
                                                         <option value="Referencía BanBajío">Referencía BanBajío</option>
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
@@ -1082,11 +1071,8 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
-                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                                    <input type="date" class="form-control" name="fechaContable" />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
                                                     <input type="text" class="form-control" name="comentario" />
                                                     <input type="hidden" name="usuario" value="@oUser.Nombre" />
@@ -1151,21 +1137,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
-                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                        <option value="Banorte">Banorte</option>
-                                                        <option value="Santander">Santander</option>
-                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                        <option value="BanCoppel LC">BanCoppel LC</option>
-                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                        <option value="Cuenta Externa">Cuenta Externa</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                                    <input type="date" class="form-control" name="fechaContable" />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
                                                     <input type="text" class="form-control" name="comentario" />
                                                     <input type="hidden" name="usuario" value="@oUser.Nombre" />
@@ -1202,67 +1176,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 </div>
                             </form>
 
-                            <!-- Efectivo -->
-                            @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuenta")">
-            @Html.AntiForgeryToken()
-            <div class="modal fade" id="Corporativo_@item.A.M.idCita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="exampleModalLabel"><b>¿Está seguro de mandar los datos de esta venta a CORPORATIVO?</b></h4>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="id" value="@item.A.M.idCita" />
-                            <input type="hidden" name="cuenta" value="CORPORATIVO" />
-                            <div class="form-group" style="width:60%; min-width:320px">
-                                <label for="recipient-name" class="col-form-label">Nombre:</label>
-                                <b>@item.A.N.Nombre</b><br />
-                                <label for="recipient-name" class="col-form-label">CURP:</label>
-                                <b>@item.A.N.CURP</b><br />
-                                <label for="recipient-name" class="col-form-label">NoExpediente:</label>
-                                <b>@item.A.M.NoExpediente</b><br />
-                                <label for="recipient-name" class="col-form-label">Fecha:</label>
-                                <b>@Convert.ToDateTime(item.A.M.FechaReferencia).ToString("dd-MMMM-yyyy")</b><br />
-                                <label for="recipient-name" class="col-form-label">Sucursal:</label>
-                                <b>@item.A.M.Sucursal</b><br />
-                                <label for="recipient-name" class="col-form-label">Doctor:</label>
-                                <b>@item.A.M.Doctor</b><br />
-                                <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
-                                <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                                    <option selected disabled>Seleccionar</option>
-                                    <option value="Referencia OXXO">Referencia OXXO</option>
-                                    <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                    <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                    <option value="Banorte">Banorte</option>
-                                    <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                    <option value="BanCoppel LC">BanCoppel LC</option>
-                                    <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                    <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                    <option value="Cuenta Externa">Cuenta Externa</option>
-                                    <option value="Pendiente de Pago">Pendiente de Pago</option>
-                                </select>
-                                <br />
-                                <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                <input type="date" class="form-control" name="fechaContable" />
-                                <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
-                                <input type="text" class="form-control" name="comentario" />
-                                <input type="hidden" name="usuario" value="@oUser.Nombre" />
-                                <input type="hidden" name="fechaInicio" value="@fechaInicio" />
-                                <input type="hidden" name="fechaFinal" value="@fechaFinal" />
-                                <input type="hidden" name="cuenta2" value="@cuenta" />
-                                <input type="hidden" name="canal" value="@canal" />
-                                <input type="hidden" name="sucursal" value="@sucursal" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <input type="submit" value="Guardar" class="btn btn-primary" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>*@
-
                             <!-- Aclaraciones -->
                             <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuenta")">
                                 @Html.AntiForgeryToken()
@@ -1291,21 +1204,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
-                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                        <option value="Banorte">Banorte</option>
-                                                        <option value="Santander">Santander</option>
-                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                        <option value="BanCoppel LC">BanCoppel LC</option>
-                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                        <option value="Cuenta Externa">Cuenta Externa</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                                    <input type="date" class="form-control" name="fechaContable" />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
                                                     <input type="text" class="form-control" name="comentario" />
                                                     <input type="hidden" name="usuario" value="@oUser.Nombre" />
@@ -1420,50 +1321,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                     </div>
                                 </div>
                             </form>
-
-                            @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuenta")">
-            @Html.AntiForgeryToken()
-            <div class="modal fade" id="CONCILIADO_@item.A.M.idPaciente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="exampleModalLabel"><b>¿Ha conciliado este pago?</b></h4>
-                        </div>
-                        <div class="modal-body">
-                            <input type="hidden" name="id" value="@item.A.M.idCita" />
-                            <input type="hidden" name="cuenta" value="CONCILIADO" />
-                            <div class="form-group" style="width:60%; min-width:320px">
-                                <label for="recipient-name" class="col-form-label">Nombre:</label>
-                                <b>@item.A.N.Nombre</b><br />
-                                <label for="recipient-name" class="col-form-label">CURP:</label>
-                                <b>@item.A.N.CURP</b><br />
-                                <label for="recipient-name" class="col-form-label">NoExpediente:</label>
-                                <b>@item.A.M.NoExpediente</b><br />
-                                <label for="recipient-name" class="col-form-label">Fecha:</label>
-                                <b>@Convert.ToDateTime(item.A.M.FechaReferencia).ToString("dd-MMMM-yyyy")</b><br />
-                                <label for="recipient-name" class="col-form-label">Doctor:</label>
-                                <b>@item.A.M.Doctor</b><br />
-                                <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
-
-                                <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
-                                <input type="text" class="form-control" name="comentario" />
-                                <input type="hidden" name="usuario" value="@oUser.Nombre" />
-                                <input type="hidden" name="fechaInicio" value="@fechaInicio" />
-                                <input type="hidden" name="fechaFinal" value="@fechaFinal" />
-                                <input type="hidden" name="cuenta2" value="@cuenta" />
-                                <input type="hidden" name="canal" value="@canal" />
-                                <input type="hidden" name="sucursal" value="@sucursal" />
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                            <input type="submit" value="Guardar" class="btn btn-primary" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>*@
-
                         </div>
 
                     </td>
@@ -1471,6 +1328,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                 flag++;
             }
         }
+
+
+        @*AQUI EMPIEZAN LOS ALTERNATIVOS*@
 
         @{
             foreach (var item in modelo1)
@@ -1502,7 +1362,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                         }
                                     </span>
                                 </span>
-                                            }
+                            }
                         }
                     </td>
 
@@ -1538,19 +1398,43 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     <td>
                         @Convert.ToDateTime(item.FechaCaptura).ToString("dd-MM-yy")
                     </td>
+
+                    @*FECHA CONTABLE*@
                     <td>
-                        @if (item.FechaContable == null)
-                        {
-                            <span>------</span>
-                        }
-                        else
-                        {
-                            @Convert.ToDateTime(item.FechaContable).ToString("dd-MM-yy")
-                        }
+                        <span class="field-tip">
+                            @{
+                                if (item.Cuenta == "BANCOS" || item.Cuenta == "CONEKTA")
+                                {
+                                    @Convert.ToDateTime(item.FechaContable).ToString("dd-MM-yy")
+                                }
+
+                                else
+                                {
+                                    <span><mark style="background-color: #FFFF00; padding:5px; border-radius:7px">---------</mark></span>
+
+                                }
+                            }
+                            <span class="tip-content">
+
+                                @{
+                                    if (item.FechaContable != null)
+                                    {
+                                        <b>Ultimo Movimiento Contable:</b>
+                                        <b>@Convert.ToDateTime(item.FechaContable).ToString("dd-MMMM-yy")</b>
+                                    }
+
+                                    else
+                                    {
+                                        <b>No hay Movimientos Contables</b>
+                                    }
+                                }
+
+                            </span>
+                        </span>
                     </td>
                     <td>
                         @{
-                                var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault(); 
+                            var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
 
                             if (item.TipoLicencia != "AEREO")
                             {
@@ -1670,7 +1554,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
                                                         <option value="Referencía BanBajío">Referencía BanBajío</option>
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
@@ -1680,18 +1563,18 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
-                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
 
                                                     @*CAMPO REQUERIDO PARA SELECTORES*@
                                                     <br />
                                                     <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="form-select" required>Usar Saldo a Favor?</label>
-                                                        <select name="usarSaldo" id="usarSaldo1" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                                        <label for="recipient-name" class="form-select" required>Indique Forma de Pago</label>
+                                                        <select name="FormadePago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
                                                             <option disabled selected value="">Seleccione una opcion</option>
-                                                            <option value="Si">Si</option>
-                                                            <option value="No">No</option>
+                                                            <option value="EFECTIVO">Efectivo</option>
+                                                            <option value="TRANSFERENCIA">Transferencia</option>
+                                                            <option value="TARJETA">Tarjeta</option>
                                                         </select>
                                                     </div>
 
@@ -1743,16 +1626,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
                                                         <option value="Referencia OXXO">Referencia OXXO</option>
-                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                        <option value="Banorte">Banorte</option>
-                                                        <option value="Santander">Santander</option>
-                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                        <option value="BanCoppel LC">BanCoppel LC</option>
-                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                        <option value="Cuenta Externa">Cuenta Externa</option>
-                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
+
                                                     </select>
                                                     <br />
 
@@ -1760,11 +1634,12 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     @*CAMPO REQUERIDO PARA SELECTORES*@
                                                     <br />
                                                     <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="form-select" required>Usar Saldo a Favor?</label>
-                                                        <select name="usarSaldo" id="usarSaldo1" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                                        <label for="recipient-name" class="form-select" required>Indique Forma de Pago</label>
+                                                        <select name="FormadePago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
                                                             <option disabled selected value="">Seleccione una opcion</option>
-                                                            <option value="Si">Si</option>
-                                                            <option value="No">No</option>
+                                                            <option value="EFECTIVO">Efectivo</option>
+                                                            <option value="TRANSFERENCIA">Transferencia</option>
+                                                            <option value="TARJETA">Tarjeta</option>
                                                         </select>
                                                     </div>
 
@@ -1849,7 +1724,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 </div>
                             </form>
 
-                            <!-- Efectivo -->
+                            <!-- CXC -->
                             <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuentaALT")">
                                 @Html.AntiForgeryToken()
                                 <div class="modal fade" id="CXC1_@item.idPacienteESP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1875,21 +1750,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
-                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                        <option value="Banorte">Banorte</option>
-                                                        <option value="Santander">Santander</option>
-                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                        <option value="BanCoppel LC">BanCoppel LC</option>
-                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                        <option value="Cuenta Externa">Cuenta Externa</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                                    <input type="date" class="form-control" name="fechaContable" />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
                                                     <input type="text" class="form-control" name="comentario" />
                                                     <input type="hidden" name="usuario" value="@oUser.Nombre" />
@@ -1909,67 +1772,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 </div>
                             </form>
 
-
-                            <!-- Efectivo -->
-                            @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuentaALT")">
-                                    @Html.AntiForgeryToken()
-                                    <div class="modal fade" id="Corporativo1_@item.idPacienteESP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="exampleModalLabel"><b>¿Está seguro de mandar los datos de esta venta a CORPORATIVO?</b></h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="id" value="@item.idPacienteESP" />
-                                                    <input type="hidden" name="cuenta" value="CORPORATIVO" />
-                                                    <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="col-form-label">Nombre:</label>
-                                                        <b>@item.Nombre</b><br />
-                                                        <label for="recipient-name" class="col-form-label">CURP:</label>
-                                                        <b>@item.CURP</b><br />
-                                                        <label for="recipient-name" class="col-form-label">NoExpediente:</label>
-                                                        <b>@item.NoExpediente</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Fecha:</label>
-                                                        <b>@Convert.ToDateTime(item.FechaCaptura).ToString("dd-MMMM-yyyy")</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Doctor:</label>
-                                                        <b>@item.Doctor</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
-                                                        <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                                                            <option selected disabled>Seleccionar</option>
-                                                            <option value="Referencia OXXO">Referencia OXXO</option>
-                                                            <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                            <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                            <option value="Banorte">Banorte</option>
-                                                            <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                            <option value="BanCoppel LC">BanCoppel LC</option>
-                                                            <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                            <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                            <option value="Cuenta Externa">Cuenta Externa</option>
-                                                            <option value="Pendiente de Pago">Pendiente de Pago</option>
-                                                        </select>
-                                                        <br />
-                                                        <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                                        <input type="date" class="form-control" name="fechaContable" />
-                                                        <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
-                                                        <input type="text" class="form-control" name="comentario" />
-                                                        <input type="hidden" name="usuario" value="@oUser.Nombre" />
-                                                        <input type="hidden" name="fechaInicio" value="@fechaInicio" />
-                                                        <input type="hidden" name="fechaFinal" value="@fechaFinal" />
-                                                        <input type="hidden" name="cuenta2" value="@cuenta" />
-                                                        <input type="hidden" name="canal" value="@canal" />
-                                                        <input type="hidden" name="sucursal" value="@sucursal" />
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                    <input type="submit" value="Enviar" class="btn btn-primary" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>*@
-
-                            <!-- Efectivo -->
+                            <!-- ACLARACIONES -->
                             <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuentaALT")">
                                 @Html.AntiForgeryToken()
                                 <div class="modal fade" id="Aclaracion1_@item.idPacienteESP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1995,21 +1798,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
-                                                        <option value="Referencia OXXO">Referencia OXXO</option>
-                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                        <option value="Banorte">Banorte</option>
-                                                        <option value="Santander">Santander</option>
-                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                        <option value="BanCoppel LC">BanCoppel LC</option>
-                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                        <option value="Cuenta Externa">Cuenta Externa</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de pago contable:</label>
-                                                    <input type="date" class="form-control" name="fechaContable" />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
                                                     <input type="text" class="form-control" name="comentario" />
                                                     <input type="hidden" name="usuario" value="@oUser.Nombre" />
@@ -2029,7 +1820,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 </div>
                             </form>
 
-                            <!-- Efectivo -->
+                            <!-- DEVOLUCIONES -->
                             <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuentaALT")">
                                 @Html.AntiForgeryToken()
                                 <div class="modal fade" id="Devoluciones1_@item.idPacienteESP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -2087,59 +1878,12 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                     </div>
                                 </div>
                             </form>
-
-
-                            @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuentaALT")">
-                                    @Html.AntiForgeryToken()
-                                    <div class="modal fade" id="Devoluciones1_@item.idPacienteESP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h4 class="modal-title" id="exampleModalLabel"><b>¿Ha conciliado este pago?</b></h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <input type="hidden" name="id" value="@item.idPacienteESP" />
-                                                    <input type="hidden" name="cuenta" value="CONCILIADO" />
-                                                    <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="col-form-label">Nombre:</label>
-                                                        <b>@item.Nombre</b><br />
-                                                        <label for="recipient-name" class="col-form-label">CURP:</label>
-                                                        <b>@item.CURP</b><br />
-                                                        <label for="recipient-name" class="col-form-label">NoExpediente:</label>
-                                                        <b>@item.NoExpediente</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Fecha:</label>
-                                                        <b>@Convert.ToDateTime(item.FechaCaptura).ToString("dd-MMMM-yyyy")</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Doctor:</label>
-                                                        <b>@item.Doctor</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
-
-                                                        <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
-                                                        <input type="text" class="form-control" name="comentario" />
-                                                        <input type="hidden" name="usuario" value="@oUser.Nombre" />
-                                                        <input type="hidden" name="fechaInicio" value="@fechaInicio" />
-                                                        <input type="hidden" name="fechaFinal" value="@fechaFinal" />
-                                                        <input type="hidden" name="cuenta2" value="@cuenta" />
-                                                        <input type="hidden" name="canal" value="@canal" />
-                                                        <input type="hidden" name="sucursal" value="@sucursal" />
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                    <input type="submit" value="Guardar" class="btn btn-primary" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>*@
-
                         </div>
-
                     </td>
                 </tr>
                 flag++;
             }
         }
-
     </table>
 </div>
 
@@ -2165,23 +1909,23 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     TipoPago
                 </th>
                 <th>
-                    FechaPago
+                    Fecha Cita de Epi
                 </th>
                 <th>
                     FechaContable
                 </th>
-                <th>
-                    Comisión
-                </th>
+                @*<th>
+                        Comisión
+                    </th>*@
                 <th>
                     Precio
                 </th>
                 <th>
                     Recepcionista
                 </th>
-                <th>
-                    Contabilidad
-                </th>
+                @*<th>
+                        Contabilidad
+                    </th>*@
                 <th>
                     Cuenta
                 </th>
@@ -2195,15 +1939,23 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
             foreach (var item in modeloExcel)
             {
                 <tr>
+
+                    @*NOMBRE*@
                     <td>
                         <b>@item.A.N.Nombre</b>
                     </td>
+
+                    @*SUCURSAL*@
                     <td>
                         @item.A.M.Sucursal
                     </td>
+
+                    @*REFERENCIA*@
                     <td>
                         @item.A.M.Referencia
                     </td>
+
+                    @*REFERIDO POR*@
                     <td>
                         <span class="field-tip">
                             <b>@item.A.M.ReferidoPor</b>
@@ -2212,6 +1964,8 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             </span>
                         </span>
                     </td>
+
+                    @*TIPO PAGO*@
                     <td>
                         @{
                             if (item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
@@ -2228,9 +1982,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             }
                         }
                     </td>
+
+                    @*FECHA DE PAGO*@
                     <td>
-                        @Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yyyy")
+                        @Convert.ToDateTime(item.A.M.FechaCita).AddDays(1).ToString("dd-MMMM-yyyy");
                     </td>
+
+                    @*FECHA CONTABLE*@
                     <td>
                         @if (item.A.M.FechaContable == null)
                         {
@@ -2241,42 +1999,83 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             @Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MM-yy")
                         }
                     </td>
-                    <td>
-                    </td>
+
+                    @*COMISION*@
+                    <!--<td>
+                    </td>-->
+                    @*PRECIO*@
                     <td>
                         @{
                             var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
 
-                            if (item.A.M.TipoLicencia != "AEREO")
+                            if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
+                                || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
                             {
-
-                                if (costo.PrecioNormalconIVA != null)
+                                if (item.A.M.TipoLicencia != "AEREO")
                                 {
-                                    <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
+
+                                    if (costo.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
+                                    }
+                                    else
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
+                                    }
                                 }
                                 else
                                 {
-                                    <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
+
+                                    if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                                    }
+                                    else
+                                    {
+                                        <span><b>$3480</b></span>
+                                    }
+
                                 }
+
                             }
+
                             else
                             {
-                                if (costo.PrecioAereo != null)
+
+                                if (item.A.M.TipoLicencia != "AEREO")
                                 {
-                                    <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+
+                                    <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
+
                                 }
                                 else
                                 {
-                                    <span><b>$3480</b></span>
+
+                                    if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
+                                    {
+                                        <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                                    }
+                                    else
+                                    {
+                                        <span><b>$3480</b></span>
+                                    }
+
                                 }
+
                             }
+
                         }
                     </td>
+
+                    @*RECEPCIONISTA*@
                     <td>
                         @item.A.M.Recepcionista
                     </td>
-                    <td>
-                    </td>
+
+                    @*CONTABILIDAD*@
+                    <!--<td>
+                    </td>-->
+                    @*CUENTA*@
                     <td>
                         @{
                             if (item.A.M.Cuenta == null)
@@ -2289,6 +2088,8 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             }
                         }
                     </td>
+
+                    @*MOVIMIENTOS DE LA CUENTA*@
                     <td>
                         @item.A.M.CuentaComentario
                     </td>
@@ -2301,15 +2102,23 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
             foreach (var item in modeloExcel1)
             {
                 <tr>
+
+                    @*NOMBRE*@
                     <td>
                         <b>@item.Nombre</b>
                     </td>
+
+                    @*SUCURSAL*@
                     <td>
                         -----
                     </td>
+
+                    @*REFERENCIA*@
                     <td>
                         -----
                     </td>
+
+                    @*REFERIDO POR*@
                     <td>
                         <span class="field-tip">
                             <b>@item.ReferidoPor</b>
@@ -2318,12 +2127,18 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             </span>
                         </span>
                     </td>
+
+                    @*TIPO PAGO*@
                     <td>
                         @item.TipoPago
                     </td>
+
+                    @*FECHA PAGO*@
                     <td>
-                        @Convert.ToDateTime(item.FechaCaptura).ToString("dd-MMMM-yyyy")
+                        @Convert.ToDateTime(item.FechaCaptura).AddDays(1).ToString("dd-MMMM-yyyy")
                     </td>
+
+                    @*FECHA CONTABLE*@
                     <td>
                         @if (item.FechaContable == null)
                         {
@@ -2334,8 +2149,11 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             @Convert.ToDateTime(item.FechaContable).ToString("dd-MM-yy")
                         }
                     </td>
-                    <td>
-                    </td>
+
+                    @*COMISION*@
+                    <!--<td>
+                    </td>-->
+                    @*PRECIO EPI*@
                     <td>
                         @{
                             var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
@@ -2365,11 +2183,17 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             }
                         }
                     </td>
+
+                    @*RECEPCIONISTA*@
                     <td>
                         @item.Solicita
                     </td>
-                    <td>
-                    </td>
+
+                    @*CONTABILIDAD*@
+                    @*<td>
+                        </td>*@
+
+                    @*COMENTARIO CUENTA*@
                     <td>
                         @{
                             if (item.Cuenta == null)
@@ -2387,7 +2211,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     </td>
                 </tr>
             }
-
 
         }
 

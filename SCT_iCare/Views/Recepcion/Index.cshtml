@@ -492,6 +492,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             <option disabled required>----------------------------------</option>
                                             <option value="Pendiente de Pago"></option>
                                         }
+
                                     }
                                 </select>
                             </div>
@@ -1375,6 +1376,7 @@ else
                 </tr>
             </thead>
 
+            @*FILTRO DE COLORES POR TIPO DE LICENCIA*@
 
             @foreach (var item in modelo)
             {
