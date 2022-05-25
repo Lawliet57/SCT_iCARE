@@ -105,10 +105,10 @@
         <input type="submit" class="btn btn-info" value="Enviar" />
     </div>
 </form>
+<br />
 
 
-<div class="tablaScroll" style="max-width:700px">
-    <br />
+<div class="tablaScroll" style="max-width:700px; min-height:500px">    
     <table class="table  table-bordered table-hover tablas" style="color: #2F2D6B">
         <thead>
             <tr style="color:white">
@@ -125,6 +125,7 @@
                     Meta Diaria
                 </th>
                 <th></th>
+                <th hidden></th>
             </tr>
         </thead>
 
@@ -132,9 +133,9 @@
         @foreach (var item in canales)
         {
 
-            <tr @*style="border-top-color: black; border-top-width:2px"*@>
+            <tr>
                 <td class="bg-info">
-                    <b>@item.NombreCanal</b>
+                    <b style="color:dimgrey">@item.NombreCanal</b>
                 </td>
                 <td>
                     @item.Meta
@@ -195,11 +196,55 @@
                         </div>
                     </form>
                 </td>
+
+
+                <td hidden>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#metasCanal1_@item.idCanales"><span class="glyphicon glyphicon-refresh"></span> Actualizar Meta</button>
+
+                    <!-- Modal -->
+                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/MetasIndividuales/MetasIndividuales")">
+                        <div class="modal fade" id="metasCanal1_@item.idCanales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:aquamarine">
+                                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Editar meta</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Cantidad de EPIs Meta:</label>
+                                            <h5><b>@item.Meta</b></h5>
+                                            <input type="hidden" name="canalInd" value="@item.NombreCanal" />
+                                        </div>
+                                        <hr />
+                                        <div class="form-group">
+                                            <h4>Desgloce por @item.NombreCanal</h4>
+                                            @{
+                                                var canalEnv = (from i in db.Canales where i.idCanales == item.idCanales select i).FirstOrDefault();
+                                                var referidoTipoEnv = from i in db.Referido where i.Tipo == canal.NombreCanal select i.Nombre;
+
+                                                foreach (var i in referidoTipoEnv)
+                                                {
+                                                    <span>@i --- @Convert.ToInt32(Convert.ToDouble(canal.Meta) / Convert.ToDouble(referidoTipoEnv.Count()))</span><br />
+                                                }
+
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <input type="submit" value="Editar Metas del Canal" class="btn btn-primary" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
+                </td>
             </tr>
 
             flag += 1;
 
-                                                }
+           }
 
     </table>
 </div>

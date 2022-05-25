@@ -1345,15 +1345,19 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         @{
             foreach (var item in modelo1)
             {
-                if (item.TipoLicencia == "AEREO")
+                if (item.CanalTipo == "IN SITU")
                 {
-                    fila = "#D1C4E9";
+                    fila = "#AFEEEE";
                 }
-                else
+                else if (item.CanalTipo == "GESTOR ALT")
+                {
+                    fila = "#c3c3c3";
+                }
+                else 
                 {
                     fila = "white";
                 }
-                <tr style="@fila">
+                <tr style="background-color:@fila">
                     <td>
                         @flag
                     </td>

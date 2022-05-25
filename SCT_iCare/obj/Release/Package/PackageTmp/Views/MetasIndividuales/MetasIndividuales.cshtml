@@ -1,0 +1,210 @@
+﻿@{
+    ViewBag.Title = "MetasIndividuales";
+
+    GMIEntities db = new GMIEntities();
+
+    var oUser = (Usuarios)HttpContext.Current.Session["User"];
+
+    int flag = 1;
+
+    int diaMes = DateTime.Today.Day;
+
+    System.Globalization.CultureInfo norwCulture = System.Globalization.CultureInfo.CreateSpecificCulture("es");
+    System.Globalization.Calendar cal = norwCulture.Calendar;
+    int semana = cal.GetWeekOfYear(DateTime.Today, norwCulture.DateTimeFormat.CalendarWeekRule, norwCulture.DateTimeFormat.FirstDayOfWeek);
+
+    int inicioMes = 1;
+    int MES = DateTime.Today.Month;
+    int ANIO = DateTime.Today.Year;
+
+
+    string canalInd = "";
+
+
+    DateTime FECHAI = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), inicioMes);
+    DateTime FECHAF = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), inicioMes);
+    FECHAF = FECHAF.AddMonths(1).AddDays(-1);
+    int diasMes = FECHAF.Day;
+
+    DateTime diasDelMes = new DateTime(DateTime.Today.Month);
+    string mesActual = Convert.ToString(diaMes);
+
+    int dia1 = 0;
+    DateTime diaPrimero = new DateTime(DateTime.Today.Year, 1, 1);
+    DateTime diaUltimo = diaPrimero.AddYears(1).AddDays(-1);
+
+    DateTime fechaInicio = diaPrimero;
+    DateTime fechaFinal = new DateTime();
+
+    for (int i = 1; i <= 52; i++)
+    {
+        if (i == semana + 2)
+        {
+            break;
+        }
+
+        int diaSemana = Convert.ToInt32(fechaInicio.DayOfWeek);
+
+        for (int n = diaSemana; n <= 7; n++)
+        {
+            dia1++;
+            if (n == 7)
+            {
+                fechaFinal = diaPrimero.AddDays(dia1);
+                fechaInicio = fechaFinal.AddDays(-7);
+            }
+        }
+    }
+
+    var dbReferido = db.Referido.OrderBy(o => o.Nombre);
+
+    int realizadosCallCenter = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
+                .Where(w => w.M.FechaExpdiente >= fechaInicio && w.M.FechaExpdiente < fechaFinal && w.M.FinalCaptura != null && w.N.Canal == "Call Center").Count();
+
+    int realizadosALT = db.PacienteESP.Where(w => w.FechaCaptura >= fechaInicio && w.FechaCaptura < fechaFinal && w.Capturista != null).Count();
+
+    int realizadosGestores = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).Join(db.Referido, o => o.N.ReferidoPor, p => p.Nombre, (o, p) => new { O = o, P = p })
+                .Where(w => w.O.M.FechaExpdiente >= fechaInicio && w.O.M.FechaExpdiente < fechaFinal && w.O.M.FinalCaptura != null && w.P.Tipo == "Gestor").Count();
+
+    int realizadosCATEM = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).Join(db.Referido, o => o.N.ReferidoPor, p => p.Nombre, (o, p) => new { O = o, P = p })
+                .Where(w => w.O.M.FechaExpdiente >= fechaInicio && w.O.M.FechaExpdiente < fechaFinal && w.O.M.FinalCaptura != null && w.P.Tipo.Contains("CATEM")).Count();
+
+    int realizadosEmpresas = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).Join(db.Referido, o => o.N.ReferidoPor, p => p.Nombre, (o, p) => new { O = o, P = p })
+                .Where(w => w.O.M.FechaExpdiente >= fechaInicio && w.O.M.FechaExpdiente < fechaFinal && w.O.M.FinalCaptura != null && w.P.Tipo == "Empresa").Count();
+
+
+
+
+    //FILTRO DE CANAL
+
+    if (ViewBag.Canal != "")
+    {
+        canalInd = ViewBag.Canal;
+
+        dbReferido = dbReferido.Where(w => w.Tipo.Contains(canalInd)).OrderBy(o => o.Nombre);
+    }
+
+}
+<br />
+<h2 style="color:white">Meta Semanal</h2>
+<br />
+
+<form class="form-inline" method="post" enctype="multipart/form-data" action="@Url.Content("~/Admin/TablaMetas")">
+    <div>
+
+        <select name="gestor" style="font-size:2vh" class="form-control">
+            <option>Seleccionar</option>
+            <option value="Diarias">METAS DIARIAS</option>
+            <option value="Semanales">METAS SEMANALES</option>
+            <option value="Sucursales">SUCURSALES</option>
+            <option value="Alternativos">ACUMULADO ALT</option>
+            <option value="Comparacion">COMPARACIÓN</option>
+            <option value="Doctores">DOCTORES</option>
+            @{
+                if (oUser.Nombre == "Jesús Zenteno" || oUser.Nombre == "Jorge Rodriguez" || oUser.Nombre == "Administrador" || oUser.Nombre == "Ángel Muñoz")
+                {
+                    <option disabled>-------------------------</option>
+                    <option value="Precios">ACTUALIZAR PRECIOS</option>
+                }
+            }
+        </select>
+        <input type="submit" class="btn btn-info" value="Enviar" />
+    </div>
+</form>
+<br />
+
+<form class="form-inline" method="post" enctype="multipart/form-data" action="@Url.Content("~/MetasIndividuales/MetasIndividuales")">
+    <div>
+
+        <select name="canalInd" style="font-size:1.5vh; width: 100px" class="form-control">
+            @{
+                if (ViewBag.Canal == "")
+                {
+                    <option value="">CANAL</option>
+                }
+                else
+                {
+                    <option value="@canalInd">@canalInd.ToUpper()</option>
+                }
+            }
+            @{
+                foreach (var item in db.Canales)
+                {
+                    <option value="@item.NombreCanal">@item.NombreCanal</option>
+                }
+            }
+        </select>
+
+        <input type="submit" class="btn btn-info" value="Enviar" />
+
+    </div>
+    <br />
+</form>
+
+<a href="~/Admin/ActualizarMeta" style="text-decoration:none"><h4 style="color:white">Regresar a la Tabla de Metas General</h4></a>
+
+<div class="tablaScroll" style="max-width:700px; min-height:500px">
+    <table class="table  table-bordered table-hover tablas" style="color: #2F2D6B">
+        <thead>
+            <tr style="color:white">
+                <th>
+                    <b>Gestor</b>
+                </th>
+                <th>
+                    Meta Asignada Mensual
+                </th>
+                <th>
+                    Meta Semanal
+                </th>
+                <th>
+                    Meta Diaria
+                </th>
+            </tr>
+        </thead>
+
+
+        @foreach (var item in dbReferido)
+        {
+
+            <tr>
+                <td class="bg-info">
+                    <b style="color:dimgrey">@item.Nombre</b>
+                </td>
+                <td>
+                    @item.Meta
+                </td>
+                <td>
+                    @{
+
+                        double metaSemanal = (Convert.ToDouble(item.Meta) / Convert.ToDouble(diasMes));
+                        metaSemanal = metaSemanal * 7;
+
+                        <span>@Convert.ToInt32(metaSemanal)</span>
+                    }
+                </td>
+                <td>
+                    @{
+                        double metaDiaria = (Convert.ToDouble(item.Meta) / Convert.ToDouble(diasMes));
+
+                        <span>@Convert.ToInt32(metaDiaria)</span>
+                    }
+                </td>
+            </tr>
+
+            flag += 1;
+
+        }
+
+    </table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
