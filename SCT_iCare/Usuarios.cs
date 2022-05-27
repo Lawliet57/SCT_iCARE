@@ -17,10 +17,10 @@ namespace SCT_iCare
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Usuarios()
         {
-            this.Recepcionista = new HashSet<Recepcionista>();
-            this.log_InicioGestor = new HashSet<log_InicioGestor>();
             this.DoctorModulo = new HashSet<DoctorModulo>();
             this.DoctorModuloDS = new HashSet<DoctorModuloDS>();
+            this.log_InicioGestor = new HashSet<log_InicioGestor>();
+            this.Recepcionista = new HashSet<Recepcionista>();
             this.RecepcionistaDS = new HashSet<RecepcionistaDS>();
         }
     
@@ -31,15 +31,15 @@ namespace SCT_iCare
         public Nullable<int> idRol { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recepcionista> Recepcionista { get; set; }
-        public virtual Roles Roles { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<log_InicioGestor> log_InicioGestor { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DoctorModulo> DoctorModulo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DoctorModuloDS> DoctorModuloDS { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<log_InicioGestor> log_InicioGestor { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Recepcionista> Recepcionista { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RecepcionistaDS> RecepcionistaDS { get; set; }
+        public virtual Roles Roles { get; set; }
     }
 }

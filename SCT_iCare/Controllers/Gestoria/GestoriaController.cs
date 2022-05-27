@@ -9,8 +9,6 @@ using System.Configuration;
 using Newtonsoft.Json.Serialization;
 using BarcodeLib;
 using SCT_iCare.Models;
-using conekta;
-
 using System.IO;
 using System.Text;
 using System.Globalization;
@@ -65,8 +63,6 @@ namespace SCT_iCare.Controllers.Gestoria
             Paciente paciente1 = new Paciente();
 
             //iTextSharp.text.pdf.BarcodeQRCode barcodeQRCode = new iTextSharp.text.pdf.BarcodeQRCode("dictamenes.medicinagmi.mx/ConsultaDictamen/Resultado?folio=" + noEstudio, 1000, 1000, null);
-
-            string canal = null;
 
             referencia = "REF " + referido;
 
@@ -1814,9 +1810,6 @@ namespace SCT_iCare.Controllers.Gestoria
         {
             GetApiKey();
 
-            string mailSeteado = "referenciasoxxo@medicinagmi.mx";
-
-
             int cantidadN;
             int cantidadA;
 
@@ -2223,8 +2216,6 @@ namespace SCT_iCare.Controllers.Gestoria
                     ViewBag.idCita = cita.idCita;
                 }
             }
-
-            byte[] imageBytes;
 
             ViewBag.AEREO = Convert.ToInt32(cantidadA);
             ViewBag.AUTO = Convert.ToInt32(cantidadN);

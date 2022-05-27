@@ -159,6 +159,7 @@
                 <th>
                     Meta Diaria
                 </th>
+                <th></th>
             </tr>
         </thead>
 
@@ -188,6 +189,40 @@
 
                         <span>@Convert.ToInt32(metaDiaria)</span>
                     }
+                </td>
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#metasCanal_@item.Nombre"><span class="glyphicon glyphicon-refresh"></span> Actualizar Meta</button>
+
+                    <!-- Modal -->
+                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/MetasIndividuales/EditarMetasIndividuales")">
+                        <div class="modal fade" id="metasCanal_@item.Nombre" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:aquamarine">
+                                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Editar meta</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Cantidad de EPIs Meta:</label>
+                                            <input type="tel" class="form-control" id="fecha" name="setMeta" placeholder="@item.Meta">
+                                            <input type="hidden" value="@item.idReferido" name="id" />
+                                            <input type="hidden" value="@canalInd" name="canalInd" />
+                                        </div>
+                                        <hr />
+                                        <div class="form-group">
+                                            <h4>Meta Actual de @item.Nombre</h4>          
+                                                <span>@item.Nombre --- @item.Meta</span><br />
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <input type="submit" value="Enviar" class="btn btn-primary" />
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </form>
                 </td>
             </tr>
 

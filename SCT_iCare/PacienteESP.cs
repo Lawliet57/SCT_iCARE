@@ -17,16 +17,16 @@ namespace SCT_iCare
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public PacienteESP()
         {
-            this.FotoPacienteESP = new HashSet<FotoPacienteESP>();
             this.CartaNoAccidentesESP = new HashSet<CartaNoAccidentesESP>();
             this.DeclaracionSaludESP = new HashSet<DeclaracionSaludESP>();
-            this.DocumentosESP = new HashSet<DocumentosESP>();
-            this.HemoglobinaGlucosiladaESP = new HashSet<HemoglobinaGlucosiladaESP>();
             this.DictamenESP = new HashSet<DictamenESP>();
+            this.DocumentosESP = new HashSet<DocumentosESP>();
             this.EPI_ESP = new HashSet<EPI_ESP>();
-            this.MovimientosAudio = new HashSet<MovimientosAudio>();
             this.FirmaESP = new HashSet<FirmaESP>();
+            this.FotoPacienteESP = new HashSet<FotoPacienteESP>();
+            this.HemoglobinaGlucosiladaESP = new HashSet<HemoglobinaGlucosiladaESP>();
             this.HuellasESP = new HashSet<HuellasESP>();
+            this.MovimientosAudio = new HashSet<MovimientosAudio>();
         }
     
         public int idPacienteESP { get; set; }
@@ -44,9 +44,9 @@ namespace SCT_iCare
         public string ReferidoPor { get; set; }
         public Nullable<System.DateTime> FechaCita { get; set; }
         public string Estatura { get; set; }
-        public string Metra { get; set; }
         public string EstatusCaptura { get; set; }
         public string Capturista { get; set; }
+        public string Metra { get; set; }
         public string Genero { get; set; }
         public string Problema { get; set; }
         public string Solicita { get; set; }
@@ -61,24 +61,24 @@ namespace SCT_iCare
         public string FormaPago { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<FotoPacienteESP> FotoPacienteESP { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartaNoAccidentesESP> CartaNoAccidentesESP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DeclaracionSaludESP> DeclaracionSaludESP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<DocumentosESP> DocumentosESP { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<HemoglobinaGlucosiladaESP> HemoglobinaGlucosiladaESP { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DictamenESP> DictamenESP { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DocumentosESP> DocumentosESP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EPI_ESP> EPI_ESP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<MovimientosAudio> MovimientosAudio { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<FirmaESP> FirmaESP { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<FotoPacienteESP> FotoPacienteESP { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<HemoglobinaGlucosiladaESP> HemoglobinaGlucosiladaESP { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HuellasESP> HuellasESP { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MovimientosAudio> MovimientosAudio { get; set; }
     }
 }

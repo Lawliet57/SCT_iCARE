@@ -17,8 +17,8 @@ namespace SCT_iCare
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Captura()
         {
-            this.IncidenciaDictamen = new HashSet<IncidenciaDictamen>();
             this.CapturaIncidencia = new HashSet<CapturaIncidencia>();
+            this.IncidenciaDictamen = new HashSet<IncidenciaDictamen>();
             this.IncidenciaPaciente = new HashSet<IncidenciaPaciente>();
         }
     
@@ -45,9 +45,9 @@ namespace SCT_iCare
     
         public virtual Paciente Paciente { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<IncidenciaDictamen> IncidenciaDictamen { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CapturaIncidencia> CapturaIncidencia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<IncidenciaDictamen> IncidenciaDictamen { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<IncidenciaPaciente> IncidenciaPaciente { get; set; }
     }

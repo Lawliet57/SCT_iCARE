@@ -265,8 +265,6 @@ namespace SCT_iCare.Controllers.Recepcion
             //    return Json(selected, JsonRequestBehavior.AllowGet);
             //}
 
-            string canal = null;
-
             int cantidadN;
             int cantidadA;
 
@@ -1252,8 +1250,6 @@ namespace SCT_iCare.Controllers.Recepcion
         public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, int card, int? referido, DateTime? fecha)
         {
             GetApiKey();
-
-            string mailSeteado = "referenciaoxxo@medicinagmi.mx";
 
             int cantidadN;
             int cantidadA;
@@ -2844,9 +2840,6 @@ namespace SCT_iCare.Controllers.Recepcion
         public ActionResult OrdenScotiabank(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string referido)
         {
             GetApiKey();
-
-            string mailSeteado = "referenciasoxxo@medicinagmi.mx";
-
 
             int cantidadN;
             int cantidadA;

@@ -1311,6 +1311,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 }
 
 
+@*TABLA DE RECEPCION*@
+
 @if (modelo.FirstOrDefault() == null)
 {
     <br />
@@ -2240,7 +2242,7 @@ else
                                             </div>
                                             <div class="form-group">
                                                 <label for="ticket" class="col-form-label">Ticket de Pago:</label>
-                                                <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                <input  type="file" name="ticket" asp-for="file" class="" required value="ticket" />
                                             </div>
                                         </div>
                                         <div class="modal-footer">

@@ -263,8 +263,6 @@ namespace SCT_iCare.Controllers.Dictamenes
         {
             PacienteESP paciente1 = new PacienteESP();
 
-            string canal = null;
-
             int cantidadN;
             int cantidadA;
 
@@ -386,8 +384,6 @@ namespace SCT_iCare.Controllers.Dictamenes
         public ActionResult CreateVentas(string nombre, string usuario, /*string sucursal, */string cantidad, string cantidadAereo, int? referido, string urgente, string pagoGestor)
         {
             PacienteESP paciente1 = new PacienteESP();
-
-            string canal = null;
 
             int cantidadN;
             int cantidadA;
@@ -1069,7 +1065,6 @@ namespace SCT_iCare.Controllers.Dictamenes
                 int posicionActual = 0;
                 int posicionDeseada = 0;
                 int operacion = 0;
-                string arribaAbajo = "";
 
                 for (int i = 0; i < 16; i++)
                 {
@@ -1824,7 +1819,6 @@ namespace SCT_iCare.Controllers.Dictamenes
                 int posicionActual = 0;
                 int posicionDeseada = 0;
                 int operacion = 0;
-                string arribaAbajo = "";
 
                 for (int i = 0; i < 16; i++)
                 {

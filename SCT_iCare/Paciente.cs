@@ -17,27 +17,27 @@ namespace SCT_iCare
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Paciente()
         {
+            this.Archivos = new HashSet<Archivos>();
+            this.Biometricos = new HashSet<Biometricos>();
             this.Captura = new HashSet<Captura>();
+            this.CarruselMedico = new HashSet<CarruselMedico>();
             this.Cita = new HashSet<Cita>();
             this.Dictamen = new HashSet<Dictamen>();
-            this.Expedientes = new HashSet<Expedientes>();
             this.DictamenProblema = new HashSet<DictamenProblema>();
-            this.CarruselMedico = new HashSet<CarruselMedico>();
-            this.EPI_Laboratorio = new HashSet<EPI_Laboratorio>();
-            this.EPI_SignosVitales = new HashSet<EPI_SignosVitales>();
-            this.EPI_Cardiologia = new HashSet<EPI_Cardiologia>();
-            this.Epi_Oftalmologia = new HashSet<Epi_Oftalmologia>();
             this.EPI_A_Heredofamiliares = new HashSet<EPI_A_Heredofamiliares>();
             this.EPI_A_NoPatologicos = new HashSet<EPI_A_NoPatologicos>();
             this.EPI_A_Patologicos = new HashSet<EPI_A_Patologicos>();
             this.EPI_AparatosSistemas = new HashSet<EPI_AparatosSistemas>();
             this.EPI_Audiologia = new HashSet<EPI_Audiologia>();
-            this.EPI_ExploracionFisica = new HashSet<EPI_ExploracionFisica>();
+            this.EPI_Cardiologia = new HashSet<EPI_Cardiologia>();
             this.EPI_DictamenAptitud = new HashSet<EPI_DictamenAptitud>();
+            this.EPI_ExploracionFisica = new HashSet<EPI_ExploracionFisica>();
+            this.EPI_Laboratorio = new HashSet<EPI_Laboratorio>();
             this.EPI_Odontologia = new HashSet<EPI_Odontologia>();
+            this.Epi_Oftalmologia = new HashSet<Epi_Oftalmologia>();
+            this.EPI_SignosVitales = new HashSet<EPI_SignosVitales>();
             this.ExpedienteRevaloracion = new HashSet<ExpedienteRevaloracion>();
-            this.Archivos = new HashSet<Archivos>();
-            this.Biometricos = new HashSet<Biometricos>();
+            this.Expedientes = new HashSet<Expedientes>();
             this.Tickets = new HashSet<Tickets>();
         }
     
@@ -51,25 +51,19 @@ namespace SCT_iCare
         public string Genero { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Archivos> Archivos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Biometricos> Biometricos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Captura> Captura { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CarruselMedico> CarruselMedico { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cita> Cita { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Dictamen> Dictamen { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Expedientes> Expedientes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DictamenProblema> DictamenProblema { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CarruselMedico> CarruselMedico { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EPI_Laboratorio> EPI_Laboratorio { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EPI_SignosVitales> EPI_SignosVitales { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EPI_Cardiologia> EPI_Cardiologia { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Epi_Oftalmologia> Epi_Oftalmologia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EPI_A_Heredofamiliares> EPI_A_Heredofamiliares { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -81,17 +75,23 @@ namespace SCT_iCare
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EPI_Audiologia> EPI_Audiologia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<EPI_ExploracionFisica> EPI_ExploracionFisica { get; set; }
+        public virtual ICollection<EPI_Cardiologia> EPI_Cardiologia { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EPI_DictamenAptitud> EPI_DictamenAptitud { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EPI_ExploracionFisica> EPI_ExploracionFisica { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EPI_Laboratorio> EPI_Laboratorio { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EPI_Odontologia> EPI_Odontologia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Epi_Oftalmologia> Epi_Oftalmologia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<EPI_SignosVitales> EPI_SignosVitales { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ExpedienteRevaloracion> ExpedienteRevaloracion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Archivos> Archivos { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Biometricos> Biometricos { get; set; }
+        public virtual ICollection<Expedientes> Expedientes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tickets> Tickets { get; set; }
     }

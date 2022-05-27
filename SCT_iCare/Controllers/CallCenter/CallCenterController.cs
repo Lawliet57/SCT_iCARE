@@ -889,8 +889,6 @@ namespace SCT_iCare.Controllers.CallCenter
         {
             GetApiKey();
 
-            string mailSeteado = "referenciaoxxo@medicinagmi.mx";
-
             int cantidadN;
             int cantidadA;
 
@@ -1303,7 +1301,6 @@ namespace SCT_iCare.Controllers.CallCenter
         {
             GetApiKey();
 
-            string mailSeteado = "referenciasoxxo@medicinagmi.mx";
             int precio = 0;
 
             if (tipoL == "AEREO")
@@ -1758,7 +1755,6 @@ namespace SCT_iCare.Controllers.CallCenter
             string TELEFONO = null;
             string EMAIL = null;
             DateTime FECHA = new DateTime();
-            string SUCURSAL = null;
 
             if (id == null)
             {
@@ -1887,8 +1883,6 @@ namespace SCT_iCare.Controllers.CallCenter
 
                 return Json(selected, JsonRequestBehavior.AllowGet);
 
-
-                return Json(selected, JsonRequestBehavior.AllowGet);
             }
             else
             {

@@ -18,8 +18,8 @@ namespace SCT_iCare
         public Sucursales()
         {
             this.Doctores = new HashSet<Doctores>();
-            this.Recepcionista = new HashSet<Recepcionista>();
             this.DoctorModulo = new HashSet<DoctorModulo>();
+            this.Recepcionista = new HashSet<Recepcionista>();
         }
     
         public int idSucursal { get; set; }
@@ -35,8 +35,8 @@ namespace SCT_iCare
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Doctores> Doctores { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Recepcionista> Recepcionista { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DoctorModulo> DoctorModulo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Recepcionista> Recepcionista { get; set; }
     }
 }
