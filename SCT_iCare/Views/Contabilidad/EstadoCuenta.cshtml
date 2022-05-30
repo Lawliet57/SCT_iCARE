@@ -38,7 +38,9 @@
     int precioAereo = 0;
     int precioCIVA = 0;
     int precioSIVA = 0;
-
+    int sumaPrecios = 0;
+    int precioVisual = 0;
+    int bucle = 0;
 
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
@@ -347,43 +349,76 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 @{
                     foreach (var item in modeloNormal.OrderBy(q => q.A.M.FechaCita))
                     {
-                        fechaTabla = Convert.ToString(item.A.M.FechaCita);                        
+                        fechaTabla = Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yy");
+                        var parseFechaInicial = DateTime.Parse(fechaTabla);
+                        var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23);
+                        int conteoEpis = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
+                        bucle = conteoEpis;
 
-                        if (fechaTablaAnterior != Convert.ToString(item.A.M.FechaCita))
+                        //DIFERENCIAR PRECIOS
+
+                        if (item.A.M.TipoLicencia == "AEREO")
+                        {
+                            var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i);
+
+                            foreach (var precios in precioEpi)
+                            {
+                                precioAereo = Convert.ToInt32(precios.PrecioAereo);
+                            }
+
+                        }
+
+                        else if (item.A.M.TipoLicencia != "AEREO")
+                        {
+                            var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i);
+
+                            foreach (var precios in precioEpi)
+                            {
+
+                                if (precios.PrecioNormalconIVA != "0" && precios.PrecioNormalconIVA != null)
+                                {
+                                    precioCIVA = Convert.ToInt32(precios.PrecioNormalconIVA);
+                                }
+                                else
+                                {
+                                    precioSIVA = Convert.ToInt32(precios.PrecioNormal);
+                                }
+                            }
+
+                            sumaPrecios = precioAereo + precioCIVA + precioSIVA;
+
+                            for ( int i= 0; i < bucle; i++)
+                            {
+                                precioVisual += sumaPrecios;
+                            }
+                        }
+
+                        if (fechaTablaAnterior != fechaTabla)
                         {
                             <tr>
 
                                 @*FECHA DE CITA*@
                                 <td>
-                                    <span>@item.A.M.FechaCita</span>
+                                    <span>@fechaTabla</span>
                                 </td>
 
                                 @*NUMERO DE EPIS X DIA EN FECHA*@
                                 <td>
-                                    @{
-                                        int conteoEpis = (from i in modeloNormal where i.A.M.FechaCita >= item.A.M.FechaCita && i.A.M.FechaCita <= item.A.M.FechaCita select i).Count();
-                                        <span>@conteoEpis</span>
-                                    }
+                                        <span>@conteoEpis</span>                               
                                 </td>
 
                                 @*IMPORTE*@
-                                 <td>
-                                    @{                                        
-                                        //DIFERENCIAR PRECIOS
-
-                                        if (item.A.M.TipoLicencia == "AEREO")
-                                        {
-                                            var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor select i.PrecioAereo);
-                                            precioAereo = Convert.ToInt32(precioEpi);                                            
-                                        }
-                                        conteoEpis = (from i in modeloNormal where i.A.M.FechaCita >= item.A.M.FechaCita && i.A.M.FechaCita <= item.A.M.FechaCita select i).Count();
-                                        <span>@conteoEpis</span>
-                                    }
-                                </td>
-
+                                 <td>                                  
+                                     <span>$@precioVisual.ToString("###,###,###,###")</span>    
+                                 </td>
                             </tr>
                         }
                         fechaTablaAnterior = fechaTabla;
+                        precioVisual = 0;
+                        precioAereo = 0;
+                        precioSIVA = 0;
+                        precioCIVA = 0;
+                        bucle = 0;
                     }
                 }
             </tbody>
