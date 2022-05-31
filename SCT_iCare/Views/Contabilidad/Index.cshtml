@@ -657,7 +657,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 else
                                 {
 
-                                    if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
+                                    if (costo.PrecioAereo != null && costo.PrecioAereo != "0")
                                     {
                                         <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
                                     }

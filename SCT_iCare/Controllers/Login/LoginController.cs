@@ -159,6 +159,11 @@ namespace SCT_iCare.Controllers.Login
                                 ViewBag.Nombre = oUser.Nombre.ToString();
                                 return Redirect("~/Admin/Index");
                             }
+                            else if (oUser.Nombre == "Edith Atilano")
+                            {
+                                ViewBag.Nombre = oUser.Nombre.ToString();
+                                return Redirect("~/CERTIFICADOes/Index");
+                            }
                             else
                             {
                                 ViewBag.Nombre = oUser.Nombre.ToString();

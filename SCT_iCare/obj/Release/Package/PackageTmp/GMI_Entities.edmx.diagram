@@ -4,153 +4,153 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="59">
-        <EntityTypeShape EntityType="DevModel.Aptitud" Width="1.5" PointX="3.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Canal" Width="1.5" PointX="0.75" PointY="13.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Captura" Width="1.5" PointX="3" PointY="7.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.CERTIFICADO" Width="1.5" PointX="0.875" PointY="5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Cita" Width="1.5" PointX="3" PointY="12.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Ciudades" Width="1.5" PointX="5.75" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Dictamen" Width="1.5" PointX="6" PointY="11.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Doctores" Width="1.5" PointX="10.25" PointY="3.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Expedientes" Width="1.5" PointX="3.125" PointY="18.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.IncidenciaDictamen" Width="1.5" PointX="5.25" PointY="8" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Menu" Width="1.5" PointX="5.75" PointY="18" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Paciente" Width="1.5" PointX="0.75" PointY="9.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Recepcionista" Width="1.5" PointX="10.25" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.ReferenciasSB" Width="1.5" PointX="7.75" PointY="7.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Roles" Width="1.5" PointX="5.75" PointY="15.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.RolMenu" Width="1.5" PointX="8" PointY="18" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Sucursales" Width="1.5" PointX="8" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="DevModel.Usuarios" Width="1.5" PointX="8" PointY="14.875" IsExpanded="true" />
-        <AssociationConnector Association="DevModel.FK_Dictamen_Aptitud" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Cita_Canal" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Captura_Paciente" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_IncidenciaDictamen_Captura" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Cita_Paciente" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Sucursales_Ciudades" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Dictamen_Paciente" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Doctores_Sucursales" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Expedientes_Paciente" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_RolMenu_Menu" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Recepcionista_Sucursales" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Recepcionista_Usuarios" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_RolMenu_Roles" ManuallyRouted="false" />
-        <AssociationConnector Association="DevModel.FK_Usuarios_Roles" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="DevModel.CapturaIncidencia" Width="1.5" PointX="3.75" PointY="2.375" />
+      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="10">
+        <EntityTypeShape EntityType="DevModel.Aptitud" Width="1.5" PointX="3.75" PointY="7.875" />
+        <EntityTypeShape EntityType="DevModel.Archivos" Width="1.5" PointX="3" PointY="39.25" />
+        <EntityTypeShape EntityType="DevModel.AudioGA" Width="1.5" PointX="29" PointY="33.625" />
+        <EntityTypeShape EntityType="DevModel.Biometricos" Width="1.5" PointX="3" PointY="45" />
+        <EntityTypeShape EntityType="DevModel.CallCenter" Width="1.5" PointX="0.75" PointY="1" />
+        <EntityTypeShape EntityType="DevModel.Canal" Width="1.5" PointX="0.75" PointY="57" />
+        <EntityTypeShape EntityType="DevModel.Canales" Width="1.5" PointX="0.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DevModel.Captura" Width="1.5" PointX="3" PointY="12.125" />
+        <EntityTypeShape EntityType="DevModel.CapturaIncidencia" Width="1.5" PointX="5.25" PointY="16.75" />
+        <EntityTypeShape EntityType="DevModel.Cardiologo" Width="1.5" PointX="15" PointY="10.625" />
+        <EntityTypeShape EntityType="DevModel.CarruselMedico" Width="1.5" PointX="3" PointY="87.75" />
+        <EntityTypeShape EntityType="DevModel.CartaNoAccidentesESP" Width="1.5" PointX="10" PointY="21.625" />
+        <EntityTypeShape EntityType="DevModel.CERTIFICADO" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DevModel.Cita" Width="1.5" PointX="3" PointY="51" />
+        <EntityTypeShape EntityType="DevModel.CitaDS" Width="1.5" PointX="15" PointY="2" />
+        <EntityTypeShape EntityType="DevModel.Ciudades" Width="1.5" PointX="20.75" PointY="19" />
+        <EntityTypeShape EntityType="DevModel.ConteoDoctores2" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DevModel.DeclaracionSaludESP" Width="1.5" PointX="10" PointY="19.125" />
+        <EntityTypeShape EntityType="DevModel.Dictamen" Width="1.5" PointX="6" PointY="51.625" />
+        <EntityTypeShape EntityType="DevModel.DictamenESP" Width="1.5" PointX="10" PointY="26.75" />
+        <EntityTypeShape EntityType="DevModel.DictamenProblema" Width="1.5" PointX="3" PointY="30.125" />
+        <EntityTypeShape EntityType="DevModel.Doctores" Width="1.5" PointX="25.25" PointY="19" />
+        <EntityTypeShape EntityType="DevModel.Doctores2" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DevModel.DoctorModulo" Width="1.5" PointX="25.25" PointY="11.5" />
+        <EntityTypeShape EntityType="DevModel.DoctorModuloDS" Width="1.5" PointX="22.25" PointY="11.5" />
+        <EntityTypeShape EntityType="DevModel.DocumentosESP" Width="1.5" PointX="10" PointY="16.625" />
+        <EntityTypeShape EntityType="DevModel.EKGRandom" Width="1.5" PointX="6.75" PointY="4.75" />
+        <EntityTypeShape EntityType="DevModel.EPI_A_Heredofamiliares" Width="1.5" PointX="3" PointY="72.625" />
+        <EntityTypeShape EntityType="DevModel.EPI_A_NoPatologicos" Width="1.5" PointX="3" PointY="81.375" />
+        <EntityTypeShape EntityType="DevModel.EPI_A_Patologicos" Width="1.5" PointX="3" PointY="19.625" />
+        <EntityTypeShape EntityType="DevModel.EPI_AparatosSistemas" Width="1.5" PointX="3" PointY="32.875" />
+        <EntityTypeShape EntityType="DevModel.EPI_Audiologia" Width="1.5" PointX="3" PointY="100.625" />
+        <EntityTypeShape EntityType="DevModel.EPI_Cardiologia" Width="1.5" PointX="3" PointY="64.125" />
+        <EntityTypeShape EntityType="DevModel.EPI_DictamenAptitud" Width="1.5" PointX="3" PointY="27.125" />
+        <EntityTypeShape EntityType="DevModel.EPI_ESP" Width="1.5" PointX="10" PointY="29.25" />
+        <EntityTypeShape EntityType="DevModel.EPI_ExploracionFisica" Width="1.5" PointX="3" PointY="77.875" />
+        <EntityTypeShape EntityType="DevModel.EPI_GA" Width="1.5" PointX="29" PointY="16" />
+        <EntityTypeShape EntityType="DevModel.EPI_Laboratorio" Width="1.5" PointX="3" PointY="47.625" />
+        <EntityTypeShape EntityType="DevModel.EPI_Odontologia" Width="1.5" PointX="3" PointY="61.375" />
+        <EntityTypeShape EntityType="DevModel.Epi_Oftalmologia" Width="1.5" PointX="3" PointY="93" />
+        <EntityTypeShape EntityType="DevModel.EPI_SignosVitales" Width="1.5" PointX="3" PointY="68" />
+        <EntityTypeShape EntityType="DevModel.ExpedienteRevaloracion" Width="1.5" PointX="3" PointY="98" />
+        <EntityTypeShape EntityType="DevModel.Expedientes" Width="1.5" PointX="3" PointY="85" />
+        <EntityTypeShape EntityType="DevModel.Farmacia" Width="1.5" PointX="15" PointY="8" />
+        <EntityTypeShape EntityType="DevModel.FirmaESP" Width="1.5" PointX="10" PointY="11.5" />
+        <EntityTypeShape EntityType="DevModel.FotoPacienteESP" Width="1.5" PointX="10" PointY="14.125" />
+        <EntityTypeShape EntityType="DevModel.Fotos" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DevModel.HemoglobinaGlucosiladaESP" Width="1.5" PointX="10" PointY="24.25" />
+        <EntityTypeShape EntityType="DevModel.HuellasESP" Width="1.5" PointX="10" PointY="3" />
+        <EntityTypeShape EntityType="DevModel.HuellasRandom" Width="1.5" PointX="5.75" PointY="7.75" />
+        <EntityTypeShape EntityType="DevModel.IncidenciaDictamen" Width="1.5" PointX="5.25" PointY="13.625" />
+        <EntityTypeShape EntityType="DevModel.IncidenciaPaciente" Width="1.5" PointX="5.25" PointY="11.125" />
+        <EntityTypeShape EntityType="DevModel.log_InicioGestor" Width="1.5" PointX="22.25" PointY="23.25" />
+        <EntityTypeShape EntityType="DevModel.log_Movimientos" Width="1.5" PointX="24.5" PointY="23.5" />
+        <EntityTypeShape EntityType="DevModel.MedicinaInterna" Width="1.5" PointX="15" PointY="20" />
+        <EntityTypeShape EntityType="DevModel.Menu" Width="1.5" PointX="17.75" PointY="6" />
+        <EntityTypeShape EntityType="DevModel.Modulos" Width="1.5" PointX="23" PointY="5.75" />
+        <EntityTypeShape EntityType="DevModel.MovimientosAudio" Width="1.5" PointX="10" PointY="6.125" />
+        <EntityTypeShape EntityType="DevModel.Nutriologo" Width="1.5" PointX="15" PointY="13.75" />
+        <EntityTypeShape EntityType="DevModel.Oftalmologo" Width="1.5" PointX="15" PointY="16.875" />
+        <EntityTypeShape EntityType="DevModel.Paciente" Width="1.5" PointX="0.75" PointY="49.375" />
+        <EntityTypeShape EntityType="DevModel.PacienteDS" Width="1.5" PointX="12.75" PointY="12.125" />
+        <EntityTypeShape EntityType="DevModel.PacienteESP" Width="1.5" PointX="7.75" PointY="20.25" />
+        <EntityTypeShape EntityType="DevModel.PacienteGA" Width="1.5" PointX="26.75" PointY="22.375" />
+        <EntityTypeShape EntityType="DevModel.PagosGestores" Width="1.5" PointX="28" PointY="1.875" />
+        <EntityTypeShape EntityType="DevModel.Recepcionista" Width="1.5" PointX="22.25" PointY="14.75" />
+        <EntityTypeShape EntityType="DevModel.RecepcionistaDS" Width="1.5" PointX="22.25" PointY="8.75" />
+        <EntityTypeShape EntityType="DevModel.ReferenciasSB" Width="1.5" PointX="17.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DevModel.Referido" Width="1.5" PointX="25.75" PointY="1" />
+        <EntityTypeShape EntityType="DevModel.Roles" Width="1.5" PointX="17.75" PointY="9" />
+        <EntityTypeShape EntityType="DevModel.RolMenu" Width="1.5" PointX="20" PointY="8" />
+        <EntityTypeShape EntityType="DevModel.SignosVitalesDS" Width="1.5" PointX="15" PointY="23" />
+        <EntityTypeShape EntityType="DevModel.SucursalDS" Width="1.5" PointX="20" PointY="4.75" />
+        <EntityTypeShape EntityType="DevModel.Sucursales" Width="1.5" PointX="23" PointY="18.25" />
+        <EntityTypeShape EntityType="DevModel.sysdiagrams" Width="1.5" PointX="17.75" PointY="15.75" />
+        <EntityTypeShape EntityType="DevModel.Tickets" Width="1.5" PointX="3" PointY="42.375" />
+        <EntityTypeShape EntityType="DevModel.Tipificaciones" Width="1.5" PointX="3" PointY="1" />
+        <EntityTypeShape EntityType="DevModel.UrgentesCount" Width="1.5" PointX="17.75" PointY="18.75" />
+        <EntityTypeShape EntityType="DevModel.Usuarios" Width="1.5" PointX="20" PointY="11.125" />
+        <EntityTypeShape EntityType="DevModel.CadenaSplit" Width="1.5" PointX="7.75" PointY="0.75" />
+        <AssociationConnector Association="DevModel.FK_Dictamen_Aptitud" />
+        <AssociationConnector Association="DevModel.FK_Archivos_Paciente" />
+        <AssociationConnector Association="DevModel.FK_AudioGA_PacienteGA" />
+        <AssociationConnector Association="DevModel.FK_Biometricos_Paciente" />
+        <AssociationConnector Association="DevModel.FK_Tipificaciones_CallCenter" />
+        <AssociationConnector Association="DevModel.FK_Cita_Canal" />
+        <AssociationConnector Association="DevModel.FK_Captura_Paciente" />
         <AssociationConnector Association="DevModel.FK_CapturaIncidencia_Captura" />
-        <EntityTypeShape EntityType="DevModel.IncidenciaPaciente" Width="1.5" PointX="5.25" PointY="0.75" />
+        <AssociationConnector Association="DevModel.FK_IncidenciaDictamen_Captura" />
         <AssociationConnector Association="DevModel.FK_IncidenciaPaciente_Captura" />
-        <EntityTypeShape EntityType="DevModel.log_InicioGestor" Width="1.5" PointX="10.25" PointY="15.125" />
-        <EntityTypeShape EntityType="DevModel.log_Movimientos" Width="1.5" PointX="10.25" PointY="17.875" />
-        <AssociationConnector Association="DevModel.FK_log_InicioGestor_Usuarios" />
-        <AssociationConnector Association="DevModel.FK_log_Movimientos_log_InicioGestor" />
-        <EntityTypeShape EntityType="DevModel.DictamenProblema" Width="1.5" PointX="3" PointY="21.75" />
+        <AssociationConnector Association="DevModel.FK_Cardiologo_PacienteDS" />
+        <AssociationConnector Association="DevModel.FK_CarruselMedico_Paciente" />
+        <AssociationConnector Association="DevModel.FK_CartaNoAccidentesESP_PacienteESP" />
+        <AssociationConnector Association="DevModel.FK_Cita_Paciente" />
+        <AssociationConnector Association="DevModel.FK_CitaDS_PacienteDS" />
+        <AssociationConnector Association="DevModel.FK_Sucursales_Ciudades" />
+        <AssociationConnector Association="DevModel.FK_DeclaracionSaludESP_PacienteESP" />
+        <AssociationConnector Association="DevModel.FK_Dictamen_Paciente" />
+        <AssociationConnector Association="DevModel.FK_DictamenESP_PacienteESP" />
         <AssociationConnector Association="DevModel.FK_DictamenProblema_Paciente" />
-        <EntityTypeShape EntityType="DevModel.DoctorModulo" Width="1.5" PointX="10.25" PointY="10" />
-        <EntityTypeShape EntityType="DevModel.Modulos" Width="1.5" PointX="8" PointY="0.75" />
+        <AssociationConnector Association="DevModel.FK_Doctores_Sucursales" />
         <AssociationConnector Association="DevModel.FK_DoctorModulo_Modulos" />
         <AssociationConnector Association="DevModel.FK_DoctorModulo_Sucursales" />
         <AssociationConnector Association="DevModel.FK_DoctorModulo_Usuarios" />
-        <EntityTypeShape EntityType="DevModel.CarruselMedico" Width="1.5" PointX="3" PointY="25.375" />
-        <AssociationConnector Association="DevModel.FK_CarruselMedico_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EPI_Laboratorio" Width="1.5" PointX="9.125" PointY="25" />
-        <EntityTypeShape EntityType="DevModel.EPI_SignosVitales" Width="1.5" PointX="9.75" PointY="28.125" />
-        <AssociationConnector Association="DevModel.FK_EPI_Laboratorio_Paciente" />
-        <AssociationConnector Association="DevModel.FK_EPI_SignosVitales_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EPI_Cardiologia" Width="1.5" PointX="14.5" PointY="25.5" />
-        <AssociationConnector Association="DevModel.FK_EPI_Cardiologia_Paciente" />
-        <EntityTypeShape EntityType="DevModel.Epi_Oftalmologia" Width="1.5" PointX="6.125" PointY="28" />
-        <AssociationConnector Association="DevModel.FK_Epi_Oftalmologia_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EPI_A_Heredofamiliares" Width="1.5" PointX="14.875" PointY="20.75" />
-        <EntityTypeShape EntityType="DevModel.EPI_A_NoPatologicos" Width="1.5" PointX="8.875" PointY="21.5" />
-        <EntityTypeShape EntityType="DevModel.EPI_A_Patologicos" Width="1.5" PointX="11.5" PointY="21.125" />
-        <EntityTypeShape EntityType="DevModel.EPI_AparatosSistemas" Width="1.5" PointX="6.25" PointY="21.5" />
+        <AssociationConnector Association="DevModel.FK_DoctorModuloDS_Modulos" />
+        <AssociationConnector Association="DevModel.FK_DoctorModuloDS_SucursalDS" />
+        <AssociationConnector Association="DevModel.FK_DoctorModuloDS_Usuarios" />
+        <AssociationConnector Association="DevModel.FK_DocumentosESP_PacienteESP" />
         <AssociationConnector Association="DevModel.FK_EPI_A_Heredofamiliares_Paciente" />
         <AssociationConnector Association="DevModel.FK_EPI_A_NoPatologicos_Paciente" />
         <AssociationConnector Association="DevModel.FK_EPI_A_Patologicos_Paciente" />
         <AssociationConnector Association="DevModel.FK_EPI_AparatosSistemas_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EPI_Audiologia" Width="1.5" PointX="3" PointY="32.875" />
-        <EntityTypeShape EntityType="DevModel.EPI_ExploracionFisica" Width="1.5" PointX="1.375" PointY="0.75" />
         <AssociationConnector Association="DevModel.FK_EPI_Audiologia_Paciente" />
-        <AssociationConnector Association="DevModel.FK_EPI_ExploracionFisica_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EPI_DictamenAptitud" Width="1.5" PointX="8.25" PointY="33.125" />
+        <AssociationConnector Association="DevModel.FK_EPI_Cardiologia_Paciente" />
         <AssociationConnector Association="DevModel.FK_EPI_DictamenAptitud_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EPI_Odontologia" Width="1.5" PointX="5.75" PointY="33" />
-        <AssociationConnector Association="DevModel.FK_EPI_Odontologia_Paciente" />
-        <EntityTypeShape EntityType="DevModel.Referido" Width="1.5" PointX="19.625" PointY="7.125" />
-        <EntityTypeShape EntityType="DevModel.ExpedienteRevaloracion" Width="1.5" PointX="3" PointY="36.25" />
-        <AssociationConnector Association="DevModel.FK_ExpedienteRevaloracion_Paciente" />
-        <EntityTypeShape EntityType="DevModel.Archivos" Width="1.5" PointX="3" PointY="39" />
-        <AssociationConnector Association="DevModel.FK_Archivos_Paciente" />
-        <EntityTypeShape EntityType="DevModel.Biometricos" Width="1.5" PointX="3" PointY="42.375" />
-        <AssociationConnector Association="DevModel.FK_Biometricos_Paciente" />
-        <EntityTypeShape EntityType="DevModel.EKGRandom" Width="1.5" PointX="12.375" PointY="0.75" />
-        <EntityTypeShape EntityType="DevModel.HuellasRandom" Width="1.5" PointX="12.375" PointY="3.75" />
-        <EntityTypeShape EntityType="DevModel.PacienteESP" Width="1.5" PointX="12.375" PointY="6.75" />
-        <EntityTypeShape EntityType="DevModel.FotoPacienteESP" Width="1.5" PointX="14.625" PointY="7.875" />
-        <AssociationConnector Association="DevModel.FK_FotoPacienteESP_PacienteESP" />
-        <EntityTypeShape EntityType="DevModel.CartaNoAccidentesESP" Width="1.5" PointX="14.625" PointY="13.5" />
-        <EntityTypeShape EntityType="DevModel.DeclaracionSaludESP" Width="1.5" PointX="14.625" PointY="16.125" />
-        <EntityTypeShape EntityType="DevModel.DocumentosESP" Width="1.5" PointX="14.625" PointY="11" />
-        <EntityTypeShape EntityType="DevModel.HemoglobinaGlucosiladaESP" Width="1.5" PointX="14.625" PointY="4.5" />
-        <AssociationConnector Association="DevModel.FK_CartaNoAccidentesESP_PacienteESP" />
-        <AssociationConnector Association="DevModel.FK_DeclaracionSaludESP_PacienteESP" />
-        <AssociationConnector Association="DevModel.FK_DocumentosESP_PacienteESP" />
-        <AssociationConnector Association="DevModel.FK_HemoglobinaGlucosiladaESP_PacienteESP" />
-        <EntityTypeShape EntityType="DevModel.DictamenESP" Width="1.5" PointX="14.625" PointY="1.625" />
-        <AssociationConnector Association="DevModel.FK_DictamenESP_PacienteESP" />
-        <EntityTypeShape EntityType="DevModel.UrgentesCount" Width="1.5" PointX="17.375" PointY="0.75" />
-        <EntityTypeShape EntityType="DevModel.EPI_ESP" Width="1.5" PointX="14.625" PointY="35.25" />
-        <EntityTypeShape EntityType="DevModel.MovimientosAudio" Width="1.5" PointX="14.625" PointY="29.75" />
         <AssociationConnector Association="DevModel.FK_EPI_ESP_PacienteESP" />
-        <AssociationConnector Association="DevModel.FK_MovimientosAudio_PacienteESP" />
-        <EntityTypeShape EntityType="DevModel.CallCenter" Width="1.5" PointX="17.375" PointY="3.75" />
-        <EntityTypeShape EntityType="DevModel.Tipificaciones" Width="1.5" PointX="17.375" PointY="6.75" />
-        <EntityTypeShape EntityType="DevModel.FirmaESP" Width="1.5" PointX="17.375" PointY="9.75" />
-        <EntityTypeShape EntityType="DevModel.HuellasESP" Width="1.5" PointX="17.375" PointY="12.75" />
-        <EntityTypeShape EntityType="DevModel.Canales" Width="1.5" PointX="17.375" PointY="15.75" />
-        <EntityTypeShape EntityType="DevModel.ConteoDoctores2" Width="1.5" PointX="17.375" PointY="18.75" />
-        <EntityTypeShape EntityType="DevModel.Doctores2" Width="1.5" PointX="19.375" PointY="0.75" />
-        <AssociationConnector Association="DevModel.FK_Tipificaciones_CallCenter" />
-        <AssociationConnector Association="DevModel.FK_FirmaESP_PacienteESP" />
-        <AssociationConnector Association="DevModel.FK_HuellasESP_PacienteESP" />
-        <EntityTypeShape EntityType="DevModel.Tickets" Width="1.5" PointX="19.375" PointY="3.75" />
-        <AssociationConnector Association="DevModel.FK_Tickets_Paciente" />
-        <EntityTypeShape EntityType="DevModel.PagosGestores" Width="1.5" PointX="21.875" PointY="7.875" />
-        <AssociationConnector Association="DevModel.FK_PagosGestores_Referido" />
-        <EntityTypeShape EntityType="DevModel.AudioGA" Width="1.5" PointX="26.625" PointY="5.5" />
-        <EntityTypeShape EntityType="DevModel.Cardiologo" Width="1.5" PointX="21.625" PointY="25.25" />
-        <EntityTypeShape EntityType="DevModel.CitaDS" Width="1.5" PointX="21.625" PointY="28.25" />
-        <EntityTypeShape EntityType="DevModel.DoctorModuloDS" Width="1.5" PointX="10.25" PointY="0.75" />
-        <EntityTypeShape EntityType="DevModel.EPI_GA" Width="1.5" PointX="26.625" PointY="11.125" />
-        <EntityTypeShape EntityType="DevModel.Farmacia" Width="1.5" PointX="21.625" PointY="34.25" />
-        <EntityTypeShape EntityType="DevModel.Fotos" Width="1.5" PointX="21.375" PointY="4.25" />
-        <EntityTypeShape EntityType="DevModel.MedicinaInterna" Width="1.5" PointX="21.625" PointY="22.125" />
-        <EntityTypeShape EntityType="DevModel.Nutriologo" Width="1.5" PointX="21.625" PointY="40" />
-        <EntityTypeShape EntityType="DevModel.Oftalmologo" Width="1.5" PointX="21.625" PointY="36.875" />
-        <EntityTypeShape EntityType="DevModel.PacienteDS" Width="1.5" PointX="19.375" PointY="27.75" />
-        <EntityTypeShape EntityType="DevModel.PacienteGA" Width="1.5" PointX="24.375" PointY="11.875" />
-        <EntityTypeShape EntityType="DevModel.RecepcionistaDS" Width="1.5" PointX="17.25" PointY="25" />
-        <EntityTypeShape EntityType="DevModel.SignosVitalesDS" Width="1.5" PointX="21.625" PointY="17.625" />
-        <EntityTypeShape EntityType="DevModel.SucursalDS" Width="1.5" PointX="8" PointY="40.375" />
-        <EntityTypeShape EntityType="DevModel.sysdiagrams" Width="1.5" PointX="21.375" PointY="7.25" />
-        <EntityTypeShape EntityType="DevModel.CadenaSplit" Width="1.5" PointX="23.375" PointY="4.25" />
-        <AssociationConnector Association="DevModel.FK_AudioGA_PacienteGA" />
-        <AssociationConnector Association="DevModel.FK_Cardiologo_PacienteDS" />
-        <AssociationConnector Association="DevModel.FK_CitaDS_PacienteDS" />
-        <AssociationConnector Association="DevModel.FK_DoctorModuloDS_Modulos" />
-        <AssociationConnector Association="DevModel.FK_DoctorModuloDS_SucursalDS" />
-        <AssociationConnector Association="DevModel.FK_DoctorModuloDS_Usuarios" />
+        <AssociationConnector Association="DevModel.FK_EPI_ExploracionFisica_Paciente" />
         <AssociationConnector Association="DevModel.FK_EPI_GA_PacienteGA" />
+        <AssociationConnector Association="DevModel.FK_EPI_Laboratorio_Paciente" />
+        <AssociationConnector Association="DevModel.FK_EPI_Odontologia_Paciente" />
+        <AssociationConnector Association="DevModel.FK_Epi_Oftalmologia_Paciente" />
+        <AssociationConnector Association="DevModel.FK_EPI_SignosVitales_Paciente" />
+        <AssociationConnector Association="DevModel.FK_ExpedienteRevaloracion_Paciente" />
+        <AssociationConnector Association="DevModel.FK_Expedientes_Paciente" />
         <AssociationConnector Association="DevModel.FK_Farmacia_PacienteDS" />
+        <AssociationConnector Association="DevModel.FK_FirmaESP_PacienteESP" />
+        <AssociationConnector Association="DevModel.FK_FotoPacienteESP_PacienteESP" />
+        <AssociationConnector Association="DevModel.FK_HemoglobinaGlucosiladaESP_PacienteESP" />
+        <AssociationConnector Association="DevModel.FK_HuellasESP_PacienteESP" />
+        <AssociationConnector Association="DevModel.FK_log_InicioGestor_Usuarios" />
+        <AssociationConnector Association="DevModel.FK_log_Movimientos_log_InicioGestor" />
         <AssociationConnector Association="DevModel.FK_MedicinaInterna_PacienteDS" />
+        <AssociationConnector Association="DevModel.FK_RolMenu_Menu" />
+        <AssociationConnector Association="DevModel.FK_MovimientosAudio_PacienteESP" />
         <AssociationConnector Association="DevModel.FK_Nutriologo_PacienteDS" />
         <AssociationConnector Association="DevModel.FK_Oftalmologo_PacienteDS" />
+        <AssociationConnector Association="DevModel.FK_Tickets_Paciente" />
         <AssociationConnector Association="DevModel.FK_SignosVitalesDS_PacienteDS" />
+        <AssociationConnector Association="DevModel.FK_PagosGestores_Referido" />
+        <AssociationConnector Association="DevModel.FK_Recepcionista_Sucursales" />
+        <AssociationConnector Association="DevModel.FK_Recepcionista_Usuarios" />
         <AssociationConnector Association="DevModel.FK_RecepcionistaDS_SucursalDS" />
         <AssociationConnector Association="DevModel.FK_RecepcionistaDS_Usuarios" />
-        </Diagram>
+        <AssociationConnector Association="DevModel.FK_RolMenu_Roles" />
+        <AssociationConnector Association="DevModel.FK_Usuarios_Roles" />
+      </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
 </edmx:Edmx>

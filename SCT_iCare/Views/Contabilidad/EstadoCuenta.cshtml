@@ -36,11 +36,13 @@
     var fechaTabla = "";
     var fechaTablaAnterior = "";
     int precioAereo = 0;
-    int precioCIVA = 0;
-    int precioSIVA = 0;
-    int sumaPrecios = 0;
+    int precioNormalCIVA = 0;
+    int precioNormalSIVA = 0;
+    int sumaPreciosTotales = 0;
+    int sumaPreciosAereos = 0;
+    int sumaPreciosNormalesSIVA = 0;
+    int sumaPreciosNormalesCIVA = 0;
     int precioVisual = 0;
-    int bucle = 0;
 
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
@@ -316,9 +318,9 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             </tr>
             <tr>
                 <th style="background-color: yellow;" scope="col">Fecha</th>
-                <th style="background-color: yellow;" scope="col">Epis P</th>
-                <th style="background-color: yellow;" scope="col">Importe</th>
                 <th style="background-color: yellow;" scope="col">Epis</th>
+                <th style="background-color: yellow;" scope="col">Importe</th>
+                <th style="background-color: yellow;" scope="col">Epis P</th>
                 <th style="background-color: yellow;" scope="col">Importe</th>
                 <th style="background-color: yellow;" scope="col">Banco/Efectivo</th>
             </tr>
@@ -352,73 +354,63 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         fechaTabla = Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yy");
                         var parseFechaInicial = DateTime.Parse(fechaTabla);
                         var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23);
-                        int conteoEpis = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
-                        bucle = conteoEpis;
+                        int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
+                        int conteoEpisAereos = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal &&  i.A.M.TipoLicencia == "AEREO" select i).Count();
+                        int conteoEpisNormalesCIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+                        && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío" || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte"
+                        || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO" || i.A.M.TipoPago == "Pago con Tarjeta") select i).Count();
+                        int conteoEpisNormalesSIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+                        && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío" && i.A.M.TipoPago != "Banorte"
+                        && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta") select i).Count();
 
                         //DIFERENCIAR PRECIOS
 
-                        if (item.A.M.TipoLicencia == "AEREO")
+                        var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+
+                        precioAereo = Convert.ToInt32(precioEpi.PrecioAereo);
+                        precioNormalCIVA = Convert.ToInt32(precioEpi.PrecioNormalconIVA);
+                        precioNormalSIVA = Convert.ToInt32(precioEpi.PrecioNormal);
+
+                        if (precioEpi.PrecioAereo == null || precioEpi.PrecioAereo == "0")
                         {
-                            var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i);
-
-                            foreach (var precios in precioEpi)
-                            {
-                                precioAereo = Convert.ToInt32(precios.PrecioAereo);
-                            }
-
+                            precioAereo = 3480;
+                        }
+                        if (precioEpi.PrecioNormalconIVA == null || precioEpi.PrecioNormalconIVA == "0")
+                        {
+                            precioNormalCIVA = precioNormalSIVA;
                         }
 
-                        else if (item.A.M.TipoLicencia != "AEREO")
-                        {
-                            var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i);
-
-                            foreach (var precios in precioEpi)
-                            {
-
-                                if (precios.PrecioNormalconIVA != "0" && precios.PrecioNormalconIVA != null)
-                                {
-                                    precioCIVA = Convert.ToInt32(precios.PrecioNormalconIVA);
-                                }
-                                else
-                                {
-                                    precioSIVA = Convert.ToInt32(precios.PrecioNormal);
-                                }
-                            }
-
-                            sumaPrecios = precioAereo + precioCIVA + precioSIVA;
-
-                            for ( int i= 0; i < bucle; i++)
-                            {
-                                precioVisual += sumaPrecios;
-                            }
-                        }
+                        sumaPreciosNormalesSIVA = conteoEpisNormalesSIVA * precioNormalSIVA;
+                        sumaPreciosNormalesCIVA = conteoEpisNormalesCIVA * precioNormalCIVA;
+                        sumaPreciosAereos = conteoEpisAereos * precioAereo;
+                        sumaPreciosTotales = sumaPreciosAereos + sumaPreciosNormalesSIVA + sumaPreciosNormalesCIVA;
+                        precioVisual = sumaPreciosTotales;
 
                         if (fechaTablaAnterior != fechaTabla)
                         {
-                            <tr>
+                                <tr>
 
-                                @*FECHA DE CITA*@
-                                <td>
-                                    <span>@fechaTabla</span>
-                                </td>
+                                    @*FECHA DE CITA*@
+                                    <td>
+                                        <span>@fechaTabla</span>
+                                    </td>
 
-                                @*NUMERO DE EPIS X DIA EN FECHA*@
-                                <td>
-                                        <span>@conteoEpis</span>                               
-                                </td>
+                                    @*NUMERO DE EPIS X DIA EN FECHA*@
+                                    <td>
+                                            <span>@conteoEpisTotales</span>                               
+                                    </td>
 
-                                @*IMPORTE*@
-                                 <td>                                  
-                                     <span>$@precioVisual.ToString("###,###,###,###")</span>    
-                                 </td>
-                            </tr>
+                                    @*IMPORTE*@
+                                     <td>                                  
+                                         <span>$@precioVisual.ToString("###,###,###,###")</span>    
+                                     </td>
+                                </tr>
                         }
                         fechaTablaAnterior = fechaTabla;
                         precioVisual = 0;
                         precioAereo = 0;
-                        precioSIVA = 0;
-                        precioCIVA = 0;
-                        bucle = 0;
+                        precioNormalSIVA = 0;
+                        precioNormalCIVA = 0;
                     }
                 }
             </tbody>

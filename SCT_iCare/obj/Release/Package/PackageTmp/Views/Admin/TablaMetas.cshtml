@@ -9,16 +9,24 @@
 
     int flag = 1;
 
-    int diaCorrienteHeader = 1;
-    int diaCorrienteRow = 1;
-
     int diaMes = DateTime.Today.Day;
 
-    int episTotal = 0;
-    int pausaTotal = 0;
-    int dictamenTotal = 0;
-
     int diferenciaTotal = 0;
+
+
+    int inicioMes = 1;
+    int MES = DateTime.Today.Month;
+    int ANIO = DateTime.Today.Year;
+
+    DateTime FECHAI = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), inicioMes);
+    DateTime FECHAF = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), inicioMes);
+    FECHAF = FECHAF.AddMonths(1).AddDays(-1);
+    int diasMes = FECHAF.Day;
+
+    DateTime diasDelMes = new DateTime(DateTime.Today.Month);
+    string mesActual = Convert.ToString(diaMes);
+
+
 
     System.Globalization.CultureInfo norwCulture = System.Globalization.CultureInfo.CreateSpecificCulture("es");
     System.Globalization.Calendar cal = norwCulture.Calendar;
@@ -144,43 +152,35 @@
         {
 
             <tr>
+
+                @*NOMBRE CANAL*@
                 <td>
-                    <b data-toggle="modal" data-target="#metas_@item.idCanales">@item.NombreCanal</b>
-
-                    <!-- Modal -->
-                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Admin/EditarMeta")">
-                        <div class="modal fade" id="metas_@item.idCanales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header" style="background-color:aquamarine">
-                                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Editar meta</h3>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                            <label for="recipient-name" class="col-form-label">Cantidad de EPIs Meta:</label>
-                                            <input type="tel" class="form-control" id="fecha" name="meta" placeholder="@item.Meta">
-                                            <input type="hidden" value="@item.idCanales" name="id" />
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                        <input type="submit" value="Enviar" class="btn btn-primary" />
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    </form>
-
+                    <b data-toggle="modal">@item.NombreCanal</b>
                 </td>
-                <td>
-                    @item.Meta
-                </td>
+
+                @*META MENSUAL*@
                 <td>
                     @{
-                        int metaDiaria = Convert.ToInt32(item.Meta) / 30;
 
-                        <span>@metaDiaria</span>
+                        int MetaTotalCanal = 0;
+
+                        foreach (var w in db.Referido.Where(p => p.Tipo == item.NombreCanal))
+                        {
+
+                            MetaTotalCanal += Convert.ToInt32(w.Meta);
+                        }
+
+                        @MetaTotalCanal
+
+                    }
+                </td>
+
+                @*META DIARIA*@
+                <td>
+                    @{
+                        double metaDiaria = (Convert.ToDouble(MetaTotalCanal) / Convert.ToDouble(diasMes));
+
+                        <span>@Convert.ToInt32(metaDiaria)</span>
                     }
                 </td>
                 <td>

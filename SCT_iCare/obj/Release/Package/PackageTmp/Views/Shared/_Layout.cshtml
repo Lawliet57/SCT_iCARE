@@ -36,6 +36,24 @@
 
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+    @*FUNCION TIEMPO SESION*@
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            setTimeout(function () {
+                $(".content2").fadeOut(1050000);
+            }, 3000);
+
+            setTimeout(function () {
+                $(".content2").fadeIn(1500);
+            }, 5280000);
+        });
+    </script>
+
 </head>
 <body>
     <div class="navbar navbar-default navbar-fixed-top bg-light">
@@ -71,7 +89,7 @@
                                 <div class="dropdown-menu" style="padding: 7px">
                                     @{
                                         if (rol == 2 && (Usuario != "Andrés Anduaga" && Usuario != "Teresa Lozano" && Usuario != "Jorge Rodriguez"
-                                            && Usuario != "Evelyn Millán" && Usuario != "Gabriel Ortiz" && Usuario != "Jessica Bustos" && Usuario != "Ariel Juárez"))
+                                            && Usuario != "Evelyn Millán" && Usuario != "Gabriel Ortiz" && Usuario != "Jessica Bustos" && Usuario != "Ariel Juárez" && Usuario != "Edith Atilano"))
                                         {
                                             <h5>@Html.ActionLink("Inicio", "TablaComparacion", "Admin")</h5>
                                             <h5>@Html.ActionLink("Tablas", "TablaMetas", "Admin")</h5>
@@ -136,6 +154,11 @@
                                         else if (rol == 1)
                                         {
                                             <h5>@Html.ActionLink("Call Center", "Index", "CallCenter")</h5>
+                                            if (Usuario == "1N")
+                                            {
+                                                <h5>@Html.ActionLink("Recepción", "Index", "Recepcion")</h5>
+                                                <h5>@Html.ActionLink("Captura", "Captura", "EPIs")</h5>
+                                            }
                                         }
                                         else if (rol == 3)
                                         {
@@ -189,6 +212,7 @@
                                         }
                                         else if (Usuario == "Edith Atilano" || Usuario == "Ariel Juárez")
                                         {
+                                            <h5>@Html.ActionLink("Recepción", "Index", "Recepcion")</h5>
                                             <h5>@Html.ActionLink("Call Center", "Index", "CallCenter")</h5>
                                             <h5>@Html.ActionLink("Dashboard", "Index", "Admin")</h5>
                                             <h5>@Html.ActionLink("Reportes", "DescargasReporte", "EPIs")</h5>
@@ -211,6 +235,7 @@
                                         }
                                         else if (Usuario == "Juan Serrano")
                                         {
+                                            <h5>@Html.ActionLink("Dashboard", "Index", "Admin")</h5>
                                             <h5>@Html.ActionLink("8 Columnas", "TablaComparacion", "Admin")</h5>
                                             <h5>@Html.ActionLink("Reportes", "DescargasReporte", "EPIs")</h5>
                                             <h5>@Html.ActionLink("Dashboard II", "Dashboard", "Dictamenes")</h5>
@@ -235,11 +260,6 @@
                                             <h5>@Html.ActionLink("Dashboard II", "Dashboard", "Dictamenes")</h5>
                                             <h5>@Html.ActionLink("Ventas Alt", "VentasAlternativas", "Dictamenes")</h5>
                                         }
-                                        else if (Usuario == "1N")
-                                        {
-                                            <h5>@Html.ActionLink("Recepción", "Index", "Recepcion")</h5>
-                                            <h5>@Html.ActionLink("Captura", "Captura", "EPIs")</h5>
-                                        }
 
                                     }
                                     <h5>
@@ -251,10 +271,18 @@
                     </div>
 
                     @*<li><img src="~/Imagenes/iCare-01.png" style="width:100px"/></li>
-                                      <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>*@
+                          <li>@Html.ActionLink("Acerca de", "About", "Home")</li>
+            <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>*@
 
                 </div>
+                <div class="content2" style="display:none;">
+
+                    <div class="alert alert-warning" role="alert">
+                        !HOLA SU SESIÓN ESTA APUNTO DE FINALIZAR, PORFAVOR VUELVA A <a href="~/Login/Inicio" class="alert-link">INGRESAR!</a>.
+                    </div>
+
+                </div>
+
             </div>
         </div>
     </div>
