@@ -30,11 +30,11 @@
     string canal = "";
     string referido = "";
 
-
-
     //VARIABLES DE TABLA
     var fechaTabla = "";
     var fechaTablaAnterior = "";
+
+    //EPIS NO PAGADOS
     int precioAereo = 0;
     int precioNormalCIVA = 0;
     int precioNormalSIVA = 0;
@@ -43,6 +43,20 @@
     int sumaPreciosNormalesSIVA = 0;
     int sumaPreciosNormalesCIVA = 0;
     int precioVisual = 0;
+
+    //EPIS PAGADOS
+    int precioPAereo = 0;
+    int precioPNormalCIVA = 0;
+    int precioPNormalSIVA = 0;
+    int sumaPreciosPTotales = 0;
+    int sumaPreciosPAereos = 0;
+    int sumaPreciosPNormalesSIVA = 0;
+    int sumaPreciosPNormalesCIVA = 0;
+    int precioPVisual = 0;
+
+    //PAGO DE GESTORES
+    int pagoVisual = 0;
+    var fechadePago = "";
 
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
@@ -113,6 +127,8 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
     var precioEpiGeneral = db.Referido;
 
+    var pagosGestores = db.PagosGestores;
+
 
 
     //QUERYS FILTROS
@@ -173,7 +189,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 @*Referencia estilos para ambas tablas*@
 
-<link rel="stylesheet" type="text/css" href="~/estilos.css">
+<link rel="stylesheet" type="text/css" href="~/Estilo.css">
 
 
 @*HEADER O ENCABEZADO*@
@@ -278,7 +294,6 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         <a href="~/Contabilidad/EstadoCuenta">
             <span type="button" class="btn btn-success">Limpiar</span>
         </a>
-
     </div>
 </form>
 
@@ -314,7 +329,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             <tr>
                 <th style="background-color: dodgerblue;" colspan="2"></th>
                 <th style="background-color: dodgerblue; " colspan="2">ALTERNATIVOS</th>
-                <th style="background-color: dodgerblue; " colspan="2"></th>
+                <th style="background-color: dodgerblue; " colspan="3"></th>
             </tr>
             <tr>
                 <th style="background-color: yellow;" scope="col">Fecha</th>
@@ -322,6 +337,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 <th style="background-color: yellow;" scope="col">Importe</th>
                 <th style="background-color: yellow;" scope="col">Epis P</th>
                 <th style="background-color: yellow;" scope="col">Importe</th>
+                <th style="background-color: yellow;" scope="col">Importe Pagos</th>
                 <th style="background-color: yellow;" scope="col">Banco/Efectivo</th>
             </tr>
         </thead>
@@ -342,7 +358,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             <thead style="color:white">
                 <tr>
                     <th style="background-color: gray;" colspan="2"></th>
-                    <th style="background-color: gray; " colspan="2">Pagos a Saldo al mes de @fechaInicio.AddMonths(-1).ToString("MMMM")</th>
+                    <th style="background-color: gray; " colspan="3">Pagos a Saldo al mes de @fechaInicio.ToString("MMMM")</th>
                     <th style="background-color: gray; " colspan="2"></th>
                 </tr>
             </thead>
@@ -351,11 +367,14 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 @{
                     foreach (var item in modeloNormal.OrderBy(q => q.A.M.FechaCita))
                     {
+                        //VARIABLES PARA FECHAS
                         fechaTabla = Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yy");
                         var parseFechaInicial = DateTime.Parse(fechaTabla);
-                        var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23);
+                        var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
+
+                        //CONTEO DE EPIS TOTALES
                         int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
-                        int conteoEpisAereos = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal &&  i.A.M.TipoLicencia == "AEREO" select i).Count();
+                        int conteoEpisAereos = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO" select i).Count();
                         int conteoEpisNormalesCIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
                         && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío" || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte"
                         || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO" || i.A.M.TipoPago == "Pago con Tarjeta") select i).Count();
@@ -363,7 +382,23 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío" && i.A.M.TipoPago != "Banorte"
                         && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta") select i).Count();
 
-                        //DIFERENCIAR PRECIOS
+                        //CONTEO DE EPIS PAGADOS
+                        int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                        int conteoEpisPAereos = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO"
+                        && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                        int conteoEpisPNormalesCIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+                        && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío"
+                        || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte" || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO"
+                        || i.A.M.TipoPago == "Pago con Tarjeta") select i).Count();
+                        int conteoEpisPNormalesSIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+                        && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío"
+                        && i.A.M.TipoPago != "Banorte" && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta") select i).Count();
+
+                        //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
+
+                        var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+
+                        //DIFERENCIAR PRECIOS NO PAGADOS
 
                         var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
 
@@ -386,31 +421,111 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         sumaPreciosTotales = sumaPreciosAereos + sumaPreciosNormalesSIVA + sumaPreciosNormalesCIVA;
                         precioVisual = sumaPreciosTotales;
 
+                        //DIFERENCIAR PRECIOS  PAGADOS
+
+                        var precioEpiP = (from i in precioEpiGeneral where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+
+                        precioPAereo = Convert.ToInt32(precioEpi.PrecioAereo);
+                        precioPNormalCIVA = Convert.ToInt32(precioEpi.PrecioNormalconIVA);
+                        precioPNormalSIVA = Convert.ToInt32(precioEpi.PrecioNormal);
+
+                        if (precioEpiP.PrecioAereo == null || precioEpiP.PrecioAereo == "0")
+                        {
+                            precioPAereo = 3480;
+                        }
+                        if (precioEpiP.PrecioNormalconIVA == null || precioEpiP.PrecioNormalconIVA == "0")
+                        {
+                            precioPNormalCIVA = precioPNormalSIVA;
+                        }
+
+                        sumaPreciosPNormalesSIVA = conteoEpisPNormalesSIVA * precioPNormalSIVA;
+                        sumaPreciosPNormalesCIVA = conteoEpisPNormalesCIVA * precioPNormalCIVA;
+                        sumaPreciosPAereos = conteoEpisPAereos * precioPAereo;
+                        sumaPreciosPTotales = sumaPreciosPAereos + sumaPreciosPNormalesSIVA + sumaPreciosPNormalesCIVA;
+                        precioPVisual = sumaPreciosPTotales;
+
+                        foreach (var pagos in pagoGestor)
+                        {
+                            pagoVisual += Convert.ToInt32(pagos.PagoIngresado);
+                            fechadePago = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
+                        }
+
                         if (fechaTablaAnterior != fechaTabla)
                         {
-                                <tr>
+                                    <tr>
 
-                                    @*FECHA DE CITA*@
-                                    <td>
-                                        <span>@fechaTabla</span>
-                                    </td>
+                                        @*FECHA DE CITA*@
+                                        <td>
+                                            <span>@fechaTabla</span>
+                                        </td>
 
-                                    @*NUMERO DE EPIS X DIA EN FECHA*@
-                                    <td>
-                                            <span>@conteoEpisTotales</span>                               
-                                    </td>
+                                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                                        <td>
+                                            <span>@conteoEpisTotales</span>
+                                        </td>
 
-                                    @*IMPORTE*@
-                                     <td>                                  
-                                         <span>$@precioVisual.ToString("###,###,###,###")</span>    
-                                     </td>
-                                </tr>
+                                        @*IMPORTE*@
+                                        <td>
+                                            <span>$@precioVisual.ToString("###,###,###,###")</span>
+                                        </td>
+
+                                        @*EPIS PAGADOS*@
+
+                                        @{
+                                            if (conteoEpisPTotales != 0)
+                                            {
+                                                <td>
+                                                    <span>@conteoEpisPTotales</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                            }
+                                        }
+
+                                        @*IMPORTE EPIS PAGADOS*@
+
+                                        @{
+                                            if (conteoEpisPTotales != 0)
+                                            {
+                                                <td>
+                                                    <span>$@precioPVisual.ToString("###,###,###,###")</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                            }
+                                        }
+
+                                        @*IMPORTE MODULO DE PAGOS*@
+
+                                        @{
+                                            if (fechaTabla == fechadePago)
+                                            {
+                                                <td>
+                                                    <span>$@pagoVisual.ToString("###,###,###,###")</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                            }
+
+                                        }
+                                     
+                                    </tr>
                         }
-                        fechaTablaAnterior = fechaTabla;
-                        precioVisual = 0;
-                        precioAereo = 0;
-                        precioNormalSIVA = 0;
-                        precioNormalCIVA = 0;
+                                            fechaTablaAnterior = fechaTabla;
+                                            precioVisual = 0;
+                                            precioAereo = 0;
+                                            precioNormalSIVA = 0;
+                                            precioNormalCIVA = 0;
+                                            pagoVisual = 0;
                     }
                 }
             </tbody>
@@ -419,6 +534,181 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
     else if (canal == "IN SITU" || canal == "GESTOR ALT")
     { 
-                    
+        <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
+            <thead style="color:white">
+                <tr>
+                    <th style="background-color: gray;" colspan="2"></th>
+                    <th style="background-color: gray; " colspan="3">Pagos a Saldo al mes de @fechaInicio.ToString("MMMM")</th>
+                    <th style="background-color: gray; " colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @{
+                    foreach (var item in modeloAlternativo.OrderBy(q => q.FechaCita))
+                    {
+                        //VARIABLES PARA FECHAS
+                        fechaTabla = Convert.ToDateTime(item.FechaCita).ToString("dd-MMMM-yy");
+                        var parseFechaInicial = DateTime.Parse(fechaTabla);
+                        var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
+
+                        //CONTEO DE EPIS TOTALES
+                        int conteoEpisTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i).Count();
+                        int conteoEpisAereos = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia == "AEREO" select i).Count();
+                        int conteoEpisNormalesCIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+                        && (i.TipoPago == "Referencía BanBajío" || i.TipoPago == "Transferencia vía BanBajío" || i.TipoPago == "Referencia BanBajío" || i.TipoPago == "Banorte"
+                        || i.TipoPago == "REFERENCIA OXXO" || i.TipoPago == "Referencia OXXO" || i.TipoPago == "Pago con Tarjeta") select i).Count();
+                        int conteoEpisNormalesSIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+                        && (i.TipoPago != "Referencía BanBajío" && i.TipoPago != "Transferencia vía BanBajío" && i.TipoPago != "Referencia BanBajío" && i.TipoPago != "Banorte"
+                        && i.TipoPago != "REFERENCIA OXXO" && i.TipoPago != "Referencia OXXO" && i.TipoPago != "Pago con Tarjeta") select i).Count();
+
+                        //CONTEO DE EPIS PAGADOS
+                        int conteoEpisPTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+                        int conteoEpisPAereos = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia == "AEREO"
+                        && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+                        int conteoEpisPNormalesCIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+                        && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") && (i.TipoPago == "Referencía BanBajío" || i.TipoPago == "Transferencia vía BanBajío"
+                        || i.TipoPago == "Referencia BanBajío" || i.TipoPago == "Banorte" || i.TipoPago == "REFERENCIA OXXO" || i.TipoPago == "Referencia OXXO"
+                        || i.TipoPago == "Pago con Tarjeta") select i).Count();
+                        int conteoEpisPNormalesSIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+                        && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") && (i.TipoPago != "Referencía BanBajío" && i.TipoPago != "Transferencia vía BanBajío" && i.TipoPago != "Referencia BanBajío"
+                        && i.TipoPago != "Banorte" && i.TipoPago != "REFERENCIA OXXO" && i.TipoPago != "Referencia OXXO" && i.TipoPago != "Pago con Tarjeta") select i).Count();
+
+                        //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
+
+                        var pagoGestor = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+
+                        //DIFERENCIAR PRECIOS NO PAGADOS
+
+                        var precioEpi = (from i in precioEpiGeneral where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
+
+                        precioAereo = Convert.ToInt32(precioEpi.PrecioAereo);
+                        precioNormalCIVA = Convert.ToInt32(precioEpi.PrecioNormalconIVA);
+                        precioNormalSIVA = Convert.ToInt32(precioEpi.PrecioNormal);
+
+                        if (precioEpi.PrecioAereo == null || precioEpi.PrecioAereo == "0")
+                        {
+                            precioAereo = 3480;
+                        }
+                        if (precioEpi.PrecioNormalconIVA == null || precioEpi.PrecioNormalconIVA == "0")
+                        {
+                            precioNormalCIVA = precioNormalSIVA;
+                        }
+
+                        sumaPreciosNormalesSIVA = conteoEpisNormalesSIVA * precioNormalSIVA;
+                        sumaPreciosNormalesCIVA = conteoEpisNormalesCIVA * precioNormalCIVA;
+                        sumaPreciosAereos = conteoEpisAereos * precioAereo;
+                        sumaPreciosTotales = sumaPreciosAereos + sumaPreciosNormalesSIVA + sumaPreciosNormalesCIVA;
+                        precioVisual = sumaPreciosTotales;
+
+                        //DIFERENCIAR PRECIOS  PAGADOS
+
+                        var precioEpiP = (from i in precioEpiGeneral where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
+
+                        precioPAereo = Convert.ToInt32(precioEpi.PrecioAereo);
+                        precioPNormalCIVA = Convert.ToInt32(precioEpi.PrecioNormalconIVA);
+                        precioPNormalSIVA = Convert.ToInt32(precioEpi.PrecioNormal);
+
+                        if (precioEpiP.PrecioAereo == null || precioEpiP.PrecioAereo == "0")
+                        {
+                            precioPAereo = 3480;
+                        }
+                        if (precioEpiP.PrecioNormalconIVA == null || precioEpiP.PrecioNormalconIVA == "0")
+                        {
+                            precioPNormalCIVA = precioPNormalSIVA;
+                        }
+
+                        sumaPreciosPNormalesSIVA = conteoEpisPNormalesSIVA * precioPNormalSIVA;
+                        sumaPreciosPNormalesCIVA = conteoEpisPNormalesCIVA * precioPNormalCIVA;
+                        sumaPreciosPAereos = conteoEpisPAereos * precioPAereo;
+                        sumaPreciosPTotales = sumaPreciosPAereos + sumaPreciosPNormalesSIVA + sumaPreciosPNormalesCIVA;
+                        precioPVisual = sumaPreciosPTotales;
+
+                        foreach (var pagos in pagoGestor)
+                        {
+                            pagoVisual += Convert.ToInt32(pagos.PagoIngresado);
+                            fechadePago = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
+                        }
+
+                        if (fechaTablaAnterior != fechaTabla)
+                        {
+                                    <tr>
+
+                                        @*FECHA DE CITA*@
+                                        <td>
+                                            <span>@fechaTabla</span>
+                                        </td>
+
+                                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                                        <td>
+                                            <span>@conteoEpisTotales</span>
+                                        </td>
+
+                                        @*IMPORTE*@
+                                        <td>
+                                            <span>$@precioVisual.ToString("###,###,###,###")</span>
+                                        </td>
+
+                                        @*EPIS PAGADOS*@
+
+                                        @{
+                                            if (conteoEpisPTotales != 0)
+                                            {
+                                                <td>
+                                                    <span>@conteoEpisPTotales</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                            }
+                                        }
+
+                                        @*IMPORTE EPIS PAGADOS*@
+
+                                        @{
+                                            if (conteoEpisPTotales != 0)
+                                            {
+                                                <td>
+                                                    <span>$@precioPVisual.ToString("###,###,###,###")</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                            }
+                                        }
+
+                                        @*IMPORTE MODULO DE PAGOS*@
+
+                                        @{
+                                            if (fechaTabla == fechadePago)
+                                            {
+                                                <td>
+                                                    <span>$@pagoVisual.ToString("###,###,###,###")</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                </td>
+                                            }
+
+                                        }
+                                     
+                                    </tr>
+                        }
+                                            fechaTablaAnterior = fechaTabla;
+                                            precioVisual = 0;
+                                            precioAereo = 0;
+                                            precioNormalSIVA = 0;
+                                            precioNormalCIVA = 0;
+                                            pagoVisual = 0;
+                    }
+                }
+            </tbody>
+        </table>                    
     }
 }

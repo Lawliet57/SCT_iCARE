@@ -2092,7 +2092,18 @@ else
                                             </div>
                                             <div class="form-group">
                                                 <label for="ticket" class="col-form-label">Ticket de Pago:</label>
-                                                <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                @{
+                                                    var consultaTicket = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
+
+                                                    if (consultaTicket == "Pendiente de Pago")
+                                                    {
+                                                        <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="file" name="ticket" asp-for="file" class="" required value="ticket" />
+                                                    }
+                                                }
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -2242,7 +2253,18 @@ else
                                             </div>
                                             <div class="form-group">
                                                 <label for="ticket" class="col-form-label">Ticket de Pago:</label>
-                                                <input  type="file" name="ticket" asp-for="file" class="" required value="ticket" />
+                                                @{
+                                                    var consultaTicket1 = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
+
+                                                    if (consultaTicket1 == "Pendiente de Pago")
+                                                    {
+                                                        <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="file" name="ticket" asp-for="file" class="" required value="ticket" />
+                                                    }
+                                                }
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -2539,7 +2561,18 @@ else
                                             </div>
                                             <div class="form-group">
                                                 <label for="ticket" class="col-form-label">Ticket de Pago:</label>
-                                                <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                @{
+                                                    var consultaTicket2 = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
+
+                                                    if (consultaTicket2 == "Pendiente de Pago")
+                                                    {
+                                                        <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="file" name="ticket" asp-for="file" class="" required value="ticket" />
+                                                    }
+                                                }
                                             </div>
                                         </div>
                                         <div class="modal-footer">
