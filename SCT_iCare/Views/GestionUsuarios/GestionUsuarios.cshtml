@@ -1,0 +1,160 @@
+﻿@model IEnumerable<SCT_iCare.Usuarios>
+@{
+    ViewBag.Title = "GestionUsuarios";
+    GMIEntities db = new GMIEntities();
+
+}
+
+<br />
+<br />
+
+<h3 style="color:white" class="text-center">Gestión de Usuarios</h3>
+
+@*Alertas en caso de error*@
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
+@*bloque de links a modulo de doctores, sucursales y gestores*@
+<br />
+<div align='center'>
+    <a href="~/GestionUsuarios/CreateU"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Usuario</button></a>
+    <a href="~/GestionUsuarios/GestoresU"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteAzul botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-list"></span>&nbsp; Gestores</button></a>
+    <a href="~/Sucursales/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparentePendiente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-home"></span> &nbsp;Sucursales</button></a>
+    <a href="~/Doctores/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Doctores</button></a>
+</div>
+
+
+@*boton y caja de texto para bucador por nombre*@
+
+<br />
+<br />
+<div align='left'>
+    @using (Html.BeginForm())
+    {
+
+        <p>
+
+            @Html.TextBox("SearchString")
+            <input class="btn btn-info" type="submit" value="Search" placeholder="Search" />
+        </p>
+    }
+</div>
+
+
+@*Referencia estilo para  tabla*@
+
+<link rel="stylesheet" type="text/css" href="~/estilos.css">
+
+
+
+
+
+<div class="tablaScroll">
+
+    <table class="table tablas table-responsive" style="color: #2F2D6B">
+        <thead>
+            <tr class="bg-primary">
+
+                <th align="center">
+                    <h4>@Html.DisplayNameFor(model => model.Nombre)</h4>
+                </th>
+                <th>
+                    <h4>@Html.DisplayNameFor(model => model.Email)</h4>
+                </th>
+                <th>
+                    <h4>Rol</h4>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+
+
+        @foreach (var item in Model)
+        {
+            <tr class="alt">
+
+                <td class="table-secondary">
+                    <b>@Html.DisplayFor(modelItem => item.Nombre)</b>
+                </td>
+                <td>
+                    <b> @Html.DisplayFor(modelItem => item.Email)</b>
+                </td>
+                <td>
+                    <b>@Html.DisplayFor(modelItem => item.Roles.Nombre)</b>
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acción
+                        </button>
+
+                        @*Acciones para cada usuario*@
+
+                        <div class="dropdown-menu">
+                            <b><h5>@Html.ActionLink("Editar", "EditU", new { id = item.idUsuario }, new { @style = "color: Purple" })</h5></b>
+                            <div class="dropdown-divider"></div>
+                            <h5>@Html.ActionLink("Detalles", "DetailsU", new { id = item.idUsuario })</h5>
+                            <div class="dropdown-divider"></div>
+                            <h5>@Html.ActionLink("Eliminar", "DeleteU", new { id = item.idUsuario }, new { @style = "color: Red" })</h5>
+                            @{
+                                if (item.idRol == 3 || item.idRol == 14 || item.idRol == 21)
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <h5><a href="#" data-toggle="modal" data-target="#Modal_@item.idUsuario"><b>Asignar Sucursal</b></a></h5>
+                                }
+                            }
+                        </div>
+                    </div>
+
+                    @*Modal para elegir sucursal*@
+                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/GestionUsuarios/AsignarSucursal")">
+                        @Html.AntiForgeryToken()
+                        <div class="modal fade" id="Modal_@item.idUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel"><b>Elegir Sucursal para <i>@item.Nombre</i></b></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" name="id" value="@item.idUsuario" />
+                                        <div class="form-group" style="width:60%; min-width:320px">
+                                            <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                                            <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                                                @{
+                                                    var sucursales = from s in db.Sucursales select s;
+
+                                                    foreach (var item1 in sucursales)
+                                                    {
+                                                        <option value="@item1.idSucursal">@item1.Nombre</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <input type="submit" value="Asignar" class="btn btn-success" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

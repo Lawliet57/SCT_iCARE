@@ -7,6 +7,18 @@
 <br />
 
 <h3 style="color:white" class="text-center">Editar Sucursal</h3>
+
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
 <br />
 <br />
 
@@ -52,7 +64,7 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Guardar" class="btn btn-outline-warning boton-transparente botonesGral" />
+                <input type="submit" value="Guardar" class="btn btn-outline-warning boton-transparenteExcel botonesGral" />
             </div>
         </div>
     </div>
@@ -65,3 +77,8 @@
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

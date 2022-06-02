@@ -10,12 +10,25 @@
 
 <h3 style="color:white" class="text-center">Sucursales</h3>
 
-<br />
 
-<a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#modalCiudad"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Ciudad</button></a>
-<a href="~/Sucursales/Create"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Sucursal</button></a>
-<a href="~/Doctores/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Doctores</button></a>
-<a href="~/Usuarios/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Usuarios</button></a>
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
+<br />
+<div align='center'>
+
+    <a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#modalCiudad"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Ciudad</button></a>
+    <a href="~/Sucursales/Create"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteAzul botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Sucursal</button></a>
+    <a href="~/Doctores/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparentePendiente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Doctores</button></a>
+    <a href="~/GestionUsuarios/GestionUsuarios"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Usuarios</button></a>
+</div>
 
 <!-- Modal para digitalización completa-->
 <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Sucursales/AgregarCiudad")">
@@ -38,54 +51,60 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                    <input type="submit" value="Guardar" class="btn btn-success" />
                 </div>
             </div>
         </div>
     </div>
 </form>
 
+
+@*Referencia estilo para  tabla*@
+
+<link rel="stylesheet" type="text/css" href="~/estilos.css">
+
+
 <br />
 <div class="tablaScroll">
     <table class="table tablas table-responsive" style="color: #2F2D6B">
         <thead>
             <tr class="bg-primary">
-                <th>
+                <th align="center">
                     @Html.DisplayNameFor(model => model.Nombre)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Calle)
                 </th>
-                <th>
+                <th align="center">
                     @Html.DisplayNameFor(model => model.Colonia)
                 </th>
                 <th>
                     @Html.DisplayNameFor(model => model.Ciudades.Ciudad)
                 </th>
-                <th></th>
+                <th align="center"></th>
             </tr>
         </thead>
-        
+
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
+            <tr class="alt">
+                <td class="table-secondary">
                     <b>@Html.DisplayFor(modelItem => item.Nombre)</b>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Calle)
+                    <b> @Html.DisplayFor(modelItem => item.Calle)</b>
+                </td>
+                <td class="table-secondary">
+                    <b>@Html.DisplayFor(modelItem => item.Colonia)</b>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Colonia)
+                    <b> @Html.DisplayFor(modelItem => item.Ciudades.Ciudad)</b>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Ciudades.Ciudad)
-                </td>
-                <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.idSucursal }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.idSucursal }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.idSucursal })
+                <td class="table-secondary">
+                    <b> @Html.ActionLink("Editar", "Edit", new { id = item.idSucursal }, new { @style = "color: Purple" })</b> |
+                    <b> @Html.ActionLink("Detalles", "Details", new { id = item.idSucursal }) </b>|
+                    <b> @Html.ActionLink("Eliminar", "Delete", new { id = item.idSucursal }, new { @style = "color: Red" })</b>
                 </td>
             </tr>
         }
@@ -93,3 +112,6 @@
     </table>
 </div>
 
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

@@ -1,0 +1,72 @@
+﻿@model SCT_iCare.Usuarios
+
+@{
+    ViewBag.Title = "DeleteU";
+
+}
+
+<br />
+
+
+<h3 style="color:white">¿Desea eliminar a este Usuario?</h3>
+
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
+
+<div>
+    <hr />
+    <dl class="dl-horizontal labelGral">
+        <dt>
+            <h4>@Html.DisplayNameFor(model => model.Nombre)</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@Html.DisplayFor(model => model.Nombre)</h4>
+        </dd>
+
+        <dt>
+            <h4>@Html.DisplayNameFor(model => model.Email)</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@Html.DisplayFor(model => model.Email)</h4>
+        </dd>
+
+
+        <dt>
+            <h4>@Html.DisplayNameFor(model => model.Roles.Nombre)</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@Html.DisplayFor(model => model.Roles.Nombre)</h4>
+        </dd>
+
+    </dl>
+
+    <br />
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color enlaceSinBoton">
+            <input type="submit" value="Eliminar" class="btn btn-outline-warning boton-transparenteExcel botonesGral" /> |
+            @Html.ActionLink("Volver a Usuarios", "GestionUsuarios")
+        </div>
+    }
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

@@ -269,10 +269,10 @@
     </Compile>
     <Compile Include="Controllers\Admin\AdminController.cs" />
     <Compile Include="Controllers\Admin\DoctoresController.cs" />
+    <Compile Include="Controllers\Admin\GestionUsuariosController.cs" />
     <Compile Include="Controllers\Admin\LogGestoresController.cs" />
     <Compile Include="Controllers\Admin\MetasIndividualesController.cs" />
     <Compile Include="Controllers\Admin\SucursalesController.cs" />
-    <Compile Include="Controllers\Admin\UsuariosController.cs" />
     <Compile Include="Controllers\ArchivoClinico\ArchivoClinicoController.cs" />
     <Compile Include="Controllers\CallCenter\CallCenterController.cs" />
     <Compile Include="Controllers\Certificados\CERTIFICADOesController.cs" />
@@ -563,6 +563,7 @@
     <Content Include="Estilos CSS\TablaSucursales.css" />
     <Content Include="Estilos CSS\TablaAcumuladoALT.css" />
     <Content Include="Estilos CSS\TablaMetasDiarias.css" />
+    <Content Include="estilosUser.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -789,11 +790,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Login\Inicio.cshtml" />
     <Content Include="Views\Contabilidad\Index.cshtml" />
-    <Content Include="Views\Usuarios\Create.cshtml" />
-    <Content Include="Views\Usuarios\Delete.cshtml" />
-    <Content Include="Views\Usuarios\Details.cshtml" />
-    <Content Include="Views\Usuarios\Edit.cshtml" />
-    <Content Include="Views\Usuarios\Index.cshtml" />
     <Content Include="Views\Error\UnauthorizedOperation.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
@@ -840,13 +836,11 @@
     <Content Include="Views\ConsultaDictamen\Estatus.cshtml" />
     <Content Include="Views\ConsultaDictamen\Proceso.cshtml" />
     <Content Include="Views\LogGestores\Index.cshtml" />
-    <Content Include="Views\Usuarios\Gestores.cshtml" />
     <Content Include="Views\Gestoria\Index.cshtml" />
     <Content Include="Views\GestorVenta\Index.cshtml" />
     <Content Include="Views\GestorVenta\Orden.cshtml" />
     <Content Include="Views\Gestoria\Orden.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Usuarios\CarruselMedico.cshtml" />
     <Content Include="Views\ArchivoClinico\Index.cshtml" />
     <Content Include="Views\ArchivoClinico\Recepcion.cshtml" />
     <Content Include="Views\ArchivoClinico\AUDIOLOGÍA.cshtml" />
@@ -905,6 +899,13 @@
     <Content Include="Views\Admin\Sucursales8Columnas.cshtml" />
     <Content Include="Views\Contabilidad\EstadoCuenta.cshtml" />
     <Content Include="Views\MetasIndividuales\MetasIndividuales.cshtml" />
+    <Content Include="Views\GestionUsuarios\GestionUsuarios.cshtml" />
+    <Content Include="Views\GestionUsuarios\GestoresU.cshtml" />
+    <Content Include="Views\GestionUsuarios\DetailsU.cshtml" />
+    <Content Include="Views\GestionUsuarios\CreateU.cshtml" />
+    <Content Include="Views\GestionUsuarios\EditU.cshtml" />
+    <Content Include="Views\GestionUsuarios\DeleteU.cshtml" />
+    <Content Include="Views\GestionUsuarios\CarruselMedicoU.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

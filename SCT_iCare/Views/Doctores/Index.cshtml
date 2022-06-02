@@ -10,20 +10,55 @@
 
 <h3 style="color:white" class="text-center">Doctores</h3>
 
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
+<br />
+<div align='center'>
+    <a href="~/Doctores/Create"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Doctor</button></a>
+    <a href="~/Sucursales/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteAzul botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-home"></span> &nbsp;Sucursales</button></a>
+    <a href="~/GestionUsuarios/GestionUsuarios"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparentePendiente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Usuarios</button></a>
+    <a href="~/GestionUsuarios/CarruselMedicoU"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span>&nbsp; Módulos Doctores</button></a>
+</div>
+
+
+
+@*Referencia estilo para  tabla*@
+
+<link rel="stylesheet" type="text/css" href="~/estilos.css">
+
+
+
+<br />
 <br />
 
-<a href="~/Doctores/Create"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Doctor</button></a>
-<a href="~/Sucursales/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-home"></span> &nbsp;Sucursales</button></a>
-<a href="~/Usuarios/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Usuarios</button></a>
-<a href="~/Usuarios/CarruselMedico"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteAzul botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span>&nbsp; Módulos Doctores</button></a>
+<div align='left'>
+    @using (Html.BeginForm())
+    {
 
-<br />
-<br />
+        <p>
+
+            @Html.TextBox("SearchString")
+            <input class="btn btn-info" type="submit" value="Search" placeholder="Search" />
+        </p>
+    }
+</div>
+
+
 <div class="tablaScroll">
-    <table class="table tablas" style="color: #2F2D6B">
+
+    <table class="table tablas table-responsive" style="color: #2F2D6B">
+
         <thead>
             <tr class="bg-primary">
-                <th>
+                <th align="center">
                     @Html.DisplayNameFor(model => model.Nombre)
                 </th>
                 <th>
@@ -32,21 +67,21 @@
                 <th></th>
             </tr>
         </thead>
-        
+
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
+            <tr class="alt">
+                <td class="table-secondary">
                     <b>@Html.DisplayFor(modelItem => item.Nombre)</b>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Sucursales.Nombre)
+                    <b> @Html.DisplayFor(modelItem => item.Sucursales.Nombre)</b>
                 </td>
                 <td>
-                    @Html.ActionLink("Editar", "Edit", new { id = item.idDoctor }) |
-                    @Html.ActionLink("Detalles", "Details", new { id = item.idDoctor }) |
-                    @Html.ActionLink("Eliminar", "Delete", new { id = item.idDoctor })
+                    <b>@Html.ActionLink("Editar", "Edit", new { id = item.idDoctor }, new { @style = "color: Purple" })</b> |
+                    <b> @Html.ActionLink("Detalles", "Details", new { id = item.idDoctor })</b>  |
+                    <b> @Html.ActionLink("Eliminar", "Delete", new { id = item.idDoctor }, new { @style = "color: Red" })</b>
                 </td>
             </tr>
         }
@@ -54,3 +89,6 @@
     </table>
 </div>
 
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>

@@ -1,29 +1,100 @@
 ﻿@model IEnumerable<SCT_iCare.Usuarios>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "GestionUsuarios";
 
     GMIEntities db = new GMIEntities();
 }
 
 <br />
-<br />
-
-<h3 style="color:white" class="text-center">Usuarios</h3>
-<br />
-<a href="~/Usuarios/Create"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Usuario</button></a>
-<a href="~/Usuarios/Gestores"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteAzul botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-list"></span>&nbsp; Gestores</button></a>
-<a href="~/Sucursales/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-home"></span> &nbsp;Sucursales</button></a>
-<a href="~/Doctores/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-user"></span> &nbsp;Doctores</button></a>
-
 
 <br />
+
+<h3 style="color:white" class="text-center">Gestores</h3>
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
 <br />
+
+<div align='center'>
+    <a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Gestor</button></a>
+    <a href="~/Sucursales/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral"><span class="glyphicon glyphicon-home"></span> &nbsp;Sucursales</button></a>
+    <a href="~/Doctores/Index"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparentePendiente"><span class="glyphicon glyphicon-user"></span> &nbsp;Doctores</button></a>
+</div>
+
+
+<br />
+<br />
+
+<div class="modal fade" id="registrerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Nuevo Gestor</b></h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/GestionUsuarios/CreateGestor")">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Nombre del Gestor:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Correo (Usuario):</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Enviar" class="btn btn-success" />
+            </div></form>
+        </div>
+    </div>
+</div>
+
+
+
+<br />
+<br />
+<div align='left'>
+    @using (Html.BeginForm())
+    {
+
+        <p>
+
+            @Html.TextBox("SearchString")
+            <input class="btn btn-info" type="submit" value="Search" placeholder="Search" />
+        </p>
+    }
+</div>
+
+
+
+
+@*Referencia estilo para  tabla*@
+
+<link rel="stylesheet" type="text/css" href="~/estilos.css">
+
+
 <div class="tablaScroll">
+
     <table class="table tablas table-responsive" style="color: #2F2D6B">
+
         <thead>
             <tr class="bg-primary">
-                <th>
+                <th align="center">
                     <h4>@Html.DisplayNameFor(model => model.Nombre)</h4>
                 </th>
                 <th>
@@ -35,12 +106,12 @@
                 <th></th>
             </tr>
         </thead>
-        
+
 
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
+            <tr class="alt">
+                <td class="table-secondary">
                     <b>@Html.DisplayFor(modelItem => item.Nombre)</b>
                 </td>
                 <td>
@@ -51,17 +122,17 @@
                 </td>
                 <td>
                     <div class="btn-group">
-                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Acción
                         </button>
                         <div class="dropdown-menu">
-                            <h5>@Html.ActionLink("Editar", "Edit", new { id = item.idUsuario })</h5>
+                            <h5>@Html.ActionLink("Editar", "EditU", new { id = item.idUsuario }, new { @style = "color: Purple" })</h5>
                             <div class="dropdown-divider"></div>
-                            <h5>@Html.ActionLink("Detalles", "Details", new { id = item.idUsuario })</h5>
+                            <h5>@Html.ActionLink("Detalles", "DetailsU", new { id = item.idUsuario })</h5>
                             <div class="dropdown-divider"></div>
-                            <h5>@Html.ActionLink("Eliminar", "Delete", new { id = item.idUsuario })</h5>
+                            <h5>@Html.ActionLink("Eliminar", "DeleteU", new { id = item.idUsuario }, new { @style = "color: Red" })</h5>
                             @{
-                                if (item.idRol == 3 || item.idRol == 14 || item.idRol == 21)
+                                if (item.idRol == 3)
                                 {
                                     <div class="dropdown-divider"></div>
                                     <h5><a href="#" data-toggle="modal" data-target="#Modal_@item.idUsuario"><b>Asignar Sucursal</b></a></h5>
@@ -71,7 +142,7 @@
                     </div>
 
                     <!-- Modal para elegir el método de pago una vez que se concrete el mismo -->
-                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Usuarios/AsignarSucursal")">
+                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/GestionUsuarios/AsignarSucursal")">
                         @Html.AntiForgeryToken()
                         <div class="modal fade" id="Modal_@item.idUsuario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
@@ -108,5 +179,11 @@
         }
 
     </table>
+</div>
+
+<br />
+
+<div class="enlaceSinBoton">
+    @Html.ActionLink("Volver a Usuarios", "GestionUsuarios")
 </div>
 

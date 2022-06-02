@@ -15,9 +15,14 @@ namespace SCT_iCare.Controllers.Admin
         private GMIEntities db = new GMIEntities();
 
         // GET: Doctores
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
             var doctores = db.Doctores.Include(d => d.Sucursales);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                doctores = doctores.Where(s => s.Nombre.ToUpper().Contains(searchString.ToUpper()));
+            }
+
             return View(doctores.ToList());
         }
 
@@ -44,8 +49,7 @@ namespace SCT_iCare.Controllers.Admin
         }
 
         // POST: Doctores/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
-        // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "idDoctor,Nombre,idSucursal")] Doctores doctores)

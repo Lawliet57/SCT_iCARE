@@ -58,6 +58,13 @@
     int pagoVisual = 0;
     var fechadePago = "";
 
+    //FOOTERS
+    int totalEpis = 0;
+    int saldoTotalImporte = 0;
+    int totalEpisP = 0;
+    int saldoTotalP = 0;
+    int totalPago = 0;
+
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
 
@@ -328,8 +335,8 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         <thead>
             <tr>
                 <th style="background-color: dodgerblue;" colspan="2"></th>
-                <th style="background-color: dodgerblue; " colspan="2">ALTERNATIVOS</th>
-                <th style="background-color: dodgerblue; " colspan="3"></th>
+                <th style="background-color: dodgerblue; " colspan="3">ALTERNATIVOS</th>
+                <th style="background-color: dodgerblue; " colspan="2"></th>
             </tr>
             <tr>
                 <th style="background-color: yellow;" scope="col">Fecha</th>
@@ -358,7 +365,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             <thead style="color:white">
                 <tr>
                     <th style="background-color: gray;" colspan="2"></th>
-                    <th style="background-color: gray; " colspan="3">Pagos a Saldo al mes de @fechaInicio.ToString("MMMM")</th>
+                    <th style="background-color: gray; " colspan="3">Operaciones de @fechaInicio.ToString("MMMM")</th>
                     <th style="background-color: gray; " colspan="2"></th>
                 </tr>
             </thead>
@@ -375,24 +382,34 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         //CONTEO DE EPIS TOTALES
                         int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
                         int conteoEpisAereos = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO" select i).Count();
-                        int conteoEpisNormalesCIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
-                        && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío" || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte"
-                        || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO" || i.A.M.TipoPago == "Pago con Tarjeta") select i).Count();
-                        int conteoEpisNormalesSIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
-                        && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío" && i.A.M.TipoPago != "Banorte"
-                        && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta") select i).Count();
+                        int conteoEpisNormalesCIVA = (from i in modeloNormal
+                                                      where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+&& (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío" || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte"
+|| i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO" || i.A.M.TipoPago == "Pago con Tarjeta")
+                                                      select i).Count();
+                        int conteoEpisNormalesSIVA = (from i in modeloNormal
+                                                      where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+&& (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío" && i.A.M.TipoPago != "Banorte"
+&& i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta")
+                                                      select i).Count();
 
                         //CONTEO DE EPIS PAGADOS
                         int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-                        int conteoEpisPAereos = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO"
-                        && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-                        int conteoEpisPNormalesCIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
-                        && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío"
-                        || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte" || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO"
-                        || i.A.M.TipoPago == "Pago con Tarjeta") select i).Count();
-                        int conteoEpisPNormalesSIVA = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
-                        && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío"
-                        && i.A.M.TipoPago != "Banorte" && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta") select i).Count();
+                        int conteoEpisPAereos = (from i in modeloNormal
+                                                 where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO"
+&& (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA")
+                                                 select i).Count();
+                        int conteoEpisPNormalesCIVA = (from i in modeloNormal
+                                                       where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+&& (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío"
+|| i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte" || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO"
+|| i.A.M.TipoPago == "Pago con Tarjeta")
+                                                       select i).Count();
+                        int conteoEpisPNormalesSIVA = (from i in modeloNormal
+                                                       where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia != "AEREO"
+&& (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío"
+&& i.A.M.TipoPago != "Banorte" && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta")
+                                                       select i).Count();
 
                         //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
 
@@ -452,88 +469,159 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
                         if (fechaTablaAnterior != fechaTabla)
                         {
-                                    <tr>
+                            totalEpis = (from i in modeloNormal select i).Count();
+                            saldoTotalImporte += precioVisual;
+                            totalEpisP = (from i in modeloNormal where (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count(); ;
+                            saldoTotalP += precioPVisual;
+                            totalPago += pagoVisual;
 
-                                        @*FECHA DE CITA*@
+                            <tr>
+
+                                @*FECHA DE CITA*@
+                                <td>
+                                    <span>@fechaTabla</span>
+                                </td>
+
+                                @*NUMERO DE EPIS X DIA EN FECHA*@
+                                <td>
+                                    <span>@conteoEpisTotales</span>
+                                </td>
+
+                                @*IMPORTE*@
+                                <td>
+                                    <span>$@precioVisual.ToString("###,###,###,###")</span>
+                                </td>
+
+                                @*EPIS PAGADOS*@
+
+                                @{
+                                    if (conteoEpisPTotales != 0)
+                                    {
                                         <td>
-                                            <span>@fechaTabla</span>
+                                            <span>@conteoEpisPTotales</span>
                                         </td>
-
-                                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                                    }
+                                    else
+                                    {
                                         <td>
-                                            <span>@conteoEpisTotales</span>
                                         </td>
+                                    }
+                                }
 
-                                        @*IMPORTE*@
+                                @*IMPORTE EPIS PAGADOS*@
+
+                                @{
+                                    if (conteoEpisPTotales != 0)
+                                    {
                                         <td>
-                                            <span>$@precioVisual.ToString("###,###,###,###")</span>
+                                            <span>$@precioPVisual.ToString("###,###,###,###")</span>
                                         </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
+                                }
 
-                                        @*EPIS PAGADOS*@
+                                @*IMPORTE MODULO DE PAGOS*@
 
-                                        @{
-                                            if (conteoEpisPTotales != 0)
-                                            {
-                                                <td>
-                                                    <span>@conteoEpisPTotales</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                </td>
-                                            }
-                                        }
+                                @{
+                                    if (fechaTabla == fechadePago)
+                                    {
+                                        <td>
+                                            <span>$@pagoVisual.ToString("###,###,###,###")</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
 
-                                        @*IMPORTE EPIS PAGADOS*@
+                                }
+                            </tr>
 
-                                        @{
-                                            if (conteoEpisPTotales != 0)
-                                            {
-                                                <td>
-                                                    <span>$@precioPVisual.ToString("###,###,###,###")</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                </td>
-                                            }
-                                        }
-
-                                        @*IMPORTE MODULO DE PAGOS*@
-
-                                        @{
-                                            if (fechaTabla == fechadePago)
-                                            {
-                                                <td>
-                                                    <span>$@pagoVisual.ToString("###,###,###,###")</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                </td>
-                                            }
-
-                                        }
-                                     
-                                    </tr>
+                            fechaTablaAnterior = fechaTabla;
+                            precioVisual = 0;
+                            precioAereo = 0;
+                            precioNormalSIVA = 0;
+                            precioNormalCIVA = 0;
+                            pagoVisual = 0;
                         }
-                                            fechaTablaAnterior = fechaTabla;
-                                            precioVisual = 0;
-                                            precioAereo = 0;
-                                            precioNormalSIVA = 0;
-                                            precioNormalCIVA = 0;
-                                            pagoVisual = 0;
                     }
+            <tr style="background-color:navajowhite">
+
+                @*FECHA DE CITA*@
+                <td>
+                    <span><b>TOTAL EPIS</b></span>
+                </td>
+
+                @*NUMERO DE EPIS X DIA EN FECHA*@
+                <td>
+                    <span><b>@totalEpis</b></span>
+                </td>
+
+                @*IMPORTE*@
+                <td>
+                    <span><b>$@saldoTotalImporte.ToString("###,###,###,###")</b></span>
+                </td>
+
+                @*EPIS PAGADOS*@
+
+
+                @{
+                    if (totalEpisP != 0)
+                    {
+                        <td>
+                            <span><b>@totalEpisP</b></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                }
+
+                @*IMPORTE EPIS PAGADOS*@
+
+                @{
+                    if (saldoTotalP != 0)
+                    {
+                        <td>
+                            <span><b>$@saldoTotalP.ToString("###,###,###,###")</b></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                }
+
+                @*IMPORTE MODULO DE PAGOS*@
+                @{
+                    if (saldoTotalP != 0)
+                    {
+                        <td>
+                            <span><b>$@totalPago.ToString("###,###,###,###")</b></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                }
+            </tr>
                 }
             </tbody>
         </table>
     }
 
     else if (canal == "IN SITU" || canal == "GESTOR ALT")
-    { 
+    {
         <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
             <thead style="color:white">
                 <tr>
@@ -555,24 +643,34 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         //CONTEO DE EPIS TOTALES
                         int conteoEpisTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i).Count();
                         int conteoEpisAereos = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia == "AEREO" select i).Count();
-                        int conteoEpisNormalesCIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
-                        && (i.TipoPago == "Referencía BanBajío" || i.TipoPago == "Transferencia vía BanBajío" || i.TipoPago == "Referencia BanBajío" || i.TipoPago == "Banorte"
-                        || i.TipoPago == "REFERENCIA OXXO" || i.TipoPago == "Referencia OXXO" || i.TipoPago == "Pago con Tarjeta") select i).Count();
-                        int conteoEpisNormalesSIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
-                        && (i.TipoPago != "Referencía BanBajío" && i.TipoPago != "Transferencia vía BanBajío" && i.TipoPago != "Referencia BanBajío" && i.TipoPago != "Banorte"
-                        && i.TipoPago != "REFERENCIA OXXO" && i.TipoPago != "Referencia OXXO" && i.TipoPago != "Pago con Tarjeta") select i).Count();
+                        int conteoEpisNormalesCIVA = (from i in modeloAlternativo
+                                                      where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+&& (i.TipoPago == "Referencía BanBajío" || i.TipoPago == "Transferencia vía BanBajío" || i.TipoPago == "Referencia BanBajío" || i.TipoPago == "Banorte"
+|| i.TipoPago == "REFERENCIA OXXO" || i.TipoPago == "Referencia OXXO" || i.TipoPago == "Pago con Tarjeta")
+                                                      select i).Count();
+                        int conteoEpisNormalesSIVA = (from i in modeloAlternativo
+                                                      where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+&& (i.TipoPago != "Referencía BanBajío" && i.TipoPago != "Transferencia vía BanBajío" && i.TipoPago != "Referencia BanBajío" && i.TipoPago != "Banorte"
+&& i.TipoPago != "REFERENCIA OXXO" && i.TipoPago != "Referencia OXXO" && i.TipoPago != "Pago con Tarjeta")
+                                                      select i).Count();
 
                         //CONTEO DE EPIS PAGADOS
                         int conteoEpisPTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
-                        int conteoEpisPAereos = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia == "AEREO"
-                        && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
-                        int conteoEpisPNormalesCIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
-                        && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") && (i.TipoPago == "Referencía BanBajío" || i.TipoPago == "Transferencia vía BanBajío"
-                        || i.TipoPago == "Referencia BanBajío" || i.TipoPago == "Banorte" || i.TipoPago == "REFERENCIA OXXO" || i.TipoPago == "Referencia OXXO"
-                        || i.TipoPago == "Pago con Tarjeta") select i).Count();
-                        int conteoEpisPNormalesSIVA = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
-                        && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") && (i.TipoPago != "Referencía BanBajío" && i.TipoPago != "Transferencia vía BanBajío" && i.TipoPago != "Referencia BanBajío"
-                        && i.TipoPago != "Banorte" && i.TipoPago != "REFERENCIA OXXO" && i.TipoPago != "Referencia OXXO" && i.TipoPago != "Pago con Tarjeta") select i).Count();
+                        int conteoEpisPAereos = (from i in modeloAlternativo
+                                                 where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia == "AEREO"
+&& (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA")
+                                                 select i).Count();
+                        int conteoEpisPNormalesCIVA = (from i in modeloAlternativo
+                                                       where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+&& (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") && (i.TipoPago == "Referencía BanBajío" || i.TipoPago == "Transferencia vía BanBajío"
+|| i.TipoPago == "Referencia BanBajío" || i.TipoPago == "Banorte" || i.TipoPago == "REFERENCIA OXXO" || i.TipoPago == "Referencia OXXO"
+|| i.TipoPago == "Pago con Tarjeta")
+                                                       select i).Count();
+                        int conteoEpisPNormalesSIVA = (from i in modeloAlternativo
+                                                       where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && i.TipoLicencia != "AEREO"
+&& (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") && (i.TipoPago != "Referencía BanBajío" && i.TipoPago != "Transferencia vía BanBajío" && i.TipoPago != "Referencia BanBajío"
+&& i.TipoPago != "Banorte" && i.TipoPago != "REFERENCIA OXXO" && i.TipoPago != "Referencia OXXO" && i.TipoPago != "Pago con Tarjeta")
+                                                       select i).Count();
 
                         //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
 
@@ -632,83 +730,154 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
                         if (fechaTablaAnterior != fechaTabla)
                         {
-                                    <tr>
+                            totalEpis = (from i in modeloAlternativo select i).Count();
+                            saldoTotalImporte += precioVisual;
+                            totalEpisP = (from i in modeloAlternativo where (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count(); ;
+                            saldoTotalP += precioPVisual;
+                            totalPago += pagoVisual;
 
-                                        @*FECHA DE CITA*@
+                            <tr>
+
+                                @*FECHA DE CITA*@
+                                <td>
+                                    <span>@fechaTabla</span>
+                                </td>
+
+                                @*NUMERO DE EPIS X DIA EN FECHA*@
+                                <td>
+                                    <span>@conteoEpisTotales</span>
+                                </td>
+
+                                @*IMPORTE*@
+                                <td>
+                                    <span>$@precioVisual.ToString("###,###,###,###")</span>
+                                </td>
+
+                                @*EPIS PAGADOS*@
+
+                                @{
+                                    if (conteoEpisPTotales != 0)
+                                    {
                                         <td>
-                                            <span>@fechaTabla</span>
+                                            <span>@conteoEpisPTotales</span>
                                         </td>
-
-                                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                                    }
+                                    else
+                                    {
                                         <td>
-                                            <span>@conteoEpisTotales</span>
                                         </td>
+                                    }
+                                }
 
-                                        @*IMPORTE*@
+                                @*IMPORTE EPIS PAGADOS*@
+
+                                @{
+                                    if (conteoEpisPTotales != 0)
+                                    {
                                         <td>
-                                            <span>$@precioVisual.ToString("###,###,###,###")</span>
+                                            <span>$@precioPVisual.ToString("###,###,###,###")</span>
                                         </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
+                                }
 
-                                        @*EPIS PAGADOS*@
+                                @*IMPORTE MODULO DE PAGOS*@
 
-                                        @{
-                                            if (conteoEpisPTotales != 0)
-                                            {
-                                                <td>
-                                                    <span>@conteoEpisPTotales</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                </td>
-                                            }
-                                        }
+                                @{
+                                    if (fechaTabla == fechadePago)
+                                    {
+                                        <td>
+                                            <span>$@pagoVisual.ToString("###,###,###,###")</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
 
-                                        @*IMPORTE EPIS PAGADOS*@
+                                }
+                            </tr>
 
-                                        @{
-                                            if (conteoEpisPTotales != 0)
-                                            {
-                                                <td>
-                                                    <span>$@precioPVisual.ToString("###,###,###,###")</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                </td>
-                                            }
-                                        }
-
-                                        @*IMPORTE MODULO DE PAGOS*@
-
-                                        @{
-                                            if (fechaTabla == fechadePago)
-                                            {
-                                                <td>
-                                                    <span>$@pagoVisual.ToString("###,###,###,###")</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                </td>
-                                            }
-
-                                        }
-                                     
-                                    </tr>
+                            fechaTablaAnterior = fechaTabla;
+                            precioVisual = 0;
+                            precioAereo = 0;
+                            precioNormalSIVA = 0;
+                            precioNormalCIVA = 0;
+                            pagoVisual = 0;
                         }
-                                            fechaTablaAnterior = fechaTabla;
-                                            precioVisual = 0;
-                                            precioAereo = 0;
-                                            precioNormalSIVA = 0;
-                                            precioNormalCIVA = 0;
-                                            pagoVisual = 0;
+                    }
+            <tr style="background-color:navajowhite">
+
+                @*FECHA DE CITA*@
+                <td>
+                    <span><b>TOTAL EPIS</b></span>
+                </td>
+
+                @*NUMERO DE EPIS X DIA EN FECHA*@
+                <td>
+                    <span><b>@totalEpis</b></span>
+                </td>
+
+                @*IMPORTE*@
+                <td>
+                    <span><b>$@saldoTotalImporte.ToString("###,###,###,###")</b></span>
+                </td>
+
+                @*EPIS PAGADOS*@
+
+                @{
+                    if (totalEpisP != 0)
+                    {
+                        <td>
+                            <span><b>@totalEpisP</b></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
                     }
                 }
+
+                @*IMPORTE EPIS PAGADOS*@
+
+                @{
+                    if (saldoTotalP != 0)
+                    {
+                        <td>
+                            <span><b>$@saldoTotalP.ToString("###,###,###,###")</b></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                }
+
+                @*IMPORTE MODULO DE PAGOS*@
+
+                @{
+                    if (saldoTotalP != 0)
+                    {
+                        <td>
+                            <span><b>$@totalPago.ToString("###,###,###,###")</b></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                }
+            </tr>
+                }
             </tbody>
-        </table>                    
+        </table>
     }
 }

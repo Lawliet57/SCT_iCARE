@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "CarruselMedico";
+    ViewBag.Title = "CarruselMedicoU";
 
     GMIEntities db = new GMIEntities();
 
@@ -16,9 +16,9 @@
 
 <h3 style="color:white" class="text-center">Carrusel Médico</h3>
 <br />
-<a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparente botonesGral" data-toggle="modal" data-target="#asignacion"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Asignación</button></a>
+<a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#asignacion"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Asignación</button></a>
 
-<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Usuarios/AsignarModulo")">
+<form method="post" enctype="multipart/form-data" action="@Url.Content("~/GestionUsuarios/AsignarModulo")">
     <div class="modal fade" id="asignacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -62,13 +62,13 @@
                                 {
                                     <option value="@item1.idModulo">@item1.Nombre</option>
                                     @*if (item1.idModulo > 8)
-                                    {
-                                        <option value="@item1.idModulo">@item1.Nombre</option>
-                                    }
-                else
-                {
-                        <option value="@item1.idModulo">@item1.Nombre</option>
-                }*@
+                                                            {
+                                                                <option value="@item1.idModulo">@item1.Nombre</option>
+                                                            }
+                                        else
+                                        {
+                                                <option value="@item1.idModulo">@item1.Nombre</option>
+                                        }*@
 
                                 }
                             }
@@ -77,12 +77,18 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <input type="submit" value="Asignar" class="btn btn-primary" />
+                    <input type="submit" value="Asignar" class="btn btn-success" />
                 </div>
             </div>
         </div>
     </div>
 </form>
+
+
+@*Referencia estilo para  tabla*@
+
+<link rel="stylesheet" type="text/css" href="~/estilos.css">
+
 
 <br />
 
@@ -90,7 +96,7 @@
     <table class="table tablas table-responsive" style="color: #2F2D6B">
         <thead>
             <tr class="bg-primary">
-                <th></th>
+                <th align="center"></th>
                 <th>
                     <h4>Doctor</h4>
                 </th>
@@ -133,8 +139,13 @@
                 </td>
             </tr>
 
-                            flag++;
-                        }
+            flag++;
+        }
 
     </table>
 </div>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
