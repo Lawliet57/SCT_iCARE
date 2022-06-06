@@ -28,7 +28,7 @@
 }
 
     .datagrid table td, .datagrid table th {
-        padding: 6px 7px;
+        padding: 4px 5px;
     }
 
     .datagrid table thead th {
@@ -262,7 +262,7 @@ table {
 table thead tr {
     /*background-color: #E1EEF4;*/
     border: solid;
-    padding: .35em;
+    padding: .20em;
 }
 
     table thead tr:nth-child(1) {
@@ -271,13 +271,13 @@ table thead tr {
 
 table th,
 table td {
-    padding: .625em;
+    padding: .200em;
     text-align: center;
-    width: 80;
+    width: auto;
 }
 
 table th {
     font-size: .85em;
-    letter-spacing: .1em;
+    letter-spacing: .005em;
     text-transform: uppercase;
 }

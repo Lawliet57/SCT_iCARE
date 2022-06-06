@@ -1927,7 +1927,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Digitalizar(HttpPostedFileBase file, string id, string usuario, string nombre, string doctor, string numero, string tipoL, 
+        public ActionResult Digitalizar(HttpPostedFileBase file, string id, string usuario, string nombre, string doctor, string numero, string tipoL,
             string tipoT, string curp, DateTime? fecha, HttpPostedFileBase ticket)
         {
 
@@ -1998,7 +1998,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
                 bytesTicket = bytes;
 
-                if(consultaTicket != null)
+                if (consultaTicket != null)
                 {
                     Tickets ticketArchivo = db.Tickets.Find(consultaTicket.idTicket);
 
@@ -2026,7 +2026,7 @@ namespace SCT_iCare.Controllers.Recepcion
                         db.SaveChanges();
                     }
                 }
-                
+
             }
 
             string CURP = null;
@@ -2061,7 +2061,7 @@ namespace SCT_iCare.Controllers.Recepcion
                 CURP = curp;
             }
 
-            if(fecha == null)
+            if (fecha == null)
             {
                 FECHA = Convert.ToDateTime(cita.FechaCita);
             }
@@ -2080,7 +2080,83 @@ namespace SCT_iCare.Controllers.Recepcion
             captura.idPaciente = Convert.ToInt32(id);
             captura.FechaExpdiente = FECHA;
 
-            Cita citaModificar = new Cita();
+            Cita citaModificar = new Cita();           
+
+            var findPrecio = (from q in db.Referido where q.Nombre == cita.ReferidoPor && q.Tipo == cita.CC select q).FirstOrDefault();
+            var precioEncontradoCI = findPrecio.PrecioNormalconIVA;
+            var precioEncontradoSI = findPrecio.PrecioNormal;
+            var precioEncontradoA = findPrecio.PrecioAereo;
+            var precioFinal = "";
+
+            if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío"
+            || cita.TipoPago == "Referencia BanBajío" || cita.TipoPago == "Banorte" || cita.TipoPago == "REFERENCIA OXXO" || cita.TipoPago == "Referencia OXXO"
+            || cita.TipoPago == "Pago con Tarjeta")
+            {
+
+                if (tipoL == "AEREO")
+                {
+                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
+                    {
+                        if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                        {
+                            precioFinal = precioEncontradoSI;
+                        }
+
+                        else
+                        {
+                            precioFinal = precioEncontradoCI;
+                        }
+
+                    }
+
+                    else
+                    {
+
+                        precioFinal = precioEncontradoA;
+
+                    }
+
+                }
+                else
+                {
+                    if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                    {
+
+                        precioFinal = precioEncontradoSI;
+
+                    }
+
+                    else
+                    {
+
+                        precioFinal = precioEncontradoCI;
+
+                    }
+
+                }
+            }
+
+            else
+            {
+                if (tipoL == "AEREO")
+                {
+                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
+                    {
+                            precioFinal = precioEncontradoSI;       
+                    }
+
+                    else
+                    {
+                        precioFinal = precioEncontradoA;
+                    }
+
+                }
+                else
+                {
+                    precioFinal = precioEncontradoSI;
+                }
+            }
+
             cita.TipoLicencia = tipoL;
             cita.TipoTramite = tipoT;
             cita.NoExpediente = NOEXPEDIENTE;
