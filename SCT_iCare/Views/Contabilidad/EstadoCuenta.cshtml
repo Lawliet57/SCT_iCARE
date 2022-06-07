@@ -99,6 +99,9 @@
     int saldoTotalPMA = 0;
     int totalPagoMA = 0;
     int diferenciaTotalMA = 0;
+    int montoTotalMa = 0;
+    int montoTotalMaP = 0;
+    int precioModPMA = 0; 
 
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
@@ -122,7 +125,7 @@
         fechaInicio = FECHAI;
         fechaFinal = FECHAF;
         FECHAFS = FECHAF;
-        fechaFinal = fechaFinal.AddDays(1);
+        fechaFinal = fechaFinal.AddDays(1).AddMinutes(-1);
 
     }
 
@@ -130,7 +133,7 @@
     {
         fechaFinal = Convert.ToDateTime(ViewBag.FechaFinal);
         FECHAFS = fechaFinal;
-        fechaFinal = fechaFinal.AddDays(1);
+        fechaFinal = fechaFinal.AddDays(1).AddMinutes(-1);
     }
 
     else
@@ -143,7 +146,7 @@
     }
 
     DateTime fechaInicioMesA = fechaInicio.AddMonths(-1);
-    DateTime fechaFinalMesA = fechaInicioMesA.AddMonths(1);
+    DateTime fechaFinalMesA = fechaInicioMesA.AddMonths(1).AddMinutes(-1);
 
 
 
@@ -422,9 +425,22 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
     {
         var epiFinalMA = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA select i).OrderByDescending(q => q.A.M.FechaCita).FirstOrDefault();
         var epiFinalMACOUNT = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA select i).Count();
+        var epiFinalMATotal = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA select i);
+        var epiFinalMATotalP = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA")  select i);
+
 
         if (epiFinalMACOUNT != 0)
         {
+
+            foreach (var zero in epiFinalMATotal)
+            {
+                montoTotalMa += Convert.ToInt32(zero.A.M.PrecioEpi);
+            }
+
+            foreach (var zeroP in epiFinalMATotalP)
+            {
+                montoTotalMaP += Convert.ToInt32(zeroP.A.M.PrecioEpi);
+            }
 
             //VARIABLES PARA FECHAS
             var fechaTablaMA = Convert.ToDateTime(epiFinalMA.A.M.FechaCita).ToString("dd-MMMM-yy");
@@ -433,100 +449,19 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
             //CONTEO DE EPIS TOTALES MES ANTERIOR
             int conteoEpisTotalesMA = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA select i).Count();
-            int conteoEpisAereosMA = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && i.A.M.TipoLicencia == "AEREO" select i).Count();
-            int conteoEpisNormalesCIVAMA = (from i in modeloNormalMA
-                                            where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && i.A.M.TipoLicencia != "AEREO"
-&& (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío" || i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte"
-|| i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO" || i.A.M.TipoPago == "Pago con Tarjeta")
-                                            select i).Count();
-            int conteoEpisNormalesSIVAMA = (from i in modeloNormalMA
-                                            where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && i.A.M.TipoLicencia != "AEREO"
-&& (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío" && i.A.M.TipoPago != "Banorte"
-&& i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta")
-                                            select i).Count();
 
             //CONTEO DE EPIS PAGADOS
             int conteoEpisPTotalesMA = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-            int conteoEpisPAereosMA = (from i in modeloNormalMA
-                                       where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && i.A.M.TipoLicencia == "AEREO"
-&& (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA")
-                                       select i).Count();
-            int conteoEpisPNormalesCIVAMA = (from i in modeloNormalMA
-                                             where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && i.A.M.TipoLicencia != "AEREO"
-&& (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago == "Referencía BanBajío" || i.A.M.TipoPago == "Transferencia vía BanBajío"
-|| i.A.M.TipoPago == "Referencia BanBajío" || i.A.M.TipoPago == "Banorte" || i.A.M.TipoPago == "REFERENCIA OXXO" || i.A.M.TipoPago == "Referencia OXXO"
-|| i.A.M.TipoPago == "Pago con Tarjeta")
-                                             select i).Count();
-            int conteoEpisPNormalesSIVAMA = (from i in modeloNormalMA
-                                             where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA && i.A.M.TipoLicencia != "AEREO"
-&& (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") && (i.A.M.TipoPago != "Referencía BanBajío" && i.A.M.TipoPago != "Transferencia vía BanBajío" && i.A.M.TipoPago != "Referencia BanBajío"
-&& i.A.M.TipoPago != "Banorte" && i.A.M.TipoPago != "REFERENCIA OXXO" && i.A.M.TipoPago != "Referencia OXXO" && i.A.M.TipoPago != "Pago con Tarjeta")
-                                             select i).Count();
 
             //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
 
             var pagoGestor = (from i in pagosGestores where i.Gestor == epiFinalMA.A.M.ReferidoPor && i.Fecha >= fechaInicioMesA && i.Fecha <= fechaFinalMesA select i);
+            int numPagosGes = (from i in pagosGestores where i.Gestor == epiFinalMA.A.M.ReferidoPor && i.Fecha >= fechaInicioMesA && i.Fecha <= fechaFinalMesA select i).Count();
 
-            //DIFERENCIAR PRECIOS NO PAGADOS
-
-            var precioEpiMA = (from i in precioEpiGeneral where i.Nombre == epiFinalMA.A.M.ReferidoPor && i.Tipo == epiFinalMA.A.M.CanalTipo select i).FirstOrDefault();
-
-            precioAereoMA = Convert.ToInt32(precioEpiMA.PrecioAereo);
-            precioNormalCIVAMA = Convert.ToInt32(precioEpiMA.PrecioNormalconIVA);
-            precioNormalSIVAMA = Convert.ToInt32(precioEpiMA.PrecioNormal);
-
-            if (precioEpiMA.PrecioAereo == null || precioEpiMA.PrecioAereo == "0")
+            foreach (var zeroModP in pagoGestor)
             {
-                precioAereoMA = 3480;
+                precioModPMA += Convert.ToInt32(zeroModP.PagoIngresado);
             }
-            if (precioEpiMA.PrecioNormalconIVA == null || precioEpiMA.PrecioNormalconIVA == "0")
-            {
-                precioNormalCIVAMA = precioNormalSIVAMA;
-            }
-
-            sumaPreciosNormalesSIVAMA = conteoEpisNormalesSIVAMA * precioNormalSIVAMA;
-            sumaPreciosNormalesCIVAMA = conteoEpisNormalesCIVAMA * precioNormalCIVAMA;
-            sumaPreciosAereosMA = conteoEpisAereosMA * precioAereoMA;
-            sumaPreciosTotalesMA = sumaPreciosAereosMA + sumaPreciosNormalesSIVAMA + sumaPreciosNormalesCIVAMA;
-            precioVisualMA = sumaPreciosTotalesMA;
-
-
-            //DIFERENCIAR PRECIOS  PAGADOS
-
-            var precioEpiPMA = (from i in precioEpiGeneral where i.Nombre == epiFinalMA.A.M.ReferidoPor && i.Tipo == epiFinalMA.A.M.CanalTipo select i).FirstOrDefault();
-
-            precioPAereoMA = Convert.ToInt32(precioEpiPMA.PrecioAereo);
-            precioPNormalCIVAMA = Convert.ToInt32(precioEpiPMA.PrecioNormalconIVA);
-            precioPNormalSIVAMA = Convert.ToInt32(precioEpiPMA.PrecioNormal);
-
-            if (precioEpiPMA.PrecioAereo == null || precioEpiPMA.PrecioAereo == "0")
-            {
-                precioPAereoMA = 3480;
-            }
-            if (precioEpiPMA.PrecioNormalconIVA == null || precioEpiPMA.PrecioNormalconIVA == "0")
-            {
-                precioPNormalCIVAMA = precioPNormalSIVAMA;
-            }
-
-            sumaPreciosPNormalesSIVAMA = conteoEpisPNormalesSIVAMA * precioPNormalSIVAMA;
-            sumaPreciosPNormalesCIVAMA = conteoEpisPNormalesCIVAMA * precioPNormalCIVAMA;
-            sumaPreciosPAereosMA = conteoEpisPAereosMA * precioPAereoMA;
-            sumaPreciosPTotalesMA = sumaPreciosPAereosMA + sumaPreciosPNormalesSIVAMA + sumaPreciosPNormalesCIVAMA;
-            precioPVisualMA = sumaPreciosPTotalesMA;
-
-            foreach (var pagos in pagoGestor)
-            {
-                pagoVisualMA += Convert.ToInt32(pagos.PagoIngresado);
-                fechadePagoMA = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
-            }
-
-            totalPagoMA += pagoVisualMA;
-            diferenciaTotalMA = saldoTotalImporteMA - (saldoTotalPMA + totalPagoMA);
-
-            totalEpisMA = conteoEpisTotalesMA;
-            totalEpisPMA = conteoEpisPTotalesMA;
-            saldoTotalImporteMA = precioVisualMA;
-
 
             <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
                 <thead style="color:white">
@@ -549,9 +484,12 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         </td>
 
                         @*IMPORTE*@
-                        <td>
-                            <span>@precioVisualMA.ToString("###,###,###,###")</span>
-                        </td>
+                        @{
+                            <td>
+                                <span>@montoTotalMa.ToString("###,###,###,###")</span>
+                            </td>
+                            montoTotalMa = 0;
+                        }
 
                         @*EPIS PAGADOS*@
 
@@ -560,19 +498,24 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         </td>
 
                         @*IMPORTE EPIS PAGADOS*@
-
-                        <td>
-                            <span>@precioPVisualMA.ToString("###,###,###,###")</span>
-                        </td>
+                        @{
+                            <td>
+                                <span>@montoTotalMaP.ToString("###,###,###,###")</span>
+                            </td>
+                            montoTotalMaP = 0;
+                        }
 
                         @*IMPORTE MODULO DE PAGOS*@
+                        @{
+                            <td>
+                                <span>@precioModPMA.ToString("###,###,###,###")</span>
+                            </td>
+                            precioModPMA = 0;
+                        }
 
                         <td>
-                            <span>@pagoVisualMA.ToString("###,###,###,###")</span>
                         </td>
 
-                        <td>
-                        </td>
 
                     </tr>
                 </tbody>
@@ -584,9 +527,15 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
     {
         var epiFinalMA = (from i in modeloAlternativoMA where i.FechaCita >= fechaInicioMesA && i.FechaCita <= fechaFinalMesA select i).OrderByDescending(q => q.FechaCita).FirstOrDefault();
         var epiFinalMACOUNT = (from i in modeloAlternativoMA where i.FechaCita >= fechaInicioMesA && i.FechaCita <= fechaFinalMesA select i).Count();
+        var epiFinalMATotal = (from i in modeloAlternativoMA where i.FechaCita >= fechaInicioMesA && i.FechaCita <= fechaFinalMesA select i);
 
         if (epiFinalMACOUNT != 0)
         {
+
+            //foreach (var zero in epiFinalMATotal)
+            //{
+            //    montoTotalMa += Convert.ToInt32(zero.);
+            //}
 
             //VARIABLES PARA FECHAS
             var fechaTablaMA = Convert.ToDateTime(epiFinalMA.FechaCita).ToString("dd-MMMM-yy");

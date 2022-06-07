@@ -631,13 +631,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         @{
 
                             //OPCION CON PRECIO EN TABLA CAPTURA
-                            @*var costo = (from i in db.Captura where i.idPaciente == item.A.M.idPaciente select i).FirstOrDefault();
+                            var costo = (from i in db.Cita where i.idPaciente == item.A.M.idPaciente select i).FirstOrDefault();
 
-                                <span><b>$@costo.PrecioEpi</b></span>*@
+                                <span><b>$@costo.PrecioEpi</b></span>
 
 
                             //OPCION CON PRECIO DE REFERIDO
-                            var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+                            @*var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
 
                             if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
                                 || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
@@ -693,7 +693,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                 }
 
-                            }
+                            }*@
 
                         }
 

@@ -47,6 +47,7 @@
     int ingresoActualAlt = 0;
     int ingresosTotalesA = 0;
     int ingresosTotalesN = 0;
+    int sumaDePrecios = 0; 
 
 
 
@@ -379,6 +380,13 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                         </td>
 
                         @{
+                            var precioEpisGeneral = (from i in modelo where i.A.M.CanalTipo == itemd.Tipo && i.A.M.ReferidoPor == itemd.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.TipoLicencia != "AEREO" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
+
+                            foreach (var kalaka in precioEpisGeneral)
+                            {
+                                sumaDePrecios += Convert.ToInt32(kalaka.A.M.PrecioEpi);
+                            }
+
                             //NUMERO DE EPIS NO AEREOS DENTRO DEL RANGO DE FECHA CON IVA
                             int deudaGestor = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.TipoLicencia != "AEREO" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
 
@@ -488,7 +496,9 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                         </span>
                                     </span>
                                 </td>
-                                <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
+                                <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
+
+                                                    sumaDePrecios = 0;
 
                                                 }
 
@@ -533,7 +543,9 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                         </span>
                                     </span>
                                 </td>
-                                <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
+                                <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
+
+                                                    sumaDePrecios = 0;
 
                                                 }
 
@@ -901,6 +913,13 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                             <b>@item.Nombre</b><span style="font-size:xx-small"> @item.Tipo</span>
                         </td>
                         @{
+                            var precioEpisGeneral = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.TipoLicencia != "AEREO" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
+
+                            foreach (var kalaka in precioEpisGeneral)
+                            {
+                                sumaDePrecios += Convert.ToInt32(kalaka.A.M.PrecioEpi);
+                            }
+
                             //NUMERO DE EPIS NO AEREOS DENTRO DEL RANGO DE FECHA
                             int deudaGestor = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.TipoLicencia != "AEREO" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
 
@@ -1007,7 +1026,10 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                         </span>
                                     </span>
                                 </td>
-                                <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
+
+                                <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
+
+                                sumaDePrecios = 0;
 
                             }
 
@@ -1052,11 +1074,16 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                         </span>
                                     </span>
                                 </td>
-                                <td><span> $@deudaTotal.ToString("###,###,###,###")</span></td>
+                                <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
+
+                            sumaDePrecios = 0;
 
                             }
 
                         }
+
+
+                        @*PAGO*@
 
                         <td>
 

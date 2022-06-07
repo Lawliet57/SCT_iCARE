@@ -1057,7 +1057,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             </tr>
                         </thead>
 
-                        @*DIFERENCIAS DE MES*@
+                       @*DIFERENCIAS DE MES*@
                         <tbody>
                             <tr style="border: none; background-color:transparent">
 
@@ -1066,15 +1066,19 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 
                                 @*FOOTTER  EPIS TOTALES PASADO*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@totalEpis</b></th>
 
+                                @{var finalTotal = totalEpis + totalEpisMA;
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@finalTotal</b></th>
+                                }
 
                                 @*FOOTTER  IMPORTE TOTAL PASADO*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalImporte.ToString("###,###,###,###")</b></th>
 
+                                @{var importeTotal = saldoTotalImporte + saldoTotalImporteMA;
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@importeTotal.ToString("###,###,###,###")</b></th>
+                                }
 
                                 @*FOOTTER  EPIS CONCILIADOS TOTALES PASADO*@
-                                @{
+                                @{var episPTotales = totalEpisP + totalEpisPMA;
                                     if (totalEpisP != 0)
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@totalEpisP</b></th>

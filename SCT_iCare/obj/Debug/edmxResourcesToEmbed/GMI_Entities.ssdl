@@ -210,6 +210,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <Property Name="FechaContable" Type="datetime" />
     <Property Name="UsarSaldo" Type="varchar" MaxLength="5" />
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
+    <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="CitaDS">
     <Key>

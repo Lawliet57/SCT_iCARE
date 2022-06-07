@@ -215,6 +215,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <Property Name="FechaContable" Type="datetime" />
           <Property Name="UsarSaldo" Type="varchar" MaxLength="5" />
           <Property Name="FormaPago" Type="varchar" MaxLength="40" />
+          <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="CitaDS">
           <Key>
@@ -2879,6 +2880,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <Property Name="FormaPago" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="Canal1" Relationship="DevModel.FK_Cita_Canal" FromRole="Cita" ToRole="Canal" />
           <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
+          <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CitaDS">
           <Key>
@@ -4942,6 +4944,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <EntitySetMapping Name="Cita">
             <EntityTypeMapping TypeName="DevModel.Cita">
               <MappingFragment StoreEntitySet="Cita">
+                <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
                 <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
                 <ScalarProperty Name="UsarSaldo" ColumnName="UsarSaldo" />
                 <ScalarProperty Name="FechaContable" ColumnName="FechaContable" />

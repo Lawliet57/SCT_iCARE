@@ -183,6 +183,7 @@
     <EntitySetMapping Name="Cita">
       <EntityTypeMapping TypeName="DevModel.Cita">
         <MappingFragment StoreEntitySet="Cita">
+          <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
           <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
           <ScalarProperty Name="UsarSaldo" ColumnName="UsarSaldo" />
           <ScalarProperty Name="FechaContable" ColumnName="FechaContable" />

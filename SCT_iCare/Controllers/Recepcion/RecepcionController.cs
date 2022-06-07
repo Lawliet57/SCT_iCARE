@@ -2152,8 +2152,15 @@ namespace SCT_iCare.Controllers.Recepcion
 
                 }
                 else
-                {
-                    precioFinal = precioEncontradoSI;
+                { 
+                    if (precioEncontradoSI == null || precioEncontradoSI == "0")
+                    {
+                        precioFinal = precioEncontradoCI;
+                    }
+                    else
+                    {
+                        precioFinal = precioEncontradoSI;
+                    }
                 }
             }
 
@@ -2161,6 +2168,7 @@ namespace SCT_iCare.Controllers.Recepcion
             cita.TipoTramite = tipoT;
             cita.NoExpediente = NOEXPEDIENTE;
             cita.Doctor = doctor;
+            cita.PrecioEpi = precioFinal;
 
 
             //Se obtienen las abreviaciónes de Sucursal y el ID del doctor
