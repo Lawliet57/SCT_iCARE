@@ -980,6 +980,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <Property Name="TipoPago" Type="varchar" MaxLength="100" />
     <Property Name="FechaContable" Type="datetime" />
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
+    <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>

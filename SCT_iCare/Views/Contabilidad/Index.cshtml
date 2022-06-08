@@ -460,7 +460,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
 </div>
 
-
+@*TABLA NORMAL*@
 <br />
 <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
     <table class="table  table-hover tablas" style="color: #000000">
@@ -1456,7 +1456,14 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     </td>
                     <td>
                         @{
-                            var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
+
+                            //OPCION CON PRECIO EN TABLA CAPTURA
+                            var costo = (from i in db.PacienteESP where i.idPacienteESP == item.idPacienteESP select i).FirstOrDefault();
+
+                            <span><b>$@costo.PrecioEpi</b></span>
+
+
+                            @*var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
 
                             if (item.TipoLicencia != "AEREO")
                             {
@@ -1480,7 +1487,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 {
                                     <span><b>$3480</b></span>
                                 }
-                            }
+                            }*@
                         }
 
                     </td>
@@ -2034,7 +2041,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         }
                         else
                         {
-                            @Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MM-yy")
+                            @Convert.ToDateTime(item.A.M.FechaContable).AddDays(1).ToString("dd-MMMM-yyyy")
                         }
                     </td>
 
@@ -2042,68 +2049,74 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     <!--<td>
     </td>-->
                     @*PRECIO*@
-                    <td>
-                        @{
-                            var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+                <td>
+                    @{
 
-                            if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
-                                || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
+                        //OPCION CON PRECIO EN TABLA CAPTURA
+                        var costo = (from i in db.Cita where i.idPaciente == item.A.M.idPaciente select i).FirstOrDefault();
+
+                        <span><b>$@costo.PrecioEpi</b></span>
+
+                        @*var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+
+                        if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
+                            || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
+                        {
+                            if (item.A.M.TipoLicencia != "AEREO")
                             {
-                                if (item.A.M.TipoLicencia != "AEREO")
-                                {
 
-                                    if (costo.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
-                                    }
-                                    else
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-                                    }
+                                if (costo.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
+                                {
+                                    <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
                                 }
                                 else
                                 {
-
-                                    if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                                    }
-                                    else
-                                    {
-                                        <span><b>$3480</b></span>
-                                    }
-
+                                    <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
                                 }
-
                             }
-
                             else
                             {
 
-                                if (item.A.M.TipoLicencia != "AEREO")
+                                if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
                                 {
-
-                                    <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-
+                                    <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
                                 }
                                 else
                                 {
-
-                                    if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                                    }
-                                    else
-                                    {
-                                        <span><b>$3480</b></span>
-                                    }
-
+                                    <span><b>$3480</b></span>
                                 }
 
                             }
 
                         }
-                    </td>
+
+                        else
+                        {
+
+                            if (item.A.M.TipoLicencia != "AEREO")
+                            {
+
+                                <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
+
+                            }
+                            else
+                            {
+
+                                if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
+                                {
+                                    <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                                }
+                                else
+                                {
+                                    <span><b>$3480</b></span>
+                                }
+
+                            }
+
+                        }*@
+
+                    }
+                </td>
 
                     @*RECEPCIONISTA*@
                     <td>
@@ -2194,7 +2207,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         }
                         else
                         {
-                            @Convert.ToDateTime(item.FechaContable).ToString("dd-MM-yy")
+                            @Convert.ToDateTime(item.FechaContable).AddDays(1).ToString("dd-MMMM-yyyy")
                         }
                     </td>
 
@@ -2202,35 +2215,42 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     <!--<td>
     </td>-->
                     @*PRECIO EPI*@
-                    <td>
-                        @{
-                            var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
+                <td>
+                    @{
 
-                            if (item.TipoLicencia != "AEREO")
+                        //OPCION CON PRECIO EN TABLA CAPTURA
+                        var costo = (from i in db.PacienteESP where i.idPacienteESP == item.idPacienteESP select i).FirstOrDefault();
+
+                        <span><b>$@costo.PrecioEpi</b></span>
+
+                        //OPCION CON PRECIOS DESDE LA LISTA DE REFERIDOS
+                        @*var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
+
+                        if (item.TipoLicencia != "AEREO")
+                        {
+
+                            if (costo.PrecioNormalconIVA != null)
                             {
-
-                                if (costo.PrecioNormalconIVA != null)
-                                {
-                                    <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
-                                }
-                                else
-                                {
-                                    <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-                                }
+                                <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
                             }
                             else
                             {
-                                if (costo.PrecioAereo != null)
-                                {
-                                    <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                                }
-                                else
-                                {
-                                    <span><b>$3480</b></span>
-                                }
+                                <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
                             }
                         }
-                    </td>
+                        else
+                        {
+                            if (costo.PrecioAereo != null)
+                            {
+                                <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                            }
+                            else
+                            {
+                                <span><b>$3480</b></span>
+                            }
+                        }*@
+                    }
+                </td>
 
                     @*RECEPCIONISTA*@
                     <td>

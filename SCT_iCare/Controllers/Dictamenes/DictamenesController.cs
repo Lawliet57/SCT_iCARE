@@ -2191,6 +2191,57 @@ namespace SCT_iCare.Controllers.Dictamenes
             paciente.Capturista = capturista;
             paciente.FechaCaptura = DateTime.Now;
 
+            var findPrecio = (from q in db.Referido where q.Nombre == paciente.ReferidoPor && q.Tipo == paciente.CanalTipo select q).FirstOrDefault();
+            var precioEncontradoCI = findPrecio.PrecioNormalconIVA;
+            var precioEncontradoSI = findPrecio.PrecioNormal;
+            var precioEncontradoA = findPrecio.PrecioAereo;
+            var precioFinal = "";
+
+                if (paciente.TipoLicencia == "AEREO")
+                {
+                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
+                    {
+                        if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                        {
+                            precioFinal = precioEncontradoSI;
+                        }
+
+                        else
+                        {
+                            precioFinal = precioEncontradoCI;
+                        }
+
+                    }
+
+                    else
+                    {
+
+                        precioFinal = precioEncontradoA;
+
+                    }
+
+                }
+                else
+                {
+                    if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                    {
+
+                        precioFinal = precioEncontradoSI;
+
+                    }
+
+                    else
+                    {
+
+                        precioFinal = precioEncontradoCI;
+
+                    }
+
+                }
+
+            paciente.PrecioEpi = precioFinal;
+
+
             if (ModelState.IsValid)
             {
                 db.Entry(paciente).State = EntityState.Modified;

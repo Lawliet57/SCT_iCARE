@@ -1416,6 +1416,7 @@
     <NavigationProperty Name="HemoglobinaGlucosiladaESP" Relationship="DevModel.FK_HemoglobinaGlucosiladaESP_PacienteESP" FromRole="PacienteESP" ToRole="HemoglobinaGlucosiladaESP" />
     <NavigationProperty Name="HuellasESP" Relationship="DevModel.FK_HuellasESP_PacienteESP" FromRole="PacienteESP" ToRole="HuellasESP" />
     <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
+    <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>

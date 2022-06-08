@@ -59,6 +59,7 @@ namespace SCT_iCare
         public string TipoPago { get; set; }
         public Nullable<System.DateTime> FechaContable { get; set; }
         public string FormaPago { get; set; }
+        public string PrecioEpi { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartaNoAccidentesESP> CartaNoAccidentesESP { get; set; }

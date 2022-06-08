@@ -292,6 +292,91 @@ namespace SCT_iCare.Controllers.Contabilidad
 
             cita.Conciliado = DateTime.Today.Day.ToString() + "-" + DateTime.Today.Month.ToString() + "-" + DateTime.Today.Year.ToString();
 
+
+            var findPrecio = (from q in db.Referido where q.Nombre == cita.ReferidoPor && q.Tipo == cita.CanalTipo select q).FirstOrDefault();
+            var precioEncontradoCI = findPrecio.PrecioNormalconIVA;
+            var precioEncontradoSI = findPrecio.PrecioNormal;
+            var precioEncontradoA = findPrecio.PrecioAereo;
+            var precioFinal = "";
+
+            if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío"
+          || cita.TipoPago == "Referencia BanBajío" || cita.TipoPago == "Banorte" || cita.TipoPago == "REFERENCIA OXXO" || cita.TipoPago == "Referencia OXXO"
+          || cita.TipoPago == "Pago con Tarjeta")
+            {
+
+                if (cita.TipoLicencia == "AEREO")
+                {
+                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
+                    {
+                        if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                        {
+                            precioFinal = precioEncontradoSI;
+                        }
+
+                        else
+                        {
+                            precioFinal = precioEncontradoCI;
+                        }
+
+                    }
+
+                    else
+                    {
+
+                        precioFinal = precioEncontradoA;
+
+                    }
+
+                }
+                else
+                {
+                    if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                    {
+
+                        precioFinal = precioEncontradoSI;
+
+                    }
+
+                    else
+                    {
+
+                        precioFinal = precioEncontradoCI;
+
+                    }
+
+                }
+            }
+
+            else
+            {
+                if (cita.TipoLicencia == "AEREO")
+                {
+                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
+                    {
+                        precioFinal = precioEncontradoSI;
+                    }
+
+                    else
+                    {
+                        precioFinal = precioEncontradoA;
+                    }
+
+                }
+                else
+                {
+                    if (precioEncontradoSI == null || precioEncontradoSI == "0")
+                    {
+                        precioFinal = precioEncontradoCI;
+                    }
+                    else
+                    {
+                        precioFinal = precioEncontradoSI;
+                    }
+                }
+            }
+
+            cita.PrecioEpi = precioFinal;
+
             if (ModelState.IsValid)
             {
                 db.Entry(cita).State = EntityState.Modified;

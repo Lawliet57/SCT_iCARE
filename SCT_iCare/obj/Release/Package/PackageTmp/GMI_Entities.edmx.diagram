@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="48">
+      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="94">
         <EntityTypeShape EntityType="DevModel.Aptitud" Width="1.5" PointX="3.75" PointY="7.875" />
         <EntityTypeShape EntityType="DevModel.Archivos" Width="1.5" PointX="3" PointY="39.25" />
         <EntityTypeShape EntityType="DevModel.AudioGA" Width="1.5" PointX="29" PointY="33.625" />

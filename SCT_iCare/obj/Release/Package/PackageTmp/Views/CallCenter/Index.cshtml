@@ -147,10 +147,12 @@ efectividad = ((citasCompletadas * 100) / citasEfectuadas);
     }
 }
 
-
 @*<button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal2"><span class="glyphicon glyphicon-plus"></span> Crear Referecia de Pago</button>*@
 <div class="form-inline">
     @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-plus"></span> Cita con Pago</button>*@
+
+    @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCopia"><span class="glyphicon glyphicon-plus"></span> Crear Cita</button>*@
+
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal2"><span class="glyphicon glyphicon-plus"></span> Crear Referecia de Pago</button>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal3"><span class="glyphicon glyphicon-credit"></span> Pago con Tarjeta</button>&nbsp;&nbsp;&nbsp;
 
@@ -578,7 +580,6 @@ efectividad = ((citasCompletadas * 100) / citasEfectuadas);
 </div>
 
 
-
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -705,6 +706,156 @@ efectividad = ((citasCompletadas * 100) / citasEfectuadas);
         </div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="exampleModalCopia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Generar referencia de pago</b></h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Recepcion/Create1")">
+                    @Html.AntiForgeryToken()
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Autotransporte, Marítimos y Ferroviarios):</label>
+                    </div>
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-info" id="menos1" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador1" min="1" name="cantidad" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-info" id="mas1" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Aéreos):</label>
+                    </div>
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-warning" id="menos11" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador11" min="1" name="cantidadAereo" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-warning" id="mas11" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    <input type="hidden" class="form-control" id="usuario" name="usuario" value="@oUser.Nombre">
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Nombre del Paciente (o Gestor):</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Teléfono:</label>
+                        <input type="tel" class="form-control" pattern="[0-9]{10}" title="El formato de teléfono debe contener 10 números" id="telefono" name="telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
+                        <input type="date" class="form-control" id="fechaFestivo" name="fecha" required>
+                    </div>
+                    <div class="form-group" style="width:60%; min-width:320px">
+                        <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                        <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                            @{
+                                sucursalesOption = from s in db.Sucursales select s.Nombre;
+                                foreach (var opcion in sucursalesOption)
+                                {
+                                    <option value="@opcion">@opcion</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group" style="width:60%; min-width:320px">
+                        <label for="recipient-name" class="col-form-label">Referido Por:</label>
+                        <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
+                            <option selected disabled>SELECCIONAR</option>
+                            @{
+                                //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
+                                referidosGestor = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
+                                referidosMD = (from r in db.Referido where r.Tipo == "MEDIOS DIGITALES" select r).OrderBy(o => o.Nombre);
+                                referidosEmpresa = (from r in db.Referido where r.Tipo == "EMPRESA" select r).OrderBy(o => o.Nombre);
+                                referidosOtro = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
+                                referidosSindicato = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
+                                referidosCallCenter = (from r in db.Referido where r.Tipo == "CALL CENTER" select r).OrderBy(o => o.Nombre);
+
+                                <option disabled>--------CALL CENTER--------</option>
+                                foreach (var item in referidosCallCenter)
+                                {
+                                    <option value="@item.idReferido">@item.Nombre</option>
+                                }
+
+                                <option disabled>--------GESTORES--------</option>
+                                foreach (var item in referidosGestor)
+                                {
+                                    <option value="@item.idReferido">@item.Nombre</option>
+                                }
+
+                                <option disabled><b>--------EMPRESAS--------</b></option>
+                                foreach (var item in referidosEmpresa)
+                                {
+                                    <option value="@item.idReferido">@item.Nombre</option>
+                                }
+
+                                <option disabled><b>--------SINDICATOS--------</b></option>
+                                foreach (var item in referidosSindicato)
+                                {
+                                    <option value="@item.idReferido">@item.Nombre</option>
+                                }
+
+                                <option disabled><b>----MEDIOS DIGITALES----</b></option>
+                                foreach (var item in referidosMD)
+                                {
+                                    <option value="@item.idReferido">@item.Nombre</option>
+                                }
+
+                                <option disabled><b>--------OTROS--------</b></option>
+                                foreach (var item in referidosOtro)
+                                {
+                                    <option value="@item.idReferido">@item.Nombre</option>
+                                }
+                            }
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Enviar" class="btn btn-primary" />
+            </div></form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script type="text/javascript">
     var sumar1 = document.getElementById("mas1");

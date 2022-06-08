@@ -1003,6 +1003,7 @@
     <EntitySetMapping Name="PacienteESP">
       <EntityTypeMapping TypeName="DevModel.PacienteESP">
         <MappingFragment StoreEntitySet="PacienteESP">
+          <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
           <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
           <ScalarProperty Name="FechaContable" ColumnName="FechaContable" />
           <ScalarProperty Name="TipoPago" ColumnName="TipoPago" />
