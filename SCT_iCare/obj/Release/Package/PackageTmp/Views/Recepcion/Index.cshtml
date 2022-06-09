@@ -397,6 +397,25 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <br />
                         <br />
                     </div>
+                    @{
+                        if (Sucursal == "TOLUCA" || Sucursal == "MIXCOAC")
+                        {
+                            <div class="form-inline">
+                                <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Operaciones Aeropuerto):</label>
+                            </div>
+                            <div class="form-inline">
+                                <span class="">
+                                    <button class="btn btn-warning" id="menos11" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                                </span>
+                                <input style="display:inline-block" type="number" class="form-control" id="contador11" min="1" name="cantidadOA" placeholder="Ingresa una cantidad">
+                                <span class="">
+                                    <button class="btn btn-warning" id="mas11" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                                </span>
+                                <br />
+                                <br />
+                            </div>
+                        }
+                    }
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Nombre del Paciente (o Gestor):</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required />
@@ -569,7 +588,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 
 
 
-            </div>
+</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -709,6 +728,25 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <br />
                         <br />
                     </div>
+                    @{
+                        if (Sucursal == "TOLUCA" || Sucursal == "MIXCOAC")
+                        {
+                            <div class="form-inline">
+                                <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Operaciones Aeropuerto):</label>
+                            </div>
+                            <div class="form-inline">
+                                <span class="">
+                                    <button class="btn btn-warning" id="menos11" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                                </span>
+                                <input style="display:inline-block" type="number" class="form-control" id="contador11" min="1" name="cantidadOA" placeholder="Ingresa una cantidad">
+                                <span class="">
+                                    <button class="btn btn-warning" id="mas11" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                                </span>
+                                <br />
+                                <br />
+                            </div>
+                        }
+                    }
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Nombre del Paciente (o Gestor):</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -808,7 +846,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             }
                         </select>
                     </div>
-            </div>
+</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -945,6 +983,13 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <br />
                         <br />
                     </div>
+                    @{
+                        if (Sucursal == "TOLUCA" || Sucursal == "MIXCOAC")
+                        {
+                            <label><input type="checkbox" id="cbox1" name="checkbox" value="Si"> Marque esta opcion si sus Epis Aereos son Operaciones en Aeropuerto</label><br>
+                            <br />
+                        }
+                    }
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Nombre del Paciente (o Gestor):</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
@@ -1042,7 +1087,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             }
                         </select>
                     </div>
-            </div>
+</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />

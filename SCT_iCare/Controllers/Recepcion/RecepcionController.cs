@@ -743,15 +743,15 @@ namespace SCT_iCare.Controllers.Recepcion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Orden(string nombre, string telefono, string email, string usuario, string sucursal,  string cantidad, string cantidadAereo, int? referido, DateTime? fecha)
+        public ActionResult Orden(string nombre, string telefono, string email, string usuario, string sucursal,  string cantidad, string cantidadAereo, string checkbox, int? referido, DateTime? fecha)
         {
             GetApiKey();
 
             string mailSeteado = "referenciasoxxo@medicinagmi.mx";
 
-
             int cantidadN;
             int cantidadA;
+            int precio = 0;
 
             if (cantidad == "")
             {
@@ -771,7 +771,21 @@ namespace SCT_iCare.Controllers.Recepcion
                 cantidadA = Convert.ToInt32(cantidadAereo);
             }
 
-            int precio = (cantidadN * 2842) + (cantidadA * 3480);
+            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            {
+                if (checkbox == "" || checkbox == null)
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3500);
+                }
+                else
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3200);
+                }
+            }
+            else
+            {
+                precio = (cantidadN * 2842) + (cantidadA * 3480);
+            }
 
             if (precio > 10000)
             {
@@ -1240,19 +1254,35 @@ namespace SCT_iCare.Controllers.Recepcion
 
             ViewBag.AEREO = Convert.ToInt32(cantidadA);
             ViewBag.AUTO = Convert.ToInt32(cantidadN);
-            ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2842) + (Convert.ToInt32(cantidadA) * 3480);
+
+            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            {
+                if (checkbox == "" || checkbox == null)
+                {
+                    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500);
+                }
+                else
+                {
+                    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3200);
+                }
+            }
+            else
+            {
+                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2842) + (Convert.ToInt32(cantidadA) * 3480);
+            }
             return View(detallesOrden);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, int card, int? referido, DateTime? fecha)
+        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string checkbox, int card, int? referido, DateTime? fecha)
         {
             GetApiKey();
 
             int cantidadN;
             int cantidadA;
+            int precio = 0;
 
             if (cantidad == "")
             {
@@ -1270,9 +1300,23 @@ namespace SCT_iCare.Controllers.Recepcion
             else
             {
                 cantidadA = Convert.ToInt32(cantidadAereo);
-            }
+            }                 
 
-            int precio = (cantidadN * 2842) + (cantidadA * 3480);
+            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            {
+                if (checkbox == "" || checkbox == null)
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3500);
+                }
+                else
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3200);
+                }                
+            }
+            else
+            {
+                precio = (cantidadN * 2842) + (cantidadA * 3480);
+            }
 
             if (precio > 10000)
             {
