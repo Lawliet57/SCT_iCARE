@@ -190,7 +190,7 @@ namespace SCT_iCare.Controllers.CallCenter
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Orden(string nombre, string telefono, string email, string sucursal, string usuario, DateTime fecha, string cantidad, string cantidadAereo, int? referido)
+        public ActionResult Orden(string nombre, string telefono, string email, string sucursal, string usuario, DateTime fecha, string cantidad, string cantidadAereo, string checkbox, int? referido)
         {
             GetApiKey();
 
@@ -198,6 +198,7 @@ namespace SCT_iCare.Controllers.CallCenter
 
             int cantidadN;
             int cantidadA;
+            int precio = 0;
 
             if (cantidad == "")
             {
@@ -217,7 +218,21 @@ namespace SCT_iCare.Controllers.CallCenter
                 cantidadA = Convert.ToInt32(cantidadAereo);
             }
 
-            int precio = (cantidadN * 2842) + (cantidadA * 3480);
+            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            {
+                if (checkbox == "" || checkbox == null)
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3500);
+                }
+                else
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3200);
+                }
+            }
+            else
+            {
+                precio = (cantidadN * 2842) + (cantidadA * 3480);
+            }
 
             if (precio > 10000)
             {
@@ -666,7 +681,21 @@ namespace SCT_iCare.Controllers.CallCenter
 
             ViewBag.AEREO = Convert.ToInt32(cantidadA);
             ViewBag.AUTO = Convert.ToInt32(cantidadN);
-            ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2842) + (Convert.ToInt32(cantidadA) * 3480);
+            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            {
+                if (checkbox == "" || checkbox == null)
+                {
+                    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500);
+                }
+                else
+                {
+                    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3200);
+                }
+            }
+            else
+            {
+                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2842) + (Convert.ToInt32(cantidadA) * 3480);
+            }
             return View(detallesOrden);
         }
 
@@ -879,18 +908,20 @@ namespace SCT_iCare.Controllers.CallCenter
             ViewBag.AEREO = Convert.ToInt32(cantidadA);
             ViewBag.AUTO = Convert.ToInt32(cantidadN);
             ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2842) + (Convert.ToInt32(cantidadA) * 3480);
+
             return View(detallesOrden);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, int card, DateTime? fecha, string cantidadAereo, int? referido)
+        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, int card, DateTime? fecha, string cantidadAereo, int? referido, string checkbox)
         {
             GetApiKey();
 
             int cantidadN;
             int cantidadA;
+            int precio = 0;
 
             if (cantidad == "")
             {
@@ -910,7 +941,21 @@ namespace SCT_iCare.Controllers.CallCenter
                 cantidadA = Convert.ToInt32(cantidadAereo);
             }
 
-            int precio = (cantidadN * 2842) + (cantidadA * 3480);
+            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            {
+                if (checkbox == "" || checkbox == null)
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3500);
+                }
+                else
+                {
+                    precio = (cantidadN * 2400) + (cantidadA * 3200);
+                }
+            }
+            else
+            {
+                precio = (cantidadN * 2842) + (cantidadA * 3480);
+            }
 
             if (precio > 10000)
             {
