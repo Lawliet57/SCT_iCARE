@@ -507,10 +507,12 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 <label for="recipient-name" class="col-form-label">Número de Referencia:</label>
                                 <input type="text" class="form-control" id="referencia" name="referencia" required>
                             </div>
+
+                            @*CAMPO REQUERIDO PARA SELECTORES*@
                             <div class="form-group" style="width:60%; min-width:320px">
-                                <label for="recipient-name" class="col-form-label">Referido Por:</label>
-                                <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
-                                    <option selected disabled>SELECCIONAR</option>
+                                <label for="recipient-name" class="form-select" required>Referido por:</label>
+                                <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                    <option disabled selected value="">SELECCIONAR</option>
                                     @{
                                         //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
                                         var referidosGestor = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
@@ -556,10 +558,12 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         {
                             <input type="hidden" name="pago" value="IN SITU" />
                             <input type="hidden" name="referencia" value="-----" />
+
+                            <br />
                             <div class="form-group" style="width:60%; min-width:320px">
-                                <label for="recipient-name" class="col-form-label">Referido Por:</label>
-                                <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                                    <option selected disabled>SELECCIONAR</option>
+                                <label for="recipient-name" class="form-select" required>Referido por:</label>
+                                <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                    <option disabled selected value="">SELECCIONAR</option>
                                     @{
                                         //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
                                         var referidosIS = (from r in db.Referido where r.Tipo == "IN SITU" select r).OrderBy(o => o.Nombre);
@@ -573,9 +577,6 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             </div>
                         }
                     }
-
-
-
 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -777,10 +778,12 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <input type="hidden" name="sucursal" asp-for="file" class="" required value="@Sucursal" />
                         <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
                     }
+
+                    @*CAMPO REQUERIDO PARA SELECTORES*@
                     <div class="form-group" style="width:60%; min-width:320px">
-                        <label for="recipient-name" class="col-form-label">Referido Por:</label>
-                        <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
-                            <option selected disabled>SELECCIONAR</option>
+                        <label for="recipient-name" class="form-select" required>Referido por:</label>
+                        <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                            <option disabled selected value="">SELECCIONAR</option>
                             @{
                                 //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
                                 var referidosGestor1 = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
@@ -788,7 +791,6 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 var referidosEmpresa1 = (from r in db.Referido where r.Tipo == "EMPRESA" select r).OrderBy(o => o.Nombre);
                                 var referidosOtro1 = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
                                 var referidosSindicato1 = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
-
 
                                 <option disabled>--------GESTORES--------</option>
                                 foreach (var item in referidosGestor1)
@@ -822,6 +824,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             }
                         </select>
                     </div>
+
 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -1024,13 +1027,14 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <input type="hidden" name="sucursal" asp-for="file" class="" required value="@Sucursal" />
                         <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
                     }
+
+                    @*CAMPO REQUERIDO PARA SELECTORES*@
                     <div class="form-group" style="width:60%; min-width:320px">
-                        <label for="recipient-name" class="col-form-label">Referido Por:</label>
-                        <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
-                            <option selected disabled>SELECCIONAR</option>
+                        <label for="recipient-name" class="form-select" required>Referido por:</label>
+                        <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                            <option disabled selected value="">SELECCIONAR</option>
                             @{
                                 //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
-
                                 <option disabled>--------GESTORES--------</option>
                                 foreach (var item in referidosGestor1)
                                 {
@@ -1063,6 +1067,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             }
                         </select>
                     </div>
+
 </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
