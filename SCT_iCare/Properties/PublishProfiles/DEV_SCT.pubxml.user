@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <History>False|2022-06-17T20:47:44.0173700Z;True|2022-06-16T16:43:03.9174063-05:00;False|2022-06-16T16:42:54.4944988-05:00;False|2022-06-14T08:34:29.2838018-05:00;False|2022-06-08T12:54:56.0698473-05:00;True|2022-06-01T08:18:16.7618498-05:00;False|2022-06-01T08:18:08.6861740-05:00;True|2022-05-18T14:57:46.0421583-05:00;False|2022-05-18T14:57:35.4990000-05:00;</History>
+    <History>True|2022-06-20T14:08:26.4449143Z;False|2022-06-20T09:08:16.9462377-05:00;False|2022-06-17T15:47:44.0173700-05:00;True|2022-06-16T16:43:03.9174063-05:00;False|2022-06-16T16:42:54.4944988-05:00;False|2022-06-14T08:34:29.2838018-05:00;False|2022-06-08T12:54:56.0698473-05:00;True|2022-06-01T08:18:16.7618498-05:00;False|2022-06-01T08:18:08.6861740-05:00;True|2022-05-18T14:57:46.0421583-05:00;False|2022-05-18T14:57:35.4990000-05:00;</History>
     <_PublishTargetUrl>C:\Users\punks\OneDrive - DEVWARE\Escritorio\DEVWARE\Gifs\Dev</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
@@ -288,10 +288,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:16</publishTime>
     </File>
     <File Include="bin/SCT_iCare.dll">
-      <publishTime>06/17/2022 15:47:50</publishTime>
+      <publishTime>06/20/2022 09:08:23</publishTime>
     </File>
     <File Include="bin/SCT_iCare.pdb">
-      <publishTime>06/17/2022 15:47:50</publishTime>
+      <publishTime>06/20/2022 09:08:23</publishTime>
     </File>
     <File Include="bin/SendGrid.dll">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -570,7 +570,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="GMI_Entities.edmx.diagram">
-      <publishTime>06/16/2022 10:12:14</publishTime>
+      <publishTime>06/20/2022 09:05:22</publishTime>
     </File>
     <File Include="Images/1.jpg">
       <publishTime>09/22/2021 09:57:12</publishTime>
@@ -1128,7 +1128,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/14/2022 10:14:16</publishTime>
     </File>
     <File Include="Views/Admin/ActualizarPrecios.cshtml">
-      <publishTime>06/16/2022 10:37:50</publishTime>
+      <publishTime>06/20/2022 09:05:22</publishTime>
     </File>
     <File Include="Views/Admin/ALT8Columnas.cshtml">
       <publishTime>05/18/2022 14:54:34</publishTime>
@@ -1287,10 +1287,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/20/2022 11:27:56</publishTime>
     </File>
     <File Include="Views/Contabilidad/EstadoCuenta.cshtml">
-      <publishTime>06/16/2022 15:55:55</publishTime>
+      <publishTime>06/20/2022 09:05:22</publishTime>
     </File>
     <File Include="Views/Contabilidad/Index.cshtml">
-      <publishTime>06/16/2022 08:52:49</publishTime>
+      <publishTime>06/20/2022 09:05:22</publishTime>
     </File>
     <File Include="Views/Contabilidad/Pagos.cshtml">
       <publishTime>06/09/2022 13:56:58</publishTime>
@@ -1410,7 +1410,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/20/2021 12:53:39</publishTime>
     </File>
     <File Include="Views/Recepcion/Index.cshtml">
-      <publishTime>06/17/2022 15:45:54</publishTime>
+      <publishTime>06/20/2022 09:05:22</publishTime>
     </File>
     <File Include="Views/Recepcion/NextDay.cshtml">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -1431,7 +1431,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>06/08/2022 13:11:00</publishTime>
+      <publishTime>06/20/2022 09:05:22</publishTime>
     </File>
     <File Include="Views/Shared/_Layout2.cshtml">
       <publishTime>09/22/2021 09:57:12</publishTime>
@@ -1482,7 +1482,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/16/2022 16:43:02</publishTime>
+      <publishTime>06/20/2022 09:08:24</publishTime>
     </File>
   </ItemGroup>
 </Project>
