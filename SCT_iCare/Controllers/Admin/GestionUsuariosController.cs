@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using SCT_iCare;
+using SCT_iCare.Filters;
 
-
-//PUTO EL QUE LO LEA .I.
 
 namespace SCT_iCare.Controllers.Admin
 {
@@ -19,6 +18,7 @@ namespace SCT_iCare.Controllers.Admin
         private GMIEntities db = new GMIEntities();
 
         // GET: GestionUsuarios
+        [AuthorizeUser(idOperacion: 15)]
         public ViewResult GestionUsuarios(string searchString)
         {
             var usuarios = db.Usuarios.Include(u => u.Roles);
@@ -206,7 +206,7 @@ namespace SCT_iCare.Controllers.Admin
                 {
                     db.Entry(recepcionista).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("GestionUsuarios");
                 }
             }
             else
@@ -219,11 +219,11 @@ namespace SCT_iCare.Controllers.Admin
 
                     db.Recepcionista.Add(recepcionista);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("GestionUsuarios");
                 }
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("GestionUsuarios");
         }
 
         protected override void Dispose(bool disposing)

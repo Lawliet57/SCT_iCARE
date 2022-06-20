@@ -9,34 +9,28 @@ namespace SCT_iCare.Filters
 {
     public class VerificarSession : ActionFilterAttribute
     {
-        private Usuarios oUsuario;
+        private Usuarios oUser;
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             try
             {
                 base.OnActionExecuting(filterContext);
 
-                oUsuario = (Usuarios)HttpContext.Current.Session["User"];
-                if(oUsuario == null)
+                oUser = (Usuarios)HttpContext.Current.Session["User"];
+                if (oUser == null)
                 {
                     if (filterContext.Controller is LoginController == false)
                     {
-                        filterContext.HttpContext.Response.Redirect("/Login/Inicio", false);
+                        filterContext.HttpContext.Response.Redirect("/Login/Inicio");
                     }
                 }
-                //else
-                //{
-                //    if(filterContext.Controller is LoginController == true)
-                //    {
-                //        filterContext.HttpContext.Response.Redirect("~/Login/Inicio");
-                //    }
-                //}
+
             }
             catch (Exception)
             {
                 filterContext.Result = new RedirectResult("~/Login/Inicio");
             }
-            
+
         }
     }
 }

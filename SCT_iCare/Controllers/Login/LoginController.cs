@@ -10,11 +10,15 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Configuration;
 
+
+
 namespace SCT_iCare.Controllers.Login
 {
     public class LoginController : Controller
     {
         private GMIEntities db = new GMIEntities();
+
+
 
         // GET: Login
         public ActionResult Inicio()
@@ -22,67 +26,28 @@ namespace SCT_iCare.Controllers.Login
             Execute().Wait();
 
 
-            //Random random = new Random();
-
-            //int[] tablaAudiologia = { -5, 0, 5, 10, 15, 20, 25, 30, 35 };
-            //int posicionActual = 0;
-            //int posicionDeseada = 0;
-            //int operacion = 0;
-            //string valor = "";
-
-            //string arribaAbajo = "";
-            //int numeroRandom = 0;
-
-            //for (int i = 0; i <= 7; i++)
-            //{
-            //    numeroRandom = random.Next(9); //seteado, no viene de base de datos
-
-            //    valor = tablaAudiologia[numeroRandom].ToString();
-            //    if( i == 7)
-            //    {
-            //        valor = "35";
-            //    }
-
-            //    for (int n = 0; n < 8; n++)
-            //    {
-            //        if (Convert.ToString(tablaAudiologia[n]) == valor)
-            //        {
-            //            posicionDeseada = n + 1;
-            //            break;
-            //        }
-            //    }
-
-            //    operacion = posicionActual - posicionDeseada;
-            //    posicionActual = posicionDeseada;
-
-            //    if (operacion == 0)
-            //    {
-            //        arribaAbajo = "No se mueve";
-            //    }
-            //    else if (operacion < 0)
-            //    {
-            //        arribaAbajo = "Se mueve para abajo";
-            //    }
-            //    else
-            //    {
-            //        arribaAbajo = "Se mueve para arriba";
-            //    }
-
-            //}
 
             return View();
         }
+
+
 
         static async Task Execute()
         {
             var apiKey = "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";
             var client = new SendGridClient(apiKey);
 
-            GMIEntities db = new GMIEntities();
-            var documento = (from d in db.Dictamen  orderby d.idDictamen descending select d.Dictamen1).FirstOrDefault();
 
-            byte [] bytesBinary = documento;
+
+            GMIEntities db = new GMIEntities();
+            var documento = (from d in db.Dictamen orderby d.idDictamen descending select d.Dictamen1).FirstOrDefault();
+
+
+
+            byte[] bytesBinary = documento;
             var base64 = Convert.ToBase64String(documento);
+
+
 
             var from = new EmailAddress("no-reply@grupogamx.mx", "Grupo GA");
             var subject = "Sending with SendGrid is Fun";
@@ -91,26 +56,35 @@ namespace SCT_iCare.Controllers.Login
             var htmlContent = "<h1><strong>and easy to do anywhere, even with C#</strong></h1>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 
+
+
             msg.Attachments = new List<SendGrid.Helpers.Mail.Attachment>
-                {
-                    new SendGrid.Helpers.Mail.Attachment
-                    {
-                        Content = Convert.ToBase64String(bytesBinary),
-                        Filename = "Transcript.pdf",
-                        Type = "applicaition/pdf",
-                        Disposition = "attachment"
-                    }
-                };
+{
+new SendGrid.Helpers.Mail.Attachment
+{
+Content = Convert.ToBase64String(bytesBinary),
+Filename = "Transcript.pdf",
+Type = "applicaition/pdf",
+Disposition = "attachment"
+}
+};
+
+
 
             var response = client.SendEmailAsync(msg);
-            //Console.(response.StatusCode);
-            //Console.ReadLine();
+
+
+
         }
+
+
 
 
         [HttpPost]
         public ActionResult Inicio(string User, string Pass)
         {
+
+
 
             try
             {
@@ -118,9 +92,13 @@ namespace SCT_iCare.Controllers.Login
                 int hoy = DateTime.Now.Day;
                 int anio = DateTime.Now.Year;
 
+
+
                 var contadores = (from c in db.Sucursales select c);
 
-                
+
+
+
                 foreach (var item in contadores)
                 {
                     if (hoy != Convert.ToDateTime(item.ContadorFecha).Day)
@@ -129,20 +107,26 @@ namespace SCT_iCare.Controllers.Login
                         sucursales.Contador = 0;
                         sucursales.ContadorFecha = DateTime.Now;
 
+
+
                         if (ModelState.IsValid)
                         {
-                            db.Entry(sucursales).State = EntityState.Modified;         
+                            db.Entry(sucursales).State = EntityState.Modified;
                         }
                     }
                 }
                 db.SaveChanges();
 
 
+
+
                 Pass = Encrypt.GetSHA256(Pass.Trim());
                 //Usuarios usuario = new Usuarios();
-                var oUser = (from d in db.Usuarios where d.Email==User && d.Password == Pass.Trim() select d).FirstOrDefault();
+                var oUser = (from d in db.Usuarios where d.Email == User && d.Password == Pass.Trim() select d).FirstOrDefault();
 
-                if(oUser == null)
+
+
+                if (oUser == null)
                 {
                     ViewBag.Error = "Usuario o Contraseña inválida";
                     return View();
@@ -150,6 +134,8 @@ namespace SCT_iCare.Controllers.Login
                 else
                 {
                     Session["User"] = oUser;
+
+
 
                     switch (oUser.idRol)
                     {
@@ -159,16 +145,11 @@ namespace SCT_iCare.Controllers.Login
                                 ViewBag.Nombre = oUser.Nombre.ToString();
                                 return Redirect("~/Admin/Index");
                             }
-                            else if (oUser.Nombre == "Edith Atilano")
-                            {
-                                ViewBag.Nombre = oUser.Nombre.ToString();
-                                return Redirect("~/CERTIFICADOes/Index");
-                            }
                             else
                             {
                                 ViewBag.Nombre = oUser.Nombre.ToString();
                                 return Redirect("~/Admin/TablaComparacion");
-                            }                            
+                            }
                         case 1:
                             ViewBag.Nombre = oUser.Nombre.ToString();
                             return Redirect("~/CallCenter/Index");
@@ -191,8 +172,8 @@ namespace SCT_iCare.Controllers.Login
                             ViewBag.Nombre = oUser.Nombre.ToString();
                             return Redirect("~/CERTIFICADOes/Index");
                         case 5:
-                                ViewBag.Nombre = oUser.Nombre.ToString();
-                                return Redirect("~/Admin/TablaComparacion");                            
+                            ViewBag.Nombre = oUser.Nombre.ToString();
+                            return Redirect("~/Admin/TablaComparacion");
                         case 11:
                             ViewBag.Nombre = oUser.Nombre.ToString();
                             return Redirect("~/GestorVenta/Index");
@@ -208,10 +189,14 @@ namespace SCT_iCare.Controllers.Login
                         case 10:
                             ViewBag.Nombre = oUser.Nombre.ToString();
 
+
+
                             var logGestor = new log_InicioGestor();
                             logGestor.InicioSesion = DateTime.Now;
                             logGestor.NombreUsuario = oUser.Nombre.ToString();
                             logGestor.idUsuario = oUser.idUsuario;
+
+
 
                             if (ModelState.IsValid)
                             {
@@ -242,11 +227,15 @@ namespace SCT_iCare.Controllers.Login
                             ViewBag.Nombre = oUser.Nombre.ToString();
                             return Redirect("~/Dictamenes/Citas");
 
+
+
                         default:
                             //return Redirect("~/Login/Login");
                             return View();
                     }
                 }
+
+
 
                 //return RedirectToAction("Index", "Admin");
             }
@@ -257,10 +246,14 @@ namespace SCT_iCare.Controllers.Login
             }
         }
 
+
+
         public ActionResult Redireccionar()
         {
             return RedirectToAction("Inicio");
         }
+
+
 
     }
 }

@@ -8,11 +8,15 @@ using System.Web;
 using System.Web.Mvc;
 using SCT_iCare;
 
+
+
 namespace SCT_iCare.Controllers.Admin
 {
     public class SucursalesController : Controller
     {
         private GMIEntities db = new GMIEntities();
+
+
 
         // GET: Sucursales
         public ActionResult Index()
@@ -21,14 +25,20 @@ namespace SCT_iCare.Controllers.Admin
             return View(sucursales.ToList());
         }
 
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult AgregarCiudad(string ciudad, string estado)
         {
             Ciudades ciudades = new Ciudades();
 
+
+
             ciudades.Ciudad = ciudad;
             ciudades.Estado = estado;
+
+
 
             if (ModelState.IsValid)
             {
@@ -37,8 +47,12 @@ namespace SCT_iCare.Controllers.Admin
                 return RedirectToAction("Index");
             }
 
+
+
             return RedirectToAction("Index");
         }
+
+
 
         // GET: Sucursales/Details/5
         public ActionResult Details(int? id)
@@ -55,6 +69,8 @@ namespace SCT_iCare.Controllers.Admin
             return View(sucursales);
         }
 
+
+
         // GET: Sucursales/Create
         public ActionResult Create()
         {
@@ -62,8 +78,10 @@ namespace SCT_iCare.Controllers.Admin
             return View();
         }
 
+
+
         // POST: Sucursales/Create
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -76,9 +94,13 @@ namespace SCT_iCare.Controllers.Admin
                 return RedirectToAction("Index");
             }
 
+
+
             ViewBag.idCiudad = new SelectList(db.Ciudades, "idCiudad", "Ciudad", sucursales.idCiudad);
             return View(sucursales);
         }
+
+
 
         // GET: Sucursales/Edit/5
         public ActionResult Edit(int? id)
@@ -96,8 +118,10 @@ namespace SCT_iCare.Controllers.Admin
             return View(sucursales);
         }
 
+
+
         // POST: Sucursales/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -112,6 +136,8 @@ namespace SCT_iCare.Controllers.Admin
             ViewBag.idCiudad = new SelectList(db.Ciudades, "idCiudad", "Ciudad", sucursales.idCiudad);
             return View(sucursales);
         }
+
+
 
         // GET: Sucursales/Delete/5
         public ActionResult Delete(int? id)
@@ -128,6 +154,8 @@ namespace SCT_iCare.Controllers.Admin
             return View(sucursales);
         }
 
+
+
         // POST: Sucursales/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -138,6 +166,8 @@ namespace SCT_iCare.Controllers.Admin
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

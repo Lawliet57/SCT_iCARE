@@ -1,10 +1,12 @@
 ﻿using PagedList;
+using SCT_iCare.Filters;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+
 
 namespace SCT_iCare.Controllers.Admin
 {
@@ -13,6 +15,7 @@ namespace SCT_iCare.Controllers.Admin
         GMIEntities db = new GMIEntities();
 
         // GET: Admin
+        [AuthorizeUser(idOperacion: 4)]
         public ActionResult Index(DateTime? inicio, DateTime? final)
         {
             DateTime thisDate = new DateTime();
@@ -109,6 +112,7 @@ namespace SCT_iCare.Controllers.Admin
             return View();
         }
 
+        [AuthorizeUser(idOperacion: 39)]
         public ActionResult TablaDinamica(string gestor, DateTime? fechaInicio, DateTime? fechaFinal)
         {
 
@@ -305,6 +309,7 @@ namespace SCT_iCare.Controllers.Admin
             }
         }
 
+        [AuthorizeUser(idOperacion: 35)]
         public ActionResult TablaMetas(string gestor)
         {
             if (gestor == "Diarias")
@@ -475,6 +480,7 @@ namespace SCT_iCare.Controllers.Admin
             }
         }
 
+        [AuthorizeUser(idOperacion: 38)]
         public ActionResult TablaComparacion(string gestor, DateTime? fechaInicio, DateTime? fechaFinal)
         {
 
@@ -528,6 +534,7 @@ namespace SCT_iCare.Controllers.Admin
             }
         }
 
+        //[AuthorizeUser(idOperacion: 20)]
         public ActionResult TablaComparacion2(string gestor, DateTime? fechaInicio, DateTime? fechaFinal)
         {
             ViewBag.FechaInicio = fechaInicio != null ? fechaInicio : null;
@@ -535,6 +542,7 @@ namespace SCT_iCare.Controllers.Admin
             return View();
         }
 
+        [AuthorizeUser(idOperacion: 21)]
         public ActionResult ActualizarMeta(string gestor)
         {
             if (gestor == "Diarias")

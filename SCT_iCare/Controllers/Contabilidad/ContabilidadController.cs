@@ -16,6 +16,7 @@ namespace SCT_iCare.Controllers.Contabilidad
     {
         GMIEntities db = new GMIEntities();
         // GET: Maqueta
+        [AuthorizeUser(idOperacion: 10)]
         public ActionResult Index(string canal, string cuenta, string sucursal, DateTime? fechaInicio, DateTime? fechaFinal, string tipoPago, int? referido, string conciliadooo, int? id)
         {//id nos indica si es 1 son Conciliados y si es 2 son NoConciliados
             var Referido = db.Referido.Find(referido);
@@ -155,6 +156,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
 
         ///Conciliacion
+        [AuthorizeUser(idOperacion: 11)]
         public ActionResult Conciliacion(DateTime? fechaInicio, DateTime? fechaFinal)
         {
 
@@ -164,6 +166,7 @@ namespace SCT_iCare.Controllers.Contabilidad
             return View();
         }
 
+        [AuthorizeUser(idOperacion: 12)]
         public ActionResult Pagos(string canal, DateTime? fechaInicio, DateTime? fechaFinal, string cuenta, string tipoPago, string sucursal, int? referido, int? id)
         {
             var Referido = db.Referido.Find(referido);
@@ -554,6 +557,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
 
         //METODO ESTADO DE CUENTA
+        [AuthorizeUser(idOperacion: 13)]
         public ActionResult EstadoCuenta(string canal, string cuenta, DateTime? fechaInicio, DateTime? fechaFinal, string tipoPago, string sucursal, int? referido, string conciliadooo, int? id)
         {
             var Referido = db.Referido.Find(referido);

@@ -430,6 +430,9 @@
     <Compile Include="Models\Consultorios\EntConsultorios.cs" />
     <Compile Include="Models\Root.cs" />
     <Compile Include="Models\SubirPDF.cs" />
+    <Compile Include="modulo.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="Modulos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -440,6 +443,9 @@
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Oftalmologo.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="operaciones.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Paciente.cs">
@@ -474,6 +480,9 @@
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="RolMenu.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="rol_operacion.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="SignosVitalesDS.cs">

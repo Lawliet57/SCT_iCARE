@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Net;
 using System.Data.Entity;
 using System.Web.Script.Serialization;
+using SCT_iCare.Filters;
 
 namespace SCT_iCare.Controllers.Gestoria
 {
@@ -31,6 +32,7 @@ namespace SCT_iCare.Controllers.Gestoria
         }
 
         // GET: Pacientes
+        [AuthorizeUser(idOperacion: 7)]
         public ActionResult Index()
         {
             return View(db.Paciente.ToList());
@@ -90,9 +92,9 @@ namespace SCT_iCare.Controllers.Gestoria
             //Se revisa el saldo a favor del gestor
             var saldoDisponible = (from i in db.Referido where i.Nombre == nombre select i).FirstOrDefault();
 
-            if(saldoDisponible.Saldo >= (cantidadN + cantidadA))
+            if (saldoDisponible.Saldo >= (cantidadN + cantidadA))
             {
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     Referido nuevoSaldo = db.Referido.Find(saldoDisponible.idReferido);
 
@@ -550,11 +552,11 @@ namespace SCT_iCare.Controllers.Gestoria
             var saldo = (from i in db.Referido where i.Nombre == referido select i).FirstOrDefault();
             var gestor = db.Referido.Find(saldo.idReferido);
 
-            if(epis > 0)
+            if (epis > 0)
             {
                 gestor.Saldo = gestor.Saldo + epis;
 
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     db.Entry(gestor).State = EntityState.Modified;
                     db.SaveChanges();
@@ -574,7 +576,7 @@ namespace SCT_iCare.Controllers.Gestoria
             var mail = (from m in db.Usuarios where m.Nombre == usuario select m.Email).FirstOrDefault();
 
             string mailSeteado = mail;
-            
+
 
             int cantidadN;
             int cantidadA;
@@ -604,7 +606,7 @@ namespace SCT_iCare.Controllers.Gestoria
                 precio = 9990;
             }
 
-            if(cantidadAereo == "" && cantidad == "")
+            if (cantidadAereo == "" && cantidad == "")
             {
                 return View("Index");
             }
@@ -854,7 +856,7 @@ namespace SCT_iCare.Controllers.Gestoria
 
                     var referidoID = (from i in db.Referido where i.idReferido == referido select i.Nombre).FirstOrDefault();
 
-                    paciente.Nombre = referidoID +" " + n;
+                    paciente.Nombre = referidoID + " " + n;
                     paciente.Telefono = telefono;
                     paciente.Email = mail;
 
@@ -1317,7 +1319,7 @@ namespace SCT_iCare.Controllers.Gestoria
 
                     var referidoID = (from i in db.Referido where i.idReferido == referido select i.Nombre).FirstOrDefault();
 
-                    paciente.Nombre = referidoID+ " " + n;
+                    paciente.Nombre = referidoID + " " + n;
                     paciente.Telefono = telefono;
                     paciente.Email = mail;
 

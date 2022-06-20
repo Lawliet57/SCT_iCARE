@@ -8,11 +8,15 @@ using System.Web;
 using System.Web.Mvc;
 using SCT_iCare;
 
+
+
 namespace SCT_iCare.Controllers.Admin
 {
     public class DoctoresController : Controller
     {
         private GMIEntities db = new GMIEntities();
+
+
 
         // GET: Doctores
         public ActionResult Index(string searchString)
@@ -23,8 +27,12 @@ namespace SCT_iCare.Controllers.Admin
                 doctores = doctores.Where(s => s.Nombre.ToUpper().Contains(searchString.ToUpper()));
             }
 
+
+
             return View(doctores.ToList());
         }
+
+
 
         // GET: Doctores/Details/5
         public ActionResult Details(int? id)
@@ -41,6 +49,8 @@ namespace SCT_iCare.Controllers.Admin
             return View(doctores);
         }
 
+
+
         // GET: Doctores/Create
         public ActionResult Create()
         {
@@ -48,7 +58,11 @@ namespace SCT_iCare.Controllers.Admin
             return View();
         }
 
+
+
         // POST: Doctores/Create
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -61,9 +75,13 @@ namespace SCT_iCare.Controllers.Admin
                 return RedirectToAction("Index");
             }
 
+
+
             ViewBag.idSucursal = new SelectList(db.Sucursales, "idSucursal", "Nombre", doctores.idSucursal);
             return View(doctores);
         }
+
+
 
         // GET: Doctores/Edit/5
         public ActionResult Edit(int? id)
@@ -81,8 +99,10 @@ namespace SCT_iCare.Controllers.Admin
             return View(doctores);
         }
 
+
+
         // POST: Doctores/Edit/5
-        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
+        // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -97,6 +117,8 @@ namespace SCT_iCare.Controllers.Admin
             ViewBag.idSucursal = new SelectList(db.Sucursales, "idSucursal", "Nombre", doctores.idSucursal);
             return View(doctores);
         }
+
+
 
         // GET: Doctores/Delete/5
         public ActionResult Delete(int? id)
@@ -113,6 +135,8 @@ namespace SCT_iCare.Controllers.Admin
             return View(doctores);
         }
 
+
+
         // POST: Doctores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -123,6 +147,8 @@ namespace SCT_iCare.Controllers.Admin
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

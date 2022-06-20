@@ -1,12 +1,20 @@
 ﻿@model SCT_iCare.Usuarios
 
+
+
 @{
     ViewBag.Title = "EditU";
 }
 
+
+
 <br />
 
+
+
 <h3 style="color:white">Editar Usuario</h3>
+
+
 
 @if (TempData["mensaje"] != null)
 {
@@ -18,14 +26,20 @@
 }
 
 
+
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
+
+
 
     <div class="form-horizontal">
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.idUsuario)
+
+
 
         <div class="form-group labelGral">
             <h4>@Html.LabelFor(model => model.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })</h4>
@@ -35,6 +49,8 @@
             </div>
         </div>
 
+
+
         <div class="form-group labelGral">
             <h4>@Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })</h4>
             <div class="col-md-10">
@@ -42,6 +58,8 @@
                 @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
             </div>
         </div>
+
+
 
 
 
@@ -55,6 +73,8 @@
 
 
 
+
+
         <div class="form-group labelGral">
             <h4>@Html.LabelFor(model => model.idRol, "idRol", htmlAttributes: new { @class = "control-label col-md-2" })</h4>
             <div class="col-md-10">
@@ -63,7 +83,11 @@
             </div>
         </div>
 
+
+
         <br />
+
+
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -73,13 +97,19 @@
     </div>
 }
 
+
+
 <div class="enlaceSinBoton">
     @Html.ActionLink("Volver", "GestionUsuarios")
 </div>
 
+
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+
+
 
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>

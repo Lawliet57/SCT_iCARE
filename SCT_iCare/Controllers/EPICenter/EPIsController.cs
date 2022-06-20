@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using SCT_iCare;
+using SCT_iCare.Filters;
 
 namespace SCT_iCare.Controllers.EPICenter
 {
@@ -505,6 +506,7 @@ namespace SCT_iCare.Controllers.EPICenter
             return Redirect("Captura");
         }
 
+        [AuthorizeUser(idOperacion: 9)]
         public ActionResult Captura(int? pageSize, int? page, DateTime? inicio, DateTime? final)
         {
             //DateTime start = DateTime.Now;
@@ -563,7 +565,7 @@ namespace SCT_iCare.Controllers.EPICenter
             return View(db.Cita.Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate).OrderByDescending(i => i.FechaCita).ToPagedList(page.Value, pageSize.Value));
         }
 
-
+        [AuthorizeUser(idOperacion: 36)]
         public ActionResult DescargasReporte(int? pageSize, int? page, DateTime? inicio, DateTime? final)
         {
             DateTime thisDate = new DateTime();

@@ -340,6 +340,21 @@
       <End Role="Referido" EntitySet="Referido" />
       <End Role="PagosGestores" EntitySet="PagosGestores" />
     </AssociationSet>
+    <EntitySet Name="modulo" EntityType="DevModel.modulo" />
+    <EntitySet Name="operaciones" EntityType="DevModel.operaciones" />
+    <EntitySet Name="rol_operacion" EntityType="DevModel.rol_operacion" />
+    <AssociationSet Name="FK_operaciones_modulo" Association="DevModel.FK_operaciones_modulo">
+      <End Role="modulo" EntitySet="modulo" />
+      <End Role="operaciones" EntitySet="operaciones" />
+    </AssociationSet>
+    <AssociationSet Name="FK_rol_operacion_operaciones" Association="DevModel.FK_rol_operacion_operaciones">
+      <End Role="operaciones" EntitySet="operaciones" />
+      <End Role="rol_operacion" EntitySet="rol_operacion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_rol_operacion_rol" Association="DevModel.FK_rol_operacion_rol">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="rol_operacion" EntitySet="rol_operacion" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Aptitud">
     <Key>
@@ -1505,6 +1520,7 @@
     <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Roles" FromRole="Roles" ToRole="RolMenu" />
     <NavigationProperty Name="Usuarios" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
+    <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_rol" FromRole="Roles" ToRole="rol_operacion" />
   </EntityType>
   <EntityType Name="RolMenu">
     <Key>
@@ -2428,6 +2444,70 @@
       </Principal>
       <Dependent Role="PagosGestores">
         <PropertyRef Name="idReferido" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="modulo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="operaciones" Relationship="DevModel.FK_operaciones_modulo" FromRole="modulo" ToRole="operaciones" />
+  </EntityType>
+  <EntityType Name="operaciones">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="idModulo" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="modulo" Relationship="DevModel.FK_operaciones_modulo" FromRole="operaciones" ToRole="modulo" />
+    <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="operaciones" ToRole="rol_operacion" />
+  </EntityType>
+  <EntityType Name="rol_operacion">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idRol" Type="Int32" Nullable="false" />
+    <Property Name="idOperacion" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="operaciones" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="rol_operacion" ToRole="operaciones" />
+    <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_rol" FromRole="rol_operacion" ToRole="Roles" />
+  </EntityType>
+  <Association Name="FK_operaciones_modulo">
+    <End Type="DevModel.modulo" Role="modulo" Multiplicity="1" />
+    <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="modulo">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="operaciones">
+        <PropertyRef Name="idModulo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_rol_operacion_operaciones">
+    <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="1" />
+    <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="operaciones">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="rol_operacion">
+        <PropertyRef Name="idOperacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_rol_operacion_rol">
+    <End Type="DevModel.Roles" Role="Roles" Multiplicity="1" />
+    <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="idRol" />
+      </Principal>
+      <Dependent Role="rol_operacion">
+        <PropertyRef Name="idRol" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
