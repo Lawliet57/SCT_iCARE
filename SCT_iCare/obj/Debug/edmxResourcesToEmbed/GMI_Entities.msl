@@ -1087,17 +1087,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="PagosGestores">
-      <EntityTypeMapping TypeName="DevModel.PagosGestores">
-        <MappingFragment StoreEntitySet="PagosGestores">
-          <ScalarProperty Name="idReferido" ColumnName="idReferido" />
-          <ScalarProperty Name="PagoIngresado" ColumnName="PagoIngresado" />
-          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
-          <ScalarProperty Name="Gestor" ColumnName="Gestor" />
-          <ScalarProperty Name="idPagoGestor" ColumnName="idPagoGestor" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="Recepcionista">
       <EntityTypeMapping TypeName="DevModel.Recepcionista">
         <MappingFragment StoreEntitySet="Recepcionista">
@@ -1123,26 +1112,6 @@
           <ScalarProperty Name="EstatusReferencia" ColumnName="EstatusReferencia" />
           <ScalarProperty Name="ReferenciaSB" ColumnName="ReferenciaSB" />
           <ScalarProperty Name="idReferencia" ColumnName="idReferencia" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="Referido">
-      <EntityTypeMapping TypeName="DevModel.Referido">
-        <MappingFragment StoreEntitySet="Referido">
-          <ScalarProperty Name="Meta" ColumnName="Meta" />
-          <ScalarProperty Name="Orden" ColumnName="Orden" />
-          <ScalarProperty Name="Efectivo" ColumnName="Efectivo" />
-          <ScalarProperty Name="Deuda" ColumnName="Deuda" />
-          <ScalarProperty Name="PrecioNormalconIVA" ColumnName="PrecioNormalconIVA" />
-          <ScalarProperty Name="HistorialPrecios" ColumnName="HistorialPrecios" />
-          <ScalarProperty Name="PrecioALTIS" ColumnName="PrecioALTIS" />
-          <ScalarProperty Name="PrecioALT" ColumnName="PrecioALT" />
-          <ScalarProperty Name="PrecioAereo" ColumnName="PrecioAereo" />
-          <ScalarProperty Name="PrecioNormal" ColumnName="PrecioNormal" />
-          <ScalarProperty Name="Saldo" ColumnName="Saldo" />
-          <ScalarProperty Name="Tipo" ColumnName="Tipo" />
-          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-          <ScalarProperty Name="idReferido" ColumnName="idReferido" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1257,11 +1226,37 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="CadenaSplit">
-      <EntityTypeMapping TypeName="DevModel.CadenaSplit">
-        <MappingFragment StoreEntitySet="CadenaSplit">
-          <ScalarProperty Name="Cadena" ColumnName="Cadena" />
-          <ScalarProperty Name="idCadena" ColumnName="idCadena" />
+    <EntitySetMapping Name="PagosGestores">
+      <EntityTypeMapping TypeName="DevModel.PagosGestores">
+        <MappingFragment StoreEntitySet="PagosGestores">
+          <ScalarProperty Name="idReferido" ColumnName="idReferido" />
+          <ScalarProperty Name="PagoIngresado" ColumnName="PagoIngresado" />
+          <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+          <ScalarProperty Name="Gestor" ColumnName="Gestor" />
+          <ScalarProperty Name="idPagoGestor" ColumnName="idPagoGestor" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Referido">
+      <EntityTypeMapping TypeName="DevModel.Referido">
+        <MappingFragment StoreEntitySet="Referido">
+          <ScalarProperty Name="PrecioAereosinIVA" ColumnName="PrecioAereosinIVA" />
+          <ScalarProperty Name="PrecioAereoPistaconIVA" ColumnName="PrecioAereoPistaconIVA" />
+          <ScalarProperty Name="PrecioAereoPista" ColumnName="PrecioAereoPista" />
+          <ScalarProperty Name="Meta" ColumnName="Meta" />
+          <ScalarProperty Name="Orden" ColumnName="Orden" />
+          <ScalarProperty Name="Efectivo" ColumnName="Efectivo" />
+          <ScalarProperty Name="Deuda" ColumnName="Deuda" />
+          <ScalarProperty Name="PrecioNormalconIVA" ColumnName="PrecioNormalconIVA" />
+          <ScalarProperty Name="HistorialPrecios" ColumnName="HistorialPrecios" />
+          <ScalarProperty Name="PrecioALTIS" ColumnName="PrecioALTIS" />
+          <ScalarProperty Name="PrecioALT" ColumnName="PrecioALT" />
+          <ScalarProperty Name="PrecioAereo" ColumnName="PrecioAereo" />
+          <ScalarProperty Name="PrecioNormal" ColumnName="PrecioNormal" />
+          <ScalarProperty Name="Saldo" ColumnName="Saldo" />
+          <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idReferido" ColumnName="idReferido" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -34,6 +34,9 @@ namespace SCT_iCare
         public string Efectivo { get; set; }
         public string Orden { get; set; }
         public string Meta { get; set; }
+        public string PrecioAereoPista { get; set; }
+        public string PrecioAereoPistaconIVA { get; set; }
+        public string PrecioAereosinIVA { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<PagosGestores> PagosGestores { get; set; }

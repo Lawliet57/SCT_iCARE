@@ -65,11 +65,9 @@
     <EntitySet Name="PacienteDS" EntityType="DevModel.PacienteDS" />
     <EntitySet Name="PacienteESP" EntityType="DevModel.PacienteESP" />
     <EntitySet Name="PacienteGA" EntityType="DevModel.PacienteGA" />
-    <EntitySet Name="PagosGestores" EntityType="DevModel.PagosGestores" />
     <EntitySet Name="Recepcionista" EntityType="DevModel.Recepcionista" />
     <EntitySet Name="RecepcionistaDS" EntityType="DevModel.RecepcionistaDS" />
     <EntitySet Name="ReferenciasSB" EntityType="DevModel.ReferenciasSB" />
-    <EntitySet Name="Referido" EntityType="DevModel.Referido" />
     <EntitySet Name="Roles" EntityType="DevModel.Roles" />
     <EntitySet Name="RolMenu" EntityType="DevModel.RolMenu" />
     <EntitySet Name="SignosVitalesDS" EntityType="DevModel.SignosVitalesDS" />
@@ -80,7 +78,6 @@
     <EntitySet Name="Tipificaciones" EntityType="DevModel.Tipificaciones" />
     <EntitySet Name="UrgentesCount" EntityType="DevModel.UrgentesCount" />
     <EntitySet Name="Usuarios" EntityType="DevModel.Usuarios" />
-    <EntitySet Name="CadenaSplit" EntityType="DevModel.CadenaSplit" />
     <AssociationSet Name="FK_Dictamen_Aptitud" Association="DevModel.FK_Dictamen_Aptitud">
       <End Role="Aptitud" EntitySet="Aptitud" />
       <End Role="Dictamen" EntitySet="Dictamen" />
@@ -313,10 +310,6 @@
       <End Role="PacienteDS" EntitySet="PacienteDS" />
       <End Role="SignosVitalesDS" EntitySet="SignosVitalesDS" />
     </AssociationSet>
-    <AssociationSet Name="FK_PagosGestores_Referido" Association="DevModel.FK_PagosGestores_Referido">
-      <End Role="Referido" EntitySet="Referido" />
-      <End Role="PagosGestores" EntitySet="PagosGestores" />
-    </AssociationSet>
     <AssociationSet Name="FK_Recepcionista_Sucursales" Association="DevModel.FK_Recepcionista_Sucursales">
       <End Role="Sucursales" EntitySet="Sucursales" />
       <End Role="Recepcionista" EntitySet="Recepcionista" />
@@ -340,6 +333,12 @@
     <AssociationSet Name="FK_Usuarios_Roles" Association="DevModel.FK_Usuarios_Roles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Usuarios" EntitySet="Usuarios" />
+    </AssociationSet>
+    <EntitySet Name="PagosGestores" EntityType="DevModel.PagosGestores" />
+    <EntitySet Name="Referido" EntityType="DevModel.Referido" />
+    <AssociationSet Name="FK_PagosGestores_Referido" Association="DevModel.FK_PagosGestores_Referido">
+      <End Role="Referido" EntitySet="Referido" />
+      <End Role="PagosGestores" EntitySet="PagosGestores" />
     </AssociationSet>
   </EntityContainer>
   <EntityType Name="Aptitud">
@@ -1469,17 +1468,6 @@
     <NavigationProperty Name="AudioGA" Relationship="DevModel.FK_AudioGA_PacienteGA" FromRole="PacienteGA" ToRole="AudioGA" />
     <NavigationProperty Name="EPI_GA" Relationship="DevModel.FK_EPI_GA_PacienteGA" FromRole="PacienteGA" ToRole="EPI_GA" />
   </EntityType>
-  <EntityType Name="PagosGestores">
-    <Key>
-      <PropertyRef Name="idPagoGestor" />
-    </Key>
-    <Property Name="idPagoGestor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Gestor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Fecha" Type="DateTime" Precision="3" />
-    <Property Name="PagoIngresado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="idReferido" Type="Int32" />
-    <NavigationProperty Name="Referido" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="PagosGestores" ToRole="Referido" />
-  </EntityType>
   <EntityType Name="Recepcionista">
     <Key>
       <PropertyRef Name="idRecepcionista" />
@@ -1508,26 +1496,6 @@
     <Property Name="ReferenciaSB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="EstatusReferencia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="idPaciente" Type="Int32" />
-  </EntityType>
-  <EntityType Name="Referido">
-    <Key>
-      <PropertyRef Name="idReferido" />
-    </Key>
-    <Property Name="idReferido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Saldo" Type="Int32" />
-    <Property Name="PrecioNormal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioAereo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioALT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioALTIS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="HistorialPrecios" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioNormalconIVA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Deuda" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Efectivo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Orden" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="Meta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="PagosGestores" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="Referido" ToRole="PagosGestores" />
   </EntityType>
   <EntityType Name="Roles">
     <Key>
@@ -1648,13 +1616,6 @@
     <NavigationProperty Name="Recepcionista" Relationship="DevModel.FK_Recepcionista_Usuarios" FromRole="Usuarios" ToRole="Recepcionista" />
     <NavigationProperty Name="RecepcionistaDS" Relationship="DevModel.FK_RecepcionistaDS_Usuarios" FromRole="Usuarios" ToRole="RecepcionistaDS" />
     <NavigationProperty Name="Roles" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Usuarios" ToRole="Roles" />
-  </EntityType>
-  <EntityType Name="CadenaSplit">
-    <Key>
-      <PropertyRef Name="idCadena" />
-    </Key>
-    <Property Name="idCadena" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Cadena" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_Dictamen_Aptitud">
     <End Type="DevModel.Aptitud" Role="Aptitud" Multiplicity="0..1" />
@@ -2352,18 +2313,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_PagosGestores_Referido">
-    <End Type="DevModel.Referido" Role="Referido" Multiplicity="0..1" />
-    <End Type="DevModel.PagosGestores" Role="PagosGestores" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Referido">
-        <PropertyRef Name="idReferido" />
-      </Principal>
-      <Dependent Role="PagosGestores">
-        <PropertyRef Name="idReferido" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_Recepcionista_Sucursales">
     <End Type="DevModel.Sucursales" Role="Sucursales" Multiplicity="0..1" />
     <End Type="DevModel.Recepcionista" Role="Recepcionista" Multiplicity="*" />
@@ -2433,6 +2382,52 @@
       </Principal>
       <Dependent Role="Usuarios">
         <PropertyRef Name="idRol" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="PagosGestores">
+    <Key>
+      <PropertyRef Name="idPagoGestor" />
+    </Key>
+    <Property Name="idPagoGestor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Gestor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="PagoIngresado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="idReferido" Type="Int32" />
+    <NavigationProperty Name="Referido" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="PagosGestores" ToRole="Referido" />
+  </EntityType>
+  <EntityType Name="Referido">
+    <Key>
+      <PropertyRef Name="idReferido" />
+    </Key>
+    <Property Name="idReferido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Saldo" Type="Int32" />
+    <Property Name="PrecioNormal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioALT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioALTIS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="HistorialPrecios" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioNormalconIVA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Deuda" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Efectivo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Orden" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Meta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereoPista" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereoPistaconIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereosinIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PagosGestores" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="Referido" ToRole="PagosGestores" />
+  </EntityType>
+  <Association Name="FK_PagosGestores_Referido">
+    <End Type="DevModel.Referido" Role="Referido" Multiplicity="0..1" />
+    <End Type="DevModel.PagosGestores" Role="PagosGestores" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Referido">
+        <PropertyRef Name="idReferido" />
+      </Principal>
+      <Dependent Role="PagosGestores">
+        <PropertyRef Name="idReferido" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

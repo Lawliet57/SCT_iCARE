@@ -89,11 +89,9 @@ namespace SCT_iCare
         public virtual DbSet<PacienteDS> PacienteDS { get; set; }
         public virtual DbSet<PacienteESP> PacienteESP { get; set; }
         public virtual DbSet<PacienteGA> PacienteGA { get; set; }
-        public virtual DbSet<PagosGestores> PagosGestores { get; set; }
         public virtual DbSet<Recepcionista> Recepcionista { get; set; }
         public virtual DbSet<RecepcionistaDS> RecepcionistaDS { get; set; }
         public virtual DbSet<ReferenciasSB> ReferenciasSB { get; set; }
-        public virtual DbSet<Referido> Referido { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<RolMenu> RolMenu { get; set; }
         public virtual DbSet<SignosVitalesDS> SignosVitalesDS { get; set; }
@@ -104,6 +102,7 @@ namespace SCT_iCare
         public virtual DbSet<Tipificaciones> Tipificaciones { get; set; }
         public virtual DbSet<UrgentesCount> UrgentesCount { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
-        public virtual DbSet<CadenaSplit> CadenaSplit { get; set; }
+        public virtual DbSet<PagosGestores> PagosGestores { get; set; }
+        public virtual DbSet<Referido> Referido { get; set; }
     }
 }

@@ -241,7 +241,7 @@ namespace SCT_iCare.Controllers.Recepcion
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string pago,string referencia, int? referido, DateTime? fecha)
+        public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, string pago,string referencia, int? referido, DateTime? fecha)
         {
             Paciente paciente1 = new Paciente();
 
@@ -267,6 +267,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
             int cantidadN;
             int cantidadA;
+            int cantidadAP;
 
             if (cantidad == "")
             {
@@ -286,8 +287,17 @@ namespace SCT_iCare.Controllers.Recepcion
                 cantidadA = Convert.ToInt32(cantidadAereo);
             }
 
+            if (cantidadPista == "")
+            {
+                cantidadAP = 0;
+            }
+            else
+            {
+                cantidadAP = Convert.ToInt32(cantidadPista);
+            }
 
-            if ((cantidadN + cantidadA) == 1)
+
+            if ((cantidadN + cantidadA + cantidadAP) == 1)
             {
                 Paciente paciente = new Paciente();
                 paciente.Nombre = nombre.ToUpper()/*.Normalize(System.Text.NormalizationForm.FormD).Replace(@"´¨", "")*/;
@@ -488,6 +498,10 @@ namespace SCT_iCare.Controllers.Recepcion
                 {
                     TIPOLIC = "AEREO";
                 }
+                if (cantidadAP != 0)
+                {
+                    TIPOLIC = "AEREO_PISTA";
+                }
                 cita.TipoLicencia = TIPOLIC;
 
                 //if (referido == "NINGUNO" || referido == "OTRO")
@@ -531,7 +545,7 @@ namespace SCT_iCare.Controllers.Recepcion
             else
             {
                 //return View(detallesOrden);
-                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA)); n++)
+                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA + cantidadAP)); n++)
                 {
                     Paciente paciente = new Paciente();
 
@@ -688,11 +702,19 @@ namespace SCT_iCare.Controllers.Recepcion
                         cita.Referencia = "RS1293753";
                     }
 
+                    //SEPARACION AEREOS_PISTA
+
+                    int sumaInicialTL = cantidadN + cantidadA;
+
                     if (n > cantidadN)
                     {
                         cita.TipoLicencia = "AEREO";
                     }
 
+                    if (n > sumaInicialTL)
+                    {
+                        cita.TipoLicencia = "AEREO_PISTA";
+                    }   
 
                     //if (referido == "NINGUNO" || referido == "OTRO")
                     //{
@@ -743,7 +765,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Orden(string nombre, string telefono, string email, string usuario, string sucursal,  string cantidad, string cantidadAereo, string checkbox, int? referido, DateTime? fecha)
+        public ActionResult Orden(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, string checkbox, int? referido, DateTime? fecha)
         {
             GetApiKey();
 
@@ -752,6 +774,7 @@ namespace SCT_iCare.Controllers.Recepcion
             int cantidadN;
             int cantidadA;
             int precio = 0;
+            int cantidadAP;
 
             if (cantidad == "")
             {
@@ -771,20 +794,23 @@ namespace SCT_iCare.Controllers.Recepcion
                 cantidadA = Convert.ToInt32(cantidadAereo);
             }
 
-            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            if (cantidadPista == "")
             {
-                if (checkbox == "" || checkbox == null)
-                {
-                    precio = (cantidadN * 2400) + (cantidadA * 3500);
-                }
-                else
-                {
-                    precio = (cantidadN * 2400) + (cantidadA * 3200);
-                }
+                cantidadAP = 0;
             }
             else
             {
-                precio = (cantidadN * 2842) + (cantidadA * 3480);
+                cantidadAP = Convert.ToInt32(cantidadPista);
+            }
+
+            if (referido == 167)
+            {
+                precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
+            }
+
+            else
+            {
+                precio = (cantidadN * 2748) + (cantidadA * 4060) + (cantidadAP * 3712);
             }
 
             if (precio > 10000)
@@ -792,7 +818,7 @@ namespace SCT_iCare.Controllers.Recepcion
                 precio = 9990;
             }
 
-            if (cantidadAereo == "" && cantidad == "")
+            if (cantidadAereo == "" && cantidad == "" && cantidadPista == "")
             {
                 return View("Index");
             }
@@ -832,7 +858,7 @@ namespace SCT_iCare.Controllers.Recepcion
             ViewBag.Orden = order.id;
             ViewBag.Metodo = "OXXO";
 
-            if ((cantidadN + cantidadA) == 1)
+            if ((cantidadN + cantidadA + cantidadAP) == 1)
             {
                 Paciente paciente = new Paciente();
 
@@ -946,7 +972,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
                 cita.TipoPago = "Referencia OXXO";
                 cita.NoOrden = orden.id;
-                
+
 
                 JavaScriptSerializer js = new JavaScriptSerializer();
                 dynamic datosCargo2 = js.Deserialize<dynamic>(orden.charges.data[0].ToString());
@@ -999,6 +1025,10 @@ namespace SCT_iCare.Controllers.Recepcion
                 {
                     TIPOLIC = "AEREO";
                 }
+                if (cantidadAP != 0)
+                {
+                    TIPOLIC = "AEREO_PISTA";
+                }
                 cita.TipoLicencia = TIPOLIC;
 
                 //if (referido == "NINGUNO" || referido == "OTRO")
@@ -1038,7 +1068,7 @@ namespace SCT_iCare.Controllers.Recepcion
             else
             {
                 //return View(detallesOrden);
-                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA)); n++)
+                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA + cantidadAP)); n++)
                 {
                     Paciente paciente = new Paciente();
 
@@ -1152,7 +1182,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
                     cita.TipoPago = "Referencia OXXO";
                     cita.NoOrden = orden.id;
-                 
+
 
                     JavaScriptSerializer js = new JavaScriptSerializer();
                     dynamic datosCargo2 = js.Deserialize<dynamic>(orden.charges.data[0].ToString());
@@ -1192,9 +1222,17 @@ namespace SCT_iCare.Controllers.Recepcion
                         cita.Referencia = "RS1293753";
                     }
 
+                    //SEPARACION AEREOS_PISTA
+                    int sumaInicialTL = cantidadN + cantidadA;
+
                     if (n > cantidadN)
                     {
                         cita.TipoLicencia = "AEREO";
+                    }
+
+                    if (n > sumaInicialTL)
+                    {
+                        cita.TipoLicencia = "AEREO_PISTA";
                     }
 
                     int idRefSB = Convert.ToInt32((from r in db.ReferenciasSB where r.ReferenciaSB == referenciaSB select r.idReferencia).FirstOrDefault());
@@ -1252,37 +1290,33 @@ namespace SCT_iCare.Controllers.Recepcion
 
             ViewBag.QR = imageBytes;
 
-            ViewBag.AEREO = Convert.ToInt32(cantidadA);
+            ViewBag.AEREO = Convert.ToInt32(cantidadA) + Convert.ToInt32(cantidadAP);
             ViewBag.AUTO = Convert.ToInt32(cantidadN);
 
-            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            if (referido == 167)
             {
-                if (checkbox == "" || checkbox == null)
-                {
-                    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500);
-                }
-                else
-                {
-                    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3200);
-                }
+                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
             }
+
             else
             {
-                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2842) + (Convert.ToInt32(cantidadA) * 3480);
+                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 4060) + (Convert.ToInt32(cantidadAP) * 3712);
             }
+
             return View(detallesOrden);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string checkbox, int card, int? referido, DateTime? fecha)
+        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, string checkbox, int card, int? referido, DateTime? fecha)
         {
             GetApiKey();
 
             int cantidadN;
             int cantidadA;
             int precio = 0;
+            int cantidadAP;
 
             if (cantidad == "")
             {
@@ -1300,22 +1334,26 @@ namespace SCT_iCare.Controllers.Recepcion
             else
             {
                 cantidadA = Convert.ToInt32(cantidadAereo);
-            }                 
+            }
 
-            if (sucursal == "TOLUCA" || sucursal == "MIXCOAC")
+            if (cantidadPista == "")
             {
-                if (checkbox == "" || checkbox == null)
-                {
-                    precio = (cantidadN * 2400) + (cantidadA * 3500);
-                }
-                else
-                {
-                    precio = (cantidadN * 2400) + (cantidadA * 3200);
-                }                
+                cantidadAP = 0;
             }
             else
             {
-                precio = (cantidadN * 2842) + (cantidadA * 3480);
+                cantidadAP = Convert.ToInt32(cantidadPista);
+            }
+
+
+            if (referido == 167)
+            {
+                precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
+            }
+
+            else
+            {
+                precio = (cantidadN * 2748) + (cantidadA * 4060) + (cantidadAP * 3712);
             }
 
             if (precio > 10000)
@@ -1349,7 +1387,7 @@ namespace SCT_iCare.Controllers.Recepcion
             string IDEE = nOrder.id; 
             TempData["Link"] = link;
 
-            if ((cantidadN + cantidadA) == 1)
+            if ((cantidadN + cantidadA + cantidadAP) == 1)
             {
                 Paciente paciente = new Paciente();
 
@@ -1485,6 +1523,10 @@ namespace SCT_iCare.Controllers.Recepcion
                 {
                     TIPOLIC = "AEREO";
                 }
+                if (cantidadAP != 0)
+                {
+                    TIPOLIC = "AEREO_PISTA";
+                }
                 cita.TipoLicencia = TIPOLIC;
 
                 //if (referido == "NINGUNO" || referido == "OTRO")
@@ -1523,7 +1565,7 @@ namespace SCT_iCare.Controllers.Recepcion
             else
             {
                 //return View(detallesOrden);
-                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA)); n++)
+                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA + cantidadAP)); n++)
                 {
                     Paciente paciente = new Paciente();
 
@@ -1637,9 +1679,17 @@ namespace SCT_iCare.Controllers.Recepcion
 
                     cita.TipoPago = "Pago con Tarjeta";
 
+                    //SEPARACION AEREOS_PISTA
+                    int sumaInicialTL = cantidadN + cantidadA;
+
                     if (n > cantidadN)
                     {
                         cita.TipoLicencia = "AEREO";
+                    }
+
+                    if (n > sumaInicialTL)
+                    {
+                        cita.TipoLicencia = "AEREO_PISTA";
                     }
 
                     cita.NoOrden = IDEE;
@@ -2129,54 +2179,52 @@ namespace SCT_iCare.Controllers.Recepcion
             var findPrecio = (from q in db.Referido where q.Nombre == cita.ReferidoPor && q.Tipo == cita.CC select q).FirstOrDefault();
             var precioEncontradoCI = findPrecio.PrecioNormalconIVA;
             var precioEncontradoSI = findPrecio.PrecioNormal;
-            var precioEncontradoA = findPrecio.PrecioAereo;
+            var precioEncontradoACI = findPrecio.PrecioAereo;
+            var precioEncontradoASI = findPrecio.PrecioAereosinIVA;
+            var precioEncontradoAPCI = findPrecio.PrecioAereoPistaconIVA;
+            var precioEncontradoAPSI = findPrecio.PrecioAereoPista;            
             var precioFinal = "";
 
             if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío"
             || cita.TipoPago == "Referencia BanBajío" || cita.TipoPago == "Banorte" || cita.TipoPago == "REFERENCIA OXXO" || cita.TipoPago == "Referencia OXXO"
             || cita.TipoPago == "Pago con Tarjeta")
             {
-
                 if (tipoL == "AEREO")
                 {
                     if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
                     {
-                        if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
-                        {
-                            precioFinal = precioEncontradoSI;
-                        }
-
-                        else
-                        {
-                            precioFinal = precioEncontradoCI;
-                        }
-
+                        precioFinal = "3712";
                     }
 
                     else
                     {
-
-                        precioFinal = precioEncontradoA;
-
+                        precioFinal = precioEncontradoACI;
+                    }
+                }
+                else if (tipoL == "AEREO_PISTA")
+                {
+                    if (findPrecio.PrecioAereoPistaconIVA == null || findPrecio.PrecioAereoPistaconIVA == "0")
+                    {
+                        precioFinal = "4060";
                     }
 
+                    else
+                    {
+                        precioFinal = precioEncontradoAPCI;
+                    }
                 }
+
                 else
                 {
                     if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
                     {
-
-                        precioFinal = precioEncontradoSI;
-
+                        precioFinal = "2784";
                     }
 
                     else
                     {
-
                         precioFinal = precioEncontradoCI;
-
                     }
-
                 }
             }
 
@@ -2184,23 +2232,38 @@ namespace SCT_iCare.Controllers.Recepcion
             {
                 if (tipoL == "AEREO")
                 {
-                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
+                    if (findPrecio.PrecioAereosinIVA == null || findPrecio.PrecioAereosinIVA == "0")
                     {
-                            precioFinal = precioEncontradoSI;       
+                        precioFinal = "3500";
                     }
 
                     else
                     {
-                        precioFinal = precioEncontradoA;
+                        precioFinal = precioEncontradoASI;
                     }
 
                 }
-                else
-                { 
-                    if (precioEncontradoSI == null || precioEncontradoSI == "0")
+                else if (tipoL == "AEREO_PISTA")
+                {
+                    if (findPrecio.PrecioAereoPista == null || findPrecio.PrecioAereoPista == "0")
                     {
-                        precioFinal = precioEncontradoCI;
+                        precioFinal = "3200";
                     }
+
+                    else
+                    {
+                        precioFinal = precioEncontradoAPSI;
+                    }
+
+                }
+
+                else
+                {
+                    if (findPrecio.PrecioNormal == null || findPrecio.PrecioNormal == "0")
+                    {
+                        precioFinal = "2400";
+                    }
+
                     else
                     {
                         precioFinal = precioEncontradoSI;

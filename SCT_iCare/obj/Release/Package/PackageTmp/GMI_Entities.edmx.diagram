@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="94">
+      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="82">
         <EntityTypeShape EntityType="DevModel.Aptitud" Width="1.5" PointX="3.75" PointY="7.875" />
         <EntityTypeShape EntityType="DevModel.Archivos" Width="1.5" PointX="3" PointY="39.25" />
         <EntityTypeShape EntityType="DevModel.AudioGA" Width="1.5" PointX="29" PointY="33.625" />
@@ -69,11 +69,9 @@
         <EntityTypeShape EntityType="DevModel.PacienteDS" Width="1.5" PointX="12.75" PointY="12.125" />
         <EntityTypeShape EntityType="DevModel.PacienteESP" Width="1.5" PointX="7.75" PointY="20.25" />
         <EntityTypeShape EntityType="DevModel.PacienteGA" Width="1.5" PointX="26.75" PointY="22.375" />
-        <EntityTypeShape EntityType="DevModel.PagosGestores" Width="1.5" PointX="28" PointY="1.875" />
         <EntityTypeShape EntityType="DevModel.Recepcionista" Width="1.5" PointX="22.25" PointY="14.75" />
         <EntityTypeShape EntityType="DevModel.RecepcionistaDS" Width="1.5" PointX="22.25" PointY="8.75" />
         <EntityTypeShape EntityType="DevModel.ReferenciasSB" Width="1.5" PointX="17.75" PointY="0.75" />
-        <EntityTypeShape EntityType="DevModel.Referido" Width="1.5" PointX="25.75" PointY="1" />
         <EntityTypeShape EntityType="DevModel.Roles" Width="1.5" PointX="17.75" PointY="9" />
         <EntityTypeShape EntityType="DevModel.RolMenu" Width="1.5" PointX="20" PointY="8" />
         <EntityTypeShape EntityType="DevModel.SignosVitalesDS" Width="1.5" PointX="15" PointY="23" />
@@ -84,7 +82,6 @@
         <EntityTypeShape EntityType="DevModel.Tipificaciones" Width="1.5" PointX="3" PointY="1" />
         <EntityTypeShape EntityType="DevModel.UrgentesCount" Width="1.5" PointX="17.75" PointY="18.75" />
         <EntityTypeShape EntityType="DevModel.Usuarios" Width="1.5" PointX="20" PointY="11.125" />
-        <EntityTypeShape EntityType="DevModel.CadenaSplit" Width="1.5" PointX="7.75" PointY="0.75" />
         <AssociationConnector Association="DevModel.FK_Dictamen_Aptitud" />
         <AssociationConnector Association="DevModel.FK_Archivos_Paciente" />
         <AssociationConnector Association="DevModel.FK_AudioGA_PacienteGA" />
@@ -143,13 +140,15 @@
         <AssociationConnector Association="DevModel.FK_Oftalmologo_PacienteDS" />
         <AssociationConnector Association="DevModel.FK_Tickets_Paciente" />
         <AssociationConnector Association="DevModel.FK_SignosVitalesDS_PacienteDS" />
-        <AssociationConnector Association="DevModel.FK_PagosGestores_Referido" />
         <AssociationConnector Association="DevModel.FK_Recepcionista_Sucursales" />
         <AssociationConnector Association="DevModel.FK_Recepcionista_Usuarios" />
         <AssociationConnector Association="DevModel.FK_RecepcionistaDS_SucursalDS" />
         <AssociationConnector Association="DevModel.FK_RecepcionistaDS_Usuarios" />
         <AssociationConnector Association="DevModel.FK_RolMenu_Roles" />
         <AssociationConnector Association="DevModel.FK_Usuarios_Roles" />
+        <EntityTypeShape EntityType="DevModel.PagosGestores" Width="1.5" PointX="25" PointY="1.875" />
+        <EntityTypeShape EntityType="DevModel.Referido" Width="1.5" PointX="22.75" PointY="0.625" />
+        <AssociationConnector Association="DevModel.FK_PagosGestores_Referido" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

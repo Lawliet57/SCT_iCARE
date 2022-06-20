@@ -275,6 +275,14 @@
                                             <h5>@Html.ActionLink("Dashboard II", "Dashboard", "Dictamenes")</h5>
                                         }
 
+                                        else if (Usuario == "Maribel Prueba" || Usuario == "Dafne Prueba" || Usuario == "Jessica Prueba" || Usuario == "Teresa Prueba")
+                                        {
+                                            <h5>@Html.ActionLink("Conciliación", "Index", "Contabilidad")</h5>
+                                            <h5>@Html.ActionLink("Resumen Conciliacion", "Conciliacion", "Contabilidad")</h5>
+                                            <h5>@Html.ActionLink("Pagos", "Pagos", "Contabilidad")</h5>
+                                            <h5>@Html.ActionLink("EstadoCuenta", "EstadoCuenta", "Contabilidad")</h5>
+                                        }
+
                                     }
                                     <h5>
                                         <b>@Html.ActionLink("Cerrar Sesión", "Logoff", "Logoff")</b>

@@ -225,9 +225,6 @@
     <Compile Include="Biometricos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
-    <Compile Include="CadenaSplit.cs">
-      <DependentUpon>GMI_Entities.tt</DependentUpon>
-    </Compile>
     <Compile Include="CallCenter.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
