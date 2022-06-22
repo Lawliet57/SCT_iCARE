@@ -10,13 +10,14 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using SCT_iCare;
+using SCT_iCare.Filters;
 
 namespace SCT_iCare.Controllers.EPICenter
 {
     public class EPIsController : Controller
     {
         private GMIEntities db = new GMIEntities();
-                
+
         public ActionResult CentroControl()
         {
             ViewBag.Date = DateTime.Now.ToString("dd-MMMM-yyyy");
@@ -26,7 +27,7 @@ namespace SCT_iCare.Controllers.EPICenter
 
         public ActionResult PreDictamen(int id, string usuario)
         {
-            if(usuario == null)
+            if (usuario == null)
             {
                 ViewBag.idPaciente = id;
                 return View();
@@ -55,7 +56,7 @@ namespace SCT_iCare.Controllers.EPICenter
                 ViewBag.ID = captura.idCaptura;
                 return View();
             }
-            
+
         }
 
         public ActionResult ArchivosEPI(int id, string archivoRequerido)
@@ -64,7 +65,7 @@ namespace SCT_iCare.Controllers.EPICenter
 
             var bytesBinary = archivos.ElectroCardiograma;
 
-            if(archivoRequerido == "Abrir ElectroCardiograma" && archivos.ElectroCardiograma != null)
+            if (archivoRequerido == "Abrir ElectroCardiograma" && archivos.ElectroCardiograma != null)
             {
                 TempData["EKG"] = id;
                 return RedirectToAction("PreDictamen", new { id = id });
@@ -92,7 +93,7 @@ namespace SCT_iCare.Controllers.EPICenter
         {
             var archivos = (from i in db.Archivos where i.idPaciente == id select i).FirstOrDefault();
 
-            if(tipoArchivo == "EKG")
+            if (tipoArchivo == "EKG")
             {
                 var bytesBinary = archivos.ElectroCardiograma;
                 TempData["EKG"] = null;
@@ -148,7 +149,7 @@ namespace SCT_iCare.Controllers.EPICenter
         {
             Captura captura = db.Captura.Find(id);
 
-            if(captura.EstatusCaptura == "En captura...")
+            if (captura.EstatusCaptura == "En captura...")
             {
                 TempData["ERROR"] = "ESTE EXPEDIENTE YA HA SIDO TOMADO POR OTRO USUARIO";
                 return RedirectToAction("Captura");
@@ -161,15 +162,15 @@ namespace SCT_iCare.Controllers.EPICenter
 
             var expediente = (from e in db.Expedientes where e.idPaciente == captura.idPaciente select e).FirstOrDefault();
 
-            var bytesBinary = expediente.Expediente;            
+            var bytesBinary = expediente.Expediente;
 
             if (ModelState.IsValid)
             {
                 db.Entry(captura).State = EntityState.Modified;
-                db.SaveChanges();                
+                db.SaveChanges();
             }
 
-            if(id != null)
+            if (id != null)
             {
                 TempData["ID"] = id;
                 return RedirectToAction("Captura");
@@ -405,10 +406,10 @@ namespace SCT_iCare.Controllers.EPICenter
 
             var pausas = (from p in db.CapturaIncidencia where p.idCaptura == id select p).ToList();
 
-            if(pausas != null)
+            if (pausas != null)
             {
                 int diferenciaTotal = 0;
-                foreach(var item in pausas)
+                foreach (var item in pausas)
                 {
                     TimeSpan diferencia2 = (Convert.ToDateTime(item.PausaFinal) - Convert.ToDateTime(item.PausaInicio));
                     diferenciaTotal += Convert.ToInt32(diferencia2.TotalMinutes);
@@ -420,7 +421,7 @@ namespace SCT_iCare.Controllers.EPICenter
             captura.EstatusCaptura = "Terminado";
             captura.FinalCaptura = DateTime.Now;
             captura.Duracion = minutos;
-            if(minutos > 1000)
+            if (minutos > 1000)
             {
                 captura.Duracion = 10;
             }
@@ -490,21 +491,22 @@ namespace SCT_iCare.Controllers.EPICenter
             var idPaciente = captura.idPaciente;
             var cita = (from i in db.Cita where i.idPaciente == idPaciente select i).FirstOrDefault();
 
-            cita.CancelaComentario = cita.CancelaComentario + " + "+motivo + " por usuario " + usuario + " en " + DateTime.Now.ToString("dd-MM-yy") +" ";
+            cita.CancelaComentario = cita.CancelaComentario + " + " + motivo + " por usuario " + usuario + " en " + DateTime.Now.ToString("dd-MM-yy") + " ";
             cita.Asistencia = "NO";
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 db.Entry(cita).State = EntityState.Modified;
                 db.Captura.Remove(captura);
                 db.SaveChanges();
             }
 
-            
+
 
             return Redirect("Captura");
         }
 
+        [AuthorizeUser(idOperacion: 9)]
         public ActionResult Captura(int? pageSize, int? page, DateTime? inicio, DateTime? final)
         {
             //DateTime start = DateTime.Now;
@@ -563,6 +565,7 @@ namespace SCT_iCare.Controllers.EPICenter
             return View(db.Cita.Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate).OrderByDescending(i => i.FechaCita).ToPagedList(page.Value, pageSize.Value));
         }
 
+        [AuthorizeUser(idOperacion: 36)]
         public ActionResult DescargasReporte(int? pageSize, int? page, DateTime? inicio, DateTime? final)
         {
             DateTime thisDate = new DateTime();
@@ -695,7 +698,7 @@ namespace SCT_iCare.Controllers.EPICenter
         {
             List<Paciente> data = db.Paciente.ToList();
 
-            var selected = data.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Select( S => new { S.N.Nombre, S.N.Telefono, S.M.FechaCita, S.M.Referencia });
+            var selected = data.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Select(S => new { S.N.Nombre, S.N.Telefono, S.M.FechaCita, S.M.Referencia });
             var modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m });
 
             return Json(selected, JsonRequestBehavior.AllowGet);
@@ -798,7 +801,7 @@ namespace SCT_iCare.Controllers.EPICenter
         }
 
         [HttpPost]
-        
+
         public ActionResult Pausa(int idCaptura, string motivo)
         {
             CapturaIncidencia comentario = new CapturaIncidencia();

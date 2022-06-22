@@ -30,9 +30,9 @@ namespace SCT_iCare.Controllers.Login
             var client = new SendGridClient(apiKey);
 
             GMIEntities db = new GMIEntities();
-            var documento = (from d in db.Dictamen  orderby d.idDictamen descending select d.Dictamen1).FirstOrDefault();
+            var documento = (from d in db.Dictamen orderby d.idDictamen descending select d.Dictamen1).FirstOrDefault();
 
-            byte [] bytesBinary = documento;
+            byte[] bytesBinary = documento;
             var base64 = Convert.ToBase64String(documento);
 
             var from = new EmailAddress("no-reply@grupogamx.mx", "Grupo GA");
@@ -54,7 +54,7 @@ namespace SCT_iCare.Controllers.Login
                 };
 
             var response = client.SendEmailAsync(msg);
-           
+
         }
 
 

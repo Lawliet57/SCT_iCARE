@@ -1666,6 +1666,67 @@ else
                                 <b>Referido por: </b>@item.M.ReferidoPor<br />
                                 <b>Pago: </b>@item.M.TipoPago
                                 @{
+                                    if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío")
+                                    {
+                                        if (item.M.ReferidoPor == "FUERZA DE VENTAS BB")
+                                        {
+                                            if (item.M.TipoLicencia == "AEREO")
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(3500).ToString("####.##")
+                                            }
+                                            else if (item.M.TipoLicencia == "AEREO_PISTA")
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(3200).ToString("####.##")
+                                            }
+                                            else
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(2400).ToString("####.##")
+                                            }
+                                        }
+
+                                        else if (item.M.ReferidoPor == "FUERZA DE VENTAS BB")
+                                        {
+                                            if (item.M.TipoLicencia == "AEREO")
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(3500).ToString("####.##")
+                                            }
+                                            else if (item.M.TipoLicencia == "AEREO_PISTA")
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(3200).ToString("####.##")
+                                            }
+                                            else
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(2784).ToString("####.##")
+                                            }
+                                        }
+
+                                        else 
+                                        {
+                                            if (item.M.TipoLicencia == "AEREO")
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(4060).ToString("####.##")
+                                            }
+                                            else if (item.M.TipoLicencia == "AEREO_PISTA")
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(3712).ToString("####.##")
+                                            }
+                                            else
+                                            {
+                                                <br />
+                                                <b>Precio: </b> @Convert.ToDouble(2784).ToString("####.##")
+                                            }
+                                        }
+                                    }
+                                }
+                                @{
                                     if (Sucursal == "TAPO" || Sucursal == "ASPA")
                                     {
                                         <br />

@@ -999,8 +999,6 @@ C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\obj\Debug\SCT_iCare.csproj.CoreCompile
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\obj\Debug\SCT_iCare.csproj.CopyComplete
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\obj\Debug\SCT_iCare.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\obj\Debug\SCT_iCare.pdb
-C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.AssemblyReference.cache
-C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CoreCompileInputs.cache
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\SCT_iCare.dll.config
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\SCT_iCare.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\SCT_iCare.pdb
@@ -1140,6 +1138,8 @@ C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\es\System.Web.Razor.resources.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\es\System.Web.WebPages.resources.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\es\System.Web.WebPages.Deployment.resources.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\bin\es\System.Web.WebPages.Razor.resources.dll
+C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.AssemblyReference.cache
+C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CoreCompileInputs.cache
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CopyComplete
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.pdb

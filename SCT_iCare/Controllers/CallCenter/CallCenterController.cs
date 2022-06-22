@@ -16,6 +16,7 @@ using System.Net;
 using System.Data.Entity;
 using System.Web.Script.Serialization;
 using System.Runtime.Serialization;
+using SCT_iCare.Filters;
 
 namespace SCT_iCare.Controllers.CallCenter
 {
@@ -32,6 +33,7 @@ namespace SCT_iCare.Controllers.CallCenter
         }
 
         // GET: Pacientes
+        [AuthorizeUser(idOperacion: 6)]
         public ActionResult Index(DateTime? inicio, DateTime? final)
         {
             DateTime thisDate = new DateTime();

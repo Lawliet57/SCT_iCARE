@@ -6,10 +6,28 @@
     <title>Error</title>
 </head>
 <body style="background-color:black">
-    <hgroup>
-        <h1 style="color:white">Error.</h1>
-        <h2 style="color:white">Error al procesar la solicitud.</h2>
-    </hgroup>
+
+    <br />
+    <br />
+    <section class="content-header">
+        <center>
+            <h1 style="color:#FF0000">
+                ¡El tiempo de espera se ha agotado!
+            </h1>
+        </center>
+    </section>
+
+
+    <br />
+    <br />
+    <center>
+        <h1 style="color: #ffffff">
+            Por favor vuelve a cargar la pagina o ingresa nuevamente.
+        </h1>
+    </center>
+
+
+
     <br />
 
 
@@ -27,6 +45,14 @@
         {
             switch (oUser.idRol)
             {
+                case 1:
+                    ViewBag.Nombre = oUser.Nombre.ToString();
+                    @Html.ActionLink("Haga click para volver al Inicio", "Index", "CallCenter", null, new { style = "color:white; text-decoration: none" })
+                    break;
+                case 2:
+                    ViewBag.Nombre = oUser.Nombre.ToString();
+                    @Html.ActionLink("Haga click para volver al Inicio", "Inicio", "Admin", null, new { style = "color:white; text-decoration: none" })
+                    break;
                 case 5:
                     ViewBag.Nombre = oUser.Nombre.ToString();
                     @Html.ActionLink("Haga click para volver al Inicio", "Index", "Sucursales", null, new { style = "color:white; text-decoration: none" })
@@ -51,6 +77,10 @@
                     ViewBag.Nombre = oUser.Nombre.ToString();
                     @Html.ActionLink("Haga click para volver al Inicio", "Index", "CERTIFICADOes", null, new { style = "color:white; text-decoration: none" })
                     break;
+                case 10:
+                    ViewBag.Nombre = oUser.Nombre.ToString();
+                    @Html.ActionLink("Haga click para volver al Inicio", "Index", "GestorVenta", null, new { style = "color:white; text-decoration: none" })
+                    break;
 
 
 
@@ -62,7 +92,7 @@
         else
         {
 
-
+          
 
         }
     }

@@ -15,6 +15,7 @@ using System.Globalization;
 using System.Net;
 using System.Data.Entity;
 using System.Web.Script.Serialization;
+using SCT_iCare.Filters;
 
 namespace SCT_iCare.Controllers.Gestoria
 {
@@ -31,6 +32,7 @@ namespace SCT_iCare.Controllers.Gestoria
         }
 
         // GET: Pacientes
+        [AuthorizeUser(idOperacion: 7)]
         public ActionResult Index()
         {
             return View(db.Paciente.ToList());
