@@ -1,22 +1,37 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "CarruselMedicoU";
+
+
 
     GMIEntities db = new GMIEntities();
 
+
+
     var modelo = db.DoctorModulo;
+
+
 
     int flag = 1;
 
+
+
 }
 
-<br />
+
 
 <br />
+
+
+
+<br />
+
+
 
 <h3 style="color:white" class="text-center">Carrusel Médico</h3>
 <br />
 <a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#asignacion"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Asignación</button></a>
+
+
 
 <form method="post" enctype="multipart/form-data" action="@Url.Content("~/GestionUsuarios/AsignarModulo")">
     <div class="modal fade" id="asignacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -32,6 +47,8 @@
                             @{
                                 var doctores = from s in db.Usuarios where s.idRol == 12 || s.idRol == 15 select s;
 
+
+
                                 foreach (var item1 in doctores)
                                 {
                                     <option value="@item1.idUsuario">@item1.Nombre</option>
@@ -44,6 +61,8 @@
                         <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                             @{
                                 var sucursal = from s in db.Sucursales select s;
+
+
 
                                 foreach (var item1 in sucursal)
                                 {
@@ -58,17 +77,21 @@
                             @{
                                 var modulo = from s in db.Modulos select s;
 
+
+
                                 foreach (var item1 in modulo)
                                 {
                                     <option value="@item1.idModulo">@item1.Nombre</option>
                                     @*if (item1.idModulo > 8)
-                                                            {
-                                                                <option value="@item1.idModulo">@item1.Nombre</option>
-                                                            }
+                                        {
+                                        <option value="@item1.idModulo">@item1.Nombre</option>
+                                        }
                                         else
                                         {
-                                                <option value="@item1.idModulo">@item1.Nombre</option>
+                                        <option value="@item1.idModulo">@item1.Nombre</option>
                                         }*@
+
+
 
                                 }
                             }
@@ -85,12 +108,20 @@
 </form>
 
 
-@*Referencia estilo para  tabla*@
+
+
+@*Referencia estilo para tabla*@
+
+
 
 <link rel="stylesheet" type="text/css" href="~/estilos.css">
 
 
+
+
 <br />
+
+
 
 <div class="tablaScroll">
     <table class="table tablas table-responsive" style="color: #2F2D6B">
@@ -109,6 +140,8 @@
                 <th></th>
             </tr>
         </thead>
+
+
 
 
         @foreach (var item in modelo)
@@ -139,11 +172,17 @@
                 </td>
             </tr>
 
+
+
             flag++;
         }
 
+
+
     </table>
 </div>
+
+
 
 
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>

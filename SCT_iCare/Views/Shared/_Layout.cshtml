@@ -88,7 +88,7 @@
                                 </button>
                                 <div class="dropdown-menu" style="padding: 7px">
                                     @{
-                                        if (rol == 2 && (Usuario != "Andrés Anduaga" && Usuario != "Teresa Lozano" && Usuario != "Jorge Rodriguez" && Usuario != "Flavio"
+                                        if (rol == 2 && (Usuario != "Andrés Anduaga" && Usuario != "Teresa Lozano" && Usuario != "Jorge Rodriguez" && Usuario != "Flavio" && Usuario != "Flavio Rodrigo"
                                             && Usuario != "Evelyn Millán" && Usuario != "Gabriel Ortiz" && Usuario != "Jessica Bustos" && Usuario != "Ariel Juárez" && Usuario != "Edith Atilano"))
                                         {
                                             <h5>@Html.ActionLink("Inicio", "TablaComparacion", "Admin")</h5>
@@ -252,13 +252,13 @@
                                             <h5>@Html.ActionLink("Inicio", "TablaComparacion", "Admin")</h5>
                                             <h5>@Html.ActionLink("Tablas", "TablaMetas", "Admin")</h5>
                                             <h5>@Html.ActionLink("Dashboard", "Index", "Admin")</h5>
+                                            <h5>@Html.ActionLink("Recepción", "Index", "Recepcion")</h5>
                                             <h5>@Html.ActionLink("Reportes", "DescargasReporte", "EPIs")</h5>
-                                            <h5>@Html.ActionLink("Dashboard II", "Dashboard", "Dictamenes")</h5>
-                                            <h5>@Html.ActionLink("Ventas Alt", "VentasAlternativas", "Dictamenes")</h5>
                                         }
 
                                         else if (Usuario == "Flavio")
                                         {
+
                                             <h5>@Html.ActionLink("Call Center", "Index", "CallCenter")</h5>
                                             <h5>@Html.ActionLink("Recepción", "Index", "Recepcion")</h5>
                                             <h5>@Html.ActionLink("Captura", "Captura", "EPIs")</h5>
@@ -277,6 +277,8 @@
 
                                         else if (Usuario == "Maribel Prueba" || Usuario == "Dafne Prueba" || Usuario == "Jessica Prueba" || Usuario == "Teresa Prueba")
                                         {
+                                            <h5>@Html.ActionLink("Reportes", "DescargasReporte", "EPIs")</h5>
+                                            <h5>@Html.ActionLink("Dashboard II", "Dashboard", "Dictamenes")</h5>
                                             <h5>@Html.ActionLink("Conciliación", "Index", "Contabilidad")</h5>
                                             <h5>@Html.ActionLink("Resumen Conciliacion", "Conciliacion", "Contabilidad")</h5>
                                             <h5>@Html.ActionLink("Pagos", "Pagos", "Contabilidad")</h5>

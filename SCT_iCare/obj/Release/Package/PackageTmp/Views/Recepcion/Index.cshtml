@@ -386,7 +386,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     </div>
                     @*AEREOS*@
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Tripulación requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Tripulación:</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
@@ -401,15 +401,15 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     </div>
                     @*EPIS PISTA*@
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Pista requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Pista:</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
-                            <button class="btn btn-warning" id="menos00" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                            <button class="btn btn-danger" id="menos00" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
                         </span>
                         <input style="display:inline-block" type="number" class="form-control" id="contador00" min="0" name="cantidadPista" placeholder="Ingresa una cantidad">
                         <span class="">
-                            <button class="btn btn-warning" id="mas00" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                            <button class="btn btn-danger" id="mas00" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
                         </span>
                         <br />
                         <br />
@@ -760,7 +760,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     </div>
                     @*EPIS AEREOS*@
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Tripulacion:</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
@@ -775,15 +775,15 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     </div>
                     @*EPIS PISTA*@
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Pista requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Pista:</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
-                            <button class="btn btn-warning" id="menos111" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                            <button class="btn btn-danger" id="menos111" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
                         </span>
                         <input style="display:inline-block" type="number" class="form-control" id="contador111" min="0" name="cantidadPista" placeholder="Ingresa una cantidad">
                         <span class="">
-                            <button class="btn btn-warning" id="mas111" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                            <button class="btn btn-danger" id="mas111" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
                         </span>
                         <br />
                         <br />
@@ -1058,7 +1058,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <br />
                     </div>
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Tripulacion:</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
@@ -1073,7 +1073,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     </div>
                     @*EPIS PISTA*@
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Pista requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Pista :</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
@@ -2379,7 +2379,7 @@ else
                                                 {
                                                     <input type="hidden" name="tipoL" id="tipoL" value="AEREO" />
                                                 }
-                                                   if (tipoLicenciaConsultaAngel.TipoLicencia == "AEREO_PISTA")
+                                                else if (tipoLicenciaConsultaAngel.TipoLicencia == "AEREO_PISTA")
                                                 {
                                                     <input type="hidden" name="tipoL" id="tipoL" value="AEREO_PISTA" />
                                                 }

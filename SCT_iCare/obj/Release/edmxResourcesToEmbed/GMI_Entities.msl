@@ -1260,5 +1260,31 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="modulo">
+      <EntityTypeMapping TypeName="DevModel.modulo">
+        <MappingFragment StoreEntitySet="modulo">
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="operaciones">
+      <EntityTypeMapping TypeName="DevModel.operaciones">
+        <MappingFragment StoreEntitySet="operaciones">
+          <ScalarProperty Name="idModulo" ColumnName="idModulo" />
+          <ScalarProperty Name="nombre" ColumnName="nombre" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rol_operacion">
+      <EntityTypeMapping TypeName="DevModel.rol_operacion">
+        <MappingFragment StoreEntitySet="rol_operacion">
+          <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

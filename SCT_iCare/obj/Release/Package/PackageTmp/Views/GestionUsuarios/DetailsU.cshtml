@@ -3,9 +3,15 @@
     ViewBag.Title = "DetailsU";
 }
 
+
+
 <br />
 
+
+
 <h3 style="color:white">Detalles del Usuario</h3>
+
+
 
 
 @if (TempData["mensaje"] != null)
@@ -18,6 +24,8 @@
 }
 
 
+
+
 <div>
     <hr />
     <dl class="dl-horizontal labelGral">
@@ -25,25 +33,37 @@
             <h4>@Html.DisplayNameFor(model => model.Nombre)</h4>
         </dt>
 
+
+
         <dd class="labelInfo">
             <h4>@Html.DisplayFor(model => model.Nombre)</h4>
         </dd>
+
+
 
         <dt>
             <h4>@Html.DisplayNameFor(model => model.Email)</h4>
         </dt>
 
+
+
         <dd class="labelInfo">
             <h4>@Html.DisplayFor(model => model.Email)</h4>
         </dd>
+
+
 
         <dt>
             <h4>Tipo de Usuario</h4>
         </dt>
 
+
+
         <dd class="labelInfo">
             <h4>@Html.DisplayFor(model => model.Roles.Nombre)</h4>
         </dd>
+
+
 
     </dl>
 </div>
@@ -53,5 +73,3 @@
     @Html.ActionLink("Editar Usuario", "EditU", new { id = Model.idUsuario }) |
     @Html.ActionLink("Volver a Usuarios", "GestionUsuarios")
 </p>
-
-

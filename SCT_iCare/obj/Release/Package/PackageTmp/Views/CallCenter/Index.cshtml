@@ -438,99 +438,6 @@
 
     </script>
 
-    @*<script>
-        $(function () {
-            $(".buscar").click(function () {
-                var url = "@Url.Action("Buscar", "CallCenter")";
-                var dato = $("#buscador").val();
-                var data = { dato: dato };
-
-                $.post(url, data).done(function (data) {
-                    console.log(data);
-                    let miResultado = "";
-                    if ($.isEmptyObject(data)) {
-                        miResultado = "<h3>No se encontraron registros.</h3>"
-                    }
-                    else {
-                        miResultado += "<tr class=\"bg-primary\"><th>Nombre</th><th>No Expediente</th><th>Email</th><th>Teléfono</th><th>Referencia</th><th>Fecha Cita</th><th>Sucursal</th><th></th></tr>"
-                        for (let i = 0; i < data.length; i++) {
-                            var url = '<div class="btn-group">'+
-                                '<button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'+
-                                    'Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>'+
-                                '</button>'+
-
-                                '<div class="dropdown-menu" style="padding:10px">'+
-                                    '<a href="#" data-toggle="modal"  onclick=\"$(\'#ModalEdit2_'+data[i].idPaciente+'\').modal(\'show\');\"><b>Editar Datos</b></a>'+
-                                    '<div class="dropdown-divider"></div>'+
-                                '</div>'+
-                                '</div>'+
-
-
-                                '<form method="post" enctype="multipart/form-data" action="@Url.Content("~/CallCenter/EditarCompleto")">'+
-                                '<div class="modal fade" id="ModalEdit2_'+data[i].idPaciente+'" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">'+
-                                    '<div class="modal-dialog" role="document">'+
-                                        '<div class="modal-content">'+
-                                            '<div class="modal-header">'+
-                                            '</div>'+
-                                            '<div class="modal-body">'+
-                                                '<div class="form-group">'+
-                                                    '<label for="recipient-name" class="col-form-label">Nombre del Paciente:</label>'+
-                                                    '<input type="text" class="form-control" id="nombre" name="nombre" placeholder="'+data[i].Nombre+'">'+
-                                                    '<input type="hidden" class="form-control" id="id" name="id" value="'+data[i].idPaciente+'">'+
-                                                '</div>'+
-                                                '<div class="form-group">'+
-                                                    '<label for="recipient-name" class="col-form-label">Teléfono:</label>'+
-                                                    '<input type="text" class="form-control" id="telefono" name="telefono" placeholder="'+data[i].Telefono+'" />'+
-                                                '</div>'+
-                                                '<div class="form-group">'+
-                                                    '<label for="recipient-name" class="col-form-label">Email:</label>'+
-                                                    '<input type="email" class="form-control" id="email" name="email" placeholder="'+data[i].Email+'" />'+
-                                                '</div>'+
-                                                '<div class="form-group">'+
-                                                    '<label for="recipient-name" class="col-form-label">Fecha de Cita:</label>'+
-                                                    '<input type="date" class="form-control" id="fecha" name="fecha"/>'+
-                                                '</div>'+
-                                            '</div>'+
-                                            '<div class="modal-footer">'+
-                                                '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>'+
-                                                '<input type="submit" value="Guardar" class="btn btn-primary" />'+
-                                            '</div>'+
-                                        '</div>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</form>';
-
-                            url = url.replace("XXXXX", data[i].idPaciente);
-
-                            $(document).on('hidden.bs.modal', function (event) {
-                                if ($('.modal:visible').length) {
-                                    $('body').addClass('modal-open');
-                                }
-                            });
-
-                            miResultado += "<tr style=\"border:1px solid gray\">" +
-                                "<td><b>" + data[i].Nombre + "</b></td>" +
-                                "<td><b>" + data[i].NoExpediente + "</b></td>" +
-                                "<td><b>" + data[i].Email + "</b></td>" +
-                                "<td><b>" + data[i].Telefono + "</b></td>" +
-                                "<td><b>" + data[i].Referencia + "</b></td>" +
-                                "<td><b>" + data[i].FechaReferencia + "</b></td>" +
-                                "<td><b>" + data[i].Sucursal + "</b></td>" +
-                                "<td><b>" + url + "</b></td>" +
-                                "</tr>"
-                        }
-                    }
-
-                    $('#exampleModal10').modal('show');
-                    document.getElementById("tablaEjemploSS").innerHTML = miResultado;
-
-                }).fail().always(function () {
-
-                });
-            });
-        });
-
-        </script>*@
 
     @if (TempData["Link"] != null)
     {
@@ -542,22 +449,6 @@
 
 }
 
-@*<div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Resultado de la búsqueda:</b></h3>
-                </div>
-                <div class="modal-body" id="cuerpo">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-
-        </div>
-    </div>*@
 
 <div class="modal fade" id="exampleModal10" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document" style="width:70%">
@@ -589,6 +480,8 @@
             <div class="modal-body">
                 <form method="post" enctype="multipart/form-data" action="@Url.Content("~/CallCenter/Orden")">
                     @Html.AntiForgeryToken()
+
+                    @*EPIS NORMALES*@
                     <div class="form-inline">
                         <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Autotransporte, Marítimos y Ferroviarios):</label>
                     </div>
@@ -596,23 +489,39 @@
                         <span class="">
                             <button class="btn btn-info" id="menos1" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
                         </span>
-                        <input style="display:inline-block" type="number" class="form-control" id="contador1" min="1" name="cantidad" placeholder="Ingresa una cantidad">
+                        <input style="display:inline-block" type="number" class="form-control" id="contador1" min="0" name="cantidad" placeholder="Ingresa una cantidad">
                         <span class="">
                             <button class="btn btn-info" id="mas1" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
                         </span>
                         <br />
                         <br />
                     </div>
+                    @*EPIS AEREOS*@
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs  Aereos de Tripulacion:</label>
                     </div>
                     <div class="form-inline">
                         <span class="">
                             <button class="btn btn-warning" id="menos11" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
                         </span>
-                        <input style="display:inline-block" type="number" class="form-control" id="contador11" min="1" name="cantidadAereo" placeholder="Ingresa una cantidad">
+                        <input style="display:inline-block" type="number" class="form-control" id="contador11" min="0" name="cantidadAereo" placeholder="Ingresa una cantidad">
                         <span class="">
                             <button class="btn btn-warning" id="mas11" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    @*EPIS PISTA*@
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Pista:</label>
+                    </div>
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-danger" id="menos111" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador111" min="0" name="cantidadPista" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-danger" id="mas111" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
                         </span>
                         <br />
                         <br />
@@ -635,24 +544,6 @@
                         <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                         <input type="date" class="form-control" id="fechaFestivo" name="fecha" required>
                     </div>
-                    @{
-                        <script type="text/javascript">
-                            function selectTol() {
-                                element_enfcong = document.getElementById("content_enfcong");
-                                check_enfcong = document.getElementById("enf_cong");
-                                disabled_enfcong = document.getElementById("required_enfcong");
-
-                                if (check_enfcong.value == "TOLUCA") {
-                                    element_enfcong.style.display = 'block';
-                                    disabled_enfcong.disabled = false
-                                }
-                                else {
-                                    element_enfcong.style.display = 'none';
-                                    disabled_enfcong.disabled = true
-                                }
-                            }
-                        </script>
-
                         <div class="form-group" style="width:60%; min-width:320px">
                             <label for="recipient-name" class="col-form-label">Sucursal:</label>
                             <select name="sucursal" id="enf_cong" onchange="javascript: selectTol()" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
@@ -665,11 +556,6 @@
                                 }
                             </select>
                         </div>
-                        <div class="form-group" id="content_enfcong" style="display: none;">
-                            <label style="color:black">Marque esta opcion si sus Epis Aereos son Operadores de Aeropuerto</label><br />
-                            <input type="checkbox" id="required_enfcong" name="checkbox" value="Si" disabled>
-                        </div>
-                    }
                     <div class="form-group" style="width:60%; min-width:320px">
                         <label for="recipient-name" class="col-form-label">Referido Por:</label>
                         <select name="referido" id="selectSuc" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
@@ -731,132 +617,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="exampleModalCopia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Generar referencia de pago</b></h3>
-            </div>
-            <div class="modal-body">
-                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Recepcion/Create1")">
-                    @Html.AntiForgeryToken()
-                    <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Autotransporte, Marítimos y Ferroviarios):</label>
-                    </div>
-                    <div class="form-inline">
-                        <span class="">
-                            <button class="btn btn-info" id="menos1" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
-                        </span>
-                        <input style="display:inline-block" type="number" class="form-control" id="contador1" min="1" name="cantidad" placeholder="Ingresa una cantidad">
-                        <span class="">
-                            <button class="btn btn-info" id="mas1" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
-                        </span>
-                        <br />
-                        <br />
-                    </div>
-                    <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Aéreos):</label>
-                    </div>
-                    <div class="form-inline">
-                        <span class="">
-                            <button class="btn btn-warning" id="menos11" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
-                        </span>
-                        <input style="display:inline-block" type="number" class="form-control" id="contador11" min="1" name="cantidadAereo" placeholder="Ingresa una cantidad">
-                        <span class="">
-                            <button class="btn btn-warning" id="mas11" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
-                        </span>
-                        <br />
-                        <br />
-                    </div>
-                    <input type="hidden" class="form-control" id="usuario" name="usuario" value="@oUser.Nombre">
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Nombre del Paciente (o Gestor):</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Teléfono:</label>
-                        <input type="tel" class="form-control" pattern="[0-9]{10}" title="El formato de teléfono debe contener 10 números" id="telefono" name="telefono" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Email:</label>
-                        <input type="email" class="form-control" id="email" name="email" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
-                        <input type="date" class="form-control" id="fechaFestivo" name="fecha" required>
-                    </div>
-                    <div class="form-group" style="width:60%; min-width:320px">
-                        <label for="recipient-name" class="col-form-label">Sucursal:</label>
-                        <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                            @{
-                                sucursalesOption = from s in db.Sucursales select s.Nombre;
-                                foreach (var opcion in sucursalesOption)
-                                {
-                                    <option value="@opcion">@opcion</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                    <div class="form-group" style="width:60%; min-width:320px">
-                        <label for="recipient-name" class="col-form-label">Referido Por:</label>
-                        <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
-                            <option selected disabled>SELECCIONAR</option>
-                            @{
-                                //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
-                                referidosGestor = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
-                                referidosMD = (from r in db.Referido where r.Tipo == "MEDIOS DIGITALES" select r).OrderBy(o => o.Nombre);
-                                referidosEmpresa = (from r in db.Referido where r.Tipo == "EMPRESA" select r).OrderBy(o => o.Nombre);
-                                referidosOtro = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
-                                referidosSindicato = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
-                                referidosCallCenter = (from r in db.Referido where r.Tipo == "CALL CENTER" select r).OrderBy(o => o.Nombre);
-
-                                <option disabled>--------CALL CENTER--------</option>
-                                foreach (var item in referidosCallCenter)
-                                {
-                                    <option value="@item.idReferido">@item.Nombre</option>
-                                }
-
-                                <option disabled>--------GESTORES--------</option>
-                                foreach (var item in referidosGestor)
-                                {
-                                    <option value="@item.idReferido">@item.Nombre</option>
-                                }
-
-                                <option disabled><b>--------EMPRESAS--------</b></option>
-                                foreach (var item in referidosEmpresa)
-                                {
-                                    <option value="@item.idReferido">@item.Nombre</option>
-                                }
-
-                                <option disabled><b>--------SINDICATOS--------</b></option>
-                                foreach (var item in referidosSindicato)
-                                {
-                                    <option value="@item.idReferido">@item.Nombre</option>
-                                }
-
-                                <option disabled><b>----MEDIOS DIGITALES----</b></option>
-                                foreach (var item in referidosMD)
-                                {
-                                    <option value="@item.idReferido">@item.Nombre</option>
-                                }
-
-                                <option disabled><b>--------OTROS--------</b></option>
-                                foreach (var item in referidosOtro)
-                                {
-                                    <option value="@item.idReferido">@item.Nombre</option>
-                                }
-                            }
-                        </select>
-                    </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <input type="submit" value="Enviar" class="btn btn-primary" />
-            </div></form>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
     var sumar1 = document.getElementById("mas1");
@@ -948,6 +708,51 @@
     calcular11();
 </script>
 
+<script type="text/javascript">
+    var sumar111 = document.getElementById("mas111");
+    var restar111 = document.getElementById("menos111");
+    var contador111 = document.getElementById("contador111");
+    var importe111 = document.getElementById("importe111");
+    var valorBase111 = 5.20;
+    var prevValue111;
+
+    function calcular111() {
+        var value111 = contador111.value;
+        var isValid1 = /^[1-9][0-9]*$/.test(value111);
+
+        if (!isValid1) {
+            contador111.value = prevValue111;
+        } else {
+            prevValue111 = value111;
+        }
+
+        importe111.value = Number.parseFloat(contador111.value * valorBase111).toFixed(2);
+    }
+
+    sumar111.onclick = function () {
+        contador111.value = Number(contador111.value) + 1;
+        calcular111();
+    };
+
+    restar111.onclick = function () {
+        contador111.value = Number(contador111.value) - 1;
+        calcular111();
+    };
+
+    contador111.onchange = function () {
+        calcular111();
+    };
+
+    contador00.onkeyup = function () {
+        if (contador00.value === "") {
+            return;
+        }
+        calcular111();
+    };
+
+    calcular111();
+</script>
+
 
 <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -973,8 +778,9 @@
                         <br />
                     </div>
                     <div class="form-inline">
-                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Aéreos):</label>
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos Tripulacion:</label>
                     </div>
+                    @*EPIS AEREOS*@
                     <div class="form-inline">
                         <span class="">
                             <button class="btn btn-warning" id="menos22" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
@@ -982,6 +788,21 @@
                         <input style="display:inline-block" type="number" class="form-control" id="contador22" min="1" name="cantidadAereo" placeholder="Ingresa una cantidad">
                         <span class="">
                             <button class="btn btn-warning" id="mas22" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    @*EPIS PISTA*@
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Pista:</label>
+                    </div>
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-danger" id="menos222" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador222" min="0" name="cantidadPista" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-danger" id="mas222" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
                         </span>
                         <br />
                         <br />
@@ -1001,24 +822,7 @@
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label"><b>Terminación de Tarjeta (últimos 4 números):</b></label>
                         <input type="number" maxlength="4" min="4" class="form-control" id="card" name="card" required>
-                    </div>  
-                    @{
-                        <script type="text/javascript">
-                            function selectTol2() {
-                                element_select_Suc = document.getElementById("content_select_Suc");
-                                check_select_Suc = document.getElementById("select_Suc");
-                                disabled_select_Suc = document.getElementById("required_select_Suc");
-
-                                if (check_select_Suc.value == "TOLUCA") {
-                                    element_select_Suc.style.display = 'block';
-                                    disabled_select_Suc.disabled = false
-                                }
-                                else {
-                                    element_select_Suc.style.display = 'none';
-                                    disabled_select_Suc.disabled = true
-                                }
-                            }
-                        </script>
+                    </div>                 
 
                         <div class="form-group" style="width:60%; min-width:320px">
                             <label for="recipient-name" class="col-form-label">Sucursal:</label>
@@ -1032,11 +836,7 @@
                                 }
                             </select>
                         </div>
-                        <div class="form-group" id="content_select_Suc" style="display: none;">
-                            <label style="color:black">Marque esta opcion si sus Epis Aereos son Operadores de Aeropuerto</label><br />
-                            <input type="checkbox" id="required_select_Suc" name="checkbox" value="Si" disabled>
-                        </div>
-                    }
+                    
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                         <input type="date" class="form-control" id="fechaFestivo2" name="fecha" required>
@@ -1186,6 +986,50 @@
     calcular22();
 </script>
 
+<script type="text/javascript">
+    var sumar222 = document.getElementById("mas222");
+    var restar222 = document.getElementById("menos222");
+    var contador222 = document.getElementById("contador222");
+    var importe222 = document.getElementById("importe222");
+    var valorBase222 = 5.20;
+    var prevValue222;
+
+    function calcular222() {
+        var value222 = contador222.value;
+        var isValid222 = /^[1-9][0-9]*$/.test(value222);
+
+        if (!isValid222) {
+            contador222.value = prevValue222;
+        } else {
+            prevValue222 = value222;
+        }
+
+        importe222.value = Number.parseFloat(contador222.value * valorBase222).toFixed(2);
+    }
+
+    sumar222.onclick = function () {
+        contador222.value = Number(contador222.value) + 1;
+        calcular222();
+    };
+
+    restar222.onclick = function () {
+        contador222.value = Number(contador222.value) - 1;
+        calcular222();
+    };
+
+    contador222.onchange = function () {
+        calcular222();
+    };
+
+    contador222.onkeyup = function () {
+        if (contador222.value === "") {
+            return;
+        }
+        calcular222();
+    };
+
+    calcular222();
+</script>
 
 
 @if (modeloCount == 0)
@@ -1243,6 +1087,10 @@ else
                     fila = "#BBDEFB";
                 }
                 else if (item.M.TipoTramite != "PRIMERA VEZ" && ((from i in db.Cita where i.idPaciente == item.N.idPaciente select i.TipoLicencia).FirstOrDefault()) == "AEREO")
+                {
+                    fila = "#D1C4E9";
+                }
+                else if (item.M.TipoTramite != "PRIMERA VEZ" && ((from i in db.Cita where i.idPaciente == item.N.idPaciente select i.TipoLicencia).FirstOrDefault()) == "AEREO_PISTA")
                 {
                     fila = "#D1C4E9";
                 }

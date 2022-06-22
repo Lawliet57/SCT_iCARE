@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>Error</title>
 </head>
@@ -12,10 +12,16 @@
     </hgroup>
     <br />
 
+
+
     @{
         var oUser = (Usuarios)HttpContext.Current.Session["User"];
 
-        SCTiCareEntities1 db = new SCTiCareEntities1();
+
+
+        GMIEntities db = new GMIEntities();
+
+
 
         if (oUser != null)
         {
@@ -46,6 +52,8 @@
                     @Html.ActionLink("Haga click para volver al Inicio", "Index", "CERTIFICADOes", null, new { style = "color:white; text-decoration: none" })
                     break;
 
+
+
                 default:
                     @Html.ActionLink("Haga click para volver al Inicio", "Login", "Inicio", null, new { style = "color:white; text-decoration: none" })
                     break;
@@ -54,8 +62,12 @@
         else
         {
 
+
+
         }
     }
+
+
 
     <br /><br /><br />
     <img src="~/Images/GMI_no-bg.png" style="width:35%" />
