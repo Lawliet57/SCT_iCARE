@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="82">
+      <Diagram DiagramId="cf3c66f095d44049b49bafac2ed99eb4" Name="Diagram1" ZoomLevel="61">
         <EntityTypeShape EntityType="DevModel.Aptitud" Width="1.5" PointX="3.75" PointY="7.875" />
         <EntityTypeShape EntityType="DevModel.Archivos" Width="1.5" PointX="3" PointY="39.25" />
         <EntityTypeShape EntityType="DevModel.AudioGA" Width="1.5" PointX="29" PointY="33.625" />
@@ -149,6 +149,12 @@
         <EntityTypeShape EntityType="DevModel.PagosGestores" Width="1.5" PointX="25" PointY="1.875" />
         <EntityTypeShape EntityType="DevModel.Referido" Width="1.5" PointX="22.75" PointY="0.625" />
         <AssociationConnector Association="DevModel.FK_PagosGestores_Referido" />
+        <EntityTypeShape EntityType="DevModel.modulo" Width="1.5" PointX="15.5" PointY="28.25" />
+        <EntityTypeShape EntityType="DevModel.operaciones" Width="1.5" PointX="17.75" PointY="28" />
+        <EntityTypeShape EntityType="DevModel.rol_operacion" Width="1.5" PointX="20" PointY="15" />
+        <AssociationConnector Association="DevModel.FK_operaciones_modulo" />
+        <AssociationConnector Association="DevModel.FK_rol_operacion_operaciones" />
+        <AssociationConnector Association="DevModel.FK_rol_operacion_rol" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

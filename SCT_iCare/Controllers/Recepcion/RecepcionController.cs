@@ -810,9 +810,14 @@ namespace SCT_iCare.Controllers.Recepcion
                 precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
             }
 
+            else if (referido == 168)
+            {
+                precio = (cantidadN * 2784) + (cantidadA * 3500) + (cantidadAP * 3200);
+            }
+
             else
             {
-                precio = (cantidadN * 2748) + (cantidadA * 4060) + (cantidadAP * 3712);
+                precio = (cantidadN * 2784) + (cantidadA * 4060) + (cantidadAP * 3712);
             }
 
             if (precio > 10000)
@@ -1300,6 +1305,11 @@ namespace SCT_iCare.Controllers.Recepcion
                 ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
             }
 
+            else if (referido == 168)
+            {
+                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
+            }
+
             else
             {
                 ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 4060) + (Convert.ToInt32(cantidadAP) * 3712);
@@ -1311,7 +1321,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, string checkbox, int card, int? referido, DateTime? fecha)
+        public ActionResult PagoTarjeta(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, int card, int? referido, DateTime? fecha)
         {
             GetApiKey();
 
@@ -1353,9 +1363,14 @@ namespace SCT_iCare.Controllers.Recepcion
                 precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
             }
 
+            else if (referido == 168)
+            {
+                precio = (cantidadN * 2784) + (cantidadA * 3500) + (cantidadAP * 3200);
+            }
+
             else
             {
-                precio = (cantidadN * 2748) + (cantidadA * 4060) + (cantidadAP * 3712);
+                precio = (cantidadN * 2784) + (cantidadA * 4060) + (cantidadAP * 3712);
             }
 
             if (precio > 10000)

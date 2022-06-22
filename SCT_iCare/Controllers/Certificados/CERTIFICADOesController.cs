@@ -15,7 +15,6 @@ using iTextSharp.text.pdf;
 using SCT_iCare;
 using PdfFileWriter;
 using PagedList;
-using SCT_iCare.Filters;
 
 
 
@@ -29,7 +28,6 @@ namespace SCT_iCare.Controllers.Certificados
 
 
         // GET: CERTIFICADOes
-        [AuthorizeUser(idOperacion: 14)]
         public ActionResult Index(/*int? pageSize, int? page*/)
         {
             //pageSize = (pageSize ?? 10);

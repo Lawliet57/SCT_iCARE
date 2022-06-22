@@ -15,13 +15,52 @@
 
     foreach (var item in referencia)
     {
-        if(item.TipoLicencia == "AEREO")
+        if (item.ReferidoPor == "FUERZA DE VENTAS BB")
         {
-            precio += 3480;
+            if (item.TipoLicencia == "AEREO_PISTA")
+            {
+                precio += 3200;
+            }
+            else if (item.TipoLicencia == "AEREO")
+            {
+                precio += 3500;
+            }
+            else
+            {
+                precio += 2400;
+            }
         }
+
+        else if (item.ReferidoPor == "SATELITE AEREO")
+        {
+            if (item.TipoLicencia == "AEREO_PISTA")
+            {
+                precio += 3200;
+            }
+            else if (item.TipoLicencia == "AEREO")
+            {
+                precio += 3500;
+            }
+            else
+            {
+                precio += 2784;
+            }
+        }
+
         else
         {
-            precio += 2842;
+            if (item.TipoLicencia == "AEREO_PISTA")
+            {
+                precio += 3712;
+            }
+            else if (item.TipoLicencia == "AEREO")
+            {
+                precio += 4060;
+            }
+            else
+            {
+                precio += 2784;
+            }
         }
     }
 

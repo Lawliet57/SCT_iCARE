@@ -1,16 +1,28 @@
 ﻿@model IEnumerable<SCT_iCare.Usuarios>
 
+
+
 @{
     ViewBag.Title = "GestionUsuarios";
+
+
 
     GMIEntities db = new GMIEntities();
 }
 
-<br />
+
 
 <br />
+
+
+
+<br />
+
+
 
 <h3 style="color:white" class="text-center">Gestores</h3>
+
+
 
 @if (TempData["mensaje"] != null)
 {
@@ -22,7 +34,11 @@
 }
 
 
+
+
 <br />
+
+
 
 <div align='center'>
     <a href="#"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Agregar Gestor</button></a>
@@ -31,8 +47,12 @@
 </div>
 
 
+
+
 <br />
 <br />
+
+
 
 <div class="modal fade" id="registrerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -66,13 +86,19 @@
 
 
 
+
+
 <br />
 <br />
 <div align='left'>
     @using (Html.BeginForm())
     {
 
+
+
         <p>
+
+
 
             @Html.TextBox("SearchString")
             <input class="btn btn-info" type="submit" value="Search" placeholder="Search" />
@@ -83,14 +109,24 @@
 
 
 
-@*Referencia estilo para  tabla*@
+
+
+@*Referencia estilo para tabla*@
+
+
 
 <link rel="stylesheet" type="text/css" href="~/estilos.css">
 
 
+
+
 <div class="tablaScroll">
 
+
+
     <table class="table tablas table-responsive" style="color: #2F2D6B">
+
+
 
         <thead>
             <tr class="bg-primary">
@@ -106,6 +142,8 @@
                 <th></th>
             </tr>
         </thead>
+
+
 
 
         @foreach (var item in Model)
@@ -141,6 +179,8 @@
                         </div>
                     </div>
 
+
+
                     <!-- Modal para elegir el método de pago una vez que se concrete el mismo -->
                     <form method="post" enctype="multipart/form-data" action="@Url.Content("~/GestionUsuarios/AsignarSucursal")">
                         @Html.AntiForgeryToken()
@@ -157,6 +197,8 @@
                                             <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                 @{
                                                     var sucursales = from s in db.Sucursales select s;
+
+
 
                                                     foreach (var item1 in sucursales)
                                                     {
@@ -178,12 +220,17 @@
             </tr>
         }
 
+
+
     </table>
 </div>
 
+
+
 <br />
+
+
 
 <div class="enlaceSinBoton">
     @Html.ActionLink("Volver a Usuarios", "GestionUsuarios")
 </div>
-

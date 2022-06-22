@@ -39,7 +39,7 @@
     int precioVisual = 0;
 
     //EPIS PAGADOS
-    int precioPVisual = 0;
+    int montoPxDiaP = 0;
 
     //PAGO DE GESTORES
     int pagoVisual = 0;
@@ -52,6 +52,7 @@
     //FOOTERS
     int totalEpis = 0;
     int saldoTotalImporte = 0;
+    int pagoTotalConciliados = 0;
     int totalEpisP = 0;
     int saldoTotalP = 0;
     int totalPago = 0;
@@ -65,73 +66,9 @@
     int montoTotalMaP = 0;
     int pagoMAPI = 0;
 
-    //DIAS DE MES
-    DateTime fdia1 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 1);
-    DateTime fdia1f = fdia1.AddDays(1).AddMinutes(-1);
-    DateTime fdia2 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 2);
-    DateTime fdia2f = fdia2.AddDays(1).AddMinutes(-1);
-    DateTime fdia3 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 3);
-    DateTime fdia3f = fdia3.AddDays(1).AddMinutes(-1);
-    DateTime fdia4 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 4);
-    DateTime fdia4f = fdia4.AddDays(1).AddMinutes(-1);
-    DateTime fdia5 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 5);
-    DateTime fdia5f = fdia5.AddDays(1).AddMinutes(-1);
-    DateTime fdia6 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 6);
-    DateTime fdia6f = fdia6.AddDays(1).AddMinutes(-1);
-    DateTime fdia7 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 7);
-    DateTime fdia7f = fdia7.AddDays(1).AddMinutes(-1);
-    DateTime fdia8 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 8);
-    DateTime fdia8f = fdia8.AddDays(1).AddMinutes(-1);
-    DateTime fdia9 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 9);
-    DateTime fdia9f = fdia9.AddDays(1).AddMinutes(-1);
-    DateTime fdia10 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 10);
-    DateTime fdia10f = fdia10.AddDays(1).AddMinutes(-1);
-    DateTime fdia11 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 11);
-    DateTime fdia11f = fdia11.AddDays(1).AddMinutes(-1);
-    DateTime fdia12 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 12);
-    DateTime fdia12f = fdia12.AddDays(1).AddMinutes(-1);
-    DateTime fdia13 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 13);
-    DateTime fdia13f = fdia13.AddDays(1).AddMinutes(-1);
-    DateTime fdia14 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 14);
-    DateTime fdia14f = fdia14.AddDays(1).AddMinutes(-1);
-    DateTime fdia15 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 15);
-    DateTime fdia15f = fdia15.AddDays(1).AddMinutes(-1);
-    DateTime fdia16 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 16);
-    DateTime fdia16f = fdia16.AddDays(1).AddMinutes(-1);
-    DateTime fdia17 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 17);
-    DateTime fdia17f = fdia17.AddDays(1).AddMinutes(-1);
-    DateTime fdia18 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 18);
-    DateTime fdia18f = fdia18.AddDays(1).AddMinutes(-1);
-    DateTime fdia19 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 19);
-    DateTime fdia19f = fdia17.AddDays(1).AddMinutes(-1);
-    DateTime fdia20 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 20);
-    DateTime fdia20f = fdia18.AddDays(1).AddMinutes(-1);
-    DateTime fdia21 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 21);
-    DateTime fdia21f = fdia21.AddDays(1).AddMinutes(-1);
-    DateTime fdia22 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 22);
-    DateTime fdia22f = fdia22.AddDays(1).AddMinutes(-1);
-    DateTime fdia23 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 23);
-    DateTime fdia23f = fdia23.AddDays(1).AddMinutes(-1);
-    DateTime fdia24 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 24);
-    DateTime fdia24f = fdia24.AddDays(1).AddMinutes(-1);
-    DateTime fdia25 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 25);
-    DateTime fdia25f = fdia25.AddDays(1).AddMinutes(-1);
-    DateTime fdia26 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 26);
-    DateTime fdia26f = fdia26.AddDays(1).AddMinutes(-1);
-    DateTime fdia27 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 27);
-    DateTime fdia27f = fdia27.AddDays(1).AddMinutes(-1);
-    DateTime fdia28 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 28);
-    DateTime fdia28f = fdia28.AddDays(1).AddMinutes(-1);
-    DateTime fdia29 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 29);
-    DateTime fdia29f = fdia29.AddDays(1).AddMinutes(-1);
-    DateTime fdia30 = new DateTime(Convert.ToInt32(ANIO), Convert.ToInt32(MES), 30);
-    DateTime fdia30f = fdia30.AddDays(1).AddMinutes(-1);
-
 
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
-
-    int insertfor = 0;
 
     string nombreExcel = "ESTADO DE CUENTA";
 
@@ -675,6 +612,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             //CONTEO DE EPIS TOTALES
                             int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
                             var episXDia = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i);
+                            var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal &&( i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "COMEKTA") select i);
 
                             //CONTEO DE EPIS TOTALES PAGADOS
                             int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
@@ -692,10 +630,15 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                     montoPxDia += Convert.ToInt32(precio.A.M.PrecioEpi);
                                 }
 
-                                saldoTotalImporte += precioVisual;
-                                totalEpisP = (from i in modeloNormal where (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count(); ;
-                                saldoTotalP += precioPVisual;
-                                totalPago += pagoVisual;
+                                //SUMA DE PRECIOS PAGADOS EPIS X DIA
+                                foreach (var precio in episXDiaP)
+                                {
+                                    montoPxDiaP += Convert.ToInt32(precio.A.M.PrecioEpi);
+                                }
+
+                                saldoTotalImporte += montoPxDia;
+                                saldoTotalP += montoPxDiaP;
+                                totalEpisP = (from i in modeloNormal where (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
 
                                 foreach (var pagos in pagoGestor)
                                 {
@@ -704,7 +647,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 }
 
                                 totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
+                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + pagoVisual);
 
                                 <tr style="height: auto">
 
@@ -745,7 +688,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                         if (conteoEpisPTotales != 0)
                                         {
                                             <td>
-                                                <span>$@precioPVisual.ToString("###,###,###,###")</span>
+                                                <span>$@montoPxDiaP.ToString("###,###,###,###")</span>
                                             </td>
                                         }
                                         else
@@ -778,6 +721,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
                                 fechaTablaAnterior = fechaTabla;
                                 montoPxDia = 0;
+                                montoPxDiaP = 0;
                                 precioVisual = 0;
                                 pagoVisual = 0;
                             }
@@ -878,13 +822,13 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 @{
                                     if (diferenciaTotal != 0)
                                     {
-                                        if (diferenciaTotal < 0)
+                                        if (diferenciaTotal > 0)
                                         {
-                                            diferenciaTotal = diferenciaTotal * (-1);
                                             <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
                                         }
-                                        else if (diferenciaTotal > 0)
+                                        else if (diferenciaTotal < 0)
                                         {
+                                            diferenciaTotal = diferenciaTotal * (-1);
                                             <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
                                         }
                                     }
@@ -920,7 +864,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 @{var episPTotales = totalEpisP + totalEpisPMA;
                                     if (totalEpisP != 0)
                                     {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@totalEpisP</b></th>
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@episPTotales</b></th>
                                     }
                                     else
                                     {
@@ -930,9 +874,10 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
                                 @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES PASADO*@
                                 @{
+                                    var totalPagado = saldoTotalP + montoTotalMaP;
                                     if (saldoTotalP != 0)
                                     {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalP.ToString("###,###,###,###")</b></th>
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@totalPagado.ToString("###,###,###,###")</b></th>
                                     }
                                     else
                                     {
@@ -1004,28 +949,27 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
 
                             //CONTEO DE EPIS TOTALES
-                            int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
-                            var episXDia = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i);
+                            int conteoEpisTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i).Count();
+                            var episXDia = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i);
 
                             //CONTEO DE EPIS TOTALES PAGADOS
-                            int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                            int conteoEpisPTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
 
                             //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
-                            var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+                            var pagoGestor = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
 
                             if (fechaTablaAnterior != fechaTabla)
                             {
-                                totalEpis = (from i in modeloNormal select i).Count();
+                                totalEpis = (from i in modeloAlternativo select i).Count();
 
                                 //SUMA DE PRECIOS EPIS X DIA
                                 foreach (var precio in episXDia)
                                 {
-                                    montoPxDia += Convert.ToInt32(precio.A.M.PrecioEpi);
+                                    montoPxDia += Convert.ToInt32(precio.PrecioEpi);
                                 }
 
                                 saldoTotalImporte += precioVisual;
-                                totalEpisP = (from i in modeloNormal where (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count(); ;
-                                saldoTotalP += precioPVisual;
+                                totalEpisP = (from i in modeloAlternativo where (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
                                 totalPago += pagoVisual;
 
                                 foreach (var pagos in pagoGestor)
@@ -1076,7 +1020,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                         if (conteoEpisPTotales != 0)
                                         {
                                             <td>
-                                                <span>$@precioPVisual.ToString("###,###,###,###")</span>
+                                                <span>$@montoPxDiaP.ToString("###,###,###,###")</span>
                                             </td>
                                         }
                                         else

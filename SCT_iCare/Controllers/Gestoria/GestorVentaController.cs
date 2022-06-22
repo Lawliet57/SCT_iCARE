@@ -1,5 +1,4 @@
-﻿using SCT_iCare.Filters;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,7 +15,6 @@ namespace SCT_iCare.Controllers.Gestoria
 
 
         // GET: GestorVenta
-        [AuthorizeUser(idOperacion: 7)]
         public ActionResult Index()
         {
             return View();
