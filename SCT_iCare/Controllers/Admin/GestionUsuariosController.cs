@@ -132,35 +132,49 @@ namespace SCT_iCare.Controllers.Admin
 
 
         // GET: GestionUsuarios/Edit/5
-        public ActionResult EditU(int? id)
+        public ActionResult EditU(int?  id)
         {
-            if (id == null)
+            try
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                GMIEntities db = new GMIEntities();
+                Usuarios vd = db.Usuarios.Find(id);
+                List<Roles> lsG = db.Roles.ToList();
+                ViewBag.idRol = new SelectList(lsG, "idRol", "Nombre", vd.idRol);
+                db.Dispose();
+                return View(vd);
             }
-            Usuarios usuarios = db.Usuarios.Find(id);
-            if (usuarios == null)
+            catch (Exception ex)
             {
-                return HttpNotFound("GestionUsuarios");
+                TempData["error"] = ex.Message;
+                return RedirectToAction("GestionUsuarios");
             }
-            ViewBag.idRol = new SelectList(db.Roles, "idRol", "Nombre", usuarios.idRol);
-            return View(usuarios);
         }
 
         // POST: GestionUsuarios/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditU([Bind(Include = "idUsuario,Nombre,Email,Password,idRol")] Usuarios usuarios)
+        public ActionResult EditU(Usuarios v)
         {
-            if (ModelState.IsValid)
+            try
             {
-                usuarios.Password = Encrypt.GetSHA256(usuarios.Password);
-                db.Entry(usuarios).State = EntityState.Modified;
-                db.SaveChanges();
+                using (GMIEntities db = new GMIEntities())
+                {
+                    Usuarios vd = db.Usuarios.Find(v.idUsuario);
+                    vd.Nombre = v.Nombre;
+                    vd.Email = v.Email;
+                    vd.Password = v.Password;
+                    vd.idRol = v.idRol;
+
+                    db.SaveChanges();
+                }
+                TempData["mensaje"] = "Se edito a " + v.Nombre;
+
                 return RedirectToAction("GestionUsuarios");
             }
-            ViewBag.idRol = new SelectList(db.Roles, "idRol", "Nombre", usuarios.idRol);
-            return View(usuarios);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: GestionUsuarios/Delete/5

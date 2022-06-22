@@ -10,44 +10,30 @@ using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Configuration;
 
-
-
 namespace SCT_iCare.Controllers.Login
 {
     public class LoginController : Controller
     {
         private GMIEntities db = new GMIEntities();
 
-
-
         // GET: Login
         public ActionResult Inicio()
         {
             Execute().Wait();
 
-
-
             return View();
         }
-
-
 
         static async Task Execute()
         {
             var apiKey = "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";
             var client = new SendGridClient(apiKey);
 
-
-
             GMIEntities db = new GMIEntities();
-            var documento = (from d in db.Dictamen orderby d.idDictamen descending select d.Dictamen1).FirstOrDefault();
+            var documento = (from d in db.Dictamen  orderby d.idDictamen descending select d.Dictamen1).FirstOrDefault();
 
-
-
-            byte[] bytesBinary = documento;
+            byte [] bytesBinary = documento;
             var base64 = Convert.ToBase64String(documento);
-
-
 
             var from = new EmailAddress("no-reply@grupogamx.mx", "Grupo GA");
             var subject = "Sending with SendGrid is Fun";
@@ -56,35 +42,25 @@ namespace SCT_iCare.Controllers.Login
             var htmlContent = "<h1><strong>and easy to do anywhere, even with C#</strong></h1>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
 
-
-
             msg.Attachments = new List<SendGrid.Helpers.Mail.Attachment>
-{
-new SendGrid.Helpers.Mail.Attachment
-{
-Content = Convert.ToBase64String(bytesBinary),
-Filename = "Transcript.pdf",
-Type = "applicaition/pdf",
-Disposition = "attachment"
-}
-};
-
-
+                {
+                    new SendGrid.Helpers.Mail.Attachment
+                    {
+                        Content = Convert.ToBase64String(bytesBinary),
+                        Filename = "Transcript.pdf",
+                        Type = "applicaition/pdf",
+                        Disposition = "attachment"
+                    }
+                };
 
             var response = client.SendEmailAsync(msg);
-
-
-
+           
         }
-
-
 
 
         [HttpPost]
         public ActionResult Inicio(string User, string Pass)
         {
-
-
 
             try
             {
@@ -92,11 +68,7 @@ Disposition = "attachment"
                 int hoy = DateTime.Now.Day;
                 int anio = DateTime.Now.Year;
 
-
-
                 var contadores = (from c in db.Sucursales select c);
-
-
 
 
                 foreach (var item in contadores)
@@ -107,8 +79,6 @@ Disposition = "attachment"
                         sucursales.Contador = 0;
                         sucursales.ContadorFecha = DateTime.Now;
 
-
-
                         if (ModelState.IsValid)
                         {
                             db.Entry(sucursales).State = EntityState.Modified;
@@ -118,13 +88,11 @@ Disposition = "attachment"
                 db.SaveChanges();
 
 
-
-
                 Pass = Encrypt.GetSHA256(Pass.Trim());
                 //Usuarios usuario = new Usuarios();
-                var oUser = (from d in db.Usuarios where d.Email == User && d.Password == Pass.Trim() select d).FirstOrDefault();
-
-
+                var oUser = (from d in db.Usuarios
+                             where d.Email == User && d.Password == Pass.Trim()
+                             select d).FirstOrDefault();
 
                 if (oUser == null)
                 {
@@ -134,8 +102,6 @@ Disposition = "attachment"
                 else
                 {
                     Session["User"] = oUser;
-
-
 
                     switch (oUser.idRol)
                     {
@@ -189,14 +155,10 @@ Disposition = "attachment"
                         case 10:
                             ViewBag.Nombre = oUser.Nombre.ToString();
 
-
-
                             var logGestor = new log_InicioGestor();
                             logGestor.InicioSesion = DateTime.Now;
                             logGestor.NombreUsuario = oUser.Nombre.ToString();
                             logGestor.idUsuario = oUser.idUsuario;
-
-
 
                             if (ModelState.IsValid)
                             {
@@ -227,15 +189,11 @@ Disposition = "attachment"
                             ViewBag.Nombre = oUser.Nombre.ToString();
                             return Redirect("~/Dictamenes/Citas");
 
-
-
                         default:
                             //return Redirect("~/Login/Login");
                             return View();
                     }
                 }
-
-
 
                 //return RedirectToAction("Index", "Admin");
             }
@@ -246,14 +204,10 @@ Disposition = "attachment"
             }
         }
 
-
-
         public ActionResult Redireccionar()
         {
             return RedirectToAction("Inicio");
         }
-
-
 
     }
 }

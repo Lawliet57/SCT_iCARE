@@ -225,6 +225,9 @@
     <Compile Include="Biometricos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="CadenaSplit.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="CallCenter.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -909,9 +912,9 @@
     <Content Include="Views\GestionUsuarios\GestoresU.cshtml" />
     <Content Include="Views\GestionUsuarios\DetailsU.cshtml" />
     <Content Include="Views\GestionUsuarios\CreateU.cshtml" />
-    <Content Include="Views\GestionUsuarios\EditU.cshtml" />
     <Content Include="Views\GestionUsuarios\DeleteU.cshtml" />
     <Content Include="Views\GestionUsuarios\CarruselMedicoU.cshtml" />
+    <Content Include="Views\GestionUsuarios\EditU.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

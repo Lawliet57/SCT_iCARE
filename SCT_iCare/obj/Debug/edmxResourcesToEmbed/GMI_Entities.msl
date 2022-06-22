@@ -1115,14 +1115,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="Roles">
-      <EntityTypeMapping TypeName="DevModel.Roles">
-        <MappingFragment StoreEntitySet="Roles">
-          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-          <ScalarProperty Name="idRol" ColumnName="idRol" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="RolMenu">
       <EntityTypeMapping TypeName="DevModel.RolMenu">
         <MappingFragment StoreEntitySet="RolMenu">
@@ -1283,6 +1275,22 @@
           <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
           <ScalarProperty Name="idRol" ColumnName="idRol" />
           <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CadenaSplit">
+      <EntityTypeMapping TypeName="DevModel.CadenaSplit">
+        <MappingFragment StoreEntitySet="CadenaSplit">
+          <ScalarProperty Name="Cadena" ColumnName="Cadena" />
+          <ScalarProperty Name="idCadena" ColumnName="idCadena" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="DevModel.Roles">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

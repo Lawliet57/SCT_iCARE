@@ -92,7 +92,6 @@ namespace SCT_iCare
         public virtual DbSet<Recepcionista> Recepcionista { get; set; }
         public virtual DbSet<RecepcionistaDS> RecepcionistaDS { get; set; }
         public virtual DbSet<ReferenciasSB> ReferenciasSB { get; set; }
-        public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<RolMenu> RolMenu { get; set; }
         public virtual DbSet<SignosVitalesDS> SignosVitalesDS { get; set; }
         public virtual DbSet<SucursalDS> SucursalDS { get; set; }
@@ -107,5 +106,7 @@ namespace SCT_iCare
         public virtual DbSet<modulo> modulo { get; set; }
         public virtual DbSet<operaciones> operaciones { get; set; }
         public virtual DbSet<rol_operacion> rol_operacion { get; set; }
+        public virtual DbSet<CadenaSplit> CadenaSplit { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
     }
 }

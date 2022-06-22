@@ -56,6 +56,15 @@
           <Property Name="Foto" Type="varbinary(max)" />
           <Property Name="idPaciente" Type="int" />
         </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="CadenaSplit">
+          <Key>
+            <PropertyRef Name="idCadena" />
+          </Key>
+          <Property Name="idCadena" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Cadena" Type="varchar(max)" />
+        </EntityType>
         <EntityType Name="CallCenter">
           <Key>
             <PropertyRef Name="idCallCenter" />
@@ -1928,7 +1937,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_rol_operacion_rol">
+        <Association Name="FK_rol_operacion_Roles">
           <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
           <End Role="rol_operacion" Type="Self.rol_operacion" Multiplicity="*" />
           <ReferentialConstraint>
@@ -2107,6 +2116,12 @@
           <EntitySet Name="Tipificaciones" EntityType="Self.Tipificaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UrgentesCount" EntityType="Self.UrgentesCount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CadenaSplit" EntityType="Self.CadenaSplit" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [CadenaSplit].[idCadena] AS [idCadena], 
+    [CadenaSplit].[Cadena] AS [Cadena]
+    FROM [dbo].[CadenaSplit] AS [CadenaSplit]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Archivos_Paciente" Association="Self.FK_Archivos_Paciente">
             <End Role="Paciente" EntitySet="Paciente" />
             <End Role="Archivos" EntitySet="Archivos" />
@@ -2347,7 +2362,7 @@
             <End Role="operaciones" EntitySet="operaciones" />
             <End Role="rol_operacion" EntitySet="rol_operacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_rol_operacion_rol" Association="Self.FK_rol_operacion_rol">
+          <AssociationSet Name="FK_rol_operacion_Roles" Association="Self.FK_rol_operacion_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="rol_operacion" EntitySet="rol_operacion" />
           </AssociationSet>
@@ -2452,7 +2467,6 @@
           <EntitySet Name="Recepcionista" EntityType="DevModel.Recepcionista" />
           <EntitySet Name="RecepcionistaDS" EntityType="DevModel.RecepcionistaDS" />
           <EntitySet Name="ReferenciasSB" EntityType="DevModel.ReferenciasSB" />
-          <EntitySet Name="Roles" EntityType="DevModel.Roles" />
           <EntitySet Name="RolMenu" EntityType="DevModel.RolMenu" />
           <EntitySet Name="SignosVitalesDS" EntityType="DevModel.SignosVitalesDS" />
           <EntitySet Name="SucursalDS" EntityType="DevModel.SucursalDS" />
@@ -2710,14 +2724,6 @@
             <End Role="Usuarios" EntitySet="Usuarios" />
             <End Role="RecepcionistaDS" EntitySet="RecepcionistaDS" />
           </AssociationSet>
-          <AssociationSet Name="FK_RolMenu_Roles" Association="DevModel.FK_RolMenu_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="RolMenu" EntitySet="RolMenu" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Usuarios_Roles" Association="DevModel.FK_Usuarios_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="Usuarios" EntitySet="Usuarios" />
-          </AssociationSet>
           <EntitySet Name="PagosGestores" EntityType="DevModel.PagosGestores" />
           <EntitySet Name="Referido" EntityType="DevModel.Referido" />
           <AssociationSet Name="FK_PagosGestores_Referido" Association="DevModel.FK_PagosGestores_Referido">
@@ -2735,11 +2741,21 @@
             <End Role="operaciones" EntitySet="operaciones" />
             <End Role="rol_operacion" EntitySet="rol_operacion" />
           </AssociationSet>
-          <AssociationSet Name="FK_rol_operacion_rol" Association="DevModel.FK_rol_operacion_rol">
+          <EntitySet Name="CadenaSplit" EntityType="DevModel.CadenaSplit" />
+          <EntitySet Name="Roles" EntityType="DevModel.Roles" />
+          <AssociationSet Name="FK_rol_operacion_Roles" Association="DevModel.FK_rol_operacion_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="rol_operacion" EntitySet="rol_operacion" />
           </AssociationSet>
-        </EntityContainer>
+          <AssociationSet Name="FK_RolMenu_Roles" Association="DevModel.FK_RolMenu_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="RolMenu" EntitySet="RolMenu" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Usuarios_Roles" Association="DevModel.FK_Usuarios_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="Aptitud">
           <Key>
             <PropertyRef Name="idAptitud" />
@@ -3896,16 +3912,6 @@
           <Property Name="EstatusReferencia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="idPaciente" Type="Int32" />
         </EntityType>
-        <EntityType Name="Roles">
-          <Key>
-            <PropertyRef Name="idRol" />
-          </Key>
-          <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Roles" FromRole="Roles" ToRole="RolMenu" />
-          <NavigationProperty Name="Usuarios" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
-          <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_rol" FromRole="Roles" ToRole="rol_operacion" />
-        </EntityType>
         <EntityType Name="RolMenu">
           <Key>
             <PropertyRef Name="idRolMenu" />
@@ -4761,30 +4767,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_RolMenu_Roles">
-          <End Type="DevModel.Roles" Role="Roles" Multiplicity="0..1" />
-          <End Type="DevModel.RolMenu" Role="RolMenu" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="idRol" />
-            </Principal>
-            <Dependent Role="RolMenu">
-              <PropertyRef Name="idRol" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Usuarios_Roles">
-          <End Type="DevModel.Roles" Role="Roles" Multiplicity="0..1" />
-          <End Type="DevModel.Usuarios" Role="Usuarios" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="idRol" />
-            </Principal>
-            <Dependent Role="Usuarios">
-              <PropertyRef Name="idRol" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="PagosGestores">
           <Key>
             <PropertyRef Name="idPagoGestor" />
@@ -4857,7 +4839,7 @@
           <Property Name="idRol" Type="Int32" Nullable="false" />
           <Property Name="idOperacion" Type="Int32" Nullable="false" />
           <NavigationProperty Name="operaciones" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="rol_operacion" ToRole="operaciones" />
-          <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_rol" FromRole="rol_operacion" ToRole="Roles" />
+          <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="rol_operacion" ToRole="Roles" />
         </EntityType>
         <Association Name="FK_operaciones_modulo">
           <End Type="DevModel.modulo" Role="modulo" Multiplicity="1" />
@@ -4883,7 +4865,24 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_rol_operacion_rol">
+        <EntityType Name="CadenaSplit">
+          <Key>
+            <PropertyRef Name="idCadena" />
+          </Key>
+          <Property Name="idCadena" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Cadena" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="idRol" />
+          </Key>
+          <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="Roles" ToRole="rol_operacion" />
+          <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Roles" FromRole="Roles" ToRole="RolMenu" />
+          <NavigationProperty Name="Usuarios" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
+        </EntityType>
+        <Association Name="FK_rol_operacion_Roles">
           <End Type="DevModel.Roles" Role="Roles" Multiplicity="1" />
           <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
           <ReferentialConstraint>
@@ -4891,6 +4890,30 @@
               <PropertyRef Name="idRol" />
             </Principal>
             <Dependent Role="rol_operacion">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RolMenu_Roles">
+          <End Type="DevModel.Roles" Role="Roles" Multiplicity="0..1" />
+          <End Type="DevModel.RolMenu" Role="RolMenu" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="idRol" />
+            </Principal>
+            <Dependent Role="RolMenu">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Usuarios_Roles">
+          <End Type="DevModel.Roles" Role="Roles" Multiplicity="0..1" />
+          <End Type="DevModel.Usuarios" Role="Usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="idRol" />
+            </Principal>
+            <Dependent Role="Usuarios">
               <PropertyRef Name="idRol" />
             </Dependent>
           </ReferentialConstraint>
@@ -6015,14 +6038,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="DevModel.Roles">
-              <MappingFragment StoreEntitySet="Roles">
-                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
-                <ScalarProperty Name="idRol" ColumnName="idRol" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="RolMenu">
             <EntityTypeMapping TypeName="DevModel.RolMenu">
               <MappingFragment StoreEntitySet="RolMenu">
@@ -6183,6 +6198,22 @@
                 <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
                 <ScalarProperty Name="idRol" ColumnName="idRol" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CadenaSplit">
+            <EntityTypeMapping TypeName="DevModel.CadenaSplit">
+              <MappingFragment StoreEntitySet="CadenaSplit">
+                <ScalarProperty Name="Cadena" ColumnName="Cadena" />
+                <ScalarProperty Name="idCadena" ColumnName="idCadena" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="DevModel.Roles">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idRol" ColumnName="idRol" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
