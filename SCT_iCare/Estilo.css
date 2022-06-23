@@ -281,3 +281,17 @@ table th {
     letter-spacing: .005em;
     text-transform: uppercase;
 }
+
+
+@media print {
+    .no-print, .no-print * {
+        display: none !important;
+    }
+}
+
+
+@media print {
+    .hidden-print {
+        display: none !important;
+    }
+}
