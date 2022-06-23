@@ -51,6 +51,15 @@
     <Property Name="Foto" Type="varbinary(max)" />
     <Property Name="idPaciente" Type="int" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+  <EntityType Name="CadenaSplit">
+    <Key>
+      <PropertyRef Name="idCadena" />
+    </Key>
+    <Property Name="idCadena" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Cadena" Type="varchar(max)" />
+  </EntityType>
   <EntityType Name="CallCenter">
     <Key>
       <PropertyRef Name="idCallCenter" />
@@ -1923,7 +1932,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_rol_operacion_rol">
+  <Association Name="FK_rol_operacion_Roles">
     <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
     <End Role="rol_operacion" Type="Self.rol_operacion" Multiplicity="*" />
     <ReferentialConstraint>
@@ -2102,6 +2111,12 @@
     <EntitySet Name="Tipificaciones" EntityType="Self.Tipificaciones" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UrgentesCount" EntityType="Self.UrgentesCount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CadenaSplit" EntityType="Self.CadenaSplit" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [CadenaSplit].[idCadena] AS [idCadena], 
+    [CadenaSplit].[Cadena] AS [Cadena]
+    FROM [dbo].[CadenaSplit] AS [CadenaSplit]</DefiningQuery>
+    </EntitySet>
     <AssociationSet Name="FK_Archivos_Paciente" Association="Self.FK_Archivos_Paciente">
       <End Role="Paciente" EntitySet="Paciente" />
       <End Role="Archivos" EntitySet="Archivos" />
@@ -2342,7 +2357,7 @@
       <End Role="operaciones" EntitySet="operaciones" />
       <End Role="rol_operacion" EntitySet="rol_operacion" />
     </AssociationSet>
-    <AssociationSet Name="FK_rol_operacion_rol" Association="Self.FK_rol_operacion_rol">
+    <AssociationSet Name="FK_rol_operacion_Roles" Association="Self.FK_rol_operacion_Roles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="rol_operacion" EntitySet="rol_operacion" />
     </AssociationSet>

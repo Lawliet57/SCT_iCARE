@@ -119,7 +119,7 @@
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
 Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita <= fechaFinal
 && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
-
+      
 
     var modeloAlternativo = db.PacienteESP.
 Where(s => s.EstatusCaptura == "Terminado" && s.FechaCita >= fechaInicio && s.FechaCita <= fechaFinal
@@ -612,7 +612,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             //CONTEO DE EPIS TOTALES
                             int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
                             var episXDia = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i);
-                            var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal &&( i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "COMEKTA") select i);
+                            var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "COMEKTA") select i);
 
                             //CONTEO DE EPIS TOTALES PAGADOS
                             int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
@@ -926,6 +926,95 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 }
             }
         </div>
+
+        <br />
+
+        @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
+        <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
+            <table class="table  table-hover tablas" style="color: #000000">
+                <thead style="color:white">
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            Sucursal
+                        </th>
+                        <th>
+                            Referencia
+                        </th>
+                        <th>
+                            ReferidoPor
+                        </th>
+                        <th>
+                            Cuenta
+                        </th>
+                        <th>
+                            TipoPago
+                        </th>
+                        <th>
+                            FechaEjecución
+                        </th>
+                        <th>
+                            FechaPago
+                        </th>
+                        <th>
+                            Precio
+                        </th>
+                        <th>
+                            Usuario
+                        </th>
+                    </tr>
+                </thead>
+                        @{
+                            foreach (var conc in modeloNormal)
+                            {
+                                        <tr>
+                                            <td>
+                                                @conc.B.NombrePaciente
+                                            </td>
+                                            <td>
+                                                @conc.A.M.Sucursal
+                                            </td>
+                                            <td>
+                                                @conc.A.M.Referencia
+                                            </td>
+                                            <td>
+                                                @conc.A.M.ReferidoPor
+                                            </td>
+                                            <td>
+                                                @conc.A.M.Cuenta
+                                            </td>
+                                            <td>
+                                                @conc.A.M.TipoPago
+                                            </td>
+                                            <td>
+                                                @Convert.ToDateTime(conc.A.M.FechaCita).ToString("dd-MMMM-yy")
+                                            </td>
+                                            <td>
+                                                @{
+                                                    if (conc.A.M.Cuenta == "BANCOS" || conc.A.M.Cuenta == "CONEKTA")
+                                                    {
+                                                        <span>@Convert.ToDateTime(conc.A.M.FechaContable).ToString("dd-MMMM-yy")</span>
+                                                    }
+
+                                                    else
+                                                    { 
+                                                    <span>---</span>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                $@Convert.ToDouble(conc.A.M.PrecioEpi).ToString("####.##")
+                                            </td>
+                                            <td>
+                                                @conc.A.M.Recepcionista
+                                            </td>
+                                        </tr>
+                            }
+                       }
+                </table>
+        </div>
     }
 
     else if (canal == "IN SITU" || canal == "GESTOR ALT" && canal != null && canal != "" && referido != null && referido != "")
@@ -951,6 +1040,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             //CONTEO DE EPIS TOTALES
                             int conteoEpisTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i).Count();
                             var episXDia = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i);
+                            var episXDiaP = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "COMEKTA") select i);
 
                             //CONTEO DE EPIS TOTALES PAGADOS
                             int conteoEpisPTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
@@ -968,9 +1058,15 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                     montoPxDia += Convert.ToInt32(precio.PrecioEpi);
                                 }
 
-                                saldoTotalImporte += precioVisual;
+                                //SUMA DE PRECIOS PAGADOS EPIS X DIA
+                                foreach (var precio in episXDiaP)
+                                {
+                                    montoPxDiaP += Convert.ToInt32(precio.PrecioEpi);
+                                }
+
+                                saldoTotalImporte += montoPxDia;
+                                saldoTotalP += montoPxDiaP;
                                 totalEpisP = (from i in modeloAlternativo where (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
-                                totalPago += pagoVisual;
 
                                 foreach (var pagos in pagoGestor)
                                 {
@@ -979,7 +1075,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 }
 
                                 totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
+                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + pagoVisual);
 
                                 <tr style="height: auto">
 
@@ -1053,6 +1149,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
                                 fechaTablaAnterior = fechaTabla;
                                 montoPxDia = 0;
+                                montoPxDiaP = 0;
                                 precioVisual = 0;
                                 pagoVisual = 0;
                             }
@@ -1153,13 +1250,13 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 @{
                                     if (diferenciaTotal != 0)
                                     {
-                                        if (diferenciaTotal < 0)
+                                        if (diferenciaTotal > 0)
                                         {
-                                            diferenciaTotal = diferenciaTotal * (-1);
                                             <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
                                         }
-                                        else if (diferenciaTotal > 0)
+                                        else if (diferenciaTotal < 0)
                                         {
+                                            diferenciaTotal = diferenciaTotal * (-1);
                                             <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
                                         }
                                     }
@@ -1195,7 +1292,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 @{var episPTotales = totalEpisP + totalEpisPMA;
                                     if (totalEpisP != 0)
                                     {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@totalEpisP</b></th>
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@episPTotales</b></th>
                                     }
                                     else
                                     {
@@ -1205,9 +1302,10 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
                                 @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES PASADO*@
                                 @{
+                                    var totalPagado = saldoTotalP + montoTotalMaP;
                                     if (saldoTotalP != 0)
                                     {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalP.ToString("###,###,###,###")</b></th>
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@totalPagado.ToString("###,###,###,###")</b></th>
                                     }
                                     else
                                     {
@@ -1256,7 +1354,81 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 }
             }
         </div>
+        <br />
+
+        @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
+        <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
+            <table class="table  table-hover tablas" style="color: #000000">
+                <thead style="color:white">
+                    <tr>
+                        <th>
+                            Nombre
+                        </th>
+                        <th>
+                            ReferidoPor
+                        </th>
+                        <th>
+                            Cuenta
+                        </th>
+                        <th>
+                            TipoPago
+                        </th>
+                        <th>
+                            FechaEjecución
+                        </th>
+                        <th>
+                            FechaPago
+                        </th>
+                        <th>
+                            Precio
+                        </th>
+                        <th>
+                            Usuario
+                        </th>
+                    </tr>
+                </thead>
+                @{
+                    foreach (var conc in modeloAlternativo)
+                    {
+                        <tr>
+                            <td>
+                                @conc.Nombre
+                            </td>
+                            <td>
+                                @conc.ReferidoPor
+                            </td>
+                            <td>
+                                @conc.Cuenta
+                            </td>
+                            <td>
+                                @conc.TipoPago
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(conc.FechaCita).ToString("dd-MMMM-yy")
+                            </td>
+                            <td>
+                                @{
+                                    if (conc.Cuenta == "BANCOS" || conc.Cuenta == "CONEKTA")
+                                    {
+                                        <span>@Convert.ToDateTime(conc.FechaContable).ToString("dd-MMMM-yy")</span>
+                                    }
+
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                $@Convert.ToDouble(conc.PrecioEpi).ToString("####.##")
+                            </td>
+                            <td>
+                                @conc.Usuario
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+        </div>
     }
-
 }
-
