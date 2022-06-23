@@ -52,7 +52,6 @@
     //FOOTERS
     int totalEpis = 0;
     int saldoTotalImporte = 0;
-    int pagoTotalConciliados = 0;
     int totalEpisP = 0;
     int saldoTotalP = 0;
     int totalPago = 0;
@@ -234,7 +233,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 @*INPUTS DE FILTROS*@
 <form class="form-inline" method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EstadoCuenta")">
-    <div>
+    <div class="hidden-print">
 
         @*INPUT FILTRO CANAL*@
         <select name="canal" style="font-size:1.5vh; width: 100px" class="form-control">
@@ -267,7 +266,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 }
                 else
                 {
-                    <option value="@referido">@referido</option>
+                    <option value="@referido">@referido.ToUpper()</option>
                 }
             }
             @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
@@ -283,12 +282,12 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         @{
 
             DateTime ViewBagFechaInicio = Convert.ToDateTime(ViewBag.fechaInicio);
-            var SetFechaInicio = ViewBagFechaInicio.Date.ToString("yyyy-MM");
+            var SetFechaInicio = ViewBagFechaInicio.Date.ToString("yyyy-MM-dd");
 
             if (ViewBag.fechaInicio != null)
             {
 
-                <input type="month" name="fechaInicio" class="form-control" value="@SetFechaInicio" style="width: 160px;" />
+                <input type="date" name="fechaInicio" class="form-control" value="@SetFechaInicio" style="width: 160px;" />
 
             }
 
@@ -296,7 +295,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
             {
 
-                <input type="month" name="fechaInicio" class="form-control" value="" style="width: 160px;" />
+                <input type="date" name="fechaInicio" class="form-control" value="" style="width: 160px;" />
 
             }
 
@@ -310,7 +309,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             if (ViewBag.fechaFinal != null)
             {
 
-                <input type="hidden" name="fechaFinal" class="form-control" value="@SetFechaFinal" style="width: 160px;" />
+                <input type="date" name="fechaFinal" class="form-control" value="@SetFechaFinal" style="width: 160px;" />
 
             }
 
@@ -318,7 +317,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
             {
 
-                <input type="hidden" name="fechaFinal" class="form-control" value="" style="width: 160px;" />
+                <input type="date" name="fechaFinal" class="form-control" value="" style="width: 160px;" />
 
             }
 
@@ -346,7 +345,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 
 
-|   <div>
+|   <div class="hidden-print">
     <a href="~/Contabilidad/Pagos">
         <span type="button" class="btn btn-success" style="background-color:dodgerblue">Regresar a Control de Pagos</span>
     </a>
@@ -647,7 +646,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 }
 
                                 totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + pagoVisual);
+                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
 
                                 <tr style="height: auto">
 
@@ -763,6 +762,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                     }
                 </tbody>
             </table>
+
             @{
                 if (fechaTabla != null && fechaTabla != "")
                 {
@@ -770,7 +770,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         <thead style="border: none; background-color:transparent">
                             <tr style="border: none; background-color:transparent">
 
-                                @*FOOTTER  MES ACTUAL*@{}
+                                @*FOOTTER  MES ACTUAL*@
                                 <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
 
 
@@ -930,7 +930,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         <br />
 
         @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
-        <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
+        <div class="tablaScroll" style="min-height: 900px; min-width: 1000px">
             <table class="table  table-hover tablas" style="color: #000000">
                 <thead style="color:white">
                     <tr>
@@ -1075,7 +1075,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 }
 
                                 totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + pagoVisual);
+                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
 
                                 <tr style="height: auto">
 
@@ -1198,7 +1198,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         <thead style="border: none; background-color:transparent">
                             <tr style="border: none; background-color:transparent">
 
-                                @*FOOTTER  MES ACTUAL*@{}
+                                @*FOOTTER  MES ACTUAL*@
                                 <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
 
 
@@ -1350,14 +1350,14 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 }
                 else
                 {
-                    <h1 style="background-color: aliceblue; border: none; background-color:transparent; text-align:center"><b style="color:aliceblue;">NO HAY MOVIMIENTOS DE ESTE MES</b></h1>
+                    <h1 style="background-color: aliceblue; border: none; background-color:transparent; text-align:center"><b style="color:aliceblue;">NO HAY MOVIMIENTOS EN ESTE RANGO DE FECHA</b></h1>
                 }
             }
         </div>
         <br />
 
         @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
-        <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
+        <div class="tablaScroll" style="min-height: 900px; min-width: 1000px">
             <table class="table  table-hover tablas" style="color: #000000">
                 <thead style="color:white">
                     <tr>

@@ -504,7 +504,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         @{
             foreach (var item in modelo.OrderBy(o => o.A.M.FechaCita))
             {
-                if (item.A.M.TipoLicencia == "AEREO")
+                if (item.A.M.TipoLicencia == "AEREO" || item.A.M.TipoLicencia == "AEREO_PISTA")
                 {
                     fila = "#D1C4E9";
                 }
@@ -546,9 +546,23 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         @*@item.A.M.Sucursal*@
                         <b><mark style="background; padding:5px; border-radius:7px"><span class=""></span>   @item.A.M.Sucursal </mark></b>
                     </td>
-                    <td style="font-size:smaller">
-                        @item.A.M.Referencia
-                    </td>
+                    @{
+                        var ticketPaciente = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                        string referidoFinal = Convert.ToString(idReferido);
+                        DateTime fechaFinalConc = DateTime.Today;
+                        string fechaFinalConcStr = Convert.ToString(fechaFinalConc);
+                        if (ViewBag.fechafinal != null)
+                        {
+                            fechaFinalConcStr = SetFechaFinal;
+                        }
+                        if (idReferido == 0)
+                        {
+                            referidoFinal = "";
+                        }
+                        <td style="font-size:smaller">
+                            <a href=@Url.Action("AbrirTicket", "Contabilidad", new { idTicket = ticketPaciente, cuenta = cuenta, canal = canal, sucursal = sucursal,  tiporeferido = referidoFinal, tipopago = pago, fechaInicio = fechaInicio, fechaFinal = fechaFinalConcStr}) style="color:navy; text-decoration:none"><span>@item.A.M.Referencia</span></a>
+                        </td>
+                    }
                     <td style="font-size:smaller">
                         <span class="field-tip">
                             <b>@item.A.M.ReferidoPor</b>
@@ -638,61 +652,61 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             //OPCION CON PRECIO DE REFERIDO
                             @*var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
 
-                                if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
-                                    || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
-                                {
-                                    if (item.A.M.TipoLicencia != "AEREO")
-                                    {
+                if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
+                    || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
+                {
+                    if (item.A.M.TipoLicencia != "AEREO")
+                    {
 
-                                        if (costo.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
-                                        {
-                                            <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
-                                        }
-                                        else
-                                        {
-                                            <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-                                        }
-                                    }
-                                    else
-                                    {
+                        if (costo.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
+                        {
+                            <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
+                        }
+                        else
+                        {
+                            <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
+                        }
+                    }
+                    else
+                    {
 
-                                        if (costo.PrecioAereo != null && costo.PrecioAereo != "0")
-                                        {
-                                            <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                                        }
-                                        else
-                                        {
-                                            <span><b>$3480</b></span>
-                                        }
+                        if (costo.PrecioAereo != null && costo.PrecioAereo != "0")
+                        {
+                            <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                        }
+                        else
+                        {
+                            <span><b>$3480</b></span>
+                        }
 
-                                    }
+                    }
 
-                                }
+                }
 
-                                else
-                                {
+                else
+                {
 
-                                    if (item.A.M.TipoLicencia != "AEREO")
-                                    {
+                    if (item.A.M.TipoLicencia != "AEREO")
+                    {
 
-                                        <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
+                        <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
 
-                                    }
-                                    else
-                                    {
+                    }
+                    else
+                    {
 
-                                        if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
-                                        {
-                                            <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                                        }
-                                        else
-                                        {
-                                            <span><b>$3480</b></span>
-                                        }
+                        if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
+                        {
+                            <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
+                        }
+                        else
+                        {
+                            <span><b>$3480</b></span>
+                        }
 
-                                    }
+                    }
 
-                                }*@
+                }*@
 
                         }
 
@@ -713,13 +727,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                     <div class="dropdown-menu" style="padding:10px">
                                         @*@{
-                                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                                if (consultaTicket != 0)
-                                                {
-                                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                                }
-                                            }*@
+                                if (consultaTicket != 0)
+                                {
+                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                }
+                            }*@
                                         <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
@@ -731,13 +745,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                         <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                            <div class="dropdown-divider"></div>*@
+                            <div class="dropdown-divider"></div>*@
                                         <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                            <div class="dropdown-divider"></div>*@
+                            <div class="dropdown-divider"></div>*@
                                     </div>
                                 }
 
@@ -754,13 +768,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                     <div class="dropdown-menu" style="padding:10px">
                                         @*@{
-                                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                                if (consultaTicket != 0)
-                                                {
-                                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                                }
-                                            }*@
+                                if (consultaTicket != 0)
+                                {
+                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                }
+                            }*@
                                         <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
@@ -772,13 +786,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                         <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                            <div class="dropdown-divider"></div>*@
+                            <div class="dropdown-divider"></div>*@
                                         <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
                                         <div class="dropdown-divider"></div>
                                         <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
                                         <div class="dropdown-divider"></div>
                                         @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                            <div class="dropdown-divider"></div>*@
+                            <div class="dropdown-divider"></div>*@
 
                                     </div>
                                 }

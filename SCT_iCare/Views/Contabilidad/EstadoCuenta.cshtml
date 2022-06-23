@@ -762,6 +762,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                     }
                 </tbody>
             </table>
+
             @{
                 if (fechaTabla != null && fechaTabla != "")
                 {
@@ -769,7 +770,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         <thead style="border: none; background-color:transparent">
                             <tr style="border: none; background-color:transparent">
 
-                                @*FOOTTER  MES ACTUAL*@{}
+                                @*FOOTTER  MES ACTUAL*@
                                 <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
 
 
@@ -929,7 +930,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         <br />
 
         @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
-        <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
+        <div class="tablaScroll" style="min-height: 900px; min-width: 1000px">
             <table class="table  table-hover tablas" style="color: #000000">
                 <thead style="color:white">
                     <tr>
@@ -1197,7 +1198,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         <thead style="border: none; background-color:transparent">
                             <tr style="border: none; background-color:transparent">
 
-                                @*FOOTTER  MES ACTUAL*@{}
+                                @*FOOTTER  MES ACTUAL*@
                                 <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
 
 
@@ -1356,7 +1357,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         <br />
 
         @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
-        <div class="tablaScroll" style="min-height: 1000px; min-width: 1000px">
+        <div class="tablaScroll" style="min-height: 900px; min-width: 1000px">
             <table class="table  table-hover tablas" style="color: #000000">
                 <thead style="color:white">
                     <tr>

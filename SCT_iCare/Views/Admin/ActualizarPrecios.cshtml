@@ -118,7 +118,7 @@
 
 <br />
 
-<div class="tablaScroll" style="max-width:900px">
+<div class="tablaScroll" style="max-width:1200px">
     <table class="table  table-bordered table-hover tablas" style="color: #2F2D6B">
         <thead>
             <tr style="color:white">
@@ -135,16 +135,16 @@
                     Precio con IVA
                 </th>
                 <th>
-                    Precio Aereo sin IVA
+                    Precio Aereo Tripulacion sin IVA
                 </th>
                 <th>
-                    Precio Aereo con IVA
+                    Precio Aereo Tripulacion con IVA
                 </th>
                 <th>
-                    Precio Pilotos sin IVA
+                    Precio Aereo Pista sin IVA
                 </th>
                 <th>
-                    Precio Pilotos con IVA
+                    Precio Aereo Pista con IVA
                 </th>
                 <th></th>
             </tr>
@@ -185,7 +185,7 @@
                             }
                         </span>
                     </span>
-                }
+                                }
             }
         </td>
         <td>
@@ -225,7 +225,7 @@
                             }
                         </span>
                     </span>
-                }
+                                }
             }
         </td>
         <td>
@@ -256,17 +256,17 @@
                                     <label for="recipient-name" class="col-form-label">Ingrese los nuevos precios para @item.Nombre:</label>
                                     <br />
                                     <label for="recipient-name" class="col-form-label">Precio sin IVA:</label>
-                                    <input type="number" class="form-control" id="fecha" name="precio" placeholder="@item.PrecioNormal">
+                                    <input type="number" class="form-control" name="precio" placeholder="@item.PrecioNormal">
                                     <label for="recipient-name" class="col-form-label">Precio con IVA:</label>
-                                    <input type="number" class="form-control" id="fecha" name="precioIVA" placeholder="@item.PrecioNormalconIVA">
+                                    <input type="number" class="form-control" name="precioIVA" placeholder="@item.PrecioNormalconIVA">
                                     <label for="recipient-name" class="col-form-label">Precio Áereo Tripulación sin IVA:</label>
-                                    <input type="number" class="form-control" id="fecha" name="precio" placeholder="@item.PrecioNormal">
+                                    <input type="number" class="form-control" name="precioAereoTrip" placeholder="@item.PrecioAereosinIVA">
                                     <label for="recipient-name" class="col-form-label">Precio Áereo Tripulación con IVA:</label>
-                                    <input type="number" class="form-control" id="fecha" name="precioIVA" placeholder="@item.PrecioNormalconIVA">
+                                    <input type="number" class="form-control" name="precioAereoTripIVA" placeholder="@item.PrecioAereo">
                                     <label for="recipient-name" class="col-form-label">Precio Áereo Pista sin IVA:</label>
-                                    <input type="number" class="form-control" id="fecha" name="precio" placeholder="@item.PrecioNormal">
+                                    <input type="number" class="form-control" name="precioAereoPista" placeholder="@item.PrecioAereoPista">
                                     <label for="recipient-name" class="col-form-label">Precio Áereo Pista con IVA:</label>
-                                    <input type="number" class="form-control" id="fecha" name="precioIVA" placeholder="@item.PrecioNormalconIVA">
+                                    <input type="number" class="form-control" name="precioAereoPistaIVA" placeholder="@item.PrecioAereoPistaconIVA">
                                     <input type="hidden" value="@item.idReferido" name="id" />
                                     <input type="hidden" value="@oUser.Nombre" name="usuario" />
                                 </div>

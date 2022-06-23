@@ -727,15 +727,20 @@ namespace SCT_iCare.Controllers.Admin
             return Redirect("ActualizarMeta");
         }
 
-        public ActionResult EditarPrecios(int? id, string precio, string precioIVA, string usuario)
+        public ActionResult EditarPrecios(int? id, string precio, string precioIVA, string precioAereoTrip, string precioAereoTripIVA, string precioAereoPista, string precioAereoPistaIVA, string usuario)
         {
             Referido referido = db.Referido.Find(id);
 
             string precioAnterior = referido.PrecioNormal;
             string precioAnteriorIVA = referido.PrecioNormalconIVA;
+            string precioAnteriorAereoTrip = referido.PrecioAereosinIVA;
+            string precioAnteriorAereoTripIVA = referido.PrecioAereo;
+            string precioAnteriorAereoPista = referido.PrecioAereoPista;
+            string precioAnteriorAereoPistaIVA = referido.PrecioAereoPista;
 
+
+            //PRECIO NORMAL
             string historico = referido.HistorialPrecios == null ? "" : referido.HistorialPrecios + "+";
-            referido.HistorialPrecios = historico +  " "+usuario+" en " + DateTime.Today.ToString("dd-MM-yyyy") + " de " + precioAnterior + " a " +precio;
 
             referido.PrecioNormal = precio == "" ? referido.PrecioNormal : precio;
 
@@ -745,8 +750,9 @@ namespace SCT_iCare.Controllers.Admin
                 db.SaveChanges();
             }
 
+
+            //PRECIO NORMAL IVA
             historico = referido.HistorialPrecios == null ? "" : referido.HistorialPrecios + "+";
-            referido.HistorialPrecios = historico + " " + usuario + " en " + DateTime.Today.ToString("dd-MM-yyyy") + " de " + precioAnteriorIVA + " a " + precioIVA;
 
             referido.PrecioNormalconIVA = precioIVA == "" ? referido.PrecioNormalconIVA : precioIVA;
 
@@ -756,6 +762,60 @@ namespace SCT_iCare.Controllers.Admin
                 db.SaveChanges();
             }
 
+
+            //PRECIO AEREO TRIP
+            historico = referido.HistorialPrecios == null ? "" : referido.HistorialPrecios + "+";
+
+            referido.PrecioAereosinIVA = precioAereoTrip == "" ? referido.PrecioAereosinIVA : precioAereoTrip;
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(referido).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+
+            //PRECIO AEREO TRIP IVA
+            historico = referido.HistorialPrecios == null ? "" : referido.HistorialPrecios + "+";
+
+            referido.PrecioAereo = precioAereoTripIVA == "" ? referido.PrecioAereo : precioAereoTripIVA;
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(referido).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+
+            //PRECIO AEREO PISTA
+            historico = referido.HistorialPrecios == null ? "" : referido.HistorialPrecios + "+";
+
+            referido.PrecioAereoPista = precioAereoPista == "" ? referido.PrecioAereoPista : precioAereoPista;
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(referido).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+
+
+            //PRECIO AEREO PISTA IVA
+            historico = referido.HistorialPrecios == null ? "" : referido.HistorialPrecios + "+";
+            referido.HistorialPrecios = 
+                historico + " " + usuario + " el día " + DateTime.Today.ToString("dd-MM-yyyy") + " cambio el precio sin IVA de " + precioAnterior + " a " + precio
+                + ", el precio con IVA de " + precioAnteriorIVA + " a " + precioIVA
+                + " , el precio Aereo Tripulacion sin IVA de " + precioAnteriorAereoTrip + " a " + precioAereoTrip
+                + " , el precio Aereo Tripulacion con IVA de " + precioAnteriorAereoTripIVA + " a " + precioAereoTripIVA
+                + " , el precio Aereo Pista sin IVA de  " + precioAnteriorAereoPista + " a " + precioAereoPista
+                + " y el precio Aereo Pista con IVA de " + precioAnteriorAereoPistaIVA + " a " + precioAereoPistaIVA;
+
+            referido.PrecioAereoPistaconIVA = precioAereoPistaIVA == "" ? referido.PrecioAereoPistaconIVA : precioAereoPistaIVA;
+
+            if (ModelState.IsValid)
+            {
+                db.Entry(referido).State = EntityState.Modified;
+                db.SaveChanges();
+            }
             return Redirect("ActualizarPrecios");
         }
 
