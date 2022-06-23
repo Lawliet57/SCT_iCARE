@@ -234,7 +234,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 @*INPUTS DE FILTROS*@
 <form class="form-inline" method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EstadoCuenta")">
-    <div>
+    <div class="hidden-print">
 
         @*INPUT FILTRO CANAL*@
         <select name="canal" style="font-size:1.5vh; width: 100px" class="form-control">
@@ -346,7 +346,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 
 
-|   <div>
+|   <div class="hidden-print">
     <a href="~/Contabilidad/Pagos">
         <span type="button" class="btn btn-success" style="background-color:dodgerblue">Regresar a Control de Pagos</span>
     </a>
