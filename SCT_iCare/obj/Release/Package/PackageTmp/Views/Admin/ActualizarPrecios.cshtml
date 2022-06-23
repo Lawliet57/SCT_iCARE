@@ -81,7 +81,8 @@
                     <option value="Comparacion">COMPARACIÓN</option>
                     <option value="Doctores">DOCTORES</option>
                     @{
-                        if (oUser.Nombre == "Jesús Zenteno" || oUser.Nombre == "Jorge Rodriguez" || oUser.Nombre == "Ángel Muñoz" || oUser.Nombre == "Teresa Lozano" || oUser.Nombre == "Jessica Bustos" || oUser.Nombre == "Mauricio Mosqueda")
+                        if (oUser.Nombre == "Jesús Zenteno" || oUser.Nombre == "Jorge Rodriguez" || oUser.Nombre == "Ángel Muñoz" ||
+                            oUser.Nombre == "Teresa Lozano" || oUser.Nombre == "Jessica Bustos" || oUser.Nombre == "Mauricio Mosqueda" || oUser.Nombre == "Ramon Reyna")
                         {
                             <option disabled>-------------------------</option>
                             <option value="Metas">ACTUALIZAR METAS</option>
@@ -146,7 +147,13 @@
                 <th>
                     Precio Aereo Pista con IVA
                 </th>
-                <th></th>
+                @{ 
+                    if (oUser.Nombre == "Ángel Muñoz" || oUser.Nombre == "Mauricio Mosqueda" || oUser.Nombre == "Ramon Reyna")
+                    {
+                                <th></th>
+                    }
+                }
+                
             </tr>
         </thead>
 
@@ -185,7 +192,7 @@
                             }
                         </span>
                     </span>
-                                }
+                }
             }
         </td>
         <td>
@@ -225,11 +232,11 @@
                             }
                         </span>
                     </span>
-                                }
+                }
             }
         </td>
         <td>
-            <b>$@item.PrecioAereosinIVA</b> 
+            <b>$@item.PrecioAereosinIVA</b>
         </td>
         <td>
             <b>$@item.PrecioAereo</b>
@@ -240,65 +247,70 @@
         <td>
             <b>$@item.PrecioAereoPistaconIVA</b>
         </td>
-        <td>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#metasCanal_@item.idReferido">Actualizar Precio</button>
+        @{
+            if (oUser.Nombre == "Ángel Muñoz" || oUser.Nombre == "Mauricio Mosqueda" || oUser.Nombre == "Ramon Reyna")
+            {
+                <td>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#metasCanal_@item.idReferido">Actualizar Precio</button>
 
-            <!-- Modal -->
-            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Admin/EditarPrecios")">
-                <div class="modal fade" id="metasCanal_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header" style="background-color:aquamarine">
-                                <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Editar Precio</h3>
-                            </div>
-                            <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="recipient-name" class="col-form-label">Ingrese los nuevos precios para @item.Nombre:</label>
-                                    <br />
-                                    <label for="recipient-name" class="col-form-label">Precio sin IVA:</label>
-                                    <input type="number" class="form-control" name="precio" placeholder="@item.PrecioNormal">
-                                    <label for="recipient-name" class="col-form-label">Precio con IVA:</label>
-                                    <input type="number" class="form-control" name="precioIVA" placeholder="@item.PrecioNormalconIVA">
-                                    <label for="recipient-name" class="col-form-label">Precio Áereo Tripulación sin IVA:</label>
-                                    <input type="number" class="form-control" name="precioAereoTrip" placeholder="@item.PrecioAereosinIVA">
-                                    <label for="recipient-name" class="col-form-label">Precio Áereo Tripulación con IVA:</label>
-                                    <input type="number" class="form-control" name="precioAereoTripIVA" placeholder="@item.PrecioAereo">
-                                    <label for="recipient-name" class="col-form-label">Precio Áereo Pista sin IVA:</label>
-                                    <input type="number" class="form-control" name="precioAereoPista" placeholder="@item.PrecioAereoPista">
-                                    <label for="recipient-name" class="col-form-label">Precio Áereo Pista con IVA:</label>
-                                    <input type="number" class="form-control" name="precioAereoPistaIVA" placeholder="@item.PrecioAereoPistaconIVA">
-                                    <input type="hidden" value="@item.idReferido" name="id" />
-                                    <input type="hidden" value="@oUser.Nombre" name="usuario" />
-                                </div>
-                                <div class="form-group">
+                    <!-- Modal -->
+                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Admin/EditarPrecios")">
+                        <div class="modal fade" id="metasCanal_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header" style="background-color:aquamarine">
+                                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Editar Precio</h3>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Ingrese los nuevos precios para @item.Nombre:</label>
+                                            <br />
+                                            <label for="recipient-name" class="col-form-label">Precio sin IVA:</label>
+                                            <input type="number" class="form-control" name="precio" placeholder="@item.PrecioNormal">
+                                            <label for="recipient-name" class="col-form-label">Precio con IVA:</label>
+                                            <input type="number" class="form-control" name="precioIVA" placeholder="@item.PrecioNormalconIVA">
+                                            <label for="recipient-name" class="col-form-label">Precio Áereo Tripulación sin IVA:</label>
+                                            <input type="number" class="form-control" name="precioAereoTrip" placeholder="@item.PrecioAereosinIVA">
+                                            <label for="recipient-name" class="col-form-label">Precio Áereo Tripulación con IVA:</label>
+                                            <input type="number" class="form-control" name="precioAereoTripIVA" placeholder="@item.PrecioAereo">
+                                            <label for="recipient-name" class="col-form-label">Precio Áereo Pista sin IVA:</label>
+                                            <input type="number" class="form-control" name="precioAereoPista" placeholder="@item.PrecioAereoPista">
+                                            <label for="recipient-name" class="col-form-label">Precio Áereo Pista con IVA:</label>
+                                            <input type="number" class="form-control" name="precioAereoPistaIVA" placeholder="@item.PrecioAereoPistaconIVA">
+                                            <input type="hidden" value="@item.idReferido" name="id" />
+                                            <input type="hidden" value="@oUser.Nombre" name="usuario" />
+                                        </div>
+                                        <div class="form-group">
 
-                                    @{
-                                        string[] historicoPrecios = item.HistorialPrecios != null ? item.HistorialPrecios.Split('+') : null;
-                                        int flag00 = 1;
+                                            @{
+                                                string[] historicoPrecios = item.HistorialPrecios != null ? item.HistorialPrecios.Split('+') : null;
+                                                int flag00 = 1;
 
-                                        if (historicoPrecios != null)
-                                        {
-                                            <h4>Histórico de precios </h4>
+                                                if (historicoPrecios != null)
+                                                {
+                                                    <h4>Histórico de precios </h4>
 
-                                            foreach (var i in historicoPrecios)
-                                            {
-                                                <span>@flag00 @i</span><br />
-                                                flag00++;
+                                                    foreach (var i in historicoPrecios)
+                                                    {
+                                                        <span>@flag00 @i</span><br />
+                                                        flag00++;
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <input type="submit" value="Enviar" class="btn btn-primary" />
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                <input type="submit" value="Enviar" class="btn btn-primary" />
+
                             </div>
                         </div>
-
-                    </div>
-                </div>
-            </form>
-        </td>
+                    </form>
+                </td>
+            }
+        }
     </tr>
 
             flag += 1;

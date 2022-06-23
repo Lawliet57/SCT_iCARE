@@ -999,6 +999,7 @@ C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CoreCompileIn
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CopyComplete
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.pdb
+C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\IronBarCode.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\SCT_iCare.dll.config
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\SCT_iCare.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\SCT_iCare.pdb
@@ -1060,7 +1061,6 @@ C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\conekta.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\DotNetZip.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\EntityFramework.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\EntityFramework.SqlServer.dll
-C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\IronBarCode.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\itext.barcodes.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\itext.forms.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\itext.io.dll
