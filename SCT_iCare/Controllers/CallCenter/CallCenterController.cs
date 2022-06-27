@@ -229,20 +229,25 @@ namespace SCT_iCare.Controllers.CallCenter
                 cantidadAP = Convert.ToInt32(cantidadPista);
             }
 
-            if (referido == 167)
-            {
-                precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
-            }
+            var tomarPrecio = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
 
-            else if (referido == 168)
-            {
-                precio = (cantidadN * 2784) + (cantidadA * 3500) + (cantidadAP * 3200);
-            }
+            precio = (cantidadN * Convert.ToInt32(tomarPrecio.PrecioNormalconIVA)) + (cantidadA * Convert.ToInt32(tomarPrecio.PrecioAereo))
+                + (cantidadAP * Convert.ToInt32(tomarPrecio.PrecioAereoPistaconIVA));
 
-            else
-            {
-                precio = (cantidadN * 2784) + (cantidadA * 4060) + (cantidadAP * 3712);
-            }
+            //if (referido == 167)
+            //{
+            //    precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
+            //}
+
+            //else if (referido == 168)
+            //{
+            //    precio = (cantidadN * 2784) + (cantidadA * 3500) + (cantidadAP * 3200);
+            //}
+
+            //else
+            //{
+            //    precio = (cantidadN * 2784) + (cantidadA * 4060) + (cantidadAP * 3712);
+            //}
 
             if (precio > 10000)
             {
@@ -703,20 +708,26 @@ namespace SCT_iCare.Controllers.CallCenter
             ViewBag.AEREO = Convert.ToInt32(cantidadA) + Convert.ToInt32(cantidadAP);
             ViewBag.AUTO = Convert.ToInt32(cantidadN);
 
-            if (referido == 167)
-            {
-                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
-            }
+            //PRECIO ALTERANDO CONEKTA
 
-            else if (referido == 168)
-            {
-                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
-            }
+            ViewBag.Precio = (Convert.ToInt32(cantidadN) * Convert.ToInt32(tomarPrecio.PrecioNormalconIVA))
+                + (Convert.ToInt32(cantidadA) * Convert.ToInt32(tomarPrecio.PrecioAereo))
+                + (Convert.ToInt32(cantidadAP) * Convert.ToInt32(tomarPrecio.PrecioAereoPistaconIVA));
 
-            else
-            {
-                ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 4060) + (Convert.ToInt32(cantidadAP) * 3712);
-            }
+            //if (referido == 167)
+            //{
+            //    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2400) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
+            //}
+
+            //else if (referido == 168)
+            //{
+            //    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 3500) + (Convert.ToInt32(cantidadAP) * 3200);
+            //}
+
+            //else
+            //{
+            //    ViewBag.Precio = (Convert.ToInt32(cantidadN) * 2784) + (Convert.ToInt32(cantidadA) * 4060) + (Convert.ToInt32(cantidadAP) * 3712);
+            //}
 
             return View(detallesOrden);
         }
@@ -973,22 +984,28 @@ namespace SCT_iCare.Controllers.CallCenter
                 cantidadAP = Convert.ToInt32(cantidadPista);
             }
 
+            //PRECIOS POR GESTOR CMABIANDO CONEKTA
 
-            if (referido == 167)
-            {
-                precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
-            }
+            var tomarPrecio = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
 
-           else if (referido == 168)
-            {
-                precio = (cantidadN * 2784) + (cantidadA * 3500) + (cantidadAP * 3200);
-            }
+            precio = (cantidadN * Convert.ToInt32(tomarPrecio.PrecioNormalconIVA)) + (cantidadA * Convert.ToInt32(tomarPrecio.PrecioAereo))
+                + (cantidadAP * Convert.ToInt32(tomarPrecio.PrecioAereoPistaconIVA));
 
-            else
-            {
-                precio = (cantidadN * 2784) + (cantidadA * 4060) + (cantidadAP * 3712);
-            }
 
+            //if (referido == 167)
+            //{
+            //    precio = (cantidadN * 2400) + (cantidadA * 3500) + (cantidadAP * 3200);
+            //}
+
+            //else if (referido == 168)
+            //{
+            //    precio = (cantidadN * 2784) + (cantidadA * 3500) + (cantidadAP * 3200);
+            //}
+
+            //else
+            //{
+            //    precio = (cantidadN * 2784) + (cantidadA * 4060) + (cantidadAP * 3712);
+            //}
 
             if (precio > 10000)
             {

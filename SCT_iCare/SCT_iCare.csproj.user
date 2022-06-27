@@ -23,7 +23,7 @@
     <WebStackScaffolding_DbContextTypeFullName>SCT_iCare.GMIEntities</WebStackScaffolding_DbContextTypeFullName>
     <WebStackScaffolding_IsViewGenerationSelected>True</WebStackScaffolding_IsViewGenerationSelected>
     <WebStackScaffolding_DbContextDialogWidth>600</WebStackScaffolding_DbContextDialogWidth>
-    <NameOfLastUsedPublishProfile>C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\Properties\PublishProfiles\SCT_QA_AO.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\Properties\PublishProfiles\DEV_SCT.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>

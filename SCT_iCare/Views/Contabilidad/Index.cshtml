@@ -360,15 +360,21 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         </select>
 
         <select name="referido" style="font-size: 1.5vh; width: 130px" class="form-control">
-            @{
+                      @{
                 if (ViewBag.Referido == "" || ViewBag.Referido == null)
                 {
                     <option value="">REFERIDO POR</option>
                 }
                 else
                 {
-                    <option value="@referido">@referido</option>
+                    var refe = db.Referido.Where(s => s.Nombre == referido).FirstOrDefault();
+
+                    <option value="@refe.idReferido">@referido.ToUpper()</option>
                 }
+            }
+            @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
+            {
+                <option value="@item.idReferido">@item.Nombre -- @item.Tipo</option>
             }
             @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
             {

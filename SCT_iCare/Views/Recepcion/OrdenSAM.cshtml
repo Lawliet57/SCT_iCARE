@@ -16,53 +16,68 @@
 
     foreach (var item in referencia)
     {
-        if (item.ReferidoPor == "FUERZA DE VENTAS BB")
-        {
-            if (item.TipoLicencia == "AEREO_PISTA")
-            {
-                precio += 3200;
-            }
-            else if (item.TipoLicencia == "AEREO")
-            {
-                precio += 3500;
-            }
-            else
-            {
-                precio += 2400;
-            }
-        }
+        var tomarPrecio = (from r in db.Referido where r.Nombre == item.ReferidoPor && r.Tipo == item.CanalTipo select r).FirstOrDefault();
 
-        else if (item.ReferidoPor == "SATELITE AEREO")
+        if (item.TipoLicencia == "AEREO_PISTA")
         {
-            if (item.TipoLicencia == "AEREO_PISTA")
-            {
-                precio += 3200;
-            }
-            else if (item.TipoLicencia == "AEREO")
-            {
-                precio += 3500;
-            }
-            else
-            {
-                precio += 2784;
-            }
+            precio += Convert.ToInt32(tomarPrecio.PrecioAereoPistaconIVA);
         }
-
+        else if (item.TipoLicencia == "AEREO")
+        {
+            precio += Convert.ToInt32(tomarPrecio.PrecioAereo);
+        }
         else
         {
-            if (item.TipoLicencia == "AEREO_PISTA")
-            {
-                precio += 3712;
-            }
-            else if (item.TipoLicencia == "AEREO")
-            {
-                precio += 4060;
-            }
-            else
-            {
-                precio += 2784;
-            }
+            precio += Convert.ToInt32(tomarPrecio.PrecioNormalconIVA);
         }
+
+        //if (item.ReferidoPor == "FUERZA DE VENTAS BB")
+        //{
+        //    if (item.TipoLicencia == "AEREO_PISTA")
+        //    {
+        //        precio += 3200;
+        //    }
+        //    else if (item.TipoLicencia == "AEREO")
+        //    {
+        //        precio += 3500;
+        //    }
+        //    else
+        //    {
+        //        precio += 2400;
+        //    }
+        //}
+
+        //else if (item.ReferidoPor == "SATELITE AEREO")
+        //{
+        //    if (item.TipoLicencia == "AEREO_PISTA")
+        //    {
+        //        precio += 3200;
+        //    }
+        //    else if (item.TipoLicencia == "AEREO")
+        //    {
+        //        precio += 3500;
+        //    }
+        //    else
+        //    {
+        //        precio += 2784;
+        //    }
+        //}
+
+        //else
+        //{
+        //    if (item.TipoLicencia == "AEREO_PISTA")
+        //    {
+        //        precio += 3712;
+        //    }
+        //    else if (item.TipoLicencia == "AEREO")
+        //    {
+        //        precio += 4060;
+        //    }
+        //    else
+        //    {
+        //        precio += 2784;
+        //    }
+        //}
     }
 
 

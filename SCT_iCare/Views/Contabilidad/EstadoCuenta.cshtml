@@ -236,7 +236,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
     <div class="hidden-print">
 
         @*INPUT FILTRO CANAL*@
-        <select name="canal" style="font-size:1.5vh; width: 100px" class="form-control">
+        <select name="canal" style="font-size:1.5vh; width: 145px" class="form-control">
             @{
                 if (ViewBag.Canal == "")
                 {
@@ -258,7 +258,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 
         @*INPUT FILTRO REFERIDO*@
-        <select name="referido" style="font-size: 1.5vh; width: 130px" class="form-control">
+        <select name="referido" style="font-size: 1.5vh; width: 120px" class="form-control">
             @{
                 if (ViewBag.Referido == "" || ViewBag.Referido == null)
                 {
@@ -266,7 +266,9 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 }
                 else
                 {
-                    <option value="@referido">@referido.ToUpper()</option>
+                    var refe = db.Referido.Where(s => s.Nombre == referido).FirstOrDefault();
+
+                    <option value="@refe.idReferido">@referido.ToUpper()</option>
                 }
             }
             @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
@@ -287,7 +289,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             if (ViewBag.fechaInicio != null)
             {
 
-                <input type="date" name="fechaInicio" class="form-control" value="@SetFechaInicio" style="width: 160px;" />
+                <input type="date" name="fechaInicio" class="form-control" value="@SetFechaInicio" style="width: 135px;" />
 
             }
 
@@ -295,7 +297,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
             {
 
-                <input type="date" name="fechaInicio" class="form-control" value="" style="width: 160px;" />
+                <input type="date" name="fechaInicio" class="form-control" value="" style="width: 135px;" />
 
             }
 
@@ -309,7 +311,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             if (ViewBag.fechaFinal != null)
             {
 
-                <input type="date" name="fechaFinal" class="form-control" value="@SetFechaFinal" style="width: 160px;" />
+                <input type="date" name="fechaFinal" class="form-control" value="@SetFechaFinal" style="width: 135px;" />
 
             }
 
@@ -317,7 +319,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
             {
 
-                <input type="date" name="fechaFinal" class="form-control" value="" style="width: 160px;" />
+                <input type="date" name="fechaFinal" class="form-control" value="" style="width: 135px;" />
 
             }
 
