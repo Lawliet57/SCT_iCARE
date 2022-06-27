@@ -24,6 +24,15 @@
           <Property Name="ArchivosExtra" Type="varbinary(max)" />
           <Property Name="idPaciente" Type="int" />
         </EntityType>
+        <EntityType Name="asignaciones">
+          <Key>
+            <PropertyRef Name="idAsignaciones" />
+          </Key>
+          <Property Name="idAsignaciones" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idOperacion" Type="int" Nullable="false" />
+          <Property Name="idUsuario" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="varchar" MaxLength="100" />
+        </EntityType>
         <EntityType Name="AudioGA">
           <Key>
             <PropertyRef Name="idAudioGA" />
@@ -1122,6 +1131,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           </Key>
           <Property Name="idRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nombre" Type="varchar" MaxLength="100" />
+          <Property Name="idOperacion" Type="int" />
         </EntityType>
         <EntityType Name="RolMenu">
           <Key>
@@ -1216,6 +1226,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <Property Name="Email" Type="varchar" MaxLength="200" />
           <Property Name="Password" Type="varchar" MaxLength="100" />
           <Property Name="idRol" Type="int" />
+          <Property Name="idAsignacion" Type="int" />
         </EntityType>
         <Association Name="FK_Archivos_Paciente">
           <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
@@ -1949,6 +1960,18 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Roles_operaciones">
+          <End Role="operaciones" Type="Self.operaciones" Multiplicity="0..1" />
+          <End Role="Roles" Type="Self.Roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Roles">
+              <PropertyRef Name="idOperacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_RolMenu_Menu">
           <End Role="Menu" Type="Self.Menu" Multiplicity="0..1" />
           <End Role="RolMenu" Type="Self.RolMenu" Multiplicity="*" />
@@ -2036,6 +2059,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
         <EntityContainer Name="DevModelStoreContainer">
           <EntitySet Name="Aptitud" EntityType="Self.Aptitud" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Archivos" EntityType="Self.Archivos" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="asignaciones" EntityType="Self.asignaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AudioGA" EntityType="Self.AudioGA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Biometricos" EntityType="Self.Biometricos" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CallCenter" EntityType="Self.CallCenter" Schema="dbo" store:Type="Tables" />
@@ -2365,6 +2389,10 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <AssociationSet Name="FK_rol_operacion_Roles" Association="Self.FK_rol_operacion_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Roles_operaciones" Association="Self.FK_Roles_operaciones">
+            <End Role="operaciones" EntitySet="operaciones" />
+            <End Role="Roles" EntitySet="Roles" />
           </AssociationSet>
           <AssociationSet Name="FK_RolMenu_Menu" Association="Self.FK_RolMenu_Menu">
             <End Role="Menu" EntitySet="Menu" />
@@ -2732,21 +2760,12 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           </AssociationSet>
           <EntitySet Name="modulo" EntityType="DevModel.modulo" />
           <EntitySet Name="operaciones" EntityType="DevModel.operaciones" />
-          <EntitySet Name="rol_operacion" EntityType="DevModel.rol_operacion" />
           <AssociationSet Name="FK_operaciones_modulo" Association="DevModel.FK_operaciones_modulo">
             <End Role="modulo" EntitySet="modulo" />
             <End Role="operaciones" EntitySet="operaciones" />
           </AssociationSet>
-          <AssociationSet Name="FK_rol_operacion_operaciones" Association="DevModel.FK_rol_operacion_operaciones">
-            <End Role="operaciones" EntitySet="operaciones" />
-            <End Role="rol_operacion" EntitySet="rol_operacion" />
-          </AssociationSet>
           <EntitySet Name="CadenaSplit" EntityType="DevModel.CadenaSplit" />
           <EntitySet Name="Roles" EntityType="DevModel.Roles" />
-          <AssociationSet Name="FK_rol_operacion_Roles" Association="DevModel.FK_rol_operacion_Roles">
-            <End Role="Roles" EntitySet="Roles" />
-            <End Role="rol_operacion" EntitySet="rol_operacion" />
-          </AssociationSet>
           <AssociationSet Name="FK_RolMenu_Roles" Association="DevModel.FK_RolMenu_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="RolMenu" EntitySet="RolMenu" />
@@ -2754,6 +2773,20 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <AssociationSet Name="FK_Usuarios_Roles" Association="DevModel.FK_Usuarios_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <EntitySet Name="asignaciones" EntityType="DevModel.asignaciones" />
+          <EntitySet Name="rol_operacion" EntityType="DevModel.rol_operacion" />
+          <AssociationSet Name="FK_rol_operacion_operaciones" Association="DevModel.FK_rol_operacion_operaciones">
+            <End Role="operaciones" EntitySet="operaciones" />
+            <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_rol_operacion_Roles" Association="DevModel.FK_rol_operacion_Roles">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="rol_operacion" EntitySet="rol_operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Roles_operaciones" Association="DevModel.FK_Roles_operaciones">
+            <End Role="operaciones" EntitySet="operaciones" />
+            <End Role="Roles" EntitySet="Roles" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Aptitud">
@@ -4022,6 +4055,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <NavigationProperty Name="Recepcionista" Relationship="DevModel.FK_Recepcionista_Usuarios" FromRole="Usuarios" ToRole="Recepcionista" />
           <NavigationProperty Name="RecepcionistaDS" Relationship="DevModel.FK_RecepcionistaDS_Usuarios" FromRole="Usuarios" ToRole="RecepcionistaDS" />
           <NavigationProperty Name="Roles" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Usuarios" ToRole="Roles" />
+          <Property Name="idAsignacion" Type="Int32" />
         </EntityType>
         <Association Name="FK_Dictamen_Aptitud">
           <End Type="DevModel.Aptitud" Role="Aptitud" Multiplicity="0..1" />
@@ -4830,16 +4864,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <Property Name="idModulo" Type="Int32" Nullable="false" />
           <NavigationProperty Name="modulo" Relationship="DevModel.FK_operaciones_modulo" FromRole="operaciones" ToRole="modulo" />
           <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="operaciones" ToRole="rol_operacion" />
-        </EntityType>
-        <EntityType Name="rol_operacion">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="idRol" Type="Int32" Nullable="false" />
-          <Property Name="idOperacion" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="operaciones" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="rol_operacion" ToRole="operaciones" />
-          <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="rol_operacion" ToRole="Roles" />
+          <NavigationProperty Name="Roles" Relationship="DevModel.FK_Roles_operaciones" FromRole="operaciones" ToRole="Roles" />
         </EntityType>
         <Association Name="FK_operaciones_modulo">
           <End Type="DevModel.modulo" Role="modulo" Multiplicity="1" />
@@ -4850,18 +4875,6 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
             </Principal>
             <Dependent Role="operaciones">
               <PropertyRef Name="idModulo" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_rol_operacion_operaciones">
-          <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="1" />
-          <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="operaciones">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="rol_operacion">
-              <PropertyRef Name="idOperacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -4878,22 +4891,12 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           </Key>
           <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="Roles" ToRole="rol_operacion" />
           <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Roles" FromRole="Roles" ToRole="RolMenu" />
           <NavigationProperty Name="Usuarios" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
+          <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="Roles" ToRole="rol_operacion" />
+          <Property Name="idOperacion" Type="Int32" />
+          <NavigationProperty Name="operaciones" Relationship="DevModel.FK_Roles_operaciones" FromRole="Roles" ToRole="operaciones" />
         </EntityType>
-        <Association Name="FK_rol_operacion_Roles">
-          <End Type="DevModel.Roles" Role="Roles" Multiplicity="1" />
-          <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Roles">
-              <PropertyRef Name="idRol" />
-            </Principal>
-            <Dependent Role="rol_operacion">
-              <PropertyRef Name="idRol" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_RolMenu_Roles">
           <End Type="DevModel.Roles" Role="Roles" Multiplicity="0..1" />
           <End Type="DevModel.RolMenu" Role="RolMenu" Multiplicity="*" />
@@ -4915,6 +4918,61 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
             </Principal>
             <Dependent Role="Usuarios">
               <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="asignaciones">
+          <Key>
+            <PropertyRef Name="idAsignaciones" />
+          </Key>
+          <Property Name="idAsignaciones" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idOperacion" Type="Int32" Nullable="false" />
+          <Property Name="idUsuario" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="rol_operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idRol" Type="Int32" Nullable="false" />
+          <Property Name="idOperacion" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="operaciones" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="rol_operacion" ToRole="operaciones" />
+          <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="rol_operacion" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK_rol_operacion_operaciones">
+          <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="1" />
+          <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="rol_operacion">
+              <PropertyRef Name="idOperacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_rol_operacion_Roles">
+          <End Type="DevModel.Roles" Role="Roles" Multiplicity="1" />
+          <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="idRol" />
+            </Principal>
+            <Dependent Role="rol_operacion">
+              <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Roles_operaciones">
+          <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="0..1" />
+          <End Type="DevModel.Roles" Role="Roles" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operaciones">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Roles">
+              <PropertyRef Name="idOperacion" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6133,6 +6191,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <EntitySetMapping Name="Usuarios">
             <EntityTypeMapping TypeName="DevModel.Usuarios">
               <MappingFragment StoreEntitySet="Usuarios">
+                <ScalarProperty Name="idAsignacion" ColumnName="idAsignacion" />
                 <ScalarProperty Name="idRol" ColumnName="idRol" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
@@ -6192,15 +6251,6 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="rol_operacion">
-            <EntityTypeMapping TypeName="DevModel.rol_operacion">
-              <MappingFragment StoreEntitySet="rol_operacion">
-                <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
-                <ScalarProperty Name="idRol" ColumnName="idRol" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CadenaSplit">
             <EntityTypeMapping TypeName="DevModel.CadenaSplit">
               <MappingFragment StoreEntitySet="CadenaSplit">
@@ -6212,8 +6262,28 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="DevModel.Roles">
               <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="idRol" ColumnName="idRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="asignaciones">
+            <EntityTypeMapping TypeName="DevModel.asignaciones">
+              <MappingFragment StoreEntitySet="asignaciones">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+                <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
+                <ScalarProperty Name="idAsignaciones" ColumnName="idAsignaciones" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol_operacion">
+            <EntityTypeMapping TypeName="DevModel.rol_operacion">
+              <MappingFragment StoreEntitySet="rol_operacion">
+                <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
+                <ScalarProperty Name="idRol" ColumnName="idRol" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

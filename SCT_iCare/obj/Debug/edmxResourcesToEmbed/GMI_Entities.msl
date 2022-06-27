@@ -1210,6 +1210,7 @@
     <EntitySetMapping Name="Usuarios">
       <EntityTypeMapping TypeName="DevModel.Usuarios">
         <MappingFragment StoreEntitySet="Usuarios">
+          <ScalarProperty Name="idAsignacion" ColumnName="idAsignacion" />
           <ScalarProperty Name="idRol" ColumnName="idRol" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="Email" ColumnName="Email" />
@@ -1269,15 +1270,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="rol_operacion">
-      <EntityTypeMapping TypeName="DevModel.rol_operacion">
-        <MappingFragment StoreEntitySet="rol_operacion">
-          <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
-          <ScalarProperty Name="idRol" ColumnName="idRol" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="CadenaSplit">
       <EntityTypeMapping TypeName="DevModel.CadenaSplit">
         <MappingFragment StoreEntitySet="CadenaSplit">
@@ -1289,8 +1281,28 @@
     <EntitySetMapping Name="Roles">
       <EntityTypeMapping TypeName="DevModel.Roles">
         <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
           <ScalarProperty Name="Nombre" ColumnName="Nombre" />
           <ScalarProperty Name="idRol" ColumnName="idRol" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="asignaciones">
+      <EntityTypeMapping TypeName="DevModel.asignaciones">
+        <MappingFragment StoreEntitySet="asignaciones">
+          <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+          <ScalarProperty Name="idUsuario" ColumnName="idUsuario" />
+          <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
+          <ScalarProperty Name="idAsignaciones" ColumnName="idAsignaciones" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="rol_operacion">
+      <EntityTypeMapping TypeName="DevModel.rol_operacion">
+        <MappingFragment StoreEntitySet="rol_operacion">
+          <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
+          <ScalarProperty Name="idRol" ColumnName="idRol" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

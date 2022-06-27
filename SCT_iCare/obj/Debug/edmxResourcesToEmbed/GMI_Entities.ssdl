@@ -19,6 +19,15 @@
     <Property Name="ArchivosExtra" Type="varbinary(max)" />
     <Property Name="idPaciente" Type="int" />
   </EntityType>
+  <EntityType Name="asignaciones">
+    <Key>
+      <PropertyRef Name="idAsignaciones" />
+    </Key>
+    <Property Name="idAsignaciones" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idOperacion" Type="int" Nullable="false" />
+    <Property Name="idUsuario" Type="int" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="100" />
+  </EntityType>
   <EntityType Name="AudioGA">
     <Key>
       <PropertyRef Name="idAudioGA" />
@@ -1117,6 +1126,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     </Key>
     <Property Name="idRol" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Nombre" Type="varchar" MaxLength="100" />
+    <Property Name="idOperacion" Type="int" />
   </EntityType>
   <EntityType Name="RolMenu">
     <Key>
@@ -1211,6 +1221,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <Property Name="Email" Type="varchar" MaxLength="200" />
     <Property Name="Password" Type="varchar" MaxLength="100" />
     <Property Name="idRol" Type="int" />
+    <Property Name="idAsignacion" Type="int" />
   </EntityType>
   <Association Name="FK_Archivos_Paciente">
     <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
@@ -1944,6 +1955,18 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Roles_operaciones">
+    <End Role="operaciones" Type="Self.operaciones" Multiplicity="0..1" />
+    <End Role="Roles" Type="Self.Roles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="operaciones">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Roles">
+        <PropertyRef Name="idOperacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_RolMenu_Menu">
     <End Role="Menu" Type="Self.Menu" Multiplicity="0..1" />
     <End Role="RolMenu" Type="Self.RolMenu" Multiplicity="*" />
@@ -2031,6 +2054,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
   <EntityContainer Name="DevModelStoreContainer">
     <EntitySet Name="Aptitud" EntityType="Self.Aptitud" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Archivos" EntityType="Self.Archivos" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="asignaciones" EntityType="Self.asignaciones" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="AudioGA" EntityType="Self.AudioGA" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Biometricos" EntityType="Self.Biometricos" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CallCenter" EntityType="Self.CallCenter" Schema="dbo" store:Type="Tables" />
@@ -2360,6 +2384,10 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <AssociationSet Name="FK_rol_operacion_Roles" Association="Self.FK_rol_operacion_Roles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="rol_operacion" EntitySet="rol_operacion" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Roles_operaciones" Association="Self.FK_Roles_operaciones">
+      <End Role="operaciones" EntitySet="operaciones" />
+      <End Role="Roles" EntitySet="Roles" />
     </AssociationSet>
     <AssociationSet Name="FK_RolMenu_Menu" Association="Self.FK_RolMenu_Menu">
       <End Role="Menu" EntitySet="Menu" />

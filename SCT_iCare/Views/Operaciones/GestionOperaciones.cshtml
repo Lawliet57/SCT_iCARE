@@ -1,0 +1,117 @@
+﻿@model IEnumerable<SCT_iCare.Roles>
+
+@{
+    ViewBag.Title = "GestionOperaciones";
+    GMIEntities db = new GMIEntities();
+
+}
+
+<br />
+<br />
+
+<h3 style="color:white" class="text-center">Gestión de Roles</h3>
+
+@*Alertas en caso de error*@
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
+@*bloque de links a modulo de doctores, sucursales y gestores*@
+<br />
+<div align='center'>
+    <a href="~/GestionUsuarios/CreateU"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteExcel botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-plus"></span>&nbsp; Nuevo Rol</button></a>
+    <a href="~/GestionUsuarios/GestionUsuarios"><button type="button" style="color:white" class="btn btn-outline-warning boton-transparenteAzul botonesGral" data-toggle="modal" data-target="#registrerModal"><span class="glyphicon glyphicon-chevron-left"></span>&nbsp;Gestión de Usuarios</button></a>
+
+
+</div>
+
+
+@*boton y caja de texto para bucador por nombre*@
+
+<br />
+<br />
+<div align='left'>
+    @using (Html.BeginForm())
+    {
+
+        <p>
+
+            @Html.TextBox("SearchString")
+            <input class="btn btn-info" type="submit" value="Search" placeholder="Search" />
+        </p>
+    }
+</div>
+
+
+@*Referencia estilo para  tabla*@
+
+<link rel="stylesheet" type="text/css" href="~/Estilo.css">
+
+
+
+
+@*<p>
+    @Html.ActionLink("Create New", "Create")
+</p>*@
+
+
+
+<div class="tablaScroll">
+    <table class="table tablas table-responsive" style="color: #2F2D6B">
+        <thead>
+            <tr class="bg-primary">
+                <th align="center">
+                    <h4> Listado de Roles por @Html.DisplayNameFor(model => model.Nombre)</h4>
+                </th>
+                @*<th>
+                   <h4>@Html.DisplayNameFor(model => model.operaciones.nombre)</h4> 
+                </th>*@
+                <th align="center">
+                    <h4>ACCIONES</h4>
+                </th>
+            </tr>
+            </thead>
+
+            @foreach (var item in Model)
+            {
+    <tr class="alt">
+        <td>
+            <b>  @Html.DisplayFor(modelItem => item.Nombre)</b>
+        </td>
+       
+
+        <td>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Acción
+                </button>
+
+                @*Acciones para cada usuario*@
+
+            <div class="dropdown-menu">
+                <h5>@Html.ActionLink("Operaciones", "EditR", new { id = item.idRol }, new { @style = "color: green" })</h5>
+             
+                <div class="dropdown-divider"></div>
+             
+                <div class="dropdown-divider"></div>
+                <h5>@Html.ActionLink("Eliminar", "DeleteR", new { id = item.idRol }, new { @style = "color: Red" })</h5>
+               
+
+            </div>
+            </div>
+
+        </td>
+
+   
+    </tr>
+            }
+
+    </table>
+</div>

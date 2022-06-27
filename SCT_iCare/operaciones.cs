@@ -18,6 +18,7 @@ namespace SCT_iCare
         public operaciones()
         {
             this.rol_operacion = new HashSet<rol_operacion>();
+            this.Roles = new HashSet<Roles>();
         }
     
         public int id { get; set; }
@@ -27,5 +28,7 @@ namespace SCT_iCare
         public virtual modulo modulo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<rol_operacion> rol_operacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Roles> Roles { get; set; }
     }
 }
