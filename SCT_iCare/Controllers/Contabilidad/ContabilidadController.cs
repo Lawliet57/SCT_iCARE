@@ -514,9 +514,8 @@ namespace SCT_iCare.Controllers.Contabilidad
 
 
         //METODO PARA CONCILIAR CON EL INGRESO DE PAGOS EN LA VISTA DE PAGOS
-        public ActionResult ConciliarIngresos(int? id, int efectivo, string usuario, DateTime fechaAhora, DateTime? fecha1, DateTime? fecha2)
+        public ActionResult ConciliarIngresos(int? id, string usuario, DateTime fechaAhora, DateTime? fecha1, DateTime? fecha2)
         {
-
             ViewBag.FechaInicio = fecha1 != null ? fecha1 : null;
             ViewBag.FechaFinal = fecha2 != null ? fecha2 : null;
 
@@ -526,25 +525,16 @@ namespace SCT_iCare.Controllers.Contabilidad
             Referido referido = db.Referido.Find(id);
             PagosGestores pagosGestores = new PagosGestores();
 
-            int efectivoActual = Convert.ToInt32(referido.Efectivo);
-            int sumaEfectivos = efectivoActual + efectivo;
+            var modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) 
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.FechaCita);
 
-            referido.Efectivo = Convert.ToString(sumaEfectivos);
-
-            pagosGestores.Gestor = referido.Nombre;
-            pagosGestores.idReferido = referido.idReferido;
-            pagosGestores.PagoIngresado = Convert.ToString(efectivo);
-            pagosGestores.Fecha = fechaAhora;
-
-            if (ModelState.IsValid)
+            var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
+            var saldoTotal = 0;
+            foreach (var pagosGes in pG)
             {
-                db.Entry(referido).State = EntityState.Modified;
-                db.SaveChanges();
-            }
-            if (ModelState.IsValid)
-            {
-                db.PagosGestores.Add(pagosGestores);
-                db.SaveChanges();
+                saldoTotal += Convert.ToInt32(pagosGes.PagoIngresado);
             }
 
             return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal });

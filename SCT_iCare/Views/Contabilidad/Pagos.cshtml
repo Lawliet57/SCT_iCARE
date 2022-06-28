@@ -546,13 +546,13 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                 </form>
 
                                 @*ALERT PARA CONCILIAR CON INGRESOS*@
-                                @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
+                                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
                                     @Html.AntiForgeryToken()
                                     <div class="modal fade" id="Conciliar_@itemd.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea ingresar PAGO a @itemd.Nombre?</b></h4>
+                                                    <h4 class="modal-title" id="exampleModalLabel"><b>Usted conciliara epis de @itemd.Nombre</b></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="form-group" style="width:60%; min-width:320px">
@@ -560,17 +560,12 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                                         <b>@itemd.Nombre</b><br />
                                                         <label for="recipient-name" class="col-form-label">Fecha Cita:</label>
                                                         <b>@Convert.ToDateTime(fechaInicio).ToString("dd-MMMM-yyyy")</b><br />
-
-                                                        <label for="recipient-name" class="col-form-label">Precio de EPIs:</label>
-                                                        <b>$@itemd.PrecioNormal</b><br />
-                                                        <label for="recipient-name" class="col-form-label"> Pagos del Gestor:</label>
-                                                        <b>$@pago</b><br />
+                                                       
                                                         <label for="recipient-name" class="col-form-label">Cantidad:</label>
                                                         <input type="tel" class="form-control" name="efectivo" />
                                                         <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
                                                         <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
                                                         <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
-                                                        <input type="hidden" value="@FechaAhora" class="form-control" name="fechaAhora" />
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -580,7 +575,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                             </div>
                                         </div>
                                     </div>
-                                </form>*@
+                                </form>
                             </div>
                         </td>
                     </tr>
@@ -871,13 +866,13 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 
 
                                 @*ALERT PARA CONCILIAR CON INGRESOS*@
-                                @*<form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
+                                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresos")">
                                     @Html.AntiForgeryToken()
                                     <div class="modal fade" id="Conciliar_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea ingresar PAGO a @item.Nombre?</b></h4>
+                                                    <h4 class="modal-title" id="exampleModalLabel"><b>Usted conciliara epis de @item.Nombre</b></h4>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="form-group" style="width:60%; min-width:320px">
@@ -886,16 +881,9 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                                         <label for="recipient-name" class="col-form-label">Fecha Cita:</label>
                                                         <b>@Convert.ToDateTime(fechaInicio).ToString("dd-MMMM-yyyy")</b><br />
 
-                                                        <label for="recipient-name" class="col-form-label">Precio de EPIs:</label>
-                                                        <b>$@item.PrecioNormal</b><br />
-                                                        <label for="recipient-name" class="col-form-label"> Pagos del Gestor:</label>
-                                                        <b>$@pago</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Cantidad:</label>
-                                                        <input type="tel" class="form-control" name="efectivo" />
                                                         <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
                                                         <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
                                                         <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
-                                                        <input type="hidden" value="@FechaAhora" class="form-control" name="fechaAhora" />
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
@@ -905,7 +893,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                             </div>
                                         </div>
                                     </div>
-                                </form>*@
+                                </form>
                             </div>
                         </td>
                     </tr>
