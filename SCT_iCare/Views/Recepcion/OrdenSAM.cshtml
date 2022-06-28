@@ -12,7 +12,7 @@
 
     int precio = 0;
 
-    var referencia = from i in db.Cita where i.Referencia == paciente.M.Referencia select i;
+    var referencia = from i in db.Cita where i.idPaciente == paciente.M.idPaciente select i;
 
     foreach (var item in referencia)
     {

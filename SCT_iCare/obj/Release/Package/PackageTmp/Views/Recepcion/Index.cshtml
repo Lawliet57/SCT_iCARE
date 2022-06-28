@@ -1338,161 +1338,31 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
         <h4><span class="glyphicon glyphicon-list-alt"></span> &nbsp; &nbsp;Citas: <b>@citasHoyConteo</b></h4>
     </button>
 
-    <!-- Modal -->
-    @*<div class="modal fade" id="citasHoy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:aquamarine">
-                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-list-alt"></span> &nbsp; &nbsp;Citas generadas: <b>@citasHoyConteo</b></h3>
-                    </div>
-                    <div class="modal-body">
-                        @{
-                            foreach (var item in sucursalesLista)
-                            {
-                                var elemento = (from e in db.Cita where e.Sucursal == item.Nombre && e.FechaCita >= dateToday && e.FechaCita < dateTomorrow select e).Count();
-
-                                <h4><b>@item.Nombre:</b> @elemento</h4>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-outline-warning boton-transparenteIndicador2 botonesGral col-md-4" data-toggle="modal" data-target="#episHoy" style="color:white">
         <h4><span class="glyphicon glyphicon-duplicate"></span> &nbsp; &nbsp;EPIs: <b>@episHoyConteo</b></h4>
     </button>
-
-    <!-- Modal -->
-    @*<div class="modal fade" id="episHoy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:aquamarine">
-                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-duplicate"></span> &nbsp; &nbsp;EPIs digitalizados: <b>@episHoyConteo</b></h3>
-                    </div>
-                    <div class="modal-body">
-                        @{
-                            foreach (var item in sucursalesLista)
-                            {
-                                var elemento = (from e in db.Captura where e.Sucursal == item.Nombre && e.FechaExpdiente >= dateToday && e.FechaExpdiente < dateTomorrow select e).Count();
-
-                                <h4><b>@item.Nombre:</b> @elemento</h4>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-outline-warning boton-transparenteIndicador3 botonesGral col-md-4" data-toggle="modal" data-target="#dictamenesHoy" style="color:white">
         <h4><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Dictámenes: <b>@dictamenHoyConteo</b></h4>
     </button>
 
-    <!-- Modal -->
-    @*<div class="modal fade" id="dictamenesHoy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:aquamarine">
-                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-file"></span> &nbsp; &nbsp;Dictámenes generados: <b>@dictamenHoyConteo</b></h3>
-                    </div>
-                    <div class="modal-body">
-                        @{
-                            foreach (var item in sucursalesLista)
-                            {
-                                var elemento = (from e in db.Captura where e.Sucursal == item.Nombre && e.FechaExpdiente >= dateToday && e.FechaExpdiente < dateTomorrow && e.EstatusCaptura == "Terminado" select e).Count();
-
-                                <h4><b>@item.Nombre:</b> @elemento</h4>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-outline-warning boton-transparenteIndicador4 botonesGral col-md-4" data-toggle="modal" data-target="#enProcesoHoy" style="color:white">
         <h4><span class="glyphicon glyphicon-copy"></span> &nbsp; &nbsp;Dictámenes en Proceso: <b>@enProcesoHoyConteo</b></h4>
     </button>
-
-    <!-- Modal -->
-    @*<div class="modal fade" id="enProcesoHoy" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:gold">
-                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-copy"></span> &nbsp; &nbsp;Dictámenes en Proceso: <b>@enProcesoHoyConteo</b></h3>
-                    </div>
-                    <div class="modal-body">
-                        @{
-                            foreach (var item in sucursalesLista)
-                            {
-                                var elemento = (from e in db.Captura where e.Sucursal == item.Nombre && e.FechaExpdiente >= dateToday && e.FechaExpdiente < dateTomorrow && (e.EstatusCaptura == "En captura..." || e.EstatusCaptura == "No iniciado") select e).Count();
-
-                                <h4><b>@item.Nombre:</b> @elemento</h4>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-outline-warning boton-transparenteIndicador6 botonesGral col-md-4" data-toggle="modal" data-target="#entregados" style="color:white">
         <h4><span class="glyphicon glyphicon-thumbs-up"></span> &nbsp; &nbsp;Dictámenes Entregados: <b>@entregadosConteo</b></h4>
     </button>
 
-    <!-- Modal -->
-    @*<div class="modal fade" id="entregados" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:aquamarine">
-                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-thumbs-up"></span> &nbsp; &nbsp;Dictámenes Entregados: <b>@entregadosConteo</b></h3>
-                    </div>
-                    <div class="modal-body">
-                        @{
-                            foreach (var item in sucursalesLista)
-                            {
-                                var elemento = (from e in db.Cita where e.Sucursal == item.Nombre && e.FechaCita >= dateToday && e.FechaCita < dateTomorrow && (e.Entregado == "SI") select e).Count();
-
-                                <h4><b>@item.Nombre:</b> @elemento</h4>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
 
     <!-- Button trigger modal -->
     <button type="button" class="btn btn-outline-warning boton-transparenteIndicador7 botonesGral col-md-4" data-toggle="modal" data-target="#enviados" style="color:white">
         <h4><span class="glyphicon glyphicon-send"></span> &nbsp; &nbsp;Dictámenes Enviados: <b>@enviadosCount</b></h4>
     </button>
-
-    <!-- Modal -->
-    @*<div class="modal fade" id="enviados" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header" style="background-color:aquamarine">
-                        <h3 class="modal-title" id="exampleModalLabel"><span class="glyphicon glyphicon-send"></span> &nbsp; &nbsp;Dictámenes Enviados: <b>@enviadosCount</b></h3>
-                    </div>
-                    <div class="modal-body">
-                        @{
-                            foreach (var item in sucursalesLista)
-                            {
-                                var elemento = (from e in enviados where e.Sucursal == item.Nombre && e.FechaCita >= dateToday && e.FechaCita < dateTomorrow && e.EstatusEnvio == "SI" select e).Count();
-
-                                <h4><b>@item.Nombre:</b> @elemento</h4>
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-
     <br />
     <br />
     <br />
@@ -1575,13 +1445,21 @@ else
                 {
                     fila = "#BBDEFB";
                 }
-                else if (item.M.TipoTramite != "PRIMERA VEZ" && (item.M.TipoLicencia == "AEREO" || item.M.TipoLicencia == "AEREO_PISTA"))
+                else if (item.M.TipoTramite != "PRIMERA VEZ" && item.M.TipoLicencia == "AEREO")
                 {
                     fila = "#D1C4E9";
                 }
-                else if (item.M.TipoTramite == "PRIMERA VEZ" && item.M.TipoLicencia == "AEREO")
+                else if (item.M.TipoTramite != "PRIMERA VEZ" &&  item.M.TipoLicencia == "AEREO_PISTA")
+                {
+                    fila = "#FCBAE1 ";
+                }
+                else if (item.M.TipoTramite != "PRIMERA VEZ" && item.M.TipoLicencia == "AEREO")
                 {
                     fila = "#9575CD";
+                }
+                else if (item.M.TipoTramite == "PRIMERA VEZ" && item.M.TipoLicencia == "AEREO_PISTA")
+                {
+                    fila = "#FF79C8";
                 }
                 else
                 {
@@ -1657,6 +1535,8 @@ else
                             </td>
                                     }
                     }
+
+                    @*REFERENCIA TOOLTIP DE PRECIOS*@
                     <td>
                         <span class="field-tip">
                             <b>@item.M.Canal</b>
@@ -1665,64 +1545,50 @@ else
                                 <b>Canal: </b>@item.M.Canal <br />
                                 <b>Referido por: </b>@item.M.ReferidoPor<br />
                                 <b>Pago: </b>@item.M.TipoPago
+                                <b>Licencia: </b>@item.M.TipoLicencia
+
                                 @{
-                                    if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío")
+                                    var findPrecio = (from r in db.Referido where r.Nombre == item.M.ReferidoPor && (r.Tipo != "GESTOR ALT" && r.Tipo != "IN SITU") select r).FirstOrDefault();
+                                    var idPrueba = findPrecio.idReferido;
+
+
+                                    if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Transferencia vía BanBajío"
+                                                        || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
+                                    {       
+                                        
+                                    if (item.M.TipoLicencia == "AEREO")
                                     {
-                                        if (item.M.ReferidoPor == "FUERZA DE VENTAS BB")
-                                        {
-                                            if (item.M.TipoLicencia == "AEREO")
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(3500).ToString("####.##")
-                                            }
-                                            else if (item.M.TipoLicencia == "AEREO_PISTA")
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(3200).ToString("####.##")
-                                            }
-                                            else
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(2400).ToString("####.##")
-                                            }
+                                            <br />
+                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")
                                         }
-
-                                        else if (item.M.ReferidoPor == "FUERZA DE VENTAS BB")
+                                        else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {
-                                            if (item.M.TipoLicencia == "AEREO")
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(3500).ToString("####.##")
-                                            }
-                                            else if (item.M.TipoLicencia == "AEREO_PISTA")
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(3200).ToString("####.##")
-                                            }
-                                            else
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(2784).ToString("####.##")
-                                            }
+                                            <br />
+                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereoPistaconIVA).ToString("####.##")
                                         }
-
-                                        else 
+                                        else
                                         {
-                                            if (item.M.TipoLicencia == "AEREO")
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(4060).ToString("####.##")
-                                            }
-                                            else if (item.M.TipoLicencia == "AEREO_PISTA")
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(3712).ToString("####.##")
-                                            }
-                                            else
-                                            {
-                                                <br />
-                                                <b>Precio: </b> @Convert.ToDouble(2784).ToString("####.##")
-                                            }
+                                            <br />
+                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioNormalconIVA).ToString("####.##")
+                                        }
+                                    }
+
+                                    else
+                                    {
+                                        if (item.M.TipoLicencia == "AEREO")
+                                        {
+                                            <br />
+                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereosinIVA).ToString("####.##")
+                                        }
+                                        else if (item.M.TipoLicencia == "AEREO_PISTA")
+                                        {
+                                            <br />
+                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereoPista).ToString("####.##")
+                                        }
+                                        else
+                                        {
+                                            <br />
+                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioNormal).ToString("####.##")
                                         }
                                     }
                                 }
@@ -1964,20 +1830,6 @@ else
 
                             }-->
 
-
-                        @*@if (item.M.Doctor == null && item.M.Asistencia != "NO")
-                            {
-                                <b><mark style="background-color: #FFFF00; padding:5px; border-radius:10px">Pendiente</mark></b>
-                            }
-                            else if ((item.M.EstatusPago == "paid" || item.M.EstatusPago == "Pagado") && item.M.Asistencia != "NO")
-                            {
-                                <b><mark style="background-color: #41F51A; padding:5px; border-radius:10px">Digitalizado</mark></b>
-                            }
-                            else if (item.M.Asistencia == "NO")
-                            {
-                                <b><mark style="background-color: #FC4B08; padding:5px; border-radius:10px">Cancelado</mark></b>
-                            }*@
-                        <!--</td>-->
                                 }
 
                     <td style="font-size: smaller">
@@ -2107,45 +1959,6 @@ else
                                         }
                                     }
                                 }
-
-                                @*@if (item.M.EstatusPago == "Pagado")
-                                    {
-                                        var aptitud = (from i in db.EPI_DictamenAptitud where i.idPaciente == item.N.idPaciente orderby i.idDictamenAptitud descending select i).FirstOrDefault();
-
-                                        if (aptitud != null && aptitud.Aptitud == "NO APTO")
-                                        {
-                                            <a href="#" data-toggle="modal" data-target="#revaloracion_@item.M.idPaciente"><b>Revaloración</b></a>
-                                            <div class="dropdown-divider"></div>
-                                        }
-
-                                        <a href="#" data-toggle="modal" data-target="#ModalEditar_@item.M.idPaciente"><b>Completar Datos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Modal_@item.M.idPaciente"><b>Digitalizar</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#cancela_@item.M.idPaciente"><b class="text-danger">Cancelar Cita</b></a>
-                                        <div class="dropdown-divider"></div>
-                                    }
-                                    else if (item.M.EstatusPago == "pending_payment" || item.M.EstatusPago == "Pendiente")
-                                    {
-                                        <a href="#" data-toggle="modal" data-target="#ModalPago_@item.M.idPaciente"><b>Pagado</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#cancela_@item.M.idPaciente"><b class="text-danger">Cancelar Cita</b></a>
-                                        <div class="dropdown-divider"></div>
-                                    }
-                                    else if (item.M.NoExpediente != null && item.M.EstatusPago == "Pagado")
-                                    {
-
-
-                                        <a href="#" data-toggle="modal" data-target="#ModalEdit2_@item.M.idPaciente"><b>Editar Datos</b></a>
-                                        <div class="dropdown-divider"></div>
-
-                                        var entregado = (from e in db.Captura where e.idPaciente == item.M.idPaciente && e.EstatusCaptura == "Terminado" select e.EstatusCaptura).FirstOrDefault();
-                                        if (entregado != null && item.M.Entregado == null)
-                                        {
-                                            <a href="#" data-toggle="modal" data-target="#entregar_@item.M.idPaciente"><b style="color:limegreen">Entregado</b></a>
-                                        }
-                                    }*@
-
                             </div>
                         </div>
 

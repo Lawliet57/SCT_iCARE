@@ -1552,12 +1552,12 @@ else
                                     var idPrueba = findPrecio.idReferido;
 
 
-
-                                    if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO"
+                                    if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Transferencia vía BanBajío"
                                                         || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
+                                    {       
+                                        
+                                    if (item.M.TipoLicencia == "AEREO")
                                     {
-                                        if (item.M.TipoLicencia == "AEREO")
-                                        {
                                             <br />
                                             <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")
                                         }

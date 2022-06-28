@@ -17,7 +17,6 @@ using System.Text;
 using System.Globalization;
 using MessagingToolkit.QRCode.Codec;
 using System.Drawing;
-using SCT_iCare.Filters;
 
 namespace SCT_iCare.Controllers.Recepcion
 {
@@ -33,7 +32,6 @@ namespace SCT_iCare.Controllers.Recepcion
         }
 
         // GET: Pacientes
-        [AuthorizeUser(idOperacion: 8)]
         public ActionResult Index(DateTime? inicio, DateTime? final, string sucursal)
         {
             DateTime thisDate = new DateTime();
