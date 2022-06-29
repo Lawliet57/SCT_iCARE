@@ -19,6 +19,7 @@ namespace SCT_iCare
         public Nullable<System.DateTime> Fecha { get; set; }
         public string PagoIngresado { get; set; }
         public Nullable<int> idReferido { get; set; }
+        public string EfectivoUsado { get; set; }
     
         public virtual Referido Referido { get; set; }
     }

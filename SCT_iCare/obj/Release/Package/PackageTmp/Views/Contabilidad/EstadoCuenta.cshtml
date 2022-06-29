@@ -65,6 +65,9 @@
     int montoTotalMaP = 0;
     int pagoMAPI = 0;
 
+    //FECHA DE PAGOS GESTORES
+    DateTime fechaPagosRow = DateTime.Today;
+
 
     //FECHA ACTUAL
     DateTime FechaAhora = DateTime.Now;
@@ -118,7 +121,7 @@
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
 Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita <= fechaFinal
 && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
-      
+
 
     var modeloAlternativo = db.PacienteESP.
 Where(s => s.EstatusCaptura == "Terminado" && s.FechaCita >= fechaInicio && s.FechaCita <= fechaFinal
@@ -368,10 +371,10 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             </tr>
             <tr>
                 <th style="background-color: antiquewhite;" scope="col">Fecha</th>
-                <th style="background-color: antiquewhite;" scope="col">Epis</th>
+                <th style="background-color: antiquewhite;" scope="col"># Epis</th>
                 <th style="background-color: antiquewhite;" scope="col">Importe</th>
-                <th style="background-color: antiquewhite;" scope="col">Epis P</th>
-                <th style="background-color: antiquewhite;" scope="col">Importe</th>
+                <th style="background-color: antiquewhite;" scope="col"># Epis Pagados</th>
+                <th style="background-color: antiquewhite;" scope="col">Importe Conciliación</th>
                 <th style="background-color: antiquewhite;" scope="col">Importe Pagos</th>
                 <th style="background-color: antiquewhite;" scope="col">Banco/Efectivo</th>
             </tr>
@@ -588,7 +591,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 }
 
 
-@*TABLA DE PAGOS DEL MES ACTUAL*@
+@*TABLA DE PAGOS DEL MES ACTUAL NORMALES*@
 @{
     if (canal != "IN SITU" && canal != "GESTOR ALT" && canal != null && canal != "" && referido != null && referido != "")
     {
@@ -613,13 +616,90 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             //CONTEO DE EPIS TOTALES
                             int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
                             var episXDia = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i);
-                            var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "COMEKTA") select i);
+                            var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
 
                             //CONTEO DE EPIS TOTALES PAGADOS
                             int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
 
                             //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
                             var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+                            var referidoPagos = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+                            var condicionante = "";
+                            var pagodeRow = 0;
+
+                            //VARIABLE PARA ROW DE PAGOS
+                            if (fechaTablaAnterior != "")
+                            {
+                                var fechaRow = DateTime.Parse(fechaTablaAnterior).AddDays(1);
+                                var pagoGestorRow = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).OrderBy(o => o.Fecha);
+                                var pagoGestorRowCount = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).Count();
+
+                                if (pagoGestorRowCount != 0)
+                                {
+                                    condicionante = "Si";
+
+                                    foreach (var i in pagoGestorRow)
+                                    {
+                                        var getFecha = Convert.ToDateTime(i.Fecha).ToString("dd-MMMM-yy");
+                                        fechaPagosRow = DateTime.Parse(getFecha);
+                                        pagodeRow += Convert.ToInt32(i.PagoIngresado);
+                                    }
+                                }
+                            }
+
+                            //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
+
+                            if (condicionante == "Si")
+                            {
+                                var comparacion = Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy");
+
+                                if (fechaTablaAnterior != comparacion)
+                                {
+                                    <tr style="height: auto">
+
+                                        @*FECHA DE CITA*@
+                                        <td>
+                                            <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
+                                        </td>
+
+                                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                                        <td>
+                                        </td>
+
+                                        @*IMPORTE*@
+                                        <td>
+                                        </td>
+
+                                        @*EPIS PAGADOS*@
+
+                                        <td>
+                                        </td>
+
+                                        @*IMPORTE EPIS PAGADOS*@
+
+                                        <td>
+                                        </td>
+
+                                        @*IMPORTE MODULO DE PAGOS*@
+
+                                        <td>
+                                            <span>$@pagodeRow.ToString("###,###,###,###")</span>
+                                        </td>
+
+                                        <td>
+                                        </td>
+                                    </tr>
+
+                                    montoPxDia = 0;
+                                    montoPxDiaP = 0;
+                                    precioVisual = 0;
+                                    pagoVisual = 0;
+                                    condicionante = "";
+
+                                }
+                            }
+
+                            //CONDICIONANTE DE FECHAS DE EPIS
 
                             if (fechaTablaAnterior != fechaTabla)
                             {
@@ -727,6 +807,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 pagoVisual = 0;
                             }
                         }
+
                         <tr>
 
                             @*FECHA DE CITA*@

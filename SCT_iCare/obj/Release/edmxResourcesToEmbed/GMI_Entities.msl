@@ -183,6 +183,7 @@
     <EntitySetMapping Name="Cita">
       <EntityTypeMapping TypeName="DevModel.Cita">
         <MappingFragment StoreEntitySet="Cita">
+          <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />
           <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
           <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
           <ScalarProperty Name="UsarSaldo" ColumnName="UsarSaldo" />
@@ -1221,6 +1222,7 @@
     <EntitySetMapping Name="PagosGestores">
       <EntityTypeMapping TypeName="DevModel.PagosGestores">
         <MappingFragment StoreEntitySet="PagosGestores">
+          <ScalarProperty Name="EfectivoUsado" ColumnName="EfectivoUsado" />
           <ScalarProperty Name="idReferido" ColumnName="idReferido" />
           <ScalarProperty Name="PagoIngresado" ColumnName="PagoIngresado" />
           <ScalarProperty Name="Fecha" ColumnName="Fecha" />
@@ -1275,14 +1277,6 @@
           <ScalarProperty Name="idOperacion" ColumnName="idOperacion" />
           <ScalarProperty Name="idRol" ColumnName="idRol" />
           <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="CadenaSplit">
-      <EntityTypeMapping TypeName="DevModel.CadenaSplit">
-        <MappingFragment StoreEntitySet="CadenaSplit">
-          <ScalarProperty Name="Cadena" ColumnName="Cadena" />
-          <ScalarProperty Name="idCadena" ColumnName="idCadena" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

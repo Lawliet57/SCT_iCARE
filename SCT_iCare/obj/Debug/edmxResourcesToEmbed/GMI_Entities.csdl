@@ -2378,13 +2378,14 @@
     <Property Name="PagoIngresado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="idReferido" Type="Int32" />
     <NavigationProperty Name="Referido" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="PagosGestores" ToRole="Referido" />
+    <Property Name="EfectivoUsado" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="Referido">
     <Key>
       <PropertyRef Name="idReferido" />
     </Key>
     <Property Name="idReferido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="Saldo" Type="Int32" />
     <Property Name="PrecioNormal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -2427,7 +2428,7 @@
       <PropertyRef Name="id" />
     </Key>
     <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="idModulo" Type="Int32" Nullable="false" />
     <NavigationProperty Name="modulo" Relationship="DevModel.FK_operaciones_modulo" FromRole="operaciones" ToRole="modulo" />
     <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="operaciones" ToRole="rol_operacion" />

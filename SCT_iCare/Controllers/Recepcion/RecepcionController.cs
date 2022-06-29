@@ -1005,26 +1005,26 @@ namespace SCT_iCare.Controllers.Recepcion
                 //Se usa el idCanal para poder hacer que en Recepción se tenga que editar el nombre si viene de gestor
                 cita.idCanal = 1;
 
-                if (referido == 22)
-                {
-                    cita.Referencia = "E1293749";
-                }
-                if (referido == 23)
-                {
-                    cita.Referencia = "PL1293750";
-                }
-                //if (referido == "NATALY FRANCO")
+                //if (referido == 22)
                 //{
-                //    cita.Referencia = "NF1293751";
+                //    cita.Referencia = "E1293749";
                 //}
-                if (referido == 36)
-                {
-                    cita.Referencia = "LV1293752";
-                }
-                if (referido == 21)
-                {
-                    cita.Referencia = "RS1293753";
-                }
+                //if (referido == 23)
+                //{
+                //    cita.Referencia = "PL1293750";
+                //}
+                ////if (referido == "NATALY FRANCO")
+                ////{
+                ////    cita.Referencia = "NF1293751";
+                ////}
+                //if (referido == 36)
+                //{
+                //    cita.Referencia = "LV1293752";
+                //}
+                //if (referido == 21)
+                //{
+                //    cita.Referencia = "RS1293753";
+                //}
 
                 int idRefSB = Convert.ToInt32((from r in db.ReferenciasSB where r.ReferenciaSB == referenciaSB select r.idReferencia).FirstOrDefault());
                 ReferenciasSB refe = db.ReferenciasSB.Find(idRefSB);

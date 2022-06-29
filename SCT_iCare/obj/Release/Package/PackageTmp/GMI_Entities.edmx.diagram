@@ -151,7 +151,6 @@
         <EntityTypeShape EntityType="DevModel.rol_operacion" Width="1.5" PointX="20" PointY="15" />
         <AssociationConnector Association="DevModel.FK_operaciones_modulo" />
         <AssociationConnector Association="DevModel.FK_rol_operacion_operaciones" />
-        <EntityTypeShape EntityType="DevModel.CadenaSplit" Width="1.5" PointX="8.375" PointY="0.75" />
         <EntityTypeShape EntityType="DevModel.Roles" Width="1.5" PointX="17.75" PointY="11.5" />
         <AssociationConnector Association="DevModel.FK_rol_operacion_Roles" />
         <AssociationConnector Association="DevModel.FK_RolMenu_Roles" />

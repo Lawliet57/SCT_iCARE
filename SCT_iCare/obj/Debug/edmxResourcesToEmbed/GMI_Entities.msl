@@ -1222,6 +1222,7 @@
     <EntitySetMapping Name="PagosGestores">
       <EntityTypeMapping TypeName="DevModel.PagosGestores">
         <MappingFragment StoreEntitySet="PagosGestores">
+          <ScalarProperty Name="EfectivoUsado" ColumnName="EfectivoUsado" />
           <ScalarProperty Name="idReferido" ColumnName="idReferido" />
           <ScalarProperty Name="PagoIngresado" ColumnName="PagoIngresado" />
           <ScalarProperty Name="Fecha" ColumnName="Fecha" />

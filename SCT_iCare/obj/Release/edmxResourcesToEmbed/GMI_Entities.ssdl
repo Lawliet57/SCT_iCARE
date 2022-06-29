@@ -51,15 +51,6 @@
     <Property Name="Foto" Type="varbinary(max)" />
     <Property Name="idPaciente" Type="int" />
   </EntityType>
-  <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
-  <EntityType Name="CadenaSplit">
-    <Key>
-      <PropertyRef Name="idCadena" />
-    </Key>
-    <Property Name="idCadena" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Cadena" Type="varchar(max)" />
-  </EntityType>
   <EntityType Name="CallCenter">
     <Key>
       <PropertyRef Name="idCallCenter" />
@@ -211,6 +202,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <Property Name="UsarSaldo" Type="varchar" MaxLength="5" />
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
+    <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
   </EntityType>
   <EntityType Name="CitaDS">
     <Key>
@@ -1055,6 +1047,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <Property Name="Fecha" Type="datetime" />
     <Property Name="PagoIngresado" Type="varchar" MaxLength="20" />
     <Property Name="idReferido" Type="int" />
+    <Property Name="EfectivoUsado" Type="varchar" MaxLength="5" />
   </EntityType>
   <EntityType Name="Recepcionista">
     <Key>
@@ -1086,7 +1079,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
       <PropertyRef Name="idReferido" />
     </Key>
     <Property Name="idReferido" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="Nombre" Type="varchar" MaxLength="50" />
+    <Property Name="Nombre" Type="varchar" MaxLength="100" />
     <Property Name="Tipo" Type="varchar" MaxLength="50" />
     <Property Name="Saldo" Type="int" />
     <Property Name="PrecioNormal" Type="varchar" MaxLength="20" />
@@ -2111,12 +2104,6 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <EntitySet Name="Tipificaciones" EntityType="Self.Tipificaciones" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UrgentesCount" EntityType="Self.UrgentesCount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="CadenaSplit" EntityType="Self.CadenaSplit" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [CadenaSplit].[idCadena] AS [idCadena], 
-    [CadenaSplit].[Cadena] AS [Cadena]
-    FROM [dbo].[CadenaSplit] AS [CadenaSplit]</DefiningQuery>
-    </EntitySet>
     <AssociationSet Name="FK_Archivos_Paciente" Association="Self.FK_Archivos_Paciente">
       <End Role="Paciente" EntitySet="Paciente" />
       <End Role="Archivos" EntitySet="Archivos" />
