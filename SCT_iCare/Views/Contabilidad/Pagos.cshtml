@@ -24,24 +24,13 @@
     DateTime fechaInicio = DateTime.Today;
     DateTime fechaFinal = DateTime.Today;
     DateTime FechaAhora = DateTime.Now;
+    DateTime fechaConciliador = DateTime.Today;
 
-    int deuda = 0;
-    int deudaAereos = 0;
-    int deudaTotal = 0;
-    int deuda1 = 0;
-    int deudaAereos1 = 0;
-    int deudaTotal1 = 0;
-    int saldo = 0;
     int saldoMesN = 0;
     int saldoMesA = 0;
     int saldoTotalA = 0;
     int saldoTotalN = 0;
     int pago = 0;
-    int pagoAereos = 0;
-    int pagoTotal = 0;
-    int pago1 = 0;
-    int pagoAereos1 = 0;
-    int pagoTotal1 = 0;
     string referido = "";
     string tipoReferido = "";
     int ingresoActual = 0;
@@ -557,12 +546,10 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                                 <div class="modal-body">
                                                     <div class="form-group" style="width:60%; min-width:320px">
                                                         <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
-                                                        <b>@itemd.Nombre</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Fecha Cita:</label>
-                                                        <b>@Convert.ToDateTime(fechaInicio).ToString("dd-MMMM-yyyy")</b><br />
+                                                        <b>@itemd.Nombre - @itemd.Tipo</b><br />
+                                                        <label for="recipient-name" class="col-form-label">Fecha de Conciliación:</label>
+                                                        <b>@fechaConciliador.ToString("dd-MMMM-yyyy")</b><br />
                                                        
-                                                        <label for="recipient-name" class="col-form-label">Cantidad:</label>
-                                                        <input type="tel" class="form-control" name="efectivo" />
                                                         <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
                                                         <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
                                                         <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
@@ -877,9 +864,9 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                                 <div class="modal-body">
                                                     <div class="form-group" style="width:60%; min-width:320px">
                                                         <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
-                                                        <b>@item.Nombre</b><br />
-                                                        <label for="recipient-name" class="col-form-label">Fecha de Movimiento:</label>
-                                                        <b>@Convert.ToDateTime(fechaInicio).ToString("dd-MMMM-yyyy")</b><br />
+                                                        <b>@item.Nombre - @item.Tipo</b><br />
+                                                        <label for="recipient-name" class="col-form-label">Fecha de Conciliación:</label>
+                                                        <b>@fechaConciliador.ToString("dd-MMMM-yyyy")</b><br />
 
                                                         <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
                                                         <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
