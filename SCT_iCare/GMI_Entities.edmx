@@ -993,6 +993,7 @@
           <Property Name="FechaContable" Type="datetime" />
           <Property Name="FormaPago" Type="varchar" MaxLength="40" />
           <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
+          <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -3818,6 +3819,7 @@
           <NavigationProperty Name="HuellasESP" Relationship="DevModel.FK_HuellasESP_PacienteESP" FromRole="PacienteESP" ToRole="HuellasESP" />
           <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
           <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -5908,6 +5910,7 @@
           <EntitySetMapping Name="PacienteESP">
             <EntityTypeMapping TypeName="DevModel.PacienteESP">
               <MappingFragment StoreEntitySet="PacienteESP">
+                <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />
                 <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
                 <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
                 <ScalarProperty Name="FechaContable" ColumnName="FechaContable" />

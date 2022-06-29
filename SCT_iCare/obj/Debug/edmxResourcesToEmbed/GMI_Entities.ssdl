@@ -988,6 +988,7 @@
     <Property Name="FechaContable" Type="datetime" />
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
+    <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>

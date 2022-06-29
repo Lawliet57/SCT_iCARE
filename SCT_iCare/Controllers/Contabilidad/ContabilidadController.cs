@@ -528,10 +528,13 @@ namespace SCT_iCare.Controllers.Contabilidad
             var modelonNormal = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
 Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null
-&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.FechaCita);
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).OrderBy(o => o.A.M.FechaCita);
 
             var modelonAlternativo = db.PacienteESP.Where(s => s.EstatusCaptura == "Terminado" && s.Asistencia == null && s.CanalTipo.Contains(referido.Tipo) && s.ConciliarPago == null
-&& s.ReferidoPor.Contains(referido.Nombre) && s.TipoTramite != "REVALORACIÓN").OrderBy(o => o.FechaCita);
+&& s.ReferidoPor.Contains(referido.Nombre) && s.TipoTramite != "REVALORACIÓN" && s.FechaCita >= fecha1 && s.FechaCita <= fecha2).OrderBy(o => o.FechaCita);
+
+            var modelonAlternativoCount = db.PacienteESP.Where(s => s.EstatusCaptura == "Terminado" && s.Asistencia == null && s.CanalTipo.Contains(referido.Tipo) && s.ConciliarPago == null
+&& s.ReferidoPor.Contains(referido.Nombre) && s.TipoTramite != "REVALORACIÓN" && s.FechaCita >= fecha1 && s.FechaCita <= fecha2).Count();
 
             var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
             var saldoTotal = 0;
@@ -552,6 +555,22 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 }
                 else
                 {
+
+                    break;
+                }
+            }
+
+            foreach (var pacientes in modelonAlternativo)
+            {
+                deudaTotal += Convert.ToInt32(pacientes.PrecioEpi);
+
+                if (deudaTotal <= saldoTotal)
+                {
+
+                }
+                else
+                {
+
                     break;
                 }
 
