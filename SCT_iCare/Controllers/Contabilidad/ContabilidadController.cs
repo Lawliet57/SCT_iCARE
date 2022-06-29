@@ -514,7 +514,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
 
         //METODO PARA CONCILIAR CON EL INGRESO DE PAGOS EN LA VISTA DE PAGOS
-        public ActionResult ConciliarIngresos(int? id, string usuario, DateTime fechaAhora, DateTime? fecha1, DateTime? fecha2)
+        public ActionResult ConciliarIngresos(int? id, string usuario, DateTime? fecha1, DateTime? fecha2)
         {
             ViewBag.FechaInicio = fecha1 != null ? fecha1 : null;
             ViewBag.FechaFinal = fecha2 != null ? fecha2 : null;
@@ -525,17 +525,40 @@ namespace SCT_iCare.Controllers.Contabilidad
             Referido referido = db.Referido.Find(id);
             PagosGestores pagosGestores = new PagosGestores();
 
-            var modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+            var modelonNormal = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) 
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null
 && s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.FechaCita);
+
+            var modelonNormalCount = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN").Count();
 
             var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
             var saldoTotal = 0;
+            var deudaTotal = 0;
+
             foreach (var pagosGes in pG)
             {
                 saldoTotal += Convert.ToInt32(pagosGes.PagoIngresado);
             }
+
+            foreach (var pacientes in modelonNormal)
+            {
+                deudaTotal += Convert.ToInt32(pacientes.A.M.PrecioEpi);
+
+                if (deudaTotal <= saldoTotal)
+                {
+
+                }
+                else
+                {
+                    break;
+                }
+
+            }
+
 
             return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal });
         }
