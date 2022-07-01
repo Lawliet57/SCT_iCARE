@@ -1432,6 +1432,7 @@
     <NavigationProperty Name="HuellasESP" Relationship="DevModel.FK_HuellasESP_PacienteESP" FromRole="PacienteESP" ToRole="HuellasESP" />
     <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
     <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>
@@ -2402,6 +2403,7 @@
     <Property Name="PrecioAereoPistaconIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="PrecioAereosinIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="PagosGestores" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="Referido" ToRole="PagosGestores" />
+    <Property Name="Residual" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
   </EntityType>
   <Association Name="FK_PagosGestores_Referido">
     <End Type="DevModel.Referido" Role="Referido" Multiplicity="0..1" />

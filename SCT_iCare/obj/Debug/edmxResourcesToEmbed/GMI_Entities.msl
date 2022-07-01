@@ -1235,6 +1235,7 @@
     <EntitySetMapping Name="Referido">
       <EntityTypeMapping TypeName="DevModel.Referido">
         <MappingFragment StoreEntitySet="Referido">
+          <ScalarProperty Name="Residual" ColumnName="Residual" />
           <ScalarProperty Name="PrecioAereosinIVA" ColumnName="PrecioAereosinIVA" />
           <ScalarProperty Name="PrecioAereoPistaconIVA" ColumnName="PrecioAereoPistaconIVA" />
           <ScalarProperty Name="PrecioAereoPista" ColumnName="PrecioAereoPista" />

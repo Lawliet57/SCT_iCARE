@@ -1096,6 +1096,7 @@
     <Property Name="PrecioAereoPista" Type="varchar" MaxLength="10" />
     <Property Name="PrecioAereoPistaconIVA" Type="varchar" MaxLength="10" />
     <Property Name="PrecioAereosinIVA" Type="varchar" MaxLength="10" />
+    <Property Name="Residual" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="rol_operacion">
     <Key>

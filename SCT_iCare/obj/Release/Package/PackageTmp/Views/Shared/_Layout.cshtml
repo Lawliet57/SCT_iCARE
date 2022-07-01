@@ -117,6 +117,10 @@
                                                 <h5>@Html.ActionLink("Dashboard II", "Dashboard", "Dictamenes")</h5>
                                                 <h5>@Html.ActionLink("Ventas Alt", "VentasAlternativas", "Dictamenes")</h5>
                                             }
+                                            if (Usuario == "Ángel Muñoz")
+                                            {
+                                                <h5>@Html.ActionLink("Precios", "ActualizarPrecios", "Admin")</h5>
+                                            }
                                         }
                                         else if (Usuario == "Pedro Azuara")
                                         {
@@ -267,6 +271,7 @@
                                         else if (Usuario == "Ricardo Marcos" || Usuario == "Viridiana España" || Usuario == "Gerardo García" || Usuario == "José Antonio García")
                                         {
                                             <h5>@Html.ActionLink("Call Center", "Index", "CallCenter")</h5>
+                                            <h5>@Html.ActionLink("Precios", "ActualizarPrecios", "Admin")</h5>
                                         }
 
                                         else if (Usuario == "Maribel Hernandez")
