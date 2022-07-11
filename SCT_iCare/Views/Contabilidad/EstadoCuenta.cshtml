@@ -682,6 +682,7 @@
                             fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
                         }
                         var preciodesumasnofechas = 0;
+                        var saldoRowAnterior = 0;
 
                         foreach (var item in modeloNormal.OrderBy(q => q.A.M.FechaCita))
                         {
@@ -764,8 +765,24 @@
                                             <span>$@pagodeRow.ToString("###,###,###,###")</span>
                                         </td>
 
-                                        <td>
-                                        </td>
+                                         @*SALDOS*@
+                                            @{
+                                                saldoRowAnterior = saldoRowAnterior + pagodeRow;
+
+                                                if (saldoRowAnterior < 0)
+                                                {
+                                                    var muestrasaldo = saldoRowAnterior * (-1);
+                                                    <td>
+                                                        <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
+                                                    </td>
+                                                }
+                                                else
+                                                { 
+                                                    <td>
+                                                        <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                                    </td>
+                                                }                                                
+                                            }
                                     </tr>
 
                                     montoPxDia = 0;
@@ -883,8 +900,57 @@
 
                                     }
 
-                                    <td>
-                                    </td>
+                                    @*SALDOS*@
+                                    @{
+                                        var sumaPositivos = montoPxDiaP + pagoVisual;
+                                        var saldoensaldos = sumaPositivos - montoPxDia;
+
+                                        if (saldoRowAnterior == 0)
+                                        {
+                                            saldoRowAnterior = saldoensaldos;
+                                        }
+
+                                        else if(saldoRowAnterior < 0)
+                                        {
+                                            if (saldoensaldos < 0)
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                            else
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                        }
+
+                                        else
+                                        {
+                                            if(saldoensaldos < 0)
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                            else
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                        }
+
+                                        if (saldoRowAnterior < 0)
+                                        {
+                                            var muestradesaldo = saldoRowAnterior * (-1);
+                                                <td>
+                                                    <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                                </td>
+                                            }
+
+                                            saldoensaldos = 0;
+
+                                        }
                                 </tr>
 
                                 fechaTablaAnterior = fechaTabla;
@@ -942,8 +1008,24 @@
                                         <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
                                     </td>
 
-                                    <td>
-                                    </td>
+                                    @*SALDO*@
+                                    @{ 
+                                        saldoRowAnterior = saldoRowAnterior + preciodesumasnofechas;
+
+                                        if(saldoRowAnterior < 0)
+                                        {
+                                            var muestrasaldo = saldoRowAnterior * (-1);
+                                            <td>
+                                                <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
+                                            </td>
+                                        }
+                                        else
+                                        { 
+                                            <td>
+                                                <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                            </td>
+                                        }                                
+                                    }
                                 </tr> 
                                 totalPago += preciodesumasnofechas;
                                 diferenciaTotal =  saldoTotalImporte - (saldoTotalP + totalPago);
@@ -1269,6 +1351,7 @@
                             fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
                         }
                         var preciodesumasnofechas = 0;
+                        var saldoRowAnterior = 0;
 
                         foreach (var item in modeloAlternativo.OrderBy(q => q.FechaCita))
                         {
@@ -1319,40 +1402,55 @@
 
                                 if (fechaTablaAnterior != comparacion)
                                 {
-                                    <tr style="height: auto">
+                                        <tr style="height: auto">
 
-                                        @*FECHA DE CITA*@
-                                        <td>
-                                            <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
-                                        </td>
+                                            @*FECHA DE CITA*@
+                                            <td>
+                                                <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
+                                            </td>
 
-                                        @*NUMERO DE EPIS X DIA EN FECHA*@
-                                        <td>
-                                        </td>
+                                            @*NUMERO DE EPIS X DIA EN FECHA*@
+                                            <td>
+                                            </td>
 
-                                        @*IMPORTE*@
-                                        <td>
-                                        </td>
+                                            @*IMPORTE*@
+                                            <td>
+                                            </td>
 
-                                        @*EPIS PAGADOS*@
+                                            @*EPIS PAGADOS*@
 
-                                        <td>
-                                        </td>
+                                            <td>
+                                            </td>
 
-                                        @*IMPORTE EPIS PAGADOS*@
+                                            @*IMPORTE EPIS PAGADOS*@
 
-                                        <td>
-                                        </td>
+                                            <td>
+                                            </td>
 
-                                        @*IMPORTE MODULO DE PAGOS*@
+                                            @*IMPORTE MODULO DE PAGOS*@
+                                            <td>
+                                                <span>$@pagodeRow.ToString("###,###,###,###")</span>
+                                            </td>
 
-                                        <td>
-                                            <span>$@pagodeRow.ToString("###,###,###,###")</span>
-                                        </td>
+                                            @*SALDOS*@
+                                            @{
+                                                saldoRowAnterior = saldoRowAnterior + pagodeRow;
 
-                                        <td>
-                                        </td>
-                                    </tr>
+                                                if (saldoRowAnterior < 0)
+                                                {
+                                                    var muestrasaldo = saldoRowAnterior * (-1);
+                                                    <td>
+                                                        <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
+                                                    </td>
+                                                }
+                                                else
+                                                { 
+                                                    <td>
+                                                        <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                                    </td>
+                                                }                                                
+                                            }
+                                        </tr>
 
                                     montoPxDia = 0;
                                     montoPxDiaP = 0;
@@ -1468,8 +1566,56 @@
 
                                     }
 
-                                    <td>
-                                    </td>
+                                    @*SALDOS*@
+                                    @{
+                                        var sumaPositivos = montoPxDiaP + pagoVisual;
+                                        var saldoensaldos = sumaPositivos - montoPxDia;
+
+                                        if (saldoRowAnterior == 0)
+                                        {
+                                            saldoRowAnterior = saldoensaldos;
+                                        }
+
+                                        else if(saldoRowAnterior < 0)
+                                        {
+                                            if (saldoensaldos < 0)
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                            else
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                        }
+
+                                        else
+                                        {
+                                            if(saldoensaldos < 0)
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                            else
+                                            {
+                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                            }
+                                        }
+
+                                        if (saldoRowAnterior < 0)
+                                        {
+                                            var muestradesaldo = saldoRowAnterior * (-1);
+                                                <td>
+                                                    <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                <td>
+                                                    <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                                </td>
+                                            }
+
+                                            saldoensaldos = 0;
+                                        }
                                 </tr>
 
                                 fechaTablaAnterior = fechaTabla;
@@ -1505,7 +1651,7 @@
                                 @*NUMERO DE EPIS X DIA EN FECHA*@
                                 <td>
                                 </td>
-
+                                
                                 @*IMPORTE*@
                                 <td>
                                 </td>
@@ -1521,13 +1667,28 @@
                                 </td>
 
                                 @*IMPORTE MODULO DE PAGOS*@
-
                                 <td>
                                     <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
                                 </td>
 
-                                <td>
-                                </td>
+                                @*SALDO*@
+                                @{ 
+                                    saldoRowAnterior = saldoRowAnterior + preciodesumasnofechas;
+
+                                    if(saldoRowAnterior < 0)
+                                    {
+                                        var muestrasaldo = saldoRowAnterior * (-1);
+                                        <td>
+                                            <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    { 
+                                        <td>
+                                            <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                        </td>
+                                    }                                
+                                }
                             </tr>
 
                             totalPago += preciodesumasnofechas;
@@ -1564,7 +1725,7 @@
                             <td>
                             </td>
 
-                            @*BANCOS*@
+                            @*SALDO*@
 
                             <td>
                             </td>
