@@ -913,6 +913,7 @@
     <Content Include="Views\GestionUsuarios\DeleteU.cshtml" />
     <Content Include="Views\GestionUsuarios\CarruselMedicoU.cshtml" />
     <Content Include="Views\GestionUsuarios\EditU.cshtml" />
+    <Content Include="Views\Contabilidad\FaltaTicket.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

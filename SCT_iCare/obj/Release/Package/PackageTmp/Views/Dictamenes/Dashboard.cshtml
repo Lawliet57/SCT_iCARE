@@ -27,14 +27,16 @@
     dateToday = Convert.ToDateTime(ViewBag.Inicio);
     dateTomorrow = Convert.ToDateTime(ViewBag.Final);
 
-    var episTotal = (from c in db.PacienteESP select c).Where(w => (w.FechaCita >= dateToday || w.FechaCaptura >= dateToday) && w.FechaCita < dateTomorrow);
-    int episTotalConteo = (from c in db.PacienteESP select c).Where(w => (w.FechaCita >= dateToday || w.FechaCaptura >= dateToday) && w.FechaCita < dateTomorrow).Count();
+    var episTotal = (from c in db.PacienteESP select c).Where(w => (w.FechaCita >= dateToday || w.FechaCaptura >= dateToday) && w.FechaCita < dateTomorrow && w.EstatusCaptura != "Cancelado");
+    int episTotalConteo = (from c in db.PacienteESP select c).Where(w => (w.FechaCita >= dateToday || w.FechaCaptura >= dateToday) && w.FechaCita < dateTomorrow && w.EstatusCaptura != "Cancelado").Count();
+
+    int episTotalConteoCancelado = (from c in db.PacienteESP select c).Where(w => (w.FechaCita >= dateToday || w.FechaCaptura >= dateToday) && w.FechaCita < dateTomorrow && w.EstatusCaptura == "Cancelado").Count();
 
     var episHoy = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow);
     int episHoyConteo = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow).Count();
 
-    var dictaminados = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow && w.EstatusCaptura == "Terminado");
-    int dictaminadosCount = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow && w.EstatusCaptura == "Terminado").Count();
+    var dictaminados = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow && w.EstatusCaptura == "Terminado" && w.TipoTramite != "Revaloración");
+    int dictaminadosCount = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow && w.EstatusCaptura == "Terminado" && w.TipoTramite != "Revaloración").Count();
 
     var pendientes = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow && (w.EstatusCaptura == "Pendiente" || w.EstatusCaptura == null));
     int pendientesCount = (from c in db.PacienteESP select c).Where(w => w.FechaCaptura >= dateToday && w.FechaCaptura < dateTomorrow && (w.EstatusCaptura == "Pendiente" || w.EstatusCaptura == null)).Count();
@@ -53,6 +55,9 @@
 
     var gestor = (from i in db.PacienteESP where i.FechaCaptura >= dateToday && i.FechaCaptura < dateTomorrow select i.ReferidoPor).Distinct();
     var gestor2 = (from i in db.PacienteESP where i.FechaCaptura >= mesInicio && i.FechaCaptura < mesFinal select i.ReferidoPor).Distinct();
+    var gestorRevaloracion = (from i in db.PacienteESP where i.FechaCaptura >= dateToday && i.FechaCaptura < dateTomorrow && i.TipoTramite == "Revaloración" select i.ReferidoPor).Distinct();
+    var gestorRevaloracionCount = (from i in db.PacienteESP where i.FechaCaptura >= dateToday && i.FechaCaptura < dateTomorrow && i.TipoTramite == "Revaloración" select i.ReferidoPor).Distinct().Count();
+    var gestorCancelado = (from i in db.PacienteESP where i.FechaCita >= dateToday && i.FechaCita < dateTomorrow && i.EstatusCaptura == "Cancelado" select i.ReferidoPor).Distinct();
 
     int flag = 1;
 
@@ -90,7 +95,7 @@
         <label for="recipient-name" style="color:navy" class="col-form-label text-primary">Hasta:</label>
         <input type="date" class="form-control" name="final" /> &nbsp; &nbsp;
         <input type="submit" class="btn btn-primary" value="Enviar" />
-        <a href="~/EPIs/Captura"><button type="button" class="btn btn-success">Limpiar Consulta</button></a>
+        <a href="~/Dictamenes/Dashboard"><button type="button" class="btn btn-success">Limpiar Consulta</button></a>
     </div>
 
     <div class="col-lg-3" id="barras" style="margin: 10px 0 0 10px; display:inline-grid">
@@ -285,6 +290,21 @@
 
                         <h4><b>@item:</b> @elemento</h4>
                     }
+                    <br />
+
+                    if (episTotalConteoCancelado != 0)
+                    {
+                        <h4><b>CANCELADOS</b> </h4>
+
+                        foreach (var item in gestorCancelado)
+                        {
+                            string nombreGestor = item.ToString();
+                            var elemento = (from e in db.PacienteESP where e.ReferidoPor == nombreGestor && (e.FechaCita >= dateToday || e.FechaCaptura >= dateToday)
+                                            && e.FechaCita < dateTomorrow && e.EstatusCaptura == "Cancelado" select e).Count();
+
+                            <h4><b>@item:</b> @elemento</h4>
+                        }
+                    }
 
                 }
             </div>
@@ -310,12 +330,28 @@
                     foreach (var item in gestor)
                     {
                         string nombreGestor = item.ToString();
-                        var elemento = (from e in db.PacienteESP where e.ReferidoPor == nombreGestor && (e.FechaCita >= dateToday || e.FechaCaptura >= dateToday) && e.FechaCita < dateTomorrow && e.EstatusCaptura == "Terminado" select e).Count();
+                        var elemento = (from e in db.PacienteESP where e.ReferidoPor == nombreGestor && (e.FechaCita >= dateToday || e.FechaCaptura >= dateToday) 
+                                        && e.FechaCita < dateTomorrow && e.EstatusCaptura == "Terminado" && e.TipoTramite != "Revaloración" select e).Count();
 
                         <h4><b>@item:</b> @elemento</h4>
                     }
+                    <br />
 
-                }
+                    if (gestorRevaloracionCount != 0)
+                    {
+                        <h4><b>REVALORACIONES</b> </h4>
+
+                        foreach (var item in gestorRevaloracion)
+                        {
+                            string nombreGestor = item.ToString();
+                            var elemento = (from e in db.PacienteESP where e.ReferidoPor == nombreGestor && (e.FechaCita >= dateToday || e.FechaCaptura >= dateToday) 
+                                            && e.FechaCita < dateTomorrow && e.EstatusCaptura == "Terminado" && e.TipoTramite == "Revaloración" select e).Count();
+
+                            <h4><b>@item:</b> @elemento</h4>
+                        }
+                    }
+                  }
+                    
             </div>
         </div>
     </div>
@@ -715,7 +751,7 @@ else
                     </td>
 
                     <td>
-                        <b>@item.FechaCaptura</b>
+                        <b>@Convert.ToDateTime(item.FechaCaptura).ToString("dd-MMMM-yyyy")</b> 
                     </td>
 
                 </tr>

@@ -388,16 +388,20 @@ namespace SCT_iCare.Controllers.Contabilidad
         public ActionResult AbrirTicket(int? idTicket, string cuenta, string canal, string sucursal, string tiporeferido, string tipopago,
             DateTime? fechaInicio, DateTime? fechaFinal)
         {
-            if (idTicket != null)
+            if (idTicket != 0)
             {
                 TempData["ID"] = idTicket;
                 return RedirectToAction("Index", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal, sucursal = sucursal, cuenta = cuenta, canal = canal, referido = tiporeferido, tipopago = tipopago });
             }
             else
             {
-                TempData["ID"] = null;
-                return RedirectToAction("Index", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal, sucursal = sucursal, cuenta = cuenta, canal = canal, referido = tiporeferido, tipopago = tipopago });
+                return View("FaltaTicket");
             }
+            //else
+            //{
+            //    TempData["ID"] = null;
+            //    return RedirectToAction("Index", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal, sucursal = sucursal, cuenta = cuenta, canal = canal, referido = tiporeferido, tipopago = tipopago });
+            //}
 
 
         }
@@ -425,13 +429,12 @@ namespace SCT_iCare.Controllers.Contabilidad
         {
             Tickets ticket = db.Tickets.Find(id);
 
-            var bytesBinary = ticket.Ticket;
-            TempData["ID"] = null;
-            return File(bytesBinary, "DownloadName.pdf");
-            //return File(bytesBinary, "application/pdf");
-            //return File(bytesBinary, "application/vnd.visio");
-
-
+                var bytesBinary = ticket.Ticket;
+                TempData["ID"] = null;
+                return File(bytesBinary, "DownloadName.pdf");
+                //return File(bytesBinary, "application/pdf");
+                //return File(bytesBinary, "application/vnd.visio");
+            
         }
 
         public ActionResult Deuda(int? id, string deuda, string canal)
@@ -508,13 +511,14 @@ namespace SCT_iCare.Controllers.Contabilidad
                 db.SaveChanges();
             }
 
+
             return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal });
         }
 
 
 
         //METODO PARA CONCILIAR CON EL INGRESO DE PAGOS EN LA VISTA DE PAGOS
-        public ActionResult ConciliarIngresosNom(int? id, string usuario, DateTime? fecha1, DateTime? fecha2)
+        public ActionResult ConciliarIngresosNom(int? id, string usuario, DateTime? fecha1, DateTime? fecha2, string metododepago, string fechadepago)
         {
             ViewBag.FechaInicio = fecha1 != null ? fecha1 : null;
             ViewBag.FechaFinal = fecha2 != null ? fecha2 : null;
@@ -528,12 +532,12 @@ namespace SCT_iCare.Controllers.Contabilidad
             var modelonNormal = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
 Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null && s.A.M.Conciliado == null
-&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).OrderBy(o => o.A.M.FechaCita);
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Cuenta == "CUENTAS X COBRAR" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).OrderBy(o => o.A.M.FechaCita);
 
             var modelonNormalCount = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
 Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null && s.A.M.Conciliado == null
-&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).Count();
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Cuenta == "CUENTAS X COBRAR" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).Count();
 
             var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i);
             var saldoTotal = 0;
@@ -541,7 +545,10 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var conteoNormal = 0;
             int conteo = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i).OrderBy(o => o.Fecha).Count();
             int[] idPagos = new int[conteo];
+            int[] idPacientes = new int[100];
             var aumento = 0;
+            var deudaSumatoria = 0;
+            var aumentoPaciente = 0;
 
             foreach (var pagosGes in pG)
             {
@@ -575,34 +582,57 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 {
                     foreach (var pacientes in modelonNormal)
                     {
-
                         deudaTotal += Convert.ToInt32(pacientes.A.M.PrecioEpi);
+                        idPacientes[aumentoPaciente] = pacientes.A.M.idCita;
+                        aumentoPaciente++;
 
-                        if (deudaTotal <= saldoTotal)
+                        if (deudaTotal < saldoTotal)
                         {
+                            deudaSumatoria = deudaTotal;
                             conteoNormal++;
                         }
                         else
                         {
-                            int residual = 0;
-                            residual = deudaTotal - saldoTotal;
-                            referido.Residual = Convert.ToString(residual);
-
-                            if (ModelState.IsValid)
-                            {
-                                db.Entry(referido).State = EntityState.Modified;
-                                db.SaveChanges();
-                            }
-
                             break;
-                        }
+                        }            
                     }
 
-                    if (conteoNormal <= modelonNormalCount)
+                    for (int n = 0; n < aumentoPaciente;)
                     {
-                        int residual = 0;
-                        residual = saldoTotal - deudaTotal;
-                        referido.Residual = Convert.ToString(residual);
+                        DateTime Ahora = DateTime.Now;
+                        DateTime fechadePagoController = Convert.ToDateTime(fechadepago);
+                        var fechaContable = Convert.ToDateTime(fechadePagoController);
+                        var fechaHoy = Convert.ToDateTime(Ahora).ToString("d-M-yy");
+                        var pilin = idPacientes[n];
+                        var editarPaciente = (from i in db.Cita where i.idCita == pilin select i).FirstOrDefault();
+
+                        editarPaciente.ConciliarPago = "Si";
+                        editarPaciente.Conciliado = fechaHoy;
+                        editarPaciente.FechaContable = fechaContable;
+                        editarPaciente.TipoPago = metododepago;
+                        editarPaciente.Cuenta = "BANCOS";
+
+                        if (ModelState.IsValid)
+                        {
+                            db.Entry(editarPaciente).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        n++;
+                    }
+
+                    if (conteoNormal > 0)
+                    {
+                                var residuo = saldoTotal - deudaSumatoria;
+                                referido.Residual = Convert.ToString(residuo);
+                                if (ModelState.IsValid)
+                                {
+                                    db.Entry(referido).State = EntityState.Modified;
+                                    db.SaveChanges();
+                                }
+                    }                      
+                    else
+                    {
+                        referido.Residual = Convert.ToString(saldoTotal);
 
                         if (ModelState.IsValid)
                         {
@@ -610,15 +640,15 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             db.SaveChanges();
                         }
                     }
-                }
+                }        
 
-                return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal });
+                return RedirectToAction("Pagos", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal });        
         }
         
 
 
         //METODO PARA CONCILIAR CON EL INGRESO DE PAGOS EN LA VISTA DE PAGOS
-        public ActionResult ConciliarIngresosAlt(int? id, string usuario, DateTime? fecha1, DateTime? fecha2)
+        public ActionResult ConciliarIngresosAlt(int? id, string usuario, DateTime? fecha1, DateTime? fecha2, string metododepago, string fechadepago)
         {
             ViewBag.FechaInicio = fecha1 != null ? fecha1 : null;
             ViewBag.FechaFinal = fecha2 != null ? fecha2 : null;
@@ -636,53 +666,100 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var modelonAlternativoCount = db.PacienteESP.Where(s => s.EstatusCaptura == "Terminado" && s.Asistencia == null && s.CanalTipo.Contains(referido.Tipo) && s.ConciliarPago == null
 && s.ReferidoPor.Contains(referido.Nombre) && s.Conciliado == null && s.TipoTramite != "REVALORACIÓN" && s.FechaCita >= fecha1 && s.FechaCita <= fecha2).Count();
 
-            var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
+            var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i);
             var saldoTotal = 0;
             var deudaTotal = 0;
-            var conteoAlt = 0;
+            var conteoNormal = 0;
+            int conteo = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i).OrderBy(o => o.Fecha).Count();
+            int[] idPagos = new int[conteo];
+            int[] idPacientes = new int[100];
+            var aumento = 0;
+            var deudaSumatoria = 0;
+            var aumentoPaciente = 0;
 
             foreach (var pagosGes in pG)
             {
                 saldoTotal += Convert.ToInt32(pagosGes.PagoIngresado);
+                idPagos[aumento] = pagosGes.idPagoGestor;
+                aumento++;
+            }
+
+            for (int n = 0; n < aumento;)
+            {
+                var pilin = idPagos[n];
+                var editarEfectivo = (from i in db.PagosGestores where i.idPagoGestor == pilin select i).FirstOrDefault();
+
+                editarEfectivo.EfectivoUsado = "Si";
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(editarEfectivo).State = EntityState.Modified;
+                    db.SaveChanges();
+                }
+                n++;
             }
 
             if (referido.Residual != "" && referido.Residual != null)
             {
                 saldoTotal += Convert.ToInt32(referido.Residual);
-            }         
+            }
 
-            //ALTERNATIVOS
+            //ALTERATIVOS
             if (modelonAlternativoCount != 0)
             {
                 foreach (var pacientes in modelonAlternativo)
                 {
                     deudaTotal += Convert.ToInt32(pacientes.PrecioEpi);
+                    idPacientes[aumentoPaciente] = pacientes.idPacienteESP;
+                    aumentoPaciente++;
 
-                    if (deudaTotal <= saldoTotal)
+                    if (deudaTotal < saldoTotal)
                     {
-                        conteoAlt++;
+                        deudaSumatoria = deudaTotal;
+                        conteoNormal++;
                     }
                     else
                     {
-                        int residual = 0;
-                        residual = deudaTotal - saldoTotal;
-                        referido.Residual = Convert.ToString(residual);
-
-                        if (ModelState.IsValid)
-                        {
-                            db.Entry(referido).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-
                         break;
                     }
                 }
 
-                if (conteoAlt <= modelonAlternativoCount)
+                for (int n = 0; n < aumentoPaciente;)
                 {
-                    int residual = 0;
-                    residual = saldoTotal - deudaTotal;
-                    referido.Residual = Convert.ToString(residual);
+                    DateTime Ahora = DateTime.Now;
+                    DateTime fechadePagoController = Convert.ToDateTime(fechadepago);
+                    var fechaContable = Convert.ToDateTime(fechadePagoController);
+                    var fechaHoy = Convert.ToDateTime(Ahora).ToString("d-M-yy");
+                    var pilin = idPacientes[n];
+                    var editarPaciente = (from i in db.Cita where i.idCita == pilin select i).FirstOrDefault();
+
+                    editarPaciente.ConciliarPago = "Si";
+                    editarPaciente.Conciliado = fechaHoy;
+                    editarPaciente.FechaContable = fechaContable;
+                    editarPaciente.TipoPago = metododepago;
+                    editarPaciente.Cuenta = "BANCOS";
+
+                    if (ModelState.IsValid)
+                    {
+                        db.Entry(editarPaciente).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                    n++;
+                }
+
+                if (conteoNormal > 0)
+                {
+                    var residuo = saldoTotal - deudaSumatoria;
+                    referido.Residual = Convert.ToString(residuo);
+                    if (ModelState.IsValid)
+                    {
+                        db.Entry(referido).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    referido.Residual = Convert.ToString(saldoTotal);
 
                     if (ModelState.IsValid)
                     {

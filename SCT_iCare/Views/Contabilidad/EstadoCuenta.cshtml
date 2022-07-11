@@ -78,11 +78,7 @@
     if (ViewBag.FechaInicio != null)
     {
         fechaInicio = Convert.ToDateTime(ViewBag.FechaInicio);
-        DateTime parset = fechaInicio.AddMonths(1).AddDays(-1);
-
-        fechaFinal = parset;
-        FECHAF = fechaFinal;
-        FECHAFS = FECHAF;
+        DateTime parset = fechaInicio.AddMonths(1).AddMinutes(-1);
     }
 
     else
@@ -107,7 +103,7 @@
 
         fechaFinal = FECHAF;
         FECHAFS = FECHAF;
-        fechaFinal = fechaFinal.AddDays(1);
+        fechaFinal = fechaFinal.AddDays(1).AddMinutes(-1);
 
     }
 
@@ -118,14 +114,14 @@
     //QUERYS TABLA REGISTROS MES ACTUAL
 
     var modeloNormal = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
-Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita <= fechaFinal
-&& s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
+    Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita <= fechaFinal
+    && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
 
 
     var modeloAlternativo = db.PacienteESP.
-Where(s => s.EstatusCaptura == "Terminado" && s.FechaCita >= fechaInicio && s.FechaCita <= fechaFinal
-&& s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
+    Where(s => s.EstatusCaptura == "Terminado" && s.FechaCita >= fechaInicio && s.FechaCita <= fechaFinal
+    && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
 
 
     var modeloExcelNormal = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
@@ -145,9 +141,9 @@ Where(s => s.EstatusCaptura == "Terminado" && s.FechaCita >= fechaInicio && s.Fe
     //QUERYS TABLA REGISTROS MES ANTERIOR
 
     var modeloNormalMA = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
-Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.FechaCita >= fechaInicioMesA && s.A.M.FechaCita <= fechaFinalMesA
-&& s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
+    Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+    Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.FechaCita >= fechaInicioMesA && s.A.M.FechaCita <= fechaFinalMesA
+    && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
 
 
     var modeloAlternativoMA = db.PacienteESP.
@@ -227,11 +223,20 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 <link rel="stylesheet" type="text/css" href="~/Estilo.css">
 
+<img class="visible-print" src="~/Images/GA.png" style="width:90px; padding-top:12px; padding-bottom:10px; padding-right:20px; padding-left:20px;" hidden />
+
 
 @*HEADER O ENCABEZADO*@
 <br />
 <h2 style="color: white"> Estado de Cuenta</h2>
-<br />
+@{
+    if (referido != null && referido != "" && canal != null && canal != "")
+    {
+        <h5 style="color: white"> Mostrando resultados de: @referido del día @Convert.ToDateTime(fechaInicio).ToString("dd-MM-yy") al @Convert.ToDateTime(fechaFinal).ToString("dd-MM-yy")</h5>
+        <br />
+    }
+}
+
 
 
 @*INPUTS DE FILTROS*@
@@ -350,13 +355,65 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 
 
-|   <div class="hidden-print">
+<!--<div class="hidden-print">
+    <br />
     <a href="~/Contabilidad/Pagos">
         <span type="button" class="btn btn-success" style="background-color:dodgerblue">Regresar a Control de Pagos</span>
-    </a>
-    @*<button style="background-color:limegreen" class="btn btn-info dropdown-toggle" onclick="ExportToExcel('xlsx')">Descargar reporte </button>*@
-</div>
+    </a>-->
+@*<button style="background-color:limegreen" class="btn btn-info dropdown-toggle" onclick="ExportToExcel('xlsx')">Descargar reporte </button>*@
+<!--</div>-->
 <br />
+
+@{
+    if (referido != null && referido != "" && canal != null && canal != "")
+    {
+        <div class="hidden-print">
+            <table style="max-width: 800px">
+                <thead>
+                    <tr style="font-size:smaller">
+                        <th style="background-color: cornsilk;" scope="col">Gestor</th>
+                        <th style="background-color: cornsilk;" scope="col">Precio EPI</th>
+                        <th style="background-color: cornsilk;" scope="col">Precio EPI IVA</th>
+                        <th style="background-color: cornsilk;" scope="col">Precio EPI Tripulación</th>
+                        <th style="background-color: cornsilk;" scope="col">Precio EPI Tripulación IVA</th>
+                        <th style="background-color: cornsilk;" scope="col">Precio EPI Pista</th>
+                        <th style="background-color: cornsilk;" scope="col">Precio EPI Pista IVA</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ 
+                        var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                    <tr style="background-color:whitesmoke; font-size:smaller">
+                        <td>
+                            @referido
+                        </td>
+                        <td>
+                            $@Convert.ToInt32(findidRef.PrecioNormal).ToString("###,###,###,###")
+                        </td>
+                        <td>
+                            $@Convert.ToInt32(findidRef.PrecioNormalconIVA).ToString("###,###,###,###")
+                        </td>
+                        <td>
+                            $@Convert.ToInt32(findidRef.PrecioAereosinIVA).ToString("###,###,###,###")
+                        </td>
+                        <td>
+                            $@Convert.ToInt32(findidRef.PrecioAereo).ToString("###,###,###,###")
+                        </td>
+                        <td>
+                            $@Convert.ToInt32(findidRef.PrecioAereoPista).ToString("###,###,###,###")
+                        </td>
+                        <td>
+                            $@Convert.ToInt32(findidRef.PrecioAereoPistaconIVA).ToString("###,###,###,###")
+                        </td>
+                    </tr>
+                        }
+                </tbody>
+            </table>
+             <br />
+        </div>       
+    }
+}
+
 
 
 
@@ -365,18 +422,13 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
     <table>
         <thead>
             <tr>
-                <th style="background-color: dodgerblue;" colspan="2"></th>
-                <th style="background-color: dodgerblue; " colspan="3">ALTERNATIVOS</th>
-                <th style="background-color: dodgerblue; " colspan="2"></th>
-            </tr>
-            <tr>
-                <th style="background-color: antiquewhite;" scope="col">Fecha</th>
-                <th style="background-color: antiquewhite;" scope="col"># Epis</th>
-                <th style="background-color: antiquewhite;" scope="col">Importe</th>
-                <th style="background-color: antiquewhite;" scope="col"># Epis Pagados</th>
-                <th style="background-color: antiquewhite;" scope="col">Importe Conciliación</th>
-                <th style="background-color: antiquewhite;" scope="col">Importe Pagos</th>
-                <th style="background-color: antiquewhite;" scope="col">Banco/Efectivo</th>
+                <th style="background-color:lightskyblue;" scope="col">Fecha</th>
+                <th style="background-color: lightskyblue;" scope="col"># Epis</th>
+                <th style="background-color: lightskyblue;" scope="col">Importe</th>
+                <th style="background-color: lightskyblue;" scope="col"># Epis Pagados</th>
+                <th style="background-color: lightskyblue;" scope="col">Importe Conciliación</th>
+                <th style="background-color: lightskyblue;" scope="col">Importe Pagos</th>
+                <th style="background-color: lightskyblue;" scope="col">Saldo</th>
             </tr>
         </thead>
     </table>
@@ -386,7 +438,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
 
 @*TABLA PRIMERA SECCION PAGOS SALDO POR MES ANTERIOR*@
 @{
-    if (fechaInicioMesA.Month >= 6 && fechaInicioMesA.Year >= 2022 && ViewBag.Referido != null && ViewBag.Referido != "" && canal != "IN SITU" && canal != "GESTOR ALT" && canal != null && canal != "")
+    if (fechaInicioMesA.Month >= 7 && fechaInicioMesA.Year >= 2022 && ViewBag.Referido != null && ViewBag.Referido != "" && canal != "IN SITU" && canal != "GESTOR ALT" && canal != null && canal != "")
     {
         var epiFinalMA = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA select i).OrderByDescending(q => q.A.M.FechaCita).FirstOrDefault();
         var epiFinalMACOUNT = (from i in modeloNormalMA where i.A.M.FechaCita >= fechaInicioMesA && i.A.M.FechaCita <= fechaFinalMesA select i).Count();
@@ -443,9 +495,17 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         </td>
 
                         @*NUMERO DE EPIS X DIA EN FECHA*@
-                        <td>
-                            <span>@conteoEpisTotalesMA</span>
-                        </td>
+                        @{
+                            var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                            var fechaFinalSimulada = fechaFinalMesA.AddDays(-1);
+                            <td>
+                                <div class="hidden-print">
+                                    <a href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaInicioMesA, fechaFinal = fechaFinalSimulada, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
+                                    <span>@conteoEpisTotalesMA</span>
+                                    </a>
+                                 </div>
+                            </td>
+                        }
 
                         @*IMPORTE*@
                         @{
@@ -487,7 +547,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         }
     }
 
-    else if (fechaInicioMesA.Month >= 6 && fechaInicioMesA.Year >= 2022 && ViewBag.Referido != null && ViewBag.Referido != "" && (canal != "IN SITU" || canal == "GESTOR ALT" && canal != null && canal != ""))
+    else if (fechaInicioMesA.Month >= 7 && fechaInicioMesA.Year >= 2022 && ViewBag.Referido != null && ViewBag.Referido != "" && (canal != "IN SITU" || canal == "GESTOR ALT" && canal != null && canal != ""))
     {
         var epiFinalMA = (from i in modeloAlternativoMA where i.FechaCita >= fechaInicioMesA && i.FechaCita <= fechaFinalMesA select i).OrderByDescending(q => q.FechaCita).FirstOrDefault();
         var epiFinalMACOUNT = (from i in modeloAlternativoMA where i.FechaCita >= fechaInicioMesA && i.FechaCita <= fechaFinalMesA select i).Count();
@@ -546,9 +606,11 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         </td>
 
                         @*NUMERO DE EPIS X DIA EN FECHA*@
-                        <td>
-                            <span>@conteoEpisTotalesMA</span>
-                        </td>
+                        @{
+                            var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                            var fechaFinalSimulada = fechaFinalMesA.AddDays(-1);
+                            <td><a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaInicioMesA, fechaFinal = fechaFinalSimulada, referido = findidRef.idReferido }) style="color:navy; text-decoration:none"><span class="visible-print">@conteoEpisTotalesMA</span></a></td>
+                        }
 
                         @*IMPORTE*@
                         @{
@@ -606,6 +668,21 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 </thead>
                 <tbody>
                     @{
+                        var ultimaFecha = (from i in modeloNormal select i).OrderByDescending(o => o.A.M.FechaCita).FirstOrDefault();
+                        DateTime fechadeultimoepi = FECHAI;
+                        if (ultimaFecha != null)
+                        {
+                            fechadeultimoepi = Convert.ToDateTime(ultimaFecha.A.M.FechaCita);
+                        }
+                        var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                        var ultimaFechaPagos = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha >= fechaInicio && i.Fecha <= fechaFinal select i).OrderByDescending(o => o.Fecha).FirstOrDefault();
+                        DateTime fechadeultimopago = FECHAI;
+                        if (ultimaFechaPagos != null)
+                        {
+                            fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
+                        }
+                        var preciodesumasnofechas = 0;
+
                         foreach (var item in modeloNormal.OrderBy(q => q.A.M.FechaCita))
                         {
                             //VARIABLES PARA FECHAS
@@ -622,8 +699,9 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                             int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
 
                             //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
-                            var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
                             var referidoPagos = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+                            var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+                            var pagoGestorC = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i).Count();
                             var condicionante = "";
                             var pagodeRow = 0;
 
@@ -738,9 +816,18 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                     </td>
 
                                     @*NUMERO DE EPIS X DIA EN FECHA*@
-                                    <td>
-                                        <span>@conteoEpisTotales</span>
-                                    </td>
+                                    @{
+                                        var fechaTablaInicioDia = Convert.ToDateTime(fechaTabla);
+                                        var fechaTablaFinalDia = Convert.ToDateTime(fechaTabla).AddMinutes(-1);
+                                        <td>
+                                            <div>
+                                                <a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaTablaInicioDia, fechaFinal = fechaTablaFinalDia, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
+                                                    <span>@conteoEpisTotales</span>
+                                                </a>
+                                                <span class="visible-print" hidden>@conteoEpisTotales</span>
+                                            </div>
+                                        </td>
+                                    }
 
                                     @*IMPORTE*@
                                     <td>
@@ -805,7 +892,62 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 montoPxDiaP = 0;
                                 precioVisual = 0;
                                 pagoVisual = 0;
+                                totalPago += pagodeRow;
                             }
+                        }
+
+                        //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
+                        var fechaUEPI = Convert.ToDateTime(fechadeultimoepi).ToString("dd-MMMM-yy");
+                        DateTime fechaUEPI2 = Convert.ToDateTime(fechaUEPI);
+                        var fechaUPAGO = Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy");
+                        DateTime fechaUPAGO2 = Convert.ToDateTime(fechaUPAGO);
+
+                        if (fechaUEPI2 < fechaUPAGO2 )
+                        {
+                               var fechasDePagosjaja = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha > fechadeultimoepi && i.Fecha <= fechadeultimopago select i);                               
+
+                               foreach(var i in fechasDePagosjaja)
+                               {
+                                    preciodesumasnofechas += Convert.ToInt32(i.PagoIngresado);
+                               }
+
+                                <tr style="height: auto">
+
+                                    @*FECHA DE CITA*@
+                                    <td>
+                                        <span>@Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy")</span>
+                                    </td>
+
+                                    @*NUMERO DE EPIS X DIA EN FECHA*@
+                                    <td>
+                                    </td>
+
+                                    @*IMPORTE*@
+                                    <td>
+                                    </td>
+
+                                    @*EPIS PAGADOS*@
+
+                                    <td>
+                                    </td>
+
+                                    @*IMPORTE EPIS PAGADOS*@
+
+                                    <td>
+                                    </td>
+
+                                    @*IMPORTE MODULO DE PAGOS*@
+
+                                    <td>
+                                        <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
+                                    </td>
+
+                                    <td>
+                                    </td>
+                                </tr> 
+                                totalPago += preciodesumasnofechas;
+                                diferenciaTotal =  saldoTotalImporte - (saldoTotalP + totalPago);
+                                preciodesumasnofechas=0;
                         }
 
                         <tr>
@@ -1013,7 +1155,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
         <br />
 
         @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
-        <div class="tablaScroll" style="min-height: 900px; min-width: 1000px">
+        <div class="tablaScroll; hidden-print" style="min-height: 900px; min-width: 1000px">
             <table class="table  table-hover tablas" style="color: #000000">
                 <thead style="color:white">
                     <tr>
@@ -1049,54 +1191,54 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         </th>
                     </tr>
                 </thead>
-                        @{
-                            foreach (var conc in modeloNormal)
-                            {
-                                        <tr>
-                                            <td>
-                                                @conc.B.NombrePaciente
-                                            </td>
-                                            <td>
-                                                @conc.A.M.Sucursal
-                                            </td>
-                                            <td>
-                                                @conc.A.M.Referencia
-                                            </td>
-                                            <td>
-                                                @conc.A.M.ReferidoPor
-                                            </td>
-                                            <td>
-                                                @conc.A.M.Cuenta
-                                            </td>
-                                            <td>
-                                                @conc.A.M.TipoPago
-                                            </td>
-                                            <td>
-                                                @Convert.ToDateTime(conc.A.M.FechaCita).ToString("dd-MMMM-yy")
-                                            </td>
-                                            <td>
-                                                @{
-                                                    if (conc.A.M.Cuenta == "BANCOS" || conc.A.M.Cuenta == "CONEKTA")
-                                                    {
-                                                        <span>@Convert.ToDateTime(conc.A.M.FechaContable).ToString("dd-MMMM-yy")</span>
-                                                    }
+                @{
+                    foreach (var conc in modeloNormal)
+                    {
+                        <tr>
+                            <td>
+                                @conc.B.NombrePaciente
+                            </td>
+                            <td>
+                                @conc.A.M.Sucursal
+                            </td>
+                            <td>
+                                @conc.A.M.Referencia
+                            </td>
+                            <td>
+                                @conc.A.M.ReferidoPor
+                            </td>
+                            <td>
+                                @conc.A.M.Cuenta
+                            </td>
+                            <td>
+                                @conc.A.M.TipoPago
+                            </td>
+                            <td>
+                                @Convert.ToDateTime(conc.A.M.FechaCita).ToString("dd-MMMM-yy")
+                            </td>
+                            <td>
+                                @{
+                                    if (conc.A.M.Cuenta == "BANCOS" || conc.A.M.Cuenta == "CONEKTA")
+                                    {
+                                        <span>@Convert.ToDateTime(conc.A.M.FechaContable).ToString("dd-MMMM-yy")</span>
+                                    }
 
-                                                    else
-                                                    { 
-                                                    <span>---</span>
-                                                    }
-                                                }
-                                            </td>
-                                            <td>
-                                                $@Convert.ToDouble(conc.A.M.PrecioEpi).ToString("####.##")
-                                            </td>
-                                            <td>
-                                                @conc.A.M.Recepcionista
-                                            </td>
-                                        </tr>
-                            }
-                       }
-                </table>
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                }
+                            </td>
+                            <td>
+                                $@Convert.ToDouble(conc.A.M.PrecioEpi).ToString("####.##")
+                            </td>
+                            <td>
+                                @conc.A.M.Recepcionista
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
         </div>
     }
 
@@ -1113,6 +1255,21 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 </thead>
                 <tbody>
                     @{
+                        var ultimaFecha = (from i in modeloAlternativo select i).OrderByDescending(o => o.FechaCita).FirstOrDefault();
+                        DateTime fechadeultimoepi = FECHAI;
+                        if (ultimaFecha != null)
+                        {
+                            fechadeultimoepi = Convert.ToDateTime(ultimaFecha.FechaCita);
+                        }
+                        var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                        var ultimaFechaPagos = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha >= fechaInicio && i.Fecha <= fechaFinal select i).OrderByDescending(o => o.Fecha).FirstOrDefault();
+                        DateTime fechadeultimopago = FECHAI;
+                        if (ultimaFechaPagos != null)
+                        {
+                            fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
+                        }
+                        var preciodesumasnofechas = 0;
+
                         foreach (var item in modeloAlternativo.OrderBy(q => q.FechaCita))
                         {
                             //VARIABLES PARA FECHAS
@@ -1202,7 +1359,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                     precioVisual = 0;
                                     pagoVisual = 0;
                                     condicionante = "";
-
+                                    totalPago += pagodeRow;
                                 }
                             }
 
@@ -1244,9 +1401,18 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                     </td>
 
                                     @*NUMERO DE EPIS X DIA EN FECHA*@
-                                    <td>
-                                        <span>@conteoEpisTotales</span>
-                                    </td>
+                                    @{
+                                        var fechaTablaInicioDia = Convert.ToDateTime(fechaTabla);
+                                        var fechaTablaFinalDia = Convert.ToDateTime(fechaTabla).AddMinutes(-1);
+                                        <td>
+                                            <div>
+                                                <a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaTablaInicioDia, fechaFinal = fechaTablaFinalDia, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
+                                                    <span>@conteoEpisTotales</span>
+                                                </a>
+                                                <span class="visible-print" hidden>@conteoEpisTotales</span>
+                                            </div>
+                                        </td>
+                                    }
 
                                     @*IMPORTE*@
                                     <td>
@@ -1313,6 +1479,63 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                                 pagoVisual = 0;
                             }
                         }
+
+                        //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
+                        var fechaUEPI = Convert.ToDateTime(fechadeultimoepi).ToString("dd-MMMM-yy");
+                        DateTime fechaUEPI2 = Convert.ToDateTime(fechaUEPI);
+                        var fechaUPAGO = Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy");
+                        DateTime fechaUPAGO2 = Convert.ToDateTime(fechaUPAGO);
+
+                        if (fechaUEPI2 < fechaUPAGO2 )
+                        {
+                            var fechasDePagosjaja = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha > fechadeultimoepi && i.Fecha <= fechadeultimopago select i);
+
+                            foreach (var i in fechasDePagosjaja)
+                            {
+                                preciodesumasnofechas += Convert.ToInt32(i.PagoIngresado);
+                            }
+
+                            <tr style="height: auto">
+
+                                @*FECHA DE CITA*@
+                                <td>
+                                    <span>@Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy")</span>
+                                </td>
+
+                                @*NUMERO DE EPIS X DIA EN FECHA*@
+                                <td>
+                                </td>
+
+                                @*IMPORTE*@
+                                <td>
+                                </td>
+
+                                @*EPIS PAGADOS*@
+
+                                <td>
+                                </td>
+
+                                @*IMPORTE EPIS PAGADOS*@
+
+                                <td>
+                                </td>
+
+                                @*IMPORTE MODULO DE PAGOS*@
+
+                                <td>
+                                    <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
+                                </td>
+
+                                <td>
+                                </td>
+                            </tr>
+
+                            totalPago += preciodesumasnofechas;
+                            diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
+                            preciodesumasnofechas = 0;
+                        }
+
+
                         <tr>
 
                             @*FECHA DE CITA*@

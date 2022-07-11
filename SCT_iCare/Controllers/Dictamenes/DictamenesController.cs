@@ -2194,50 +2194,70 @@ namespace SCT_iCare.Controllers.Dictamenes
             var findPrecio = (from q in db.Referido where q.Nombre == paciente.ReferidoPor && q.Tipo == paciente.CanalTipo select q).FirstOrDefault();
             var precioEncontradoCI = findPrecio.PrecioNormalconIVA;
             var precioEncontradoSI = findPrecio.PrecioNormal;
-            var precioEncontradoA = findPrecio.PrecioAereo;
+            var precioEncontradoACIVA = findPrecio.PrecioAereo;
+            var precioEncontradoASIVA = findPrecio.PrecioAereosinIVA;
+            var precioEncontradoAPCIVA = findPrecio.PrecioAereoPistaconIVA;
+            var precioEncontradoAPSIVA = findPrecio.PrecioAereoPista;
             var precioFinal = "";
 
+            if (findPrecio.Tipo == "EMPRESAS")
+            {
                 if (paciente.TipoLicencia == "AEREO")
                 {
                     if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
                     {
-                        if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
-                        {
-                            precioFinal = precioEncontradoSI;
-                        }
-
-                        else
-                        {
-                            precioFinal = precioEncontradoCI;
-                        }
-
+                        precioFinal = precioEncontradoCI;
                     }
-
                     else
                     {
-
-                        precioFinal = precioEncontradoA;
-
+                        precioFinal = precioEncontradoACIVA;
                     }
-
+                }
+               else  if (paciente.TipoLicencia == "AEREO_PISTA")
+                {
+                    if (findPrecio.PrecioAereoPistaconIVA == null || findPrecio.PrecioAereoPistaconIVA == "0")
+                    {
+                        precioFinal = precioEncontradoCI;
+                    }
+                    else
+                    {
+                        precioFinal = precioEncontradoAPCIVA;
+                    }
                 }
                 else
                 {
-                    if (findPrecio.PrecioNormalconIVA == null || findPrecio.PrecioNormalconIVA == "0")
+                    precioFinal = precioEncontradoCI;
+                }
+            }
+            else
+            {
+                if (paciente.TipoLicencia == "AEREO")
+                {
+                    if (findPrecio.PrecioAereo == null || findPrecio.PrecioAereo == "0")
                     {
-
                         precioFinal = precioEncontradoSI;
-
                     }
-
                     else
                     {
-
-                        precioFinal = precioEncontradoCI;
-
+                        precioFinal = precioEncontradoASIVA;
                     }
-
                 }
+                else if (paciente.TipoLicencia == "AEREO_PISTA")
+                {
+                    if (findPrecio.PrecioAereoPista == null || findPrecio.PrecioAereoPista == "0")
+                    {
+                        precioFinal = precioEncontradoSI;
+                    }
+                    else
+                    {
+                        precioFinal = precioEncontradoAPSIVA;
+                    }
+                }
+                else
+                {
+                    precioFinal = precioEncontradoSI;
+                }
+            }
 
             paciente.PrecioEpi = precioFinal;
 

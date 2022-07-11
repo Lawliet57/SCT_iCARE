@@ -653,67 +653,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             var costo = (from i in db.Cita where i.idPaciente == item.A.M.idPaciente select i).FirstOrDefault();
 
                             <span><b>$@costo.PrecioEpi</b></span>
-
-
-                            //OPCION CON PRECIO DE REFERIDO
-                            @*var costo = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
-
-                if (item.A.M.TipoPago == "Referencía BanBajío" || item.A.M.TipoPago == "Transferencia vía BanBajío" || item.A.M.TipoPago == "Referencia BanBajío" || item.A.M.TipoPago == "Banorte"
-                    || item.A.M.TipoPago == "REFERENCIA OXXO" || item.A.M.TipoPago == "Referencia OXXO" || item.A.M.TipoPago == "Pago con Tarjeta")
-                {
-                    if (item.A.M.TipoLicencia != "AEREO")
-                    {
-
-                        if (costo.PrecioNormalconIVA != null && costo.PrecioNormalconIVA != "0")
-                        {
-                            <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
-                        }
-                        else
-                        {
-                            <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-                        }
-                    }
-                    else
-                    {
-
-                        if (costo.PrecioAereo != null && costo.PrecioAereo != "0")
-                        {
-                            <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                        }
-                        else
-                        {
-                            <span><b>$3480</b></span>
-                        }
-
-                    }
-
-                }
-
-                else
-                {
-
-                    if (item.A.M.TipoLicencia != "AEREO")
-                    {
-
-                        <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-
-                    }
-                    else
-                    {
-
-                        if (costo.PrecioAereo != null && costo.PrecioNormalconIVA != "0")
-                        {
-                            <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                        }
-                        else
-                        {
-                            <span><b>$3480</b></span>
-                        }
-
-                    }
-
-                }*@
-
                         }
 
                     </td>
@@ -929,6 +868,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                     </select>
                                                     <br />
 
@@ -1100,6 +1040,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                     </select>
                                                     <br />
                                                     <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
@@ -1233,6 +1174,17 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
+                                                        <option value="Referencia OXXO">Referencia OXXO</option>
+                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
+                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                        <option value="Banorte">Banorte</option>
+                                                        <option value="Santander">Santander</option>
+                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                        <option value="BanCoppel LC">BanCoppel LC</option>
+                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                        <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
@@ -1310,6 +1262,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
@@ -1479,34 +1432,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                             //OPCION CON PRECIO EN TABLA CAPTURA
                             var costo = (from i in db.PacienteESP where i.idPacienteESP == item.idPacienteESP select i).FirstOrDefault();
 
-                            <span><b>$@costo.PrecioEpi</b></span>
-
-
-                            @*var costo = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
-
-                                if (item.TipoLicencia != "AEREO")
-                                {
-
-                                    if (costo.PrecioNormalconIVA != null)
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioNormalconIVA).ToString("####.##")</b></span>
-                                    }
-                                    else
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioNormal).ToString("####.##")</b></span>
-                                    }
-                                }
-                                else
-                                {
-                                    if (costo.PrecioAereo != null)
-                                    {
-                                        <span><b>$@Convert.ToDouble(costo.PrecioAereo).ToString("####.##")</b></span>
-                                    }
-                                    else
-                                    {
-                                        <span><b>$3480</b></span>
-                                    }
-                                }*@
+                            <span><b>$@costo.PrecioEpi</b></span>                       
                         }
 
                     </td>
@@ -1611,6 +1537,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                     </select>
                                                     <br />
 
@@ -1748,6 +1675,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
@@ -1846,6 +1774,17 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
+                                                        <option value="Referencia OXXO">Referencia OXXO</option>
+                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
+                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                        <option value="Banorte">Banorte</option>
+                                                        <option value="Santander">Santander</option>
+                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                        <option value="BanCoppel LC">BanCoppel LC</option>
+                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                        <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
@@ -1903,6 +1842,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
                                                         <option value="Banco Azteca LC">Banco Azteca LC</option>
                                                         <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
                                                         <option value="Pendiente de Pago">Pendiente de Pago</option>
                                                     </select>
                                                     <br />
@@ -1934,16 +1874,6 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         }
     </table>
 </div>
-
-
-
-
-
-
-
-
-
-
 
 
 

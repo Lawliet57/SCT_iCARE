@@ -999,6 +999,7 @@ C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CoreCompileIn
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.csproj.CopyComplete
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.dll
 C:\Users\CC2\Git2.0\SCT_iCARE\SCT_iCare\obj\Debug\SCT_iCare.pdb
+C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\SCT_iCare.dll.config
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\SCT_iCare.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\SCT_iCare.pdb
@@ -1013,7 +1014,6 @@ C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CodeAnalysis.CSha
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CodeAnalysis.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
-C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.CSharp.Core.targets
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
 C:\Users\punks\Git AO\SCT_iCare\SCT_iCare\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll

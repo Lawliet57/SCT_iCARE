@@ -751,7 +751,7 @@ else
                     </td>
 
                     <td>
-                        <b>@item.FechaCaptura</b>
+                        <b>@Convert.ToDateTime(item.FechaCaptura).AddDays(1).ToString("dd-MMMM-yyyy")</b> 
                     </td>
 
                 </tr>
