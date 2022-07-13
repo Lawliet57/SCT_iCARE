@@ -50,6 +50,10 @@ namespace SCT_iCare.Controllers.Contabilidad
             {
                 ViewBag.Cuenta = "";
             }
+            else if (cuenta == "NULL")
+            {
+                ViewBag.Cuenta = null;
+            }
             else
             {
                 ViewBag.Cuenta = cuenta;
@@ -250,7 +254,8 @@ namespace SCT_iCare.Controllers.Contabilidad
 
             string historico = cita.CuentaComentario == null ? "" : cita.CuentaComentario + "+";
             string cuentaAnterior = cita.Cuenta == null ? "" : " PROVIENE DE " + cita.Cuenta;
-            cita.CuentaComentario = historico + comentario + cuentaAnterior + " " + DateTime.Today.ToString("dd-MM-yy") + " POR " + usuario;
+            string pagoAnterior = " El tipo de pago fue modificado de " + cita.TipoPago;
+            cita.CuentaComentario = historico + comentario + cuentaAnterior + pagoAnterior + " " + DateTime.Today.ToString("dd-MM-yy") + " POR " + usuario;
             cita.Cuenta = cuenta;
             cita.FechaContable = fechaContable == null ? DateTime.Now : fechaContable;
             cita.UsarSaldo = usarSaldo;

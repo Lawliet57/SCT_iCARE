@@ -2222,7 +2222,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
             if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío" || cita.TipoPago == "Credito Empresas"
             || cita.TipoPago == "Referencia BanBajío" || cita.TipoPago == "Banorte" || cita.TipoPago == "REFERENCIA OXXO" || cita.TipoPago == "Referencia OXXO"
-            || cita.TipoPago == "Pago con Tarjeta")
+            || cita.TipoPago == "Pago con Tarjeta" || findPrecio.Tipo == "EMPRESA")
             {
                 if (tipoL == "AEREO")
                 {

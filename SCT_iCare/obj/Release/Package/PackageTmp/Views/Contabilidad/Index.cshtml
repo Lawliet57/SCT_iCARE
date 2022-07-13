@@ -40,7 +40,6 @@
         Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
         && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
 
-
     var modelo1 = db.PacienteESP.
         Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
         && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
@@ -67,8 +66,8 @@
 
 
         modelo1 = db.PacienteESP.
-           Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
-           && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado != null).OrderBy(o => o.Cuenta);
+   Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
+   && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado != null).OrderBy(o => o.Cuenta);
 
 
         modeloExcel = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
@@ -220,7 +219,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
 
 
-    if (ViewBag.Cuenta != "")
+    if (ViewBag.Cuenta != "" && ViewBag.Cuenta != null)
     {
         cuenta = ViewBag.Cuenta;
         nombreExcel = ViewBag.Cuenta;
@@ -231,6 +230,18 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
         modelo1 = modelo1.Where(w => w.Cuenta.Contains(cuenta)).OrderBy(o => o.Cuenta);
         modeloExcel = modeloExcel.Where(w => w.A.M.Cuenta.Contains(cuenta)).OrderBy(o => o.A.M.Cuenta);
         modeloExcel1 = modeloExcel1.Where(w => w.Cuenta.Contains(cuenta)).OrderBy(o => o.Cuenta);
+    }
+    if (ViewBag.Cuenta == null)
+    {
+        cuenta = ViewBag.Cuenta;
+        nombreExcel = ViewBag.Cuenta;
+
+        nombreExcel += "-" + cuenta;
+
+        modelo = modelo.Where(w => w.A.M.Cuenta == null).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.Cuenta == null).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.Cuenta==null).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.Cuenta==null).OrderBy(o => o.Cuenta);
     }
 
     //if(ViewBag.Cuenta == "TODOS")
@@ -296,21 +307,27 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         <select name="cuenta" style="font-size: 1.5vh; width: 100px" class="form-control">
             @{
-                if (ViewBag.Cuenta == null || ViewBag.Cuenta == "")
+                if (ViewBag.Cuenta == "")
                 {
                     <option value="">CUENTA</option>
                 }
+                else if (ViewBag.Cuenta == null)
+                {
+                    <option value="@cuenta">CAJA</option>
+                }
                 else
                 {
-                    <option value="@cuenta">@cuenta.ToUpper()</option>
+                    <option value="@cuenta"> @cuenta.ToUpper() </option>
                 }
             }
+            <option value="NULL">CAJA</option>
             <option value="BANCOS">BANCOS</option>
             <option value="CONEKTA">CONEKTA</option>
             <option value="ANTICIPOS">ANTICIPOS</option>
             <option value="CUENTAS X COBRAR">CUENTAS X COBRAR</option>
             <option value="CORPORATIVO">CORPORATIVO</option>
             <option value="ACLARACIONES">ACLARACIONES</option>
+            <option value="ACLARACIONES_RESUELTAS">ACLARACIONES RESUELTAS</option>
             <option value="DEVOLUCIONES">DEVOLUCIONES</option>
             <option value="">TODOS</option>
         </select>
@@ -663,83 +680,102 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         <div class="btn-group">
 
                             @{
+                                if(oUser.Nombre != "Maribel Hernandez")
+                                { 
 
-                                if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora" || oUser.Nombre == "Jessica Bustos" || oUser.Nombre == "Teresa Lozano " || oUser.Nombre == "Ramon Reyna")
-                                {
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    </button>
+                                    if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora" || oUser.Nombre == "Jessica Bustos" || oUser.Nombre == "Teresa Lozano " || oUser.Nombre == "Ramon Reyna")
+                                    {
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        </button>
 
-                                    <div class="dropdown-menu" style="padding:10px">
-                                        @*@{
-                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                        <div class="dropdown-menu" style="padding:10px">
+                                            @*@{
+                                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                if (consultaTicket != 0)
-                                {
-                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                }
-                            }*@
-                                        <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Conekta_@item.A.M.idCita"><b>Conekta</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Anticipos_@item.A.M.idCita"><b>Anticipos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                            <div class="dropdown-divider"></div>*@
-                                        <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                            <div class="dropdown-divider"></div>*@
-                                    </div>
-                                }
+                                                if (consultaTicket != 0)
+                                                {
+                                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                                }
+                                            }*@
+                                            <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Conekta_@item.A.M.idCita"><b>Conekta</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Anticipos_@item.A.M.idCita"><b>Anticipos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
+                                             <div class="dropdown-divider"></div>*@
+                                            @{
+                                                if (item.A.M.Cuenta != "ACLARACIONES")
+                                                    {
+                                                        <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
+                                                        <div class="dropdown-divider"></div>
+                                                    }
+                                                }
 
-                                else if (item.A.M.Conciliado != null && (item.A.M.Cuenta == "BANCOS" || item.A.M.Cuenta == "CONEKTA"))
-                                {
-                                    <b style="font-size:x-small">CONCILIADO </b><span class="glyphicon glyphicon-ok" style="font-size:x-small"></span>
-                                }
+                                            @{
+                                                if (oUser.idRol == 2 || oUser.Nombre == "Flavio Rodrigo")
+                                                {
+                                                    if (item.A.M.Cuenta == "ACLARACIONES")
+                                                    {
+                                                        <a href="#" data-toggle="modal" data-target="#Aclaraciones_Resueltas_@item.A.M.idCita"><b>Aclaraciones Resueltas</b></a>
+                                                        <div class="dropdown-divider"></div>
+                                                    }
+                                                }
+                                            }
+                                            <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
+                                                       <div class="dropdown-divider"></div>*@
+                                        </div>
+                                    }
 
-                                else
-                                {
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    </button>
+                                    else if (item.A.M.Conciliado != null && (item.A.M.Cuenta == "BANCOS" || item.A.M.Cuenta == "CONEKTA"))
+                                    {
+                                        <b style="font-size:x-small">CONCILIADO </b><span class="glyphicon glyphicon-ok" style="font-size:x-small"></span>
+                                    }
 
-                                    <div class="dropdown-menu" style="padding:10px">
-                                        @*@{
-                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        </button>
 
-                                if (consultaTicket != 0)
-                                {
-                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                }
-                            }*@
-                                        <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Conekta_@item.A.M.idCita"><b>Conekta</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Anticipos_@item.A.M.idCita"><b>Anticipos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                            <div class="dropdown-divider"></div>*@
-                                        <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                            <div class="dropdown-divider"></div>*@
+                                        <div class="dropdown-menu" style="padding:10px">
+                                            @*@{
+                                            var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                    </div>
+                                            if (consultaTicket != 0)
+                                            {
+                                                <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                            }
+                                                }*@
+                                            <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Conekta_@item.A.M.idCita"><b>Conekta</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Anticipos_@item.A.M.idCita"><b>Anticipos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
+                                            <div class="dropdown-divider"></div>*@
+                                            <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
+                                             <div class="dropdown-divider"></div>*@
+
+                                        </div>
+                                    }
                                 }
                             }
 
@@ -1173,6 +1209,84 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                     <b>@item.A.M.Doctor</b><br />
                                                     <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
                                                     <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                                                        <option value="@item.A.M.TipoPago">Seleccionar</option>
+                                                        <option value="Referencia OXXO">Referencia OXXO</option>
+                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
+                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                        <option value="Banorte">Banorte</option>
+                                                        <option value="Santander">Santander</option>
+                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                        <option value="BanCoppel LC">BanCoppel LC</option>
+                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                        <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
+                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
+                                                    </select>
+                                                    <br />
+                                                    <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
+                                                    <input type="text" class="form-control" name="comentario" />
+                                                    <input type="hidden" name="usuario" value="@oUser.Nombre" />
+                                                    <input type="hidden" name="fechaInicio" value="@fechaInicio" />
+                                                    @{
+
+                                                        if (ViewBag.fechafinal != null)
+                                                        {
+
+                                                            <input type="hidden" name="fechaFinal" value="@SetFechaFinal" />
+
+                                                        }
+
+                                                        else
+                                                        {
+
+                                                            <input type="hidden" name="fechaFinal" value="@DateTime.Today" />
+
+
+                                                        }
+
+                                                    }
+                                                    <input type="hidden" name="cuenta2" value="@cuenta" />
+                                                    <input type="hidden" name="canal" value="@canal" />
+                                                    <input type="hidden" name="sucursal" value="@sucursal" />
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <input type="submit" value="Guardar" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- Aclaraciones Resueltas -->
+                            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuenta")">
+                                @Html.AntiForgeryToken()
+                                <div class="modal fade" id="Aclaraciones_Resueltas_@item.A.M.idCita" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel"><b>¿Está seguro de mandar los datos de esta venta a ACLARACIONES RESUELTAS?</b></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" value="@item.A.M.idCita" />
+                                                <input type="hidden" name="cuenta" value="ACLARACIONES_RESUELTAS" />
+                                                <div class="form-group" style="width:60%; min-width:320px">
+                                                    <label for="recipient-name" class="col-form-label">Nombre:</label>
+                                                    <b>@item.A.N.Nombre</b><br />
+                                                    <label for="recipient-name" class="col-form-label">CURP:</label>
+                                                    <b>@item.A.N.CURP</b><br />
+                                                    <label for="recipient-name" class="col-form-label">NoExpediente:</label>
+                                                    <b>@item.A.M.NoExpediente</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Fecha:</label>
+                                                    <b>@Convert.ToDateTime(item.A.M.FechaReferencia).ToString("dd-MMMM-yyyy")</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                                                    <b>@item.A.M.Sucursal</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Doctor:</label>
+                                                    <b>@item.A.M.Doctor</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
+                                                    <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
                                                         <option selected disabled>Seleccionar</option>
                                                         <option value="Referencia OXXO">Referencia OXXO</option>
                                                         <option value="Referencía BanBajío">Referencía BanBajío</option>
@@ -1442,62 +1556,80 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     <td>
                         <div class="btn-group">
                             @{
-
-                                if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora")
+                                if (oUser.Nombre != "Maribel Hernandez")
                                 {
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    </button>
+                                    if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora")
+                                    {
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        </button>
 
-                                    <div class="dropdown-menu" style="padding:10px">
-                                        <a href="#" data-toggle="modal" data-target="#Efectivo1_@item.idPacienteESP"><b>Bancos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Conekta1_@item.idPacienteESP"><b>Conekta</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Anticipos1_@item.idPacienteESP"><b>Anticipos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#CXC1_@item.idPacienteESP"><b>CuentasXCobrar</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                            <div class="dropdown-divider"></div>*@
-                                        <a href="#" data-toggle="modal" data-target="#Aclaracion1_@item.idPacienteESP"><b>Aclaracion</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Devoluciones1_@item.idPacienteESP"><b>Devoluciones</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                            <div class="dropdown-divider"></div>*@
+                                        <div class="dropdown-menu" style="padding:10px">
+                                            <a href="#" data-toggle="modal" data-target="#Efectivo1_@item.idPacienteESP"><b>Bancos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Conekta1_@item.idPacienteESP"><b>Conekta</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Anticipos1_@item.idPacienteESP"><b>Anticipos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#CXC1_@item.idPacienteESP"><b>CuentasXCobrar</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
+                        <div class="dropdown-divider"></div>*@
+                                            @{
+                                                if (item.Cuenta != "ACLARACIONES")
+                                                {
+                                                    <a href="#" data-toggle="modal" data-target="#Aclaracion1_@item.idPacienteESP"><b>Aclaracion</b></a>
+                                                    <div class="dropdown-divider"></div>
+                                                }
+                                            }
 
-                                    </div>
-                                }
-                                else if (item.Conciliado != null)
-                                {
-                                    <b style="font-size:x-small">CONCILIADO </b><span class="glyphicon glyphicon-ok" style="font-size:x-small"></span>
-                                }
-                                else
-                                {
-                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                    </button>
+                                            @{
+                                                if (oUser.idRol == 2 || oUser.Nombre == "Flavio Rodrigo")
+                                                {
+                                                    if (item.Cuenta == "ACLARACIONES")
+                                                    {
+                                                        <a href="#" data-toggle="modal" data-target="#Aclaracion1_Resuelta_@item.idPacienteESP"><b>Aclaraciones Resueltas</b></a>
+                                                        <div class="dropdown-divider"></div>
+                                                    }
+                                                }
+                                            }
+                                            <a href="#" data-toggle="modal" data-target="#Devoluciones1_@item.idPacienteESP"><b>Devoluciones</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
+                        <div class="dropdown-divider"></div>*@
 
-                                    <div class="dropdown-menu" style="padding:10px">
-                                        <a href="#" data-toggle="modal" data-target="#Efectivo1_@item.idPacienteESP"><b>Bancos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Conekta1_@item.idPacienteESP"><b>Conekta</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Anticipos1_@item.idPacienteESP"><b>Anticipos</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#CXC1_@item.idPacienteESP"><b>CuentasXCobrar</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                            <div class="dropdown-divider"></div>*@
-                                        <a href="#" data-toggle="modal" data-target="#Aclaracion1_@item.idPacienteESP"><b>Aclaracion</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        <a href="#" data-toggle="modal" data-target="#Devoluciones1_@item.idPacienteESP"><b>Devoluciones</b></a>
-                                        <div class="dropdown-divider"></div>
-                                        @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                            <div class="dropdown-divider"></div>*@
+                                        </div>
+                                    }
+                                    else if (item.Conciliado != null && (item.Cuenta == "BANCOS" || item.Cuenta == "CONEKTA"))
+                                    {
+                                        <b style="font-size:x-small">CONCILIADO </b><span class="glyphicon glyphicon-ok" style="font-size:x-small"></span>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                        </button>
 
-                                    </div>
+                                        <div class="dropdown-menu" style="padding:10px">
+                                            <a href="#" data-toggle="modal" data-target="#Efectivo1_@item.idPacienteESP"><b>Bancos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Conekta1_@item.idPacienteESP"><b>Conekta</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Anticipos1_@item.idPacienteESP"><b>Anticipos</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#CXC1_@item.idPacienteESP"><b>CuentasXCobrar</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
+                        <div class="dropdown-divider"></div>*@
+                                            <a href="#" data-toggle="modal" data-target="#Aclaracion1_@item.idPacienteESP"><b>Aclaracion</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            <a href="#" data-toggle="modal" data-target="#Devoluciones1_@item.idPacienteESP"><b>Devoluciones</b></a>
+                                            <div class="dropdown-divider"></div>
+                                            @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
+                        <div class="dropdown-divider"></div>*@
+
+                                        </div>
+                                    }
                                 }
                             }
 
@@ -1760,6 +1892,65 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                             <div class="modal-body">
                                                 <input type="hidden" name="id" value="@item.idPacienteESP" />
                                                 <input type="hidden" name="cuenta" value="ACLARACIONES" />
+                                                <div class="form-group" style="width:60%; min-width:320px">
+                                                    <label for="recipient-name" class="col-form-label">Nombre:</label>
+                                                    <b>@item.Nombre</b><br />
+                                                    <label for="recipient-name" class="col-form-label">CURP:</label>
+                                                    <b>@item.CURP</b><br />
+                                                    <label for="recipient-name" class="col-form-label">NoExpediente:</label>
+                                                    <b>@item.NoExpediente</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Fecha:</label>
+                                                    <b>@Convert.ToDateTime(item.FechaCaptura).ToString("dd-MMMM-yyyy")</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Doctor:</label>
+                                                    <b>@item.Doctor</b><br />
+                                                    <label for="recipient-name" class="col-form-label">Tipo de Pago:</label>
+                                                    <select required name="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                                                        <option selected disabled>Seleccionar</option>
+                                                        <option value="Referencia OXXO">Referencia OXXO</option>
+                                                        <option value="Referencía BanBajío">Referencía BanBajío</option>
+                                                        <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                        <option value="Banorte">Banorte</option>
+                                                        <option value="Santander">Santander</option>
+                                                        <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                        <option value="BanCoppel LC">BanCoppel LC</option>
+                                                        <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                        <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                        <option value="Cuenta Externa">Cuenta Externa</option>
+                                                        <option value="Credito Empresas">Credito Empresas</option>
+                                                        <option value="Pendiente de Pago">Pendiente de Pago</option>
+                                                    </select>
+                                                    <br />
+                                                    <label for="recipient-name" class="col-form-label">¿Desea agregar un comentario?:</label>
+                                                    <input type="text" class="form-control" name="comentario" />
+                                                    <input type="hidden" name="usuario" value="@oUser.Nombre" />
+                                                    <input type="hidden" name="fechaInicio" value="@fechaInicio" />
+                                                    <input type="hidden" name="fechaFinal" value="@fechaFinal" />
+                                                    <input type="hidden" name="cuenta2" value="@cuenta" />
+                                                    <input type="hidden" name="canal" value="@canal" />
+                                                    <input type="hidden" name="sucursal" value="@sucursal" />
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <input type="submit" value="Guardar" class="btn btn-primary" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- ACLARACIONES RESUELTAS -->
+                            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/CambiarCuentaALT")">
+                                @Html.AntiForgeryToken()
+                                <div class="modal fade" id="Aclaracion1_Resuelta_@item.idPacienteESP" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="exampleModalLabel"><b>¿Está seguro de mandar los datos de esta venta a ACLARACIONES RESUELTAS?</b></h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="hidden" name="id" value="@item.idPacienteESP" />
+                                                <input type="hidden" name="cuenta" value="ACLARACIONES_RESUELTAS" />
                                                 <div class="form-group" style="width:60%; min-width:320px">
                                                     <label for="recipient-name" class="col-form-label">Nombre:</label>
                                                     <b>@item.Nombre</b><br />
