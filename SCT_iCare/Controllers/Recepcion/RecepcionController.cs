@@ -239,317 +239,139 @@ namespace SCT_iCare.Controllers.Recepcion
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, string pago,string referencia, int? referido, DateTime? fecha)
+        public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista,
+            string pago,string referencia, int? referido, DateTime? fecha, int precioIngresado)
         {
-            Paciente paciente1 = new Paciente();
+            var findGestor = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
+            var precioN = Convert.ToInt32(findGestor.PrecioNormal);
+            var precioNIVA = Convert.ToInt32(findGestor.PrecioNormalconIVA);
+            var precioAT = Convert.ToInt32(findGestor.PrecioAereosinIVA);
+            var precioATIVA = Convert.ToInt32(findGestor.PrecioAereo);
+            var precioP = Convert.ToInt32(findGestor.PrecioAereoPista);
+            var precioPIVA = Convert.ToInt32(findGestor.PrecioAereoPistaconIVA);
+            var cantidadInt = cantidad != "" ? Convert.ToInt32(cantidad) : 0;
+            var cantidadATInt = cantidadAereo != "" ? Convert.ToInt32(cantidadAereo) : 0;
+            var cantidadAPInt = cantidadPista != "" ? Convert.ToInt32(cantidadPista) : 0;
+            var precioReal = 0;
+            var sumaEPISN = 0;
+            var sumaEPISAT = 0;
+            var sumaEPISAP = 0;
+            string condicionante = "";
 
-            //var revisionPaciente = from i in db.Paciente where i.Nombre == nombre.ToUpper() select i ;
-
-            //if(revisionPaciente != null)
-            //{
-            //    List<Captura> data = db.Captura.ToList();
-            //    JavaScriptSerializer js = new JavaScriptSerializer();
-            //    var selected = data.Where(r => r.NombrePaciente == nombre.ToUpper())
-            //        .Select(S => new {
-            //            idCaptura = S.idCaptura,
-            //            S.NombrePaciente,
-            //            S.TipoTramite,
-            //            S.NoExpediente,
-            //            S.Sucursal,
-            //            S.Doctor,
-            //            S.EstatusCaptura
-            //        }).FirstOrDefault();
-
-            //    return Json(selected, JsonRequestBehavior.AllowGet);
-            //}
-
-            int cantidadN;
-            int cantidadA;
-            int cantidadAP;
-
-            if (cantidad == "")
+            if (pago == "REFERENCIA OXXO" || pago == "Pago con Tarjeta" || pago == "Referencia OXXO" || pago == "Transferencia vía BanBajío"
+                                                 || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
             {
-                cantidadN = 0;
-            }
-            else
-            {
-                cantidadN = Convert.ToInt32(cantidad);
-            }
-
-            if (cantidadAereo == "")
-            {
-                cantidadA = 0;
-            }
-            else
-            {
-                cantidadA = Convert.ToInt32(cantidadAereo);
-            }
-
-            if (cantidadPista == "")
-            {
-                cantidadAP = 0;
-            }
-            else
-            {
-                cantidadAP = Convert.ToInt32(cantidadPista);
-            }
-
-
-            if ((cantidadN + cantidadA + cantidadAP) == 1)
-            {
-                Paciente paciente = new Paciente();
-                paciente.Nombre = nombre.ToUpper()/*.Normalize(System.Text.NormalizationForm.FormD).Replace(@"´¨", "")*/;
-                paciente.Telefono = telefono;
-                paciente.Email = email;
-
-
-                string hash;
-                do
+                if(cantidadInt != 0)
                 {
-                    Random numero = new Random();
-                    int randomize = numero.Next(0, 61);
-                    string[] aleatorio = new string[62] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-                    string get_1;
-                    get_1 = aleatorio[randomize];
-                    hash = get_1;
-                    for (int i = 0; i < 9; i++)
-                    {
-                        randomize = numero.Next(0, 61);
-                        get_1 = aleatorio[randomize];
-                        hash += get_1;
-                    }
-                } while ((from i in db.Paciente where i.HASH == hash select i) == null);
-
-                paciente.HASH = hash;
-
-
-                //Se obtienen las abreviaciónes de Sucursal y el ID del doctor
-                string SUC = (from S in db.Sucursales where S.Nombre == sucursal select S.SUC).FirstOrDefault();
-                //string doc = (from d in db.Doctores where d.Nombre == doctor select d.idDoctor).FirstOrDefault().ToString();
-
-                //Se obtiene el número del contador desde la base de datos
-                int? num = (from c in db.Sucursales where c.Nombre == sucursal select c.Contador).FirstOrDefault() + 1;
-
-                //Contadores por número de citas en cada sucursal
-                string contador = "";
-                if (num == null)
-                {
-                    contador = "100";
+                    sumaEPISN = (cantidadInt * precioNIVA);
                 }
-                else if (num < 10)
+                if (cantidadATInt != 0)
                 {
-                    contador = "00" + Convert.ToString(num);
+                    sumaEPISAT = (cantidadATInt * precioATIVA);
                 }
-                else if (num >= 10 && num < 100)
+                if (cantidadAPInt != 0)
                 {
-                    contador = "0" + Convert.ToString(num);
+                    sumaEPISAP = (cantidadATInt * precioPIVA);
+                }
+
+                precioReal = sumaEPISN + sumaEPISAP + sumaEPISAT;
+
+                if (precioReal == precioIngresado)
+                {
+                    condicionante = "Aprobado";
+                }
+            }
+            else
+            {
+                if (cantidadInt != 0)
+                {
+                    sumaEPISN = (cantidadInt * precioN);
+                }
+                if (cantidadATInt != 0)
+                {
+                    sumaEPISAT = (cantidadATInt * precioAT);
+                }
+                if (cantidadAPInt != 0)
+                {
+                    sumaEPISAP = (cantidadATInt * precioP);
+                }
+
+                precioReal = sumaEPISN + sumaEPISAP + sumaEPISAT;
+
+                if (precioReal == precioIngresado)
+                {
+                    condicionante = "Aprobado";
+                }
+            }
+
+            if (condicionante != "Aprobado")
+            {
+                return View("PrecioIncorrecto");
+            }
+
+            else
+            {
+                Paciente paciente1 = new Paciente();
+
+                //var revisionPaciente = from i in db.Paciente where i.Nombre == nombre.ToUpper() select i ;
+
+                //if(revisionPaciente != null)
+                //{
+                //    List<Captura> data = db.Captura.ToList();
+                //    JavaScriptSerializer js = new JavaScriptSerializer();
+                //    var selected = data.Where(r => r.NombrePaciente == nombre.ToUpper())
+                //        .Select(S => new {
+                //            idCaptura = S.idCaptura,
+                //            S.NombrePaciente,
+                //            S.TipoTramite,
+                //            S.NoExpediente,
+                //            S.Sucursal,
+                //            S.Doctor,
+                //            S.EstatusCaptura
+                //        }).FirstOrDefault();
+
+                //    return Json(selected, JsonRequestBehavior.AllowGet);
+                //}
+
+                int cantidadN;
+                int cantidadA;
+                int cantidadAP;
+
+                if (cantidad == "")
+                {
+                    cantidadN = 0;
                 }
                 else
                 {
-                    contador = Convert.ToString(num);
+                    cantidadN = Convert.ToInt32(cantidad);
                 }
 
-                //Se asigna el número de ID del doctor
-                //if(Convert.ToInt32(doc) < 10)
-                //{
-                //    doc = "0" + doc;
-                //}
-
-                string mes = DateTime.Now.Month.ToString();
-                string dia = DateTime.Now.Day.ToString();
-                char[] year = (DateTime.Now.Year.ToString()).ToCharArray();
-                string anio = "";
-
-                for (int i = 2; i < year.Length; i++)
+                if (cantidadAereo == "")
                 {
-                    anio += year[i];
-                }
-
-                if (Convert.ToInt32(mes) < 10)
-                {
-                    mes = "0" + mes;
-                }
-
-                if (Convert.ToInt32(dia) < 10)
-                {
-                    dia = "0" + dia;
-                }
-
-                //Se crea el número de Folio
-                //string numFolio = (DateTime.Now.Year).ToString() + mes + (DateTime.Now.Day).ToString() + SUC + "-" + contador;
-                //paciente.Folio = (DateTime.Now.Year).ToString() + mes + (DateTime.Now.Day).ToString() + SUC + "-" + contador;
-
-                string numFolio = dia + mes + anio + SUC + "-" + contador;
-                paciente.Folio = dia + mes + anio + SUC + "-" + contador;
-
-                if (ModelState.IsValid)
-                {
-                    db.Paciente.Add(paciente);
-                    
-                    db.SaveChanges();
-                    //return RedirectToAction("Index");
-                }
-
-                CarruselMedico cm = new CarruselMedico();
-                cm.idPaciente = paciente.idPaciente;
-
-                if (ModelState.IsValid)
-                {
-                    db.CarruselMedico.Add(cm);
-                    db.SaveChanges();
-                    //return RedirectToAction("Index");
-                }
-
-                int? idSuc = (from i in db.Sucursales where i.Nombre == sucursal select i.idSucursal).FirstOrDefault();
-
-                Sucursales suc = db.Sucursales.Find(idSuc);
-
-                suc.Contador = Convert.ToInt32(num);
-
-                if (ModelState.IsValid)
-                {
-                    db.Entry(suc).State = EntityState.Modified;
-                    db.SaveChanges();
-                    //No retorna ya que sigue el proceso
-                    //return RedirectToAction("Index");
-                }
-
-                var idPaciente = (from i in db.Paciente where i.Folio == paciente.Folio select i.idPaciente).FirstOrDefault();
-
-                Cita cita = new Cita();
-
-                cita.idPaciente = idPaciente;
-                cita.FechaReferencia = DateTime.Now;
-                cita.Sucursal = sucursal;
-                cita.FechaCita = fecha != null ? fecha : DateTime.Now;
-                cita.Recepcionista = usuario;
-                cita.EstatusPago = "Pagado";
-                cita.Referencia = referencia;
-                cita.Folio = numFolio;
-                cita.Canal = "Recepción";
-                cita.TipoPago = pago;
-                cita.FechaCreacion = DateTime.Now;
-
-                //Se usa el idCanal para poder hacer que en Recepción se tenga que editar el nombre si viene de gestor
-                cita.idCanal = 1;
-
-                if(referido == 22)
-                {
-                    cita.Referencia = "E1293749";
-                }
-                if (referido == 23)
-                {
-                    cita.Referencia = "PL1293750";
-                }
-                //if (referido == "NATALY FRANCO")
-                //{
-                //    cita.Referencia = "NF1293751";
-                //}
-                if (referido == 36)
-                {
-                    cita.Referencia = "LV1293752";
-                }
-                if (referido == 21)
-                {
-                    cita.Referencia = "RS1293753";
-                }
-
-                if (pago != "Referencia Scotiabank")
-                {
-                    var tipoPago = (from t in db.ReferenciasSB where t.ReferenciaSB == referencia select t).FirstOrDefault();
-
-                    if (tipoPago != null)
-                    {
-                        ReferenciasSB refe = db.ReferenciasSB.Find(tipoPago.idReferencia);
-                        refe.EstatusReferencia = "LIBRE";
-                        refe.idPaciente = idPaciente;
-
-                        if (ModelState.IsValid)
-                        {
-                            db.Entry(refe).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
+                    cantidadA = 0;
                 }
                 else
                 {
-                    //var tipoPago = (from t in db.ReferenciasSB where t.ReferenciaSB == numero select t).FirstOrDefault();
-
-                    var tipoPago = (from t in db.ReferenciasSB where t.ReferenciaSB == referencia select t).FirstOrDefault();
-
-                    if(tipoPago != null)
-                    {
-                        ReferenciasSB refe = db.ReferenciasSB.Find(tipoPago.idReferencia);
-                        refe.EstatusReferencia = "OCUPADO";
-
-                        if (ModelState.IsValid)
-                        {
-                            db.Entry(refe).State = EntityState.Modified;
-                            db.SaveChanges();
-                        }
-                    }
-                    
+                    cantidadA = Convert.ToInt32(cantidadAereo);
                 }
 
-                string TIPOLIC = null;
-                if (cantidadA != 0)
+                if (cantidadPista == "")
                 {
-                    TIPOLIC = "AEREO";
+                    cantidadAP = 0;
                 }
-                if (cantidadAP != 0)
+                else
                 {
-                    TIPOLIC = "AEREO_PISTA";
-                }
-                cita.TipoLicencia = TIPOLIC;
-
-                //if (referido == "NINGUNO" || referido == "OTRO")
-                //{
-                //    cita.CC = "N/A";
-                //}
-                //else
-                //{
-                //    var referidoTipo = (from r in db.Referido where r.Nombre == referido select r.Tipo).FirstOrDefault();
-                //    cita.CC = referidoTipo;
-                //}
-
-                cita.Cuenta = pago == "Pendiente de Pago" && (referido != 4 && referido != 5 && referido != 6) ? "CUENTAS X COBRAR" : null;
-
-                var referidoTipo = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
-                cita.CC = referidoTipo.Tipo;
-                cita.CanalTipo = referidoTipo.Tipo;
-
-                cita.ReferidoPor = referidoTipo.Nombre;
-
-                if(referidoTipo.idReferido == 7 || referidoTipo.idReferido == 8 || referidoTipo.idReferido == 9 || referidoTipo.idReferido == 10 || referidoTipo.idReferido == 12 ||
-                    referidoTipo.idReferido == 13 || referidoTipo.idReferido == 20 || referidoTipo.idReferido == 26 || referidoTipo.idReferido == 27 || referidoTipo.idReferido == 29 ||
-                    referidoTipo.idReferido == 36 || referidoTipo.idReferido == 52 || referidoTipo.idReferido == 53 || referidoTipo.idReferido == 54 || referidoTipo.idReferido == 55 ||
-                    referidoTipo.idReferido == 56 || referidoTipo.idReferido == 59 || referidoTipo.idReferido == 130 || referidoTipo.idReferido == 136 || referidoTipo.idReferido == 142)
-                {
-                    cita.Cuenta = "CORPORATIVO";
+                    cantidadAP = Convert.ToInt32(cantidadPista);
                 }
 
 
-                //-------------------------------------------------------------
-                if (ModelState.IsValid)
-                {
-                    db.Cita.Add(cita);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-
-                
-
-            }
-            else
-            {
-                //return View(detallesOrden);
-                for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA + cantidadAP)); n++)
+                if ((cantidadN + cantidadA + cantidadAP) == 1)
                 {
                     Paciente paciente = new Paciente();
-
-                    paciente.Nombre = nombre.ToUpper() + " " + n;
+                    paciente.Nombre = nombre.ToUpper()/*.Normalize(System.Text.NormalizationForm.FormD).Replace(@"´¨", "")*/;
                     paciente.Telefono = telefono;
                     paciente.Email = email;
+
 
                     string hash;
                     do
@@ -569,6 +391,7 @@ namespace SCT_iCare.Controllers.Recepcion
                     } while ((from i in db.Paciente where i.HASH == hash select i) == null);
 
                     paciente.HASH = hash;
+
 
                     //Se obtienen las abreviaciónes de Sucursal y el ID del doctor
                     string SUC = (from S in db.Sucursales where S.Nombre == sucursal select S.SUC).FirstOrDefault();
@@ -597,17 +420,17 @@ namespace SCT_iCare.Controllers.Recepcion
                     }
 
                     //Se asigna el número de ID del doctor
-                    //if (Convert.ToInt32(doc) < 10)
+                    //if(Convert.ToInt32(doc) < 10)
                     //{
                     //    doc = "0" + doc;
                     //}
 
                     string mes = DateTime.Now.Month.ToString();
                     string dia = DateTime.Now.Day.ToString();
-                    char [] year = (DateTime.Now.Year.ToString()).ToCharArray();
+                    char[] year = (DateTime.Now.Year.ToString()).ToCharArray();
                     string anio = "";
 
-                    for(int i = 2; i < year.Length; i++)
+                    for (int i = 2; i < year.Length; i++)
                     {
                         anio += year[i];
                     }
@@ -632,11 +455,10 @@ namespace SCT_iCare.Controllers.Recepcion
                     if (ModelState.IsValid)
                     {
                         db.Paciente.Add(paciente);
+
                         db.SaveChanges();
                         //return RedirectToAction("Index");
                     }
-
-                    
 
                     CarruselMedico cm = new CarruselMedico();
                     cm.idPaciente = paciente.idPaciente;
@@ -666,18 +488,20 @@ namespace SCT_iCare.Controllers.Recepcion
 
                     Cita cita = new Cita();
 
-                    cita.TipoPago = pago;
-
                     cita.idPaciente = idPaciente;
                     cita.FechaReferencia = DateTime.Now;
                     cita.Sucursal = sucursal;
+                    cita.FechaCita = fecha != null ? fecha : DateTime.Now;
                     cita.Recepcionista = usuario;
                     cita.EstatusPago = "Pagado";
-                    cita.Folio = numFolio;
                     cita.Referencia = referencia;
+                    cita.Folio = numFolio;
                     cita.Canal = "Recepción";
-                    cita.FechaCita = fecha != null ? fecha : DateTime.Now;
+                    cita.TipoPago = pago;
                     cita.FechaCreacion = DateTime.Now;
+
+                    //Se usa el idCanal para poder hacer que en Recepción se tenga que editar el nombre si viene de gestor
+                    cita.idCanal = 1;
 
                     if (referido == 22)
                     {
@@ -700,19 +524,53 @@ namespace SCT_iCare.Controllers.Recepcion
                         cita.Referencia = "RS1293753";
                     }
 
-                    //SEPARACION AEREOS_PISTA
-
-                    int sumaInicialTL = cantidadN + cantidadA;
-
-                    if (n > cantidadN)
+                    if (pago != "Referencia Scotiabank")
                     {
-                        cita.TipoLicencia = "AEREO";
+                        var tipoPago = (from t in db.ReferenciasSB where t.ReferenciaSB == referencia select t).FirstOrDefault();
+
+                        if (tipoPago != null)
+                        {
+                            ReferenciasSB refe = db.ReferenciasSB.Find(tipoPago.idReferencia);
+                            refe.EstatusReferencia = "LIBRE";
+                            refe.idPaciente = idPaciente;
+
+                            if (ModelState.IsValid)
+                            {
+                                db.Entry(refe).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        //var tipoPago = (from t in db.ReferenciasSB where t.ReferenciaSB == numero select t).FirstOrDefault();
+
+                        var tipoPago = (from t in db.ReferenciasSB where t.ReferenciaSB == referencia select t).FirstOrDefault();
+
+                        if (tipoPago != null)
+                        {
+                            ReferenciasSB refe = db.ReferenciasSB.Find(tipoPago.idReferencia);
+                            refe.EstatusReferencia = "OCUPADO";
+
+                            if (ModelState.IsValid)
+                            {
+                                db.Entry(refe).State = EntityState.Modified;
+                                db.SaveChanges();
+                            }
+                        }
+
                     }
 
-                    if (n > sumaInicialTL)
+                    string TIPOLIC = null;
+                    if (cantidadA != 0)
                     {
-                        cita.TipoLicencia = "AEREO_PISTA";
-                    }   
+                        TIPOLIC = "AEREO";
+                    }
+                    if (cantidadAP != 0)
+                    {
+                        TIPOLIC = "AEREO_PISTA";
+                    }
+                    cita.TipoLicencia = TIPOLIC;
 
                     //if (referido == "NINGUNO" || referido == "OTRO")
                     //{
@@ -724,7 +582,7 @@ namespace SCT_iCare.Controllers.Recepcion
                     //    cita.CC = referidoTipo;
                     //}
 
-                    cita.Cuenta = pago == "Pendiente de Pago" ? "CUENTAS X COBRAR" : null;
+                    cita.Cuenta = (pago == "Pendiente de Pago" || pago == "Credito Empresas") && (referido != 4 && referido != 5 && referido != 6) ? "CUENTAS X COBRAR" : null;
 
                     var referidoTipo = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
                     cita.CC = referidoTipo.Tipo;
@@ -733,25 +591,238 @@ namespace SCT_iCare.Controllers.Recepcion
                     cita.ReferidoPor = referidoTipo.Nombre;
 
                     if (referidoTipo.idReferido == 7 || referidoTipo.idReferido == 8 || referidoTipo.idReferido == 9 || referidoTipo.idReferido == 10 || referidoTipo.idReferido == 12 ||
-                    referidoTipo.idReferido == 13 || referidoTipo.idReferido == 20 || referidoTipo.idReferido == 26 || referidoTipo.idReferido == 27 || referidoTipo.idReferido == 29 ||
-                    referidoTipo.idReferido == 36 || referidoTipo.idReferido == 52 || referidoTipo.idReferido == 53 || referidoTipo.idReferido == 54 || referidoTipo.idReferido == 55 ||
-                    referidoTipo.idReferido == 56 || referidoTipo.idReferido == 59 || referidoTipo.idReferido == 130 || referidoTipo.idReferido == 136 || referidoTipo.idReferido == 142)
+                        referidoTipo.idReferido == 13 || referidoTipo.idReferido == 20 || referidoTipo.idReferido == 26 || referidoTipo.idReferido == 27 || referidoTipo.idReferido == 29 ||
+                        referidoTipo.idReferido == 36 || referidoTipo.idReferido == 52 || referidoTipo.idReferido == 53 || referidoTipo.idReferido == 54 || referidoTipo.idReferido == 55 ||
+                        referidoTipo.idReferido == 56 || referidoTipo.idReferido == 59 || referidoTipo.idReferido == 130 || referidoTipo.idReferido == 136 || referidoTipo.idReferido == 142)
                     {
                         cita.Cuenta = "CORPORATIVO";
                     }
 
 
+                    //-------------------------------------------------------------
                     if (ModelState.IsValid)
                     {
                         db.Cita.Add(cita);
                         db.SaveChanges();
-                        //no regresa ya que se debe ver la pantalla de Orden
-                        //return RedirectToAction("Index");
+                        return RedirectToAction("Index");
+                    }
+
+
+
+                }
+                else
+                {
+                    //return View(detallesOrden);
+                    for (int n = 1; n <= Convert.ToInt32((cantidadN + cantidadA + cantidadAP)); n++)
+                    {
+                        Paciente paciente = new Paciente();
+
+                        paciente.Nombre = nombre.ToUpper() + " " + n;
+                        paciente.Telefono = telefono;
+                        paciente.Email = email;
+
+                        string hash;
+                        do
+                        {
+                            Random numero = new Random();
+                            int randomize = numero.Next(0, 61);
+                            string[] aleatorio = new string[62] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+                            string get_1;
+                            get_1 = aleatorio[randomize];
+                            hash = get_1;
+                            for (int i = 0; i < 9; i++)
+                            {
+                                randomize = numero.Next(0, 61);
+                                get_1 = aleatorio[randomize];
+                                hash += get_1;
+                            }
+                        } while ((from i in db.Paciente where i.HASH == hash select i) == null);
+
+                        paciente.HASH = hash;
+
+                        //Se obtienen las abreviaciónes de Sucursal y el ID del doctor
+                        string SUC = (from S in db.Sucursales where S.Nombre == sucursal select S.SUC).FirstOrDefault();
+                        //string doc = (from d in db.Doctores where d.Nombre == doctor select d.idDoctor).FirstOrDefault().ToString();
+
+                        //Se obtiene el número del contador desde la base de datos
+                        int? num = (from c in db.Sucursales where c.Nombre == sucursal select c.Contador).FirstOrDefault() + 1;
+
+                        //Contadores por número de citas en cada sucursal
+                        string contador = "";
+                        if (num == null)
+                        {
+                            contador = "100";
+                        }
+                        else if (num < 10)
+                        {
+                            contador = "00" + Convert.ToString(num);
+                        }
+                        else if (num >= 10 && num < 100)
+                        {
+                            contador = "0" + Convert.ToString(num);
+                        }
+                        else
+                        {
+                            contador = Convert.ToString(num);
+                        }
+
+                        //Se asigna el número de ID del doctor
+                        //if (Convert.ToInt32(doc) < 10)
+                        //{
+                        //    doc = "0" + doc;
+                        //}
+
+                        string mes = DateTime.Now.Month.ToString();
+                        string dia = DateTime.Now.Day.ToString();
+                        char[] year = (DateTime.Now.Year.ToString()).ToCharArray();
+                        string anio = "";
+
+                        for (int i = 2; i < year.Length; i++)
+                        {
+                            anio += year[i];
+                        }
+
+                        if (Convert.ToInt32(mes) < 10)
+                        {
+                            mes = "0" + mes;
+                        }
+
+                        if (Convert.ToInt32(dia) < 10)
+                        {
+                            dia = "0" + dia;
+                        }
+
+                        //Se crea el número de Folio
+                        //string numFolio = (DateTime.Now.Year).ToString() + mes + (DateTime.Now.Day).ToString() + SUC + "-" + contador;
+                        //paciente.Folio = (DateTime.Now.Year).ToString() + mes + (DateTime.Now.Day).ToString() + SUC + "-" + contador;
+
+                        string numFolio = dia + mes + anio + SUC + "-" + contador;
+                        paciente.Folio = dia + mes + anio + SUC + "-" + contador;
+
+                        if (ModelState.IsValid)
+                        {
+                            db.Paciente.Add(paciente);
+                            db.SaveChanges();
+                            //return RedirectToAction("Index");
+                        }
+
+
+
+                        CarruselMedico cm = new CarruselMedico();
+                        cm.idPaciente = paciente.idPaciente;
+
+                        if (ModelState.IsValid)
+                        {
+                            db.CarruselMedico.Add(cm);
+                            db.SaveChanges();
+                            //return RedirectToAction("Index");
+                        }
+
+                        int? idSuc = (from i in db.Sucursales where i.Nombre == sucursal select i.idSucursal).FirstOrDefault();
+
+                        Sucursales suc = db.Sucursales.Find(idSuc);
+
+                        suc.Contador = Convert.ToInt32(num);
+
+                        if (ModelState.IsValid)
+                        {
+                            db.Entry(suc).State = EntityState.Modified;
+                            db.SaveChanges();
+                            //No retorna ya que sigue el proceso
+                            //return RedirectToAction("Index");
+                        }
+
+                        var idPaciente = (from i in db.Paciente where i.Folio == paciente.Folio select i.idPaciente).FirstOrDefault();
+
+                        Cita cita = new Cita();
+
+                        cita.TipoPago = pago;
+
+                        cita.idPaciente = idPaciente;
+                        cita.FechaReferencia = DateTime.Now;
+                        cita.Sucursal = sucursal;
+                        cita.Recepcionista = usuario;
+                        cita.EstatusPago = "Pagado";
+                        cita.Folio = numFolio;
+                        cita.Referencia = referencia;
+                        cita.Canal = "Recepción";
+                        cita.FechaCita = fecha != null ? fecha : DateTime.Now;
+                        cita.FechaCreacion = DateTime.Now;
+
+                        if (referido == 22)
+                        {
+                            cita.Referencia = "E1293749";
+                        }
+                        if (referido == 23)
+                        {
+                            cita.Referencia = "PL1293750";
+                        }
+                        //if (referido == "NATALY FRANCO")
+                        //{
+                        //    cita.Referencia = "NF1293751";
+                        //}
+                        if (referido == 36)
+                        {
+                            cita.Referencia = "LV1293752";
+                        }
+                        if (referido == 21)
+                        {
+                            cita.Referencia = "RS1293753";
+                        }
+
+                        //SEPARACION AEREOS_PISTA
+
+                        int sumaInicialTL = cantidadN + cantidadA;
+
+                        if (n > cantidadN)
+                        {
+                            cita.TipoLicencia = "AEREO";
+                        }
+
+                        if (n > sumaInicialTL)
+                        {
+                            cita.TipoLicencia = "AEREO_PISTA";
+                        }
+
+                        //if (referido == "NINGUNO" || referido == "OTRO")
+                        //{
+                        //    cita.CC = "N/A";
+                        //}
+                        //else
+                        //{
+                        //    var referidoTipo = (from r in db.Referido where r.Nombre == referido select r.Tipo).FirstOrDefault();
+                        //    cita.CC = referidoTipo;
+                        //}
+
+                        cita.Cuenta = (pago == "Pendiente de Pago" || pago == "Credito Empresas") ? "CUENTAS X COBRAR" : null;
+
+                        var referidoTipo = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
+                        cita.CC = referidoTipo.Tipo;
+                        cita.CanalTipo = referidoTipo.Tipo;
+
+                        cita.ReferidoPor = referidoTipo.Nombre;
+
+                        if (referidoTipo.idReferido == 7 || referidoTipo.idReferido == 8 || referidoTipo.idReferido == 9 || referidoTipo.idReferido == 10 || referidoTipo.idReferido == 12 ||
+                        referidoTipo.idReferido == 13 || referidoTipo.idReferido == 20 || referidoTipo.idReferido == 26 || referidoTipo.idReferido == 27 || referidoTipo.idReferido == 29 ||
+                        referidoTipo.idReferido == 36 || referidoTipo.idReferido == 52 || referidoTipo.idReferido == 53 || referidoTipo.idReferido == 54 || referidoTipo.idReferido == 55 ||
+                        referidoTipo.idReferido == 56 || referidoTipo.idReferido == 59 || referidoTipo.idReferido == 130 || referidoTipo.idReferido == 136 || referidoTipo.idReferido == 142)
+                        {
+                            cita.Cuenta = "CORPORATIVO";
+                        }
+
+
+                        if (ModelState.IsValid)
+                        {
+                            db.Cita.Add(cita);
+                            db.SaveChanges();
+                            //no regresa ya que se debe ver la pantalla de Orden
+                            //return RedirectToAction("Index");
+                        }
                     }
                 }
-            }
 
-            return Redirect("Index"); ;
+                return Redirect("Index");
+            }
         }
 
         public ActionResult OrdenSAM(int? id)

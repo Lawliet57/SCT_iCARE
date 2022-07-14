@@ -261,7 +261,11 @@ namespace SCT_iCare.Controllers.Contabilidad
             cita.UsarSaldo = usarSaldo;
             cita.FormaPago = FormadePago;
 
-            if (pago != null || pago != "")
+            if (pago == null || pago == "")
+            {
+                cita.TipoPago = cita.TipoPago;
+            }
+            else
             {
                 cita.TipoPago = pago;
             }
@@ -303,7 +307,7 @@ namespace SCT_iCare.Controllers.Contabilidad
             var precioEncontradoA = findPrecio.PrecioAereo;
             var precioFinal = "";
 
-            if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío"
+            if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío" || cita.TipoPago == "Credito Empresas"
           || cita.TipoPago == "Referencia BanBajío" || cita.TipoPago == "Banorte" || cita.TipoPago == "REFERENCIA OXXO" || cita.TipoPago == "Referencia OXXO"
           || cita.TipoPago == "Pago con Tarjeta")
             {

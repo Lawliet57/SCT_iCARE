@@ -359,7 +359,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 </div>
 
 
-
+@*REGISTRAR CITA*@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -565,6 +565,10 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                     }
                                 </select>
                             </div>
+
+                            //PRECIO INGRESADO
+                            <label for="recipient-name" class="form-select" required>Ingrese Precio de EPI:</label>
+                            <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
                         }
                         else
                         {
@@ -1555,7 +1559,7 @@ else
 
 
                                     if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Transferencia vía BanBajío"
-                                                        || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
+                                                  || item.M.TipoPago == "Credito Empresas" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
                                     {       
                                         
                                     if (item.M.TipoLicencia == "AEREO")
@@ -2162,7 +2166,7 @@ else
                                                 @{
                                                     var consultaTicket = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
 
-                                                    if (consultaTicket == "Pendiente de Pago")
+                                                    if (consultaTicket == "Pendiente de Pago" || consultaTicket == "Credito Empresas")
                                                     {
                                                         <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
                                                     }
@@ -2328,7 +2332,7 @@ else
                                                 @{
                                                     var consultaTicket1 = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
 
-                                                    if (consultaTicket1 == "Pendiente de Pago")
+                                                    if (consultaTicket1 == "Pendiente de Pago" || consultaTicket == "Credito Empresas")
                                                     {
                                                         <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
                                                     }
