@@ -1,0 +1,60 @@
+﻿
+@{
+    ViewBag.Title = "PrecioIncorrecto";
+    GMIEntities db = new GMIEntities();
+}
+
+@if (TempData["mensaje"] != null)
+{
+    <div class="alert alert-success">@TempData["mensaje"]</div>
+}
+@if (TempData["error"] != null)
+{
+    <div class="alert alert-warning">@TempData["error"]</div>
+}
+
+
+<br />
+<br />
+<section class="content-header">
+    <center>
+        <h1 style="color:#FF0000">
+            ¡EL PRECIO INGRESADO NO COINCIDE CON EL PRECIO ACTUAL DEL GESTOR!
+        </h1>
+    </center>
+</section>
+
+
+<section class="content">
+    <div class="error-page">
+        <br />
+        <br />
+        <center>
+            <h1 style="color: #ffffff">
+                POR FAVOR INGRESE EL PRECIO NUEVAMENTE
+            </h1>
+        </center>
+        <div class="error-content">
+            <br />
+            <br />
+            <center>
+                <h1 style="color: #ffffff">
+                    @*CONTACTE AL ADMINISTRADOR*@
+                </h1>
+            </center>
+
+        </div>
+    </div>
+</section>
+
+
+<div class="enlaceSinBoton">
+    @Html.ActionLink("Volver a Recepción", "Index")
+</div>
+
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+

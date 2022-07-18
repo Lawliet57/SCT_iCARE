@@ -35,84 +35,84 @@
     DateTime tomorrowDate = ViewBag.Final; //new DateTime(year1, month1, day1);
 
     var modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
-    int modeloCount = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate).Count()@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
-    var pilin = 0;
-    var modelo2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
-    int modeloCount2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate).Count()@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
+int modeloCount = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate).Count()@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
+var pilin = 0;
+var modelo2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
+int modeloCount2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.Sucursal == Sucursal && s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate).Count()@*.OrderByDescending(o => new { o.M.TipoTramite,  }).OrderBy(r => r.M.EstatusPago)*@;
 
 
-    int? idRol = 0;
+int? idRol = 0;
 
-    if (oUser != null)
-    {
-        idUser = oUser.idUsuario;
-        nombreUsuario = oUser.Nombre;
-        idRol = oUser.idRol;
-
-
-        Hospital = "GENERAL";
-        Sucursal = Hospital.ToString();
-
-        if (oUser.idRol == 2 || nombreUsuario == "Royer Plata" || nombreUsuario == "Pamela Rodriguez Saucedo" || nombreUsuario == "Supervisor Anexa")
-        {
-            modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center"));
-
-            modeloCount = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center")).Count();
-
-            modelo2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center"));
-
-            modeloCount2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center")).Count();
-        }
-        else
-        {
-            modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.Recepcionista == nombreUsuario));
-
-            modeloCount = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.Recepcionista == nombreUsuario)).Count();
-
-            modelo2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.Recepcionista == nombreUsuario));
-
-            modeloCount2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
-            .Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.Recepcionista == nombreUsuario)).Count();
-        }
+if (oUser != null)
+{
+idUser = oUser.idUsuario;
+nombreUsuario = oUser.Nombre;
+idRol = oUser.idRol;
 
 
-        registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.CC == "Call Center" || s.M.CC == "Administrador")).Count();
-    }
+Hospital = "GENERAL";
+Sucursal = Hospital.ToString();
 
-    int noEnviados = db.DictamenProblema.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaExpdiente >= thisDate && s.M.FechaExpdiente < tomorrowDate && s.N.EstatusEnvio == "SI").Count();
-    int cita = (from c in db.Captura select c).Where(s => s.FechaExpdiente >= thisDate && s.FechaExpdiente < tomorrowDate).Count();
+if ((oUser.idRol == 2 && nombreUsuario != "Edith Atilano") || nombreUsuario == "Royer Plata" || nombreUsuario == "Pamela Rodriguez Saucedo" || nombreUsuario == "Supervisor Anexa")
+{
+modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center"));
 
-    var enProcesoHoy = db.Cita.Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && (w.Doctor == null || w.NoExpediente == null) && w.Canal == "Call Center");
+modeloCount = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center")).Count();
 
-    int enProcesoHoyConteo = db.Cita.Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && (w.Doctor == null || w.NoExpediente == null) && w.Canal == "Call Center").Count();
+modelo2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center"));
 
-    var dictamenesHoy = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
-    .Where(w => w.N.FechaCita >= thisDate && w.N.FechaCita < tomorrowDate && (w.N.Doctor != null && w.N.NoExpediente != null) && w.N.Canal == "Call Center");
+modeloCount2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.CC != null) && (s.M.Canal == "Call Center")).Count();
+}
+else
+{
+modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.Recepcionista == nombreUsuario));
 
-    int dictamenesHoyConteo = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
-    .Where(w => w.N.FechaCita >= thisDate && w.N.FechaCita < tomorrowDate && (w.N.Doctor != null && w.N.NoExpediente != null) && w.N.Canal == "Call Center").Count();
+modeloCount = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.Recepcionista == nombreUsuario)).Count();
+
+modelo2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.Recepcionista == nombreUsuario));
+
+modeloCount2 = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m })
+.Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.Recepcionista == nombreUsuario)).Count();
+}
 
 
-    var sucursalesLista = from s in db.Sucursales select s;
+registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate && (s.M.CC == "Call Center" || s.M.CC == "Administrador")).Count();
+}
 
-    int citasEfectuadas = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center").Count();
-    var citasCompletadas = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center" && w.Asistencia == null && (w.EstatusPago == "Pagado" || w.EstatusPago == "paid") && w.Doctor != null).Count();
-    var citasPendientes = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center" && w.Doctor == null && w.Asistencia == null).Count();
-    int citasCanceladas = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center" && w.Asistencia != null).Count();
+int noEnviados = db.DictamenProblema.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaExpdiente >= thisDate && s.M.FechaExpdiente < tomorrowDate && s.N.EstatusEnvio == "SI").Count();
+int cita = (from c in db.Captura select c).Where(s => s.FechaExpdiente >= thisDate && s.FechaExpdiente < tomorrowDate).Count();
 
-    int efectividad = 0;
+var enProcesoHoy = db.Cita.Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && (w.Doctor == null || w.NoExpediente == null) && w.Canal == "Call Center");
 
-    if (citasCompletadas != 0)
-    {
-        efectividad = ((citasCompletadas * 100) / citasEfectuadas);
-    }
+int enProcesoHoyConteo = db.Cita.Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && (w.Doctor == null || w.NoExpediente == null) && w.Canal == "Call Center").Count();
+
+var dictamenesHoy = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
+.Where(w => w.N.FechaCita >= thisDate && w.N.FechaCita < tomorrowDate && (w.N.Doctor != null && w.N.NoExpediente != null) && w.N.Canal == "Call Center");
+
+int dictamenesHoyConteo = db.Cita.Join(db.Captura, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
+.Where(w => w.N.FechaCita >= thisDate && w.N.FechaCita < tomorrowDate && (w.N.Doctor != null && w.N.NoExpediente != null) && w.N.Canal == "Call Center").Count();
+
+
+var sucursalesLista = from s in db.Sucursales select s;
+
+int citasEfectuadas = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center").Count();
+var citasCompletadas = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center" && w.Asistencia == null && (w.EstatusPago == "Pagado" || w.EstatusPago == "paid") && w.Doctor != null).Count();
+var citasPendientes = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center" && w.Doctor == null && w.Asistencia == null).Count();
+int citasCanceladas = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Canal == "Call Center" && w.Asistencia != null).Count();
+
+int efectividad = 0;
+
+if (citasCompletadas != 0)
+{
+efectividad = ((citasCompletadas * 100) / citasEfectuadas);
+}
 
 }
 
@@ -153,6 +153,7 @@
 
     @*<button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalCopia"><span class="glyphicon glyphicon-plus"></span> Crear Cita</button>*@
 
+    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><span class="glyphicon glyphicon-plus"></span> Cita con Pago</button>
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal2"><span class="glyphicon glyphicon-plus"></span> Crear Referecia de Pago</button>
     <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal3"><span class="glyphicon glyphicon-credit"></span> Pago con Tarjeta</button>&nbsp;&nbsp;&nbsp;
 
@@ -291,7 +292,7 @@
         <br />
         <br />
 
-                            }
+    }
 
 }
 
@@ -471,6 +472,378 @@
 </div>
 
 
+@*REGISTRAR CITA*@
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Registrar cita previamente pagada</b></h3>
+            </div>
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/CallCenter/Create")">
+                    @Html.AntiForgeryToken()
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs requeridos (Autotransporte, Marítimos y Ferroviarios):</label>
+                    </div>
+                    @*NORMALES*@
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-info" id="menos" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-info" id="mas" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    @*AEREOS*@
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Tripulación:</label>
+                    </div>
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-warning" id="menos0" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador0" min="0" name="cantidadAereo" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-warning" id="mas0" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    @*EPIS PISTA*@
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Cantidad de EPIs Aereos de Pista:</label>
+                    </div>
+                    <div class="form-inline">
+                        <span class="">
+                            <button class="btn btn-danger" id="menos00" type="button"><b><span class="glyphicon glyphicon-minus"></span></b></button>
+                        </span>
+                        <input style="display:inline-block" type="number" class="form-control" id="contador00" min="0" name="cantidadPista" placeholder="Ingresa una cantidad">
+                        <span class="">
+                            <button class="btn btn-danger" id="mas00" type="button"><b><span class="glyphicon glyphicon-plus"></span></b></button>
+                        </span>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Nombre del Paciente (o Gestor):</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Teléfono:</label>
+                        <input type="text" class="form-control" id="telefono" name="telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    @{
+                        if (Sucursal == "TAPO" || Sucursal == "ASPA")
+                        {
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
+                                <input type="date" class="form-control" id="fecha" name="fecha" required>
+                            </div>
+                        }
+                    }
+                    @if (idRol == 2 || (Sucursal == "TAPO" || Sucursal == "ASPA"))
+                    {
+                        <div class="form-group" style="width:60%; min-width:320px">
+                            <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                            <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                                @{
+                                    var sucursalesOptionNUEVO = from s in db.Sucursales select s.Nombre;
+                                    foreach (var opcion in sucursalesOptionNUEVO)
+                                    {
+                                        <option value="@opcion">@opcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
+                            <input type="date" class="form-control" id="fecha" name="fecha">
+                        </div>
+                        if (Sucursal == "TAPO" || Sucursal == "ASPA" || nombreUsuario == "Edith Atilano")
+                        {
+                            <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
+                        }
+                        else
+                        {
+                            <input type="hidden" name="usuario" asp-for="file" class="" required value="Administración Recepción" />
+                        }
+
+                    }
+                    else
+                    {
+                        <input type="hidden" name="sucursal" asp-for="file" class="" required value="@Sucursal" />
+                        <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
+                    }
+
+                    @{
+                        if (Sucursal != "IN SITU")
+                        {
+                            <div class="form-group" style="width:60%; min-width:320px">
+                                <label for="recipient-name" class="form-select" required>Tipo de Pago:</label>
+                                <select name="pago" id="pago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                    @{
+                                        if (Sucursal != "ASPA" && Sucursal != "TAPO")
+                                        {
+                                            <option disabled selected value="">Seleccione el tipo de pago</option>
+                                            <option value="Credito Empresas">Credito Empresas</option>
+                                            <option value="Pendiente de Pago">Pendiente de Pago</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option disabled selected value="">Seleccione el tipo de pago</option>
+                                            <option value="Credito Empresas">Credito Empresas</option>
+                                            <option value="Pendiente de Pago">Pendiente de Pago</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="recipient-name" class="col-form-label">Número de Referencia:</label>
+                                <input type="text" class="form-control" id="referencia" name="referencia" required>
+                            </div>
+
+                            @*CAMPO REQUERIDO PARA SELECTORES*@
+                            <div class="form-group" style="width:60%; min-width:320px">
+                                <label for="recipient-name" class="form-select" required>Referido por:</label>
+                                <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                    <option disabled selected value="">SELECCIONAR</option>
+                                    @{
+                                        //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
+                                        var referidosGestorN = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
+                                        var referidosMDN = (from r in db.Referido where r.Tipo == "MEDIOS DIGITALES" select r).OrderBy(o => o.Nombre);
+                                        var referidosEmpresaN = (from r in db.Referido where r.Tipo == "EMPRESA" select r).OrderBy(o => o.Nombre);
+                                        var referidosOtroN = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
+                                        var referidosSindicatoN = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
+
+                                        <option disabled>--------GESTORES--------</option>
+                                        foreach (var item in referidosGestorN)
+                                        {
+                                            <option value="@item.idReferido">@item.Nombre</option>
+                                        }
+
+                                        <option disabled><b>--------EMPRESAS--------</b></option>
+                                        foreach (var item in referidosEmpresaN)
+                                        {
+                                            <option value="@item.idReferido">@item.Nombre</option>
+                                        }
+
+                                        <option disabled><b>--------SINDICATOS--------</b></option>
+                                        foreach (var item in referidosSindicatoN)
+                                        {
+                                            <option value="@item.idReferido">@item.Nombre</option>
+                                        }
+
+                                        <option disabled><b>----MEDIOS DIGITALES----</b></option>
+                                        foreach (var item in referidosMDN)
+                                        {
+                                            <option value="@item.idReferido">@item.Nombre</option>
+                                        }
+
+                                        if (Recepcion == 2)
+                                        {
+                                            <option disabled><b>--------OTROS--------</b></option>
+                                            <option value="167">FUERZA DE VENTAS BB</option>
+                                            <option value="6">PUBLICIDAD</option>
+                                            <option value="5">RECOMENDADO</option>
+                                            <option value="168">SUCURSAL SATELITE</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option disabled><b>--------OTROS--------</b></option>
+                                            foreach (var item in referidosOtroN)
+                                            {
+                                                <option value="@item.idReferido">@item.Nombre</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+
+                            //PRECIO INGRESADO
+                            @*<label for="recipient-name" class="form-select" required>Ingrese Precio de EPI:</label>
+                            <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />*@
+                        }
+                        else
+                        {
+                            <input type="hidden" name="pago" value="IN SITU" />
+                            <input type="hidden" name="referencia" value="-----" />
+
+                            <br />
+                            <div class="form-group" style="width:60%; min-width:320px">
+                                <label for="recipient-name" class="form-select" required>Referido por:</label>
+                                <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                    <option disabled selected value="">SELECCIONAR</option>
+                                    @{
+                                        //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
+                                        var referidosIS = (from r in db.Referido where r.Tipo == "IN SITU" select r).OrderBy(o => o.Nombre);
+
+                                        foreach (var item in referidosIS)
+                                        {
+                                            <option value="@item.idReferido">@item.Nombre</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        }
+                    }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Enviar" class="btn btn-primary" />
+            </div>
+
+        </div>
+    </div>
+</div>
+</form>
+
+<script type="text/javascript">
+    var sumar = document.getElementById("mas");
+    var restar = document.getElementById("menos");
+    var contador = document.getElementById("contador");
+    var importe = document.getElementById("importe");
+    var valorBase = 5.20;
+    var prevValue;
+
+    function calcular() {
+        var value = contador.value;
+        var isValid = /^[1-9][0-9]*$/.test(value);
+
+        if (!isValid) {
+            contador.value = prevValue;
+        } else {
+            prevValue = value;
+        }
+
+        importe.value = Number.parseFloat(contador.value * valorBase).toFixed(2);
+    }
+
+    sumar.onclick = function () {
+        contador.value = Number(contador.value) + 1;
+        calcular();
+    };
+
+    restar.onclick = function () {
+        contador.value = Number(contador.value) - 1;
+        calcular();
+    };
+
+    contador.onchange = function () {
+        calcular();
+    };
+
+    contador.onkeyup = function () {
+        if (contador.value === "") {
+            return;
+        }
+        calcular();
+    };
+
+    calcular();
+</script>
+
+<script type="text/javascript">
+    var sumar0 = document.getElementById("mas0");
+    var restar0 = document.getElementById("menos0");
+    var contador0 = document.getElementById("contador0");
+    var importe0 = document.getElementById("importe0");
+    var valorBase0 = 5.20;
+    var prevValue0;
+
+    function calcular0() {
+        var value0 = contador0.value;
+        var isValid = /^[1-9][0-9]*$/.test(value0);
+
+        if (!isValid) {
+            contador0.value = prevValue0;
+        } else {
+            prevValue0 = value0;
+        }
+
+        importe0.value = Number.parseFloat(contador0.value * valorBase0).toFixed(2);
+    }
+
+    sumar0.onclick = function () {
+        contador0.value = Number(contador0.value) + 1;
+        calcular0();
+    };
+
+    restar0.onclick = function () {
+        contador0.value = Number(contador0.value) - 1;
+        calcular0();
+    };
+
+    contador0.onchange = function () {
+        calcular0();
+    };
+
+    contador0.onkeyup = function () {
+        if (contador0.value === "") {
+            return;
+        }
+        calcular0();
+    };
+
+    calcular0();
+</script>
+
+
+<script type="text/javascript">
+    var sumar00 = document.getElementById("mas00");
+    var restar00 = document.getElementById("menos00");
+    var contador00 = document.getElementById("contador00");
+    var importe00 = document.getElementById("importe00");
+    var valorBase00 = 5.20;
+    var prevValue00;
+
+    function calcular00() {
+        var value00 = contador00.value;
+        var isValid = /^[1-9][0-9]*$/.test(value00);
+
+        if (!isValid) {
+            contador00.value = prevValue00;
+        } else {
+            prevValue00 = value0;
+        }
+
+        importe00.value = Number.parseFloat(contador00.value * valorBase00).toFixed(2);
+    }
+
+    sumar00.onclick = function () {
+        contador00.value = Number(contador00.value) + 1;
+        calcular00();
+    };
+
+    restar00.onclick = function () {
+        contador00.value = Number(contador00.value) - 1;
+        calcular00();
+    };
+
+    contador00.onchange = function () {
+        calcular00();
+    };
+
+    contador00.onkeyup = function () {
+        if (contador00.value === "") {
+            return;
+        }
+        calcular00();
+    };
+
+    calcular00();
+</script>
+
+
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -544,18 +917,18 @@
                         <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                         <input type="date" class="form-control" id="fechaFestivo" name="fecha" required>
                     </div>
-                        <div class="form-group" style="width:60%; min-width:320px">
-                            <label for="recipient-name" class="col-form-label">Sucursal:</label>
-                            <select name="sucursal" id="enf_cong" onchange="javascript: selectTol()" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                                @{
-                                    var sucursalesOption = from s in db.Sucursales select s.Nombre;
-                                    foreach (var opcion in sucursalesOption)
-                                    {
-                                        <option value="@opcion">@opcion</option>
-                                    }
+                    <div class="form-group" style="width:60%; min-width:320px">
+                        <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                        <select name="sucursal" id="enf_cong" onchange="javascript: selectTol()" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                            @{
+                                var sucursalesOption = from s in db.Sucursales select s.Nombre;
+                                foreach (var opcion in sucursalesOption)
+                                {
+                                    <option value="@opcion">@opcion</option>
                                 }
-                            </select>
-                        </div>
+                            }
+                        </select>
+                    </div>
                     <div class="form-group" style="width:60%; min-width:320px">
                         <label for="recipient-name" class="col-form-label">Referido Por:</label>
                         <select name="referido" id="selectSuc" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
@@ -607,7 +980,7 @@
                             }
                         </select>
                     </div>
-</div>
+            </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -822,21 +1195,21 @@
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label"><b>Terminación de Tarjeta (últimos 4 números):</b></label>
                         <input type="number" maxlength="4" min="4" class="form-control" id="card" name="card" required>
-                    </div>                 
+                    </div>
 
-                        <div class="form-group" style="width:60%; min-width:320px">
-                            <label for="recipient-name" class="col-form-label">Sucursal:</label>
-                            <select name="sucursal" id="select_Suc" onchange="javascript: selectTol2()" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                                @{
-                                    sucursalesOption = from s in db.Sucursales select s.Nombre;
-                                    foreach (var opcion in sucursalesOption)
-                                    {
-                                        <option value="@opcion">@opcion</option>
-                                    }
+                    <div class="form-group" style="width:60%; min-width:320px">
+                        <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                        <select name="sucursal" id="select_Suc" onchange="javascript: selectTol2()" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                            @{
+                                sucursalesOption = from s in db.Sucursales select s.Nombre;
+                                foreach (var opcion in sucursalesOption)
+                                {
+                                    <option value="@opcion">@opcion</option>
                                 }
-                            </select>
-                        </div>
-                    
+                            }
+                        </select>
+                    </div>
+
                     <div class="form-group">
                         <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                         <input type="date" class="form-control" id="fechaFestivo2" name="fecha" required>
@@ -887,7 +1260,7 @@
                             }
                         </select>
                     </div>
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />

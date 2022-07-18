@@ -554,7 +554,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var conteoNormal = 0;
             int conteo = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i).OrderBy(o => o.Fecha).Count();
             int[] idPagos = new int[conteo];
-            int[] idPacientes = new int[100];
+            int[] idPacientes = new int[1000];
             var aumento = 0;
             var deudaSumatoria = 0;
             var aumentoPaciente = 0;
@@ -606,7 +606,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         }            
                     }
 
-                    for (int n = 0; n < aumentoPaciente;)
+                    for (int n = 0; n < conteoNormal;)
                     {
                         DateTime Ahora = DateTime.Now;
                         DateTime fechadePagoController = Convert.ToDateTime(fechadepago);
@@ -614,6 +614,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         var fechaHoy = Convert.ToDateTime(Ahora).ToString("d-M-yy");
                         var pilin = idPacientes[n];
                         var editarPaciente = (from i in db.Cita where i.idCita == pilin select i).FirstOrDefault();
+                        string Historico = editarPaciente.CuentaComentario;
 
                         editarPaciente.ConciliarPago = "Si";
                         editarPaciente.Conciliado = fechaHoy;
@@ -621,7 +622,16 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         editarPaciente.TipoPago = metododepago;
                         editarPaciente.Cuenta = "BANCOS";
 
-                        if (ModelState.IsValid)
+                        if (Historico == null || Historico == "")
+                        {
+                            editarPaciente.CuentaComentario = DateTime.Today.ToString("dd-MM-yy") + " por " + usuario + " CONCILIADO DESDE EL MODULO DE PAGOS";
+                        }
+                        else
+                        {
+                            editarPaciente.CuentaComentario = Historico + "+" + DateTime.Today.ToString("dd-MM-yy") + " por " + usuario + " CONCILIADO DESDE EL MODULO DE PAGOS";
+                        }
+
+                    if (ModelState.IsValid)
                         {
                             db.Entry(editarPaciente).State = EntityState.Modified;
                             db.SaveChanges();
@@ -681,7 +691,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var conteoNormal = 0;
             int conteo = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i).OrderBy(o => o.Fecha).Count();
             int[] idPagos = new int[conteo];
-            int[] idPacientes = new int[100];
+            int[] idPacientes = new int[1000];
             var aumento = 0;
             var deudaSumatoria = 0;
             var aumentoPaciente = 0;
@@ -733,20 +743,30 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                     }
                 }
 
-                for (int n = 0; n < aumentoPaciente;)
+                for (int n = 0; n < conteoNormal;)
                 {
                     DateTime Ahora = DateTime.Now;
                     DateTime fechadePagoController = Convert.ToDateTime(fechadepago);
                     var fechaContable = Convert.ToDateTime(fechadePagoController);
                     var fechaHoy = Convert.ToDateTime(Ahora).ToString("d-M-yy");
                     var pilin = idPacientes[n];
-                    var editarPaciente = (from i in db.Cita where i.idCita == pilin select i).FirstOrDefault();
+                    var editarPaciente = (from i in db.PacienteESP where i.idPacienteESP == pilin select i).FirstOrDefault();
+                    string Historico = editarPaciente.CuentaComentario;
 
                     editarPaciente.ConciliarPago = "Si";
                     editarPaciente.Conciliado = fechaHoy;
                     editarPaciente.FechaContable = fechaContable;
                     editarPaciente.TipoPago = metododepago;
                     editarPaciente.Cuenta = "BANCOS";
+
+                    if (Historico == null || Historico == "")
+                    {
+                        editarPaciente.CuentaComentario = DateTime.Today.ToString("dd-MM-yy") + " por " + usuario + " CONCILIADO DESDE EL MODULO DE PAGOS";
+                    }
+                    else
+                    {
+                        editarPaciente.CuentaComentario = Historico + "+" + DateTime.Today.ToString("dd-MM-yy") + " por " + usuario + " CONCILIADO DESDE EL MODULO DE PAGOS";
+                    }
 
                     if (ModelState.IsValid)
                     {

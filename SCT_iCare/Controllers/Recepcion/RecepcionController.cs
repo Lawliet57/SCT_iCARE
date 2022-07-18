@@ -240,77 +240,77 @@ namespace SCT_iCare.Controllers.Recepcion
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista,
-            string pago,string referencia, int? referido, DateTime? fecha, int precioIngresado)
+            string pago,string referencia, int? referido, DateTime? fecha/*, int precioIngresado*/)
         {
-            var findGestor = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
-            var precioN = Convert.ToInt32(findGestor.PrecioNormal);
-            var precioNIVA = Convert.ToInt32(findGestor.PrecioNormalconIVA);
-            var precioAT = Convert.ToInt32(findGestor.PrecioAereosinIVA);
-            var precioATIVA = Convert.ToInt32(findGestor.PrecioAereo);
-            var precioP = Convert.ToInt32(findGestor.PrecioAereoPista);
-            var precioPIVA = Convert.ToInt32(findGestor.PrecioAereoPistaconIVA);
-            var cantidadInt = cantidad != "" ? Convert.ToInt32(cantidad) : 0;
-            var cantidadATInt = cantidadAereo != "" ? Convert.ToInt32(cantidadAereo) : 0;
-            var cantidadAPInt = cantidadPista != "" ? Convert.ToInt32(cantidadPista) : 0;
-            var precioReal = 0;
-            var sumaEPISN = 0;
-            var sumaEPISAT = 0;
-            var sumaEPISAP = 0;
-            string condicionante = "";
+            //var findGestor = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
+            //var precioN = Convert.ToInt32(findGestor.PrecioNormal);
+            //var precioNIVA = Convert.ToInt32(findGestor.PrecioNormalconIVA);
+            //var precioAT = Convert.ToInt32(findGestor.PrecioAereosinIVA);
+            //var precioATIVA = Convert.ToInt32(findGestor.PrecioAereo);
+            //var precioP = Convert.ToInt32(findGestor.PrecioAereoPista);
+            //var precioPIVA = Convert.ToInt32(findGestor.PrecioAereoPistaconIVA);
+            //var cantidadInt = cantidad != "" ? Convert.ToInt32(cantidad) : 0;
+            //var cantidadATInt = cantidadAereo != "" ? Convert.ToInt32(cantidadAereo) : 0;
+            //var cantidadAPInt = cantidadPista != "" ? Convert.ToInt32(cantidadPista) : 0;
+            //var precioReal = 0;
+            //var sumaEPISN = 0;
+            //var sumaEPISAT = 0;
+            //var sumaEPISAP = 0;
+            //string condicionante = "";
 
-            if (pago == "REFERENCIA OXXO" || pago == "Pago con Tarjeta" || pago == "Referencia OXXO" || pago == "Transferencia vía BanBajío"
-                                                 || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
-            {
-                if(cantidadInt != 0)
-                {
-                    sumaEPISN = (cantidadInt * precioNIVA);
-                }
-                if (cantidadATInt != 0)
-                {
-                    sumaEPISAT = (cantidadATInt * precioATIVA);
-                }
-                if (cantidadAPInt != 0)
-                {
-                    sumaEPISAP = (cantidadATInt * precioPIVA);
-                }
+            //if (pago == "REFERENCIA OXXO" || pago == "Pago con Tarjeta" || pago == "Referencia OXXO" || pago == "Transferencia vía BanBajío"
+            //                                     || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
+            //{
+            //    if(cantidadInt != 0)
+            //    {
+            //        sumaEPISN = (cantidadInt * precioNIVA);
+            //    }
+            //    if (cantidadATInt != 0)
+            //    {
+            //        sumaEPISAT = (cantidadATInt * precioATIVA);
+            //    }
+            //    if (cantidadAPInt != 0)
+            //    {
+            //        sumaEPISAP = (cantidadATInt * precioPIVA);
+            //    }
 
-                precioReal = sumaEPISN + sumaEPISAP + sumaEPISAT;
+            //    precioReal = sumaEPISN + sumaEPISAP + sumaEPISAT;
 
-                if (precioReal == precioIngresado)
-                {
-                    condicionante = "Aprobado";
-                }
-            }
-            else
-            {
-                if (cantidadInt != 0)
-                {
-                    sumaEPISN = (cantidadInt * precioN);
-                }
-                if (cantidadATInt != 0)
-                {
-                    sumaEPISAT = (cantidadATInt * precioAT);
-                }
-                if (cantidadAPInt != 0)
-                {
-                    sumaEPISAP = (cantidadATInt * precioP);
-                }
+            //    if (precioReal == precioIngresado)
+            //    {
+            //        condicionante = "Aprobado";
+            //    }
+            //}
+            //else
+            //{
+            //    if (cantidadInt != 0)
+            //    {
+            //        sumaEPISN = (cantidadInt * precioN);
+            //    }
+            //    if (cantidadATInt != 0)
+            //    {
+            //        sumaEPISAT = (cantidadATInt * precioAT);
+            //    }
+            //    if (cantidadAPInt != 0)
+            //    {
+            //        sumaEPISAP = (cantidadATInt * precioP);
+            //    }
 
-                precioReal = sumaEPISN + sumaEPISAP + sumaEPISAT;
+            //    precioReal = sumaEPISN + sumaEPISAP + sumaEPISAT;
 
-                if (precioReal == precioIngresado)
-                {
-                    condicionante = "Aprobado";
-                }
-            }
+            //    if (precioReal == precioIngresado)
+            //    {
+            //        condicionante = "Aprobado";
+            //    }
+            //}
 
-            if (condicionante != "Aprobado")
-            {
-                return View("PrecioIncorrecto");
-            }
+            //if (condicionante != "Aprobado")
+            //{
+            //    return View("PrecioIncorrecto");
+            //}
 
-            else
-            {
+            //else
+            //{
                 Paciente paciente1 = new Paciente();
 
                 //var revisionPaciente = from i in db.Paciente where i.Nombre == nombre.ToUpper() select i ;
@@ -822,7 +822,7 @@ namespace SCT_iCare.Controllers.Recepcion
                 }
 
                 return Redirect("Index");
-            }
+            //}
         }
 
         public ActionResult OrdenSAM(int? id)

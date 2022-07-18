@@ -609,7 +609,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                                                         </select>
                                                     </div>
 
-
+                                                    <input type="hidden" value="@oUser.Nombre" class="form-control" name="usuario" />
                                                     <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
                                                     <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
                                                     <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
@@ -957,6 +957,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 
 
                                                     <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
+                                                    <input type="hidden" value="@oUser.Nombre" class="form-control" name="usuario" />
                                                     <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
                                                     <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
                                                 </div>

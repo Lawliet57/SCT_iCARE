@@ -359,7 +359,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 </div>
 
 
-
+@*REGISTRAR CITA*@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -453,7 +453,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
-                        if (Sucursal == "TAPO" || Sucursal == "ASPA")
+                        if (Sucursal == "TAPO" || Sucursal == "ASPA" || nombreUsuario == "Edith Atilano")
                         {
                             <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
                         }
@@ -557,14 +557,30 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             <option value="@item.idReferido">@item.Nombre</option>
                                         }
 
-                                        <option disabled><b>--------OTROS--------</b></option>
-                                        foreach (var item in referidosOtro)
+                                        if (Recepcion == 2)
                                         {
-                                            <option value="@item.idReferido">@item.Nombre</option>
+                                            <option disabled><b>--------OTROS--------</b></option>
+                                            <option value="167">FUERZA DE VENTAS BB</option>
+                                            <option value="6">PUBLICIDAD</option>
+                                            <option value="5">RECOMENDADO</option>
+                                            <option value="168">SUCURSAL SATELITE</option>
+
+                                        }
+                                        else
+                                        {
+                                            <option disabled><b>--------OTROS--------</b></option>
+                                                foreach (var item in referidosOtro)
+                                                {
+                                                    <option value="@item.idReferido">@item.Nombre</option>
+                                                }
                                         }
                                     }
                                 </select>
                             </div>
+
+                            //PRECIO INGRESADO
+                            @*<label for="recipient-name" class="form-select" required>Ingrese Precio de EPI:</label>
+                            <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />*@
                         }
                         else
                         {
@@ -829,7 +845,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
-                        if (Sucursal == "TAPO" || Sucursal == "ASPA")
+                        if (Sucursal == "TAPO" || Sucursal == "ASPA" || nombreUsuario == "Edith Atilano")
                         {
                             <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
                         }
@@ -1131,7 +1147,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             <label for="recipient-name" class="col-form-label">Fecha de Cita:</label>
                             <input type="date" class="form-control" id="fecha" name="fecha">
                         </div>
-                        if (Sucursal == "TAPO" || Sucursal == "ASPA")
+                        if (Sucursal == "TAPO" || Sucursal == "ASPA" || nombreUsuario == "Edith Atilano")
                         {
                             <input type="hidden" name="usuario" asp-for="file" class="" required value="@nombreUsuario" />
                         }
@@ -2162,7 +2178,7 @@ else
                                                 @{
                                                     var consultaTicket = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
 
-                                                    if (consultaTicket == "Pendiente de Pago")
+                                                    if (consultaTicket == "Pendiente de Pago" || consultaTicket == "Credito Empresas")
                                                     {
                                                         <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
                                                     }
@@ -2328,7 +2344,7 @@ else
                                                 @{
                                                     var consultaTicket1 = (from c in db.Cita where c.idPaciente == item.M.idPaciente select c.TipoPago).FirstOrDefault();
 
-                                                    if (consultaTicket1 == "Pendiente de Pago")
+                                                    if (consultaTicket1 == "Pendiente de Pago" || consultaTicket == "Credito Empresas")
                                                     {
                                                         <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
                                                     }

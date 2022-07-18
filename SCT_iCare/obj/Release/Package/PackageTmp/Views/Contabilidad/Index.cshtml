@@ -648,13 +648,15 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 @{
                                     if (item.A.M.FechaContable != null)
                                     {
+                                        <span class="tip-content">
                                         <b>Ultimo Movimiento Contable:</b>
                                         <b>@Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MMMM-yy")</b>
+                                        </span>
                                     }
 
                                     else
                                     {
-                                        <span>
+                                        <span class="tip-content">
                                             <b>No hay Movimientos Contables</b>
                                         </span>
                                     }
