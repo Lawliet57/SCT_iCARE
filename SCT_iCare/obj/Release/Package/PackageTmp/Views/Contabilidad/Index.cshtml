@@ -157,10 +157,10 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         nombreExcel += "-" + sucursal;
 
-        modelo = modelo.Where(w => w.A.M.Sucursal.Contains(sucursal)).OrderBy(o => o.A.M.Cuenta);
-        modelo1 = modelo1.Where(w => w.Sucursal.Contains(sucursal)).OrderBy(o => o.Cuenta);
-        modeloExcel = modeloExcel.Where(w => w.A.M.Sucursal.Contains(sucursal)).OrderBy(o => o.A.M.Cuenta);
-        modeloExcel1 = modeloExcel1.Where(w => w.Sucursal.Contains(sucursal)).OrderBy(o => o.Cuenta);
+        modelo = modelo.Where(w => w.A.M.Sucursal == sucursal).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.Sucursal == sucursal).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.Sucursal == sucursal).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.Sucursal == sucursal).OrderBy(o => o.Cuenta);
 
     }
 
@@ -170,10 +170,10 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         nombreExcel += "-" + canal;
 
-        modelo = modelo.Where(w => w.A.M.CanalTipo.Contains(canal)).OrderBy(o => o.A.M.Cuenta);
-        modelo1 = modelo1.Where(w => w.CanalTipo.Contains(canal)).OrderBy(o => o.Cuenta);
-        modeloExcel = modeloExcel.Where(w => w.A.M.CanalTipo.Contains(canal)).OrderBy(o => o.A.M.Cuenta);
-        modeloExcel1 = modeloExcel1.Where(w => w.CanalTipo.Contains(canal)).OrderBy(o => o.Cuenta);
+        modelo = modelo.Where(w => w.A.M.CanalTipo == canal).OrderBy(o => o.A.M.Cuenta);
+        modelo1 = modelo1.Where(w => w.CanalTipo == canal).OrderBy(o => o.Cuenta);
+        modeloExcel = modeloExcel.Where(w => w.A.M.CanalTipo == canal).OrderBy(o => o.A.M.Cuenta);
+        modeloExcel1 = modeloExcel1.Where(w => w.CanalTipo == canal).OrderBy(o => o.Cuenta);
     }
 
     if (ViewBag.Pago != "" && ViewBag.Pago != "BAJIO")
@@ -371,6 +371,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
             <option value="Banco Azteca LC">Banco Azteca LC</option>
             <option value="Banorte">Banorte</option>
             <option value="Santander">Santander</option>
+            <option value="Scotianbank">Scotiabank</option>
             <option value="Cuenta Externa">Cuenta Externa</option>
             <option value="Pendiente de Pago">Pendiente de Pago</option>
             <option value="">TODOS</option>
@@ -648,17 +649,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 @{
                                     if (item.A.M.FechaContable != null)
                                     {
-                                        <span class="tip-content">
                                         <b>Ultimo Movimiento Contable:</b>
                                         <b>@Convert.ToDateTime(item.A.M.FechaContable).ToString("dd-MMMM-yy")</b>
-                                        </span>
                                     }
 
                                     else
                                     {
-                                        <span class="tip-content">
                                             <b>No hay Movimientos Contables</b>
-                                        </span>
                                     }
                                 }
 
@@ -901,6 +898,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1073,6 +1071,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1217,6 +1216,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1295,6 +1295,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1373,6 +1374,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1562,7 +1564,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 {
                                     if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora")
                                     {
-                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="position:relative">
                                             Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
                                         </button>
 
@@ -1666,6 +1668,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1804,6 +1807,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1913,6 +1917,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -1972,6 +1977,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Santander">Santander</option>
+                                                        <option value="Scotianbank">Scotiabank</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2096,6 +2102,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     Nombre
                 </th>
                 <th>
+                    No. Expediente
+                </th>
+                <th>
                     Sucursal
                 </th>
                 <th>
@@ -2182,6 +2191,11 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     @*NOMBRE*@
                     <td>
                         <b>@item.A.N.Nombre</b>
+                    </td>
+
+                    @*EXPEDIENTE*@
+                    <td>
+                        <b>@item.A.M.NoExpediente</b>
                     </td>
 
                     @*SUCURSAL*@
@@ -2314,6 +2328,11 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     @*NOMBRE*@
                     <td>
                         <b>@item.Nombre</b>
+                    </td>
+
+                    @*EXPEDIENTE*@
+                    <td>
+                        <b>@item.NoExpediente</b>
                     </td>
 
                     @*SUCURSAL*@

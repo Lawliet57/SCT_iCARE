@@ -1,0 +1,142 @@
+﻿
+@{
+    ViewBag.Title = "VentanaPago";
+
+    var precioIngresado = ViewBag.precioIngresado;
+    var precioN = ViewBag.precioN;
+    var precioNIVA = ViewBag.precioNIVA;
+    var precioAT = ViewBag.precioAT;
+    var precioATIVA = ViewBag.precioATIVA;
+    var precioP = ViewBag.precioP;
+    var precioPIVA = ViewBag.precioPIVA;
+    var sumaGestor = ViewBag.sumaGestor;
+    var nombreGestor = ViewBag.nombreGestor;
+    var sucursal = ViewBag.Sucursal;
+    var nombrePaciente = ViewBag.nombrePaciente;
+    var emailPaciente = ViewBag.emailPaciente;
+    var telefonoPaciente = ViewBag.telefonoPaciente;
+    var fechaSolicitud = ViewBag.fechaSolicitud;
+    var fechaExpiracion = ViewBag.fechaExpiracion;
+    var cantidadEpis = ViewBag.cantidadEpis;
+    var cantidadEpisA = ViewBag.cantidadEpisA;
+    var cantidadEpisAP = ViewBag.cantidadEpisAP;
+}
+
+<br />
+
+<h3 style="color:white" class="text-center">Detalles de la Operación</h3>
+<br />
+
+<div class="col-md-6" style="min-width:400px">
+    <dl class="dl-horizontal labelGral">
+        <dt>
+            <h4>Nombre:</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@nombrePaciente</h4>
+        </dd>
+
+        <dt>
+            <h4>Email:</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@emailPaciente</h4>
+        </dd>
+
+        <dt>
+            <h4>Teléfono:</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@telefonoPaciente</h4>
+        </dd>
+
+        <dt>
+            <h4>Fecha de Solicitud:</h4>
+        </dt>
+        <dd class="labelInfo">
+            <h4>@fechaSolicitud p.m.</h4>
+        </dd>
+
+        <dt>
+            <h4>Fecha de Expiración:</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            <h4>@fechaExpiracion p.m.</h4>
+        </dd>
+
+        <dt>
+            <h4>Consultorio asignado:</h4>
+        </dt>
+        <dd class="labelInfo">
+            <h4>@sucursal</h4>
+        </dd>
+
+        <dt>
+            <h4>Cantidad de EPIs:</h4>
+        </dt>
+
+        <dd class="labelInfo">
+            @{
+                var totalCantidad = Convert.ToInt32(cantidadEpis) + Convert.ToInt32(cantidadEpisA) + Convert.ToInt32(cantidadEpisAP);
+
+                <h4> @(totalCantidad) Totales</h4>
+                <h4> (@cantidadEpis) Terrestre/Marítimo</h4>
+                <h4> (@cantidadEpisA) Aéreo Tripulacion</h4>
+                <h4> (@cantidadEpisAP) Aéreo Pista</h4>
+            }
+        </dd>
+    </dl>
+
+    <br />
+
+    <div class="form-group ">
+        <div class="col-md-offset-2 col-md-10">
+            <a href="~/Recepcion/Index"><button class="btn btn-outline-warning boton-transparente botonesGral">Listo</button></a>
+        </div>
+    </div>
+
+</div>
+
+<div class="col-md-6" style="min-width:450px; max-width:450px">
+    <div style="background-color:white; width:100%; border-radius:8px; padding:5px" class="row">
+        <div class="col-xs-12">
+            <br />
+            <div class="col-xs-12">
+                <h5 style="color:gray; font-size: 100%"><b>Usted Ingreso:</b></h5>
+                <h3 style="color:black"><b>$@precioIngresado.00 MXN</b></h3>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="col-xs-12">
+                @if (precioIngresado < 10000)
+                {
+                    <h2 style="font-size:100%">
+                        <i>
+                            A continuación se muestra el total de importe de acuerdo a los precios del gestor: @nombreGestor
+                        </i>
+                    </h2>
+                    <div class="col-xs-12" style="color:black; border:solid gray; border-radius:6px; background-color:aliceblue; text-align:center"><h4><b>$@sumaGestor.00</b></h4></div>
+                    <br/>
+                    <div class="col-xs-12">
+                        <div style="font-style:italic">
+                            <br/>
+                            <h6 style="font-size:70%" class="instrucciones">1. Precio de epi sin iva: $@precioN </h6>
+                            <h6 style="font-size:70%" class="instrucciones">2. Precio de epi con iva: $@precioNIVA</h6>
+                            <h6 style="font-size:70%" class="instrucciones">3. Precio de epi Aéreo Tripulación sin iva: $@precioAT</h6>
+                            <h6 style="font-size:70%" class="instrucciones">4. Precio de epi Aéreo Tripulación con iva: $@precioATIVA</h6>
+                            <h6 style="font-size:70%" class="instrucciones">5. Precio de epi Aéreo Pista sin iva: $@precioP</h6>
+                            <h6 style="font-size:70%" class="instrucciones">6. Precio de epi Aéreo Pista con iva: $@precioPIVA</h6>
+                        </div>
+                        <br />
+                    </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -288,10 +288,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:16</publishTime>
     </File>
     <File Include="bin/SCT_iCare.dll">
-      <publishTime>07/18/2022 09:00:46</publishTime>
+      <publishTime>07/20/2022 16:15:17</publishTime>
     </File>
     <File Include="bin/SCT_iCare.pdb">
-      <publishTime>07/18/2022 09:00:46</publishTime>
+      <publishTime>07/20/2022 16:15:17</publishTime>
     </File>
     <File Include="bin/SendGrid.dll">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -1287,13 +1287,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/20/2022 11:27:56</publishTime>
     </File>
     <File Include="Views/Contabilidad/EstadoCuenta.cshtml">
-      <publishTime>07/11/2022 14:19:44</publishTime>
+      <publishTime>07/19/2022 13:12:31</publishTime>
     </File>
     <File Include="Views/Contabilidad/FaltaTicket.cshtml">
       <publishTime>07/11/2022 12:09:38</publishTime>
     </File>
     <File Include="Views/Contabilidad/Index.cshtml">
-      <publishTime>07/18/2022 08:49:48</publishTime>
+      <publishTime>07/20/2022 08:22:53</publishTime>
     </File>
     <File Include="Views/Contabilidad/Pagos.cshtml">
       <publishTime>07/18/2022 08:35:00</publishTime>
@@ -1308,7 +1308,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/14/2022 09:19:57</publishTime>
     </File>
     <File Include="Views/Dictamenes/Citas.cshtml">
-      <publishTime>07/11/2022 12:09:38</publishTime>
+      <publishTime>07/18/2022 10:04:39</publishTime>
     </File>
     <File Include="Views/Dictamenes/Dashboard.cshtml">
       <publishTime>07/11/2022 12:09:38</publishTime>
@@ -1413,7 +1413,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/20/2021 12:53:39</publishTime>
     </File>
     <File Include="Views/Recepcion/Index.cshtml">
-      <publishTime>07/14/2022 16:26:54</publishTime>
+      <publishTime>07/20/2022 13:24:14</publishTime>
     </File>
     <File Include="Views/Recepcion/NextDay.cshtml">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -1431,7 +1431,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Views/Recepcion/PrecioIncorrecto.cshtml">
-      <publishTime>07/14/2022 12:00:25</publishTime>
+      <publishTime>07/18/2022 14:17:19</publishTime>
+    </File>
+    <File Include="Views/Recepcion/VentanaPago.cshtml">
+      <publishTime>07/20/2022 15:00:31</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>06/22/2022 14:00:18</publishTime>
@@ -1488,7 +1491,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>07/18/2022 09:00:47</publishTime>
+      <publishTime>07/20/2022 16:15:18</publishTime>
     </File>
   </ItemGroup>
 </Project>

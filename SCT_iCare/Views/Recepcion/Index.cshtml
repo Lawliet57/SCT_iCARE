@@ -294,6 +294,15 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
             $('#capturaRepetida').modal('show');
         </script>
     }
+
+    @*ABRIR VENTA APARTE*@
+
+    @*@if (TempData["ID"] != null)
+    {        
+        <script>
+                window.open('@Url.Action("VentanaPago","Recepcion", new { id = TempData["ID"] })');
+        </script>
+    }*@
 }
 
 <br />
@@ -569,18 +578,18 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                         else
                                         {
                                             <option disabled><b>--------OTROS--------</b></option>
-                                                foreach (var item in referidosOtro)
-                                                {
-                                                    <option value="@item.idReferido">@item.Nombre</option>
-                                                }
+                                            foreach (var item in referidosOtro)
+                                            {
+                                                <option value="@item.idReferido">@item.Nombre</option>
+                                            }
                                         }
                                     }
                                 </select>
                             </div>
 
                             //PRECIO INGRESADO
-                            @*<label for="recipient-name" class="form-select" required>Ingrese Precio de EPI:</label>
-                            <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />*@
+                            @*<label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
+                                <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />*@
                         }
                         else
                         {
@@ -605,7 +614,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             </div>
                         }
                     }
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -907,7 +916,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         </select>
                     </div>
 
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -1203,7 +1212,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         </select>
                     </div>
 
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -1467,7 +1476,7 @@ else
                 {
                     fila = "#D1C4E9";
                 }
-                else if (item.M.TipoTramite != "PRIMERA VEZ" &&  item.M.TipoLicencia == "AEREO_PISTA")
+                else if (item.M.TipoTramite != "PRIMERA VEZ" && item.M.TipoLicencia == "AEREO_PISTA")
                 {
                     fila = "#FCBAE1 ";
                 }
@@ -1545,13 +1554,13 @@ else
                             </th>
 
 
-                                    }
-                                    else
-                                    {
+                        }
+                        else
+                        {
                             <td>
                                 @Html.DisplayFor(modelItem => item.M.Doctor)
                             </td>
-                                    }
+                        }
                     }
 
                     @*REFERENCIA TOOLTIP DE PRECIOS*@
@@ -1572,10 +1581,10 @@ else
 
                                     if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Transferencia vía BanBajío"
                                                   || item.M.TipoPago == "Credito Empresas" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
-                                    {       
-                                        
-                                    if (item.M.TipoLicencia == "AEREO")
                                     {
+
+                                        if (item.M.TipoLicencia == "AEREO")
+                                        {
                                             <br />
                                             <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")
                                         }
@@ -1848,7 +1857,7 @@ else
 
                             }-->
 
-                                }
+                    }
 
                     <td style="font-size: smaller">
                         @{
@@ -1962,9 +1971,9 @@ else
                                             }*@
 
 
-                                var entregado = (from e in db.Captura where e.idPaciente == item.M.idPaciente && e.EstatusCaptura == "Terminado" select e.EstatusCaptura).FirstOrDefault();
-                                if (entregado != null && item.M.Entregado == null)
-                                {
+                                        var entregado = (from e in db.Captura where e.idPaciente == item.M.idPaciente && e.EstatusCaptura == "Terminado" select e.EstatusCaptura).FirstOrDefault();
+                                        if (entregado != null && item.M.Entregado == null)
+                                        {
                                             <a href="#" data-toggle="modal" data-target="#entregar_@item.M.idPaciente"><b style="color:limegreeN">Entregado</b></a>
                                         }
 
@@ -2034,9 +2043,9 @@ else
                                                     </div>
 
                                                 </div>
-                                                                }
-                                                                else
-                                                                {
+                                            }
+                                            else
+                                            {
                                                 <div class="modal-header">
                                                     <h4 class="modal-title" id="exampleModalLabel"><b>Datos del cliente</b></h4>
                                                 </div>
@@ -2051,7 +2060,7 @@ else
                                                     <label for="recipient-name" class="col-form-label"><b style="color:black">Fecha:</b> @item.M.FechaCita</label><br />
                                                     <label for="recipient-name" class="col-form-label"><b style="color:black">Terminación de Tarjeta:</b> @item.M.Referencia</label>
                                                 </div>
-                                                                }
+                                            }
                                         }
 
                                         <div class="modal-footer">
@@ -2745,3 +2754,5 @@ else
         </table>
     </div>
 }
+
+

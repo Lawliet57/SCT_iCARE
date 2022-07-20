@@ -223,7 +223,7 @@
 
 <link rel="stylesheet" type="text/css" href="~/Estilo.css">
 
-<img class="visible-print" src="~/Images/GA.png" style="width:90px; padding-top:12px; padding-bottom:10px; padding-right:20px; padding-left:20px;" hidden />
+<img class="visible-print" src="~/Images/GA.png" style="width:150px; padding-top:12px; padding-bottom:10px; padding-right:20px; padding-left:20px;" hidden />
 
 
 @*HEADER O ENCABEZADO*@
@@ -823,7 +823,7 @@
                                 }
 
                                 totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
+                                diferenciaTotal = saldoTotalImporte - (saldoTotalP);
 
                                 <tr style="height: auto">
 
@@ -902,7 +902,7 @@
 
                                     @*SALDOS*@
                                     @{
-                                        var sumaPositivos = montoPxDiaP + pagoVisual;
+                                        var sumaPositivos = montoPxDiaP;
                                         var saldoensaldos = sumaPositivos - montoPxDia;
 
                                         if (saldoRowAnterior == 0)
@@ -1028,7 +1028,7 @@
                                     }
                                 </tr> 
                                 totalPago += preciodesumasnofechas;
-                                diferenciaTotal =  saldoTotalImporte - (saldoTotalP + totalPago);
+                                diferenciaTotal =  saldoTotalImporte - (saldoTotalP);
                                 preciodesumasnofechas=0;
                         }
 
@@ -1114,7 +1114,10 @@
                                 }
 
                                 @*FOOTTER  PAGOS INGRESADOS TOTALES*@
-                                @{
+
+                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+
+                                @*@{
                                     if (totalPago != 0)
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
@@ -1123,10 +1126,13 @@
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
                                     }
-                                }
+                                }*@
 
                                 @*FOOTTER  DIFERENCIA DE PAGOS*@
                                 @{
+
+                                    diferenciaTotal = saldoTotalImporte - saldoTotalP;
+
                                     if (diferenciaTotal != 0)
                                     {
                                         if (diferenciaTotal > 0)
@@ -1193,7 +1199,10 @@
                                 }
 
                                 @*FOOTTER  PAGOS INGRESADOS TOTALES PASADO*@
-                                @{
+
+                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+
+                                @*@{
                                     if (totalPago != 0)
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
@@ -1202,7 +1211,7 @@
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
                                     }
-                                }
+                                }*@
 
                                 @*FOOTTER  DIFERENCIA DE PAGOS PASADO*@
                                 @{
@@ -1324,6 +1333,10 @@
         </div>
     }
 
+
+
+    //AQUI EMPIEZA LA TABLA DE LOS ALTERNATIVOS
+
     else if (canal == "IN SITU" || canal == "GESTOR ALT" && canal != null && canal != "" && referido != null && referido != "")
     {
         <div>
@@ -1443,12 +1456,18 @@
                                                         <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
                                                     </td>
                                                 }
+                                                else if (saldoRowAnterior == 0)
+                                                {
+                                                    <td>
+                                                        <span>$0</span>
+                                                    </td>
+                                                }
                                                 else
-                                                { 
+                                                {
                                                     <td>
                                                         <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
                                                     </td>
-                                                }                                                
+                                                }
                                             }
                                         </tr>
 
@@ -1568,7 +1587,7 @@
 
                                     @*SALDOS*@
                                     @{
-                                        var sumaPositivos = montoPxDiaP + pagoVisual;
+                                        var sumaPositivos = montoPxDiaP;
                                         var saldoensaldos = sumaPositivos - montoPxDia;
 
                                         if (saldoRowAnterior == 0)
@@ -1606,15 +1625,21 @@
                                                 <td>
                                                     <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
                                                 </td>
-                                            }
-                                            else
-                                            {
+                                        }
+                                        else if (saldoRowAnterior == 0)
+                                        { 
+                                                <td>
+                                                    <span>$0</span>
+                                                </td>
+                                        }
+                                        else
+                                        {
                                                 <td>
                                                     <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
                                                 </td>
-                                            }
+                                        }
 
-                                            saldoensaldos = 0;
+                                        saldoensaldos = 0;
                                         }
                                 </tr>
 
@@ -1778,7 +1803,9 @@
                                 }
 
                                 @*FOOTTER  PAGOS INGRESADOS TOTALES*@
-                                @{
+
+                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+                                @*@{
                                     if (totalPago != 0)
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
@@ -1787,10 +1814,14 @@
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
                                     }
-                                }
+                                }*@
 
                                 @*FOOTTER  DIFERENCIA DE PAGOS*@
+
                                 @{
+
+                                    diferenciaTotal = saldoTotalImporte - saldoTotalP;
+
                                     if (diferenciaTotal != 0)
                                     {
                                         if (diferenciaTotal > 0)
@@ -1857,7 +1888,9 @@
                                 }
 
                                 @*FOOTTER  PAGOS INGRESADOS TOTALES PASADO*@
-                                @{
+
+                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+                                @*@{
                                     if (totalPago != 0)
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
@@ -1866,7 +1899,7 @@
                                     {
                                         <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
                                     }
-                                }
+                                }*@
 
                                 @*FOOTTER  DIFERENCIA DE PAGOS PASADO*@
                                 @{
@@ -1900,7 +1933,7 @@
         <br />
 
         @*AQUI EMPIEZA LA TABLA DE DESGLOCE*@
-        <div class="tablaScroll" style="min-height: 900px; min-width: 1000px">
+        <div class="tablaScroll; hidden-print" style="min-height: 900px; min-width: 1000px">
             <table class="table  table-hover tablas" style="color: #000000">
                 <thead style="color:white">
                     <tr>

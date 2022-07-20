@@ -19,8 +19,65 @@
 <section class="content-header">
     <center>
         <h1 style="color:#FF0000">
-            ¡EL PRECIO INGRESADO NO COINCIDE CON EL PRECIO ACTUAL DEL GESTOR!
+            ¡EL TOTAL PAGADO NO COINCIDE CON EL PRECIO ACTUAL DEL GESTOR!
         </h1>
+    </center>
+    <center>
+        <h3 style="color:white">
+            <b>Los precios actuales del gestor son los siguientes:</b> 
+        </h3>
+    </center>
+    <center>
+        <table>
+            <thead style="color:white; text-align:center">
+                <tr>
+                    <th style="background-color:transparent; min-width: 200px; text-align:center; font-size:larger">
+                       Tipo de Licencia
+                    </th>
+                    <th style="background-color:transparent; min-width: 150px; text-align:center; font-size:larger">
+                        Precio con IVA
+                    </th>
+                    <th style="background-color:transparent; min-width: 150px; text-align:center; font-size:larger">
+                        Precio sin IVA
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="color:white; text-align:center">
+                <tr>
+                    <td>
+                        Terrestre/Maritimo:
+                    </td>
+                    <td>
+                        $@ViewBag.precioN
+                    </td>
+                    <td>
+                        $@ViewBag.precioNIVA
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Aéreo Tripulación:
+                    </td>
+                    <td>
+                        $@ViewBag.precioAT
+                    </td>
+                    <td>
+                        $@ViewBag.precioATIVA
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Aéreo Pista:
+                    </td>
+                    <td>
+                        $@ViewBag.precioP
+                    </td>
+                    <td>
+                        $@ViewBag.precioPIVA
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </center>
 </section>
 
@@ -30,9 +87,9 @@
         <br />
         <br />
         <center>
-            <h1 style="color: #ffffff">
-                POR FAVOR INGRESE EL PRECIO NUEVAMENTE
-            </h1>
+            <h4 style="color: #ffffff">
+                EN CASO DEL QUE EL CLIENTE HAYA PAGADO UNA CANTIDAD DIFERENTE, FAVOR DE PEDIRLE QUE PAGUE LA DIFERENCIA
+            </h4>
         </center>
         <div class="error-content">
             <br />

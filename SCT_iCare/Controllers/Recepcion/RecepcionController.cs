@@ -237,6 +237,32 @@ namespace SCT_iCare.Controllers.Recepcion
         // POST: Pacientes/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que quiere enlazarse. Para obtener 
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
+
+        public ActionResult VentanaPago(int precioN, int precioNIVA, int precioAT, int precioATIVA, int precioP, int precioPIVA, int precioIngresado, int sumaGestor, string nombreGestor, string nombrePaciente, string emailPaciente,
+            string telefonoPaciente, string fechaSolicitud, string fechaExpiracion, string Sucursal, string cantidadEpis, string cantidadEpisA , string cantidadEpisAP)
+        {
+            ViewBag.precioN = precioN;
+            ViewBag.precioNIVA = precioNIVA;
+            ViewBag.precioAT = precioAT;
+            ViewBag.precioATIVA = precioATIVA;
+            ViewBag.precioP = precioP;
+            ViewBag.precioPIVA = precioPIVA;
+            ViewBag.precioIngresado = precioIngresado;
+            ViewBag.sumaGestor = sumaGestor;
+            ViewBag.nombreGestor = nombreGestor;
+            ViewBag.nombrePaciente = nombrePaciente;
+            ViewBag.emailPaciente = emailPaciente;
+            ViewBag.telefonoPaciente = telefonoPaciente;
+            ViewBag.fechaSolicitud = fechaSolicitud;
+            ViewBag.fechaExpiracion = fechaExpiracion;
+            ViewBag.Sucursal = Sucursal;
+            ViewBag.cantidadEpis = cantidadEpis;
+            ViewBag.cantidadEpisA = cantidadEpisA;
+            ViewBag.cantidadEpisAP = cantidadEpisAP;
+
+            return View();
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista,
@@ -257,11 +283,18 @@ namespace SCT_iCare.Controllers.Recepcion
             //var sumaEPISAT = 0;
             //var sumaEPISAP = 0;
             //string condicionante = "";
+            //ViewBag.precioN = precioN;
+            //ViewBag.precioNIVA = precioNIVA;
+            //ViewBag.precioAT = precioAT;
+            //ViewBag.precioATIVA = precioATIVA;
+            //ViewBag.precioP = precioP;
+            //ViewBag.precioPIVA = precioPIVA;
+            //var fechaEx = Convert.ToDateTime(fecha).AddYears(2);
 
             //if (pago == "REFERENCIA OXXO" || pago == "Pago con Tarjeta" || pago == "Referencia OXXO" || pago == "Transferencia vía BanBajío"
             //                                     || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
             //{
-            //    if(cantidadInt != 0)
+            //    if (cantidadInt != 0)
             //    {
             //        sumaEPISN = (cantidadInt * precioNIVA);
             //    }
@@ -311,6 +344,10 @@ namespace SCT_iCare.Controllers.Recepcion
 
             //else
             //{
+
+
+
+
                 Paciente paciente1 = new Paciente();
 
                 //var revisionPaciente = from i in db.Paciente where i.Nombre == nombre.ToUpper() select i ;
@@ -604,10 +641,33 @@ namespace SCT_iCare.Controllers.Recepcion
                     {
                         db.Cita.Add(cita);
                         db.SaveChanges();
+
                         return RedirectToAction("Index");
+
+
+                        //OPCION CON VENTANA DE PAGO
+                        //return RedirectToAction("VentanaPago", new
+                        //{
+                        //    precioIngresado = precioIngresado,
+                        //    precioN = precioN,
+                        //    precioNIVA = precioNIVA,
+                        //    precioAT = precioAT,
+                        //    precioATIVA = precioATIVA,
+                        //    precioP = precioP,
+                        //    precioPIVA = precioPIVA,
+                        //    sumaGestor = precioReal,
+                        //    nombreGestor = findGestor.Nombre,
+                        //    sucursal = sucursal,
+                        //    nombrePaciente = nombre,
+                        //    emailPaciente = email,
+                        //    telefonoPaciente = telefono,
+                        //    fechaSolicitud = fecha,
+                        //    fechaExpiracion = fechaEx,
+                        //    cantidadEpis = cantidad,
+                        //    cantidadEpisA = cantidadAereo,
+                        //    cantidadEpisAP = cantidadAP
+                        //});
                     }
-
-
 
                 }
                 else
@@ -821,7 +881,45 @@ namespace SCT_iCare.Controllers.Recepcion
                     }
                 }
 
-                return Redirect("Index");
+                return RedirectToAction("Index");
+
+
+                //OPCION CON VENTANA DE PAGO
+                //return RedirectToAction("VentanaPago", new
+                //{
+                //    precioIngresado = precioIngresado,
+                //    precioN = precioN,
+                //    precioNIVA = precioNIVA,
+                //    precioAT = precioAT,
+                //    precioATIVA = precioATIVA,
+                //    precioP = precioP,
+                //    precioPIVA = precioPIVA,
+                //    sumaGestor = precioReal,
+                //    nombreGestor = findGestor.Nombre,
+                //    sucursal = sucursal,
+                //    nombrePaciente = nombre,
+                //    emailPaciente = email,
+                //    telefonoPaciente = telefono,
+                //    fechaSolicitud = fecha,
+                //    fechaExpiracion = fechaEx,
+                //    cantidadEpis = cantidad,
+                //    cantidadEpisA = cantidadAereo,
+                //    cantidadEpisAP = cantidadAP
+                //});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             //}
         }
 
