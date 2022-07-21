@@ -696,6 +696,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var deudaSumatoria = 0;
             var aumentoPaciente = 0;
 
+
             foreach (var pagosGes in pG)
             {
                 saldoTotal += Convert.ToInt32(pagosGes.PagoIngresado);
@@ -748,7 +749,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                     DateTime Ahora = DateTime.Now;
                     DateTime fechadePagoController = Convert.ToDateTime(fechadepago);
                     var fechaContable = Convert.ToDateTime(fechadePagoController);
-                    var fechaHoy = Convert.ToDateTime(Ahora).ToString("d-M-yy");
+                    var fechaHoy = Convert.ToDateTime(Ahora).ToString("dd-M-yy");
                     var pilin = idPacientes[n];
                     var editarPaciente = (from i in db.PacienteESP where i.idPacienteESP == pilin select i).FirstOrDefault();
                     string Historico = editarPaciente.CuentaComentario;
