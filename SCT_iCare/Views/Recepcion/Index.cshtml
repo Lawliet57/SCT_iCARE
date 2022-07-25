@@ -1903,7 +1903,7 @@ else
 
                             <div class="dropdown-menu" style="padding:10px">
                                 @{
-                                    if (oUser.idRol == 2)
+                                    if (oUser.idRol == 2 && oUser.Nombre != "Flavio Rodrigo")
                                     {
                                         <a href="#" data-toggle="modal" data-target="#ModalGestor_@item.M.idPaciente"><b>Modificar Datos</b></a>
                                         <div class="dropdown-divider"></div>

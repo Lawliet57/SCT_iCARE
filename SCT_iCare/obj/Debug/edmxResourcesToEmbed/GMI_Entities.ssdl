@@ -203,6 +203,7 @@
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
     <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
+    <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="CitaDS">
     <Key>
@@ -989,6 +990,7 @@
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
     <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
+    <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>

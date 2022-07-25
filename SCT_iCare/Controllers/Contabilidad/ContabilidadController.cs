@@ -558,6 +558,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var aumento = 0;
             var deudaSumatoria = 0;
             var aumentoPaciente = 0;
+            string HASH = "";
 
             foreach (var pagosGes in pG)
             {
@@ -572,6 +573,15 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                 var editarEfectivo = (from i in db.PagosGestores where i.idPagoGestor == pilin select i).FirstOrDefault();
 
                 editarEfectivo.EfectivoUsado = "Si";
+
+                if (HASH != "")
+                {
+                    HASH += "+" + pilin;
+                }
+                else
+                {
+                    HASH += pilin;
+                }
 
                 if (ModelState.IsValid)
                 {
@@ -621,8 +631,10 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                         editarPaciente.FechaContable = fechaContable;
                         editarPaciente.TipoPago = metododepago;
                         editarPaciente.Cuenta = "BANCOS";
+                        editarPaciente.RastreoPagos = HASH;
 
-                        if (Historico == null || Historico == "")
+
+                    if (Historico == null || Historico == "")
                         {
                             editarPaciente.CuentaComentario = DateTime.Today.ToString("dd-MM-yy") + " por " + usuario + " CONCILIADO DESDE EL MODULO DE PAGOS";
                         }
@@ -695,6 +707,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             var aumento = 0;
             var deudaSumatoria = 0;
             var aumentoPaciente = 0;
+            string HASH = "";
 
 
             foreach (var pagosGes in pG)
@@ -708,6 +721,15 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
             {
                 var pilin = idPagos[n];
                 var editarEfectivo = (from i in db.PagosGestores where i.idPagoGestor == pilin select i).FirstOrDefault();
+
+                if(HASH != "" )
+                {
+                    HASH += "+" + pilin;
+                }
+                else
+                {
+                    HASH += pilin;
+                }
 
                 editarEfectivo.EfectivoUsado = "Si";
 
@@ -759,6 +781,7 @@ Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.
                     editarPaciente.FechaContable = fechaContable;
                     editarPaciente.TipoPago = metododepago;
                     editarPaciente.Cuenta = "BANCOS";
+                    editarPaciente.RastreoPagos = HASH;
 
                     if (Historico == null || Historico == "")
                     {

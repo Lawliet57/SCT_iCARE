@@ -208,6 +208,7 @@
           <Property Name="FormaPago" Type="varchar" MaxLength="40" />
           <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
           <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
+          <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="CitaDS">
           <Key>
@@ -994,6 +995,7 @@
           <Property Name="FormaPago" Type="varchar" MaxLength="40" />
           <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
           <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
+          <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -2963,6 +2965,7 @@
           <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
           <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="RastreoPagos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CitaDS">
           <Key>
@@ -3821,6 +3824,7 @@
           <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
           <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="RastreoPagos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -5091,6 +5095,7 @@
           <EntitySetMapping Name="Cita">
             <EntityTypeMapping TypeName="DevModel.Cita">
               <MappingFragment StoreEntitySet="Cita">
+                <ScalarProperty Name="RastreoPagos" ColumnName="RastreoPagos" />
                 <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />
                 <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
                 <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />
@@ -5912,6 +5917,7 @@
           <EntitySetMapping Name="PacienteESP">
             <EntityTypeMapping TypeName="DevModel.PacienteESP">
               <MappingFragment StoreEntitySet="PacienteESP">
+                <ScalarProperty Name="RastreoPagos" ColumnName="RastreoPagos" />
                 <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />
                 <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />
                 <ScalarProperty Name="FormaPago" ColumnName="FormaPago" />

@@ -288,10 +288,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:16</publishTime>
     </File>
     <File Include="bin/SCT_iCare.dll">
-      <publishTime>07/21/2022 12:08:24</publishTime>
+      <publishTime>07/22/2022 11:58:19</publishTime>
     </File>
     <File Include="bin/SCT_iCare.pdb">
-      <publishTime>07/21/2022 12:08:24</publishTime>
+      <publishTime>07/22/2022 11:58:19</publishTime>
     </File>
     <File Include="bin/SendGrid.dll">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -1287,7 +1287,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>04/20/2022 11:27:56</publishTime>
     </File>
     <File Include="Views/Contabilidad/EstadoCuenta.cshtml">
-      <publishTime>07/21/2022 12:05:25</publishTime>
+      <publishTime>07/21/2022 16:22:46</publishTime>
     </File>
     <File Include="Views/Contabilidad/FaltaTicket.cshtml">
       <publishTime>07/11/2022 12:09:38</publishTime>
@@ -1413,7 +1413,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/20/2021 12:53:39</publishTime>
     </File>
     <File Include="Views/Recepcion/Index.cshtml">
-      <publishTime>07/20/2022 16:36:49</publishTime>
+      <publishTime>07/22/2022 11:42:45</publishTime>
     </File>
     <File Include="Views/Recepcion/NextDay.cshtml">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -1431,7 +1431,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Views/Recepcion/PrecioIncorrecto.cshtml">
-      <publishTime>07/20/2022 16:36:49</publishTime>
+      <publishTime>07/22/2022 11:56:45</publishTime>
     </File>
     <File Include="Views/Recepcion/VentanaPago.cshtml">
       <publishTime>07/20/2022 16:36:49</publishTime>
@@ -1491,7 +1491,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>07/21/2022 12:08:24</publishTime>
+      <publishTime>07/22/2022 11:44:42</publishTime>
     </File>
   </ItemGroup>
 </Project>

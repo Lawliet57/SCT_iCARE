@@ -266,7 +266,7 @@
 
 
         @*INPUT FILTRO REFERIDO*@
-        <select name="referido" style="font-size: 1.5vh; width: 120px" class="form-control">
+        <select name="referido" style="font-size: 1.5vh; width: 115px" class="form-control">
             @{
                 if (ViewBag.Referido == "" || ViewBag.Referido == null)
                 {
@@ -657,392 +657,333 @@
 @{
     if (canal != "IN SITU" && canal != "GESTOR ALT" && canal != null && canal != "" && referido != null && referido != "")
     {
-        <div>
-            <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
-                <thead style="color:white">
-                    <tr>
-                        <th style="background-color: gray;" colspan="2"></th>
-                        <th style="background-color: gray; " colspan="3">Operaciones de @fechaInicio.ToString("MMMM")</th>
-                        <th style="background-color: gray; " colspan="2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var ultimaFecha = (from i in modeloNormal select i).OrderByDescending(o => o.A.M.FechaCita).FirstOrDefault();
-                        DateTime fechadeultimoepi = FECHAI;
-                        if (ultimaFecha != null)
+    <div>
+        <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
+            <thead style="color:white">
+                <tr>
+                    <th style="background-color: gray;" colspan="2"></th>
+                    <th style="background-color: gray; " colspan="3">Operaciones de @fechaInicio.ToString("MMMM")</th>
+                    <th style="background-color: gray; " colspan="2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    var ultimaFecha = (from i in modeloNormal select i).OrderByDescending(o => o.A.M.FechaCita).FirstOrDefault();
+                    DateTime fechadeultimoepi = FECHAI;
+                    if (ultimaFecha != null)
+                    {
+                        fechadeultimoepi = Convert.ToDateTime(ultimaFecha.A.M.FechaCita);
+                    }
+                    var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                    var ultimaFechaPagos = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha >= fechaInicio && i.Fecha <= fechaFinal select i).OrderByDescending(o => o.Fecha).FirstOrDefault();
+                    DateTime fechadeultimopago = FECHAI;
+                    if (ultimaFechaPagos != null)
+                    {
+                        fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
+                    }
+                    var preciodesumasnofechas = 0;
+                    var saldoRowAnterior = 0;
+
+                    foreach (var item in modeloNormal.OrderBy(q => q.A.M.FechaCita))
+                    {
+                        //VARIABLES PARA FECHAS
+                        fechaTabla = Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yy");
+                        var parseFechaInicial = DateTime.Parse(fechaTabla);
+                        var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
+
+                        //CONTEO DE EPIS TOTALES
+                        int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
+                        var episXDia = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i);
+                        var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
+                        var episAereoAT = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
+                        var episAereoAP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO_PISTA" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
+                        var episN = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.TipoLicencia != "AEREO" && i.A.M.TipoLicencia != "AEREO_PISTA") && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
+
+                        //CONTEO DE EPIS TOTALES PAGADOS
+                        int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+
+                        //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
+                        var referidoPagos = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
+                        var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+                        var pagoGestorC = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i).Count();
+                        var condicionante = "";
+                        var pagodeRow = 0;
+
+                        //VARIABLE PARA ROW DE PAGOS
+                        if (fechaTablaAnterior != "")
                         {
-                            fechadeultimoepi = Convert.ToDateTime(ultimaFecha.A.M.FechaCita);
-                        }
-                        var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
-                        var ultimaFechaPagos = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha >= fechaInicio && i.Fecha <= fechaFinal select i).OrderByDescending(o => o.Fecha).FirstOrDefault();
-                        DateTime fechadeultimopago = FECHAI;
-                        if (ultimaFechaPagos != null)
-                        {
-                            fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
-                        }
-                        var preciodesumasnofechas = 0;
-                        var saldoRowAnterior = 0;
+                            var fechaRow = DateTime.Parse(fechaTablaAnterior).AddDays(1);
+                            var pagoGestorRow = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).OrderBy(o => o.Fecha);
+                            var pagoGestorRowCount = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).Count();
 
-                        foreach (var item in modeloNormal.OrderBy(q => q.A.M.FechaCita))
-                        {
-                            //VARIABLES PARA FECHAS
-                            fechaTabla = Convert.ToDateTime(item.A.M.FechaCita).ToString("dd-MMMM-yy");
-                            var parseFechaInicial = DateTime.Parse(fechaTabla);
-                            var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
-
-                            //CONTEO DE EPIS TOTALES
-                            int conteoEpisTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i).Count();
-                            var episXDia = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal select i);
-                            var episXDiaP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
-                            var episAereoAT = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
-                            var episAereoAP = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && i.A.M.TipoLicencia == "AEREO_PISTA" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
-                            var episN = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.TipoLicencia != "AEREO" && i.A.M.TipoLicencia != "AEREO_PISTA") && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i);
-
-                            //CONTEO DE EPIS TOTALES PAGADOS
-                            int conteoEpisPTotales = (from i in modeloNormal where i.A.M.FechaCita >= parseFechaInicial && i.A.M.FechaCita <= parseFechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-
-                            //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
-                            var referidoPagos = (from i in db.Referido where i.Nombre == item.A.M.ReferidoPor && i.Tipo == item.A.M.CanalTipo select i).FirstOrDefault();
-                            var pagoGestor = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
-                            var pagoGestorC = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i).Count();
-                            var condicionante = "";
-                            var pagodeRow = 0;
-
-                            //VARIABLE PARA ROW DE PAGOS
-                            if (fechaTablaAnterior != "")
+                            if (pagoGestorRowCount != 0)
                             {
-                                var fechaRow = DateTime.Parse(fechaTablaAnterior).AddDays(1);
-                                var pagoGestorRow = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).OrderBy(o => o.Fecha);
-                                var pagoGestorRowCount = (from i in pagosGestores where i.Gestor == item.A.M.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).Count();
+                                condicionante = "Si";
 
-                                if (pagoGestorRowCount != 0)
+                                foreach (var i in pagoGestorRow)
                                 {
-                                    condicionante = "Si";
-
-                                    foreach (var i in pagoGestorRow)
-                                    {
-                                        var getFecha = Convert.ToDateTime(i.Fecha).ToString("dd-MMMM-yy");
-                                        fechaPagosRow = DateTime.Parse(getFecha);
-                                        pagodeRow += Convert.ToInt32(i.PagoIngresado);
-                                    }
+                                    var getFecha = Convert.ToDateTime(i.Fecha).ToString("dd-MMMM-yy");
+                                    fechaPagosRow = DateTime.Parse(getFecha);
+                                    pagodeRow += Convert.ToInt32(i.PagoIngresado);
                                 }
                             }
+                        }
 
-                            //ROW DE PAGO SI NOY EPI EN ESTA FECHA
+                        //ROW DE PAGO SI NOY EPI EN ESTA FECHA
 
-                            if (condicionante == "Si")
+                        if (condicionante == "Si")
+                        {
+                            var comparacion = Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy");
+
+                            if (fechaTablaAnterior != comparacion)
                             {
-                                var comparacion = Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy");
-
-                                if (fechaTablaAnterior != comparacion)
-                                {
-                                    <tr style="height: auto">
-
-                                        @*FECHA DE CITA*@
-                                        <td>
-                                            <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
-                                        </td>
-
-                                        @*NUMERO DE EPIS X DIA EN FECHA*@
-                                        <td>
-                                        </td>
-
-                                        @*IMPORTE*@
-                                        <td>
-                                        </td>
-
-                                        @*EPIS PAGADOS*@
-
-                                        <td>
-                                        </td>
-
-                                        @*IMPORTE EPIS PAGADOS*@
-
-                                        <td>
-                                        </td>
-
-                                        @*IMPORTE MODULO DE PAGOS*@
-
-                                        <td>
-                                            <span>$@pagodeRow.ToString("###,###,###,###")</span>
-                                        </td>
-
-                                         @*SALDOS*@
-                                            @{
-
-                                                if (saldoRowAnterior < 0)
-                                                {
-                                                    var muestrasaldo = saldoRowAnterior * (-1);
-                                                    <td>
-                                                        <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
-                                                    </td>
-                                                }
-                                                else
-                                                { 
-                                                    <td>
-                                                        <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
-                                                    </td>
-                                                }                                                
-                                            }
-                                    </tr>
-
-                                    montoPxDia = 0;
-                                    montoPxDiaP = 0;
-                                    precioVisual = 0;
-                                    pagoVisual = 0;
-                                    condicionante = "";
-
-                                }
-                            }
-
-                            //CONDICIONANTE DE FECHAS DE EPIS
-
-                            if (fechaTablaAnterior != fechaTabla)
-                            {
-                                totalEpis = (from i in modeloNormal select i).Count();
-
-                                //SUMA DE PRECIOS EPIS X DIA
-                                foreach (var precio in episXDia)
-                                {
-                                    montoPxDia += Convert.ToInt32(precio.A.M.PrecioEpi);
-                                }
-
-                                //SUMA DE PRECIOS PAGADOS EPIS X DIA
-                                foreach (var precio in episXDiaP)
-                                {
-                                    montoPxDiaP += Convert.ToInt32(precio.A.M.PrecioEpi);
-                                }
-
-                                saldoTotalImporte += montoPxDia;
-                                saldoTotalP += montoPxDiaP;
-                                totalEpisP = (from i in modeloNormal where (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-
-                                foreach (var pagos in pagoGestor)
-                                {
-                                    pagoVisual += Convert.ToInt32(pagos.PagoIngresado);
-                                    fechadePago = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
-                                }
-
-                                totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP);
-
                                 <tr style="height: auto">
 
                                     @*FECHA DE CITA*@
                                     <td>
-                                        <span>@fechaTabla</span>
+                                        <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
                                     </td>
 
                                     @*NUMERO DE EPIS X DIA EN FECHA*@
-                                    @{
-                                        var fechaTablaInicioDia = Convert.ToDateTime(fechaTabla);
-                                        var fechaTablaFinalDia = Convert.ToDateTime(fechaTabla).AddMinutes(-1);
-                                        <td>
-                                            <div>
-                                                <a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaTablaInicioDia, fechaFinal = fechaTablaFinalDia, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
-                                                    <span>@conteoEpisTotales</span>
-                                                </a>
-                                                <span class="visible-print" hidden>@conteoEpisTotales</span>
-                                            </div>
-                                        </td>
-                                    }
+                                    <td>
+                                    </td>
 
                                     @*IMPORTE*@
                                     <td>
-                                        <span>$@montoPxDia.ToString("###,###,###,###")</span>
                                     </td>
 
                                     @*EPIS PAGADOS*@
 
-                                    @{
-                                        if (conteoEpisPTotales != 0)
-                                        {
-                                            <td>
-                                                <span>@conteoEpisPTotales</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                            </td>
-                                        }
-                                    }
+                                    <td>
+                                    </td>
 
                                     @*IMPORTE EPIS PAGADOS*@
 
-                                    @{
-                                        if (conteoEpisPTotales != 0)
-                                        {
-                                            <td>
-                                                <span>$@montoPxDiaP.ToString("###,###,###,###")</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                            </td>
-                                        }
-                                    }
+                                    <td>
+                                    </td>
 
                                     @*IMPORTE MODULO DE PAGOS*@
 
-                                    @{
-                                        if (fechaTabla == fechadePago)
-                                        {
-                                            <td>
-                                                <span>$@pagoVisual.ToString("###,###,###,###")</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                            </td>
-                                        }
-
-                                    }
+                                    <td>
+                                        <span>$@pagodeRow.ToString("###,###,###,###")</span>
+                                    </td>
 
                                     @*SALDOS*@
                                     @{
-                                        var sumaPositivos = montoPxDiaP;
-                                        var saldoensaldos = sumaPositivos - montoPxDia;
-
-                                        if (saldoRowAnterior == 0)
-                                        {
-                                            saldoRowAnterior = saldoensaldos;
-                                        }
-
-                                        else if(saldoRowAnterior < 0)
-                                        {
-                                            if (saldoensaldos < 0)
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                            else
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                        }
-
-                                        else
-                                        {
-                                            if(saldoensaldos < 0)
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                            else
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                        }
 
                                         if (saldoRowAnterior < 0)
-                                        {
-                                            var muestradesaldo = saldoRowAnterior * (-1);
-                                                <td>
-                                                    <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
-                                                </td>
-                                            }
-                                            else
-                                            {
-                                                <td>
-                                                    <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
-                                                </td>
-                                            }
-
-                                            saldoensaldos = 0;
-
-                                        }
-                                </tr>
-
-                                fechaTablaAnterior = fechaTabla;
-                                montoPxDia = 0;
-                                montoPxDiaP = 0;
-                                precioVisual = 0;
-                                pagoVisual = 0;
-                                totalPago += pagodeRow;
-                            }
-                        }
-
-                        //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
-                        var fechaUEPI = Convert.ToDateTime(fechadeultimoepi).ToString("dd-MMMM-yy");
-                        DateTime fechaUEPI2 = Convert.ToDateTime(fechaUEPI);
-                        var fechaUPAGO = Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy");
-                        DateTime fechaUPAGO2 = Convert.ToDateTime(fechaUPAGO);
-
-                        if (fechaUEPI2 < fechaUPAGO2 )
-                        {
-                               var fechasDePagosjaja = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha > fechadeultimoepi && i.Fecha <= fechadeultimopago select i);                               
-
-                               foreach(var i in fechasDePagosjaja)
-                               {
-                                    preciodesumasnofechas += Convert.ToInt32(i.PagoIngresado);
-                               }
-
-                                <tr style="height: auto">
-
-                                    @*FECHA DE CITA*@
-                                    <td>
-                                        <span>@Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy")</span>
-                                    </td>
-
-                                    @*NUMERO DE EPIS X DIA EN FECHA*@
-                                    <td>
-                                    </td>
-
-                                    @*IMPORTE*@
-                                    <td>
-                                    </td>
-
-                                    @*EPIS PAGADOS*@
-
-                                    <td>
-                                    </td>
-
-                                    @*IMPORTE EPIS PAGADOS*@
-
-                                    <td>
-                                    </td>
-
-                                    @*IMPORTE MODULO DE PAGOS*@
-
-                                    <td>
-                                        <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
-                                    </td>
-
-                                    @*SALDO*@
-                                    @{ 
-
-                                        if(saldoRowAnterior < 0)
                                         {
                                             var muestrasaldo = saldoRowAnterior * (-1);
                                             <td>
                                                 <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
                                             </td>
                                         }
-                                        else if (saldoRowAnterior == 0)
-                                        { 
-                                            <td>
-                                                <span>$0</span>
-                                            </td>
-                                        }   
                                         else
-                                        { 
+                                        {
                                             <td>
                                                 <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
                                             </td>
-                                        }                                
+                                        }
                                     }
-                                </tr> 
-                                totalPago += preciodesumasnofechas;
-                                diferenciaTotal =  saldoTotalImporte - (saldoTotalP);
-                                preciodesumasnofechas=0;
+                                </tr>
+
+                                montoPxDia = 0;
+                                montoPxDiaP = 0;
+                                precioVisual = 0;
+                                pagoVisual = 0;
+                                condicionante = "";
+
+                            }
                         }
 
-                        <tr>
+                        //CONDICIONANTE DE FECHAS DE EPIS
+
+                        if (fechaTablaAnterior != fechaTabla)
+                        {
+                            totalEpis = (from i in modeloNormal select i).Count();
+
+                            //SUMA DE PRECIOS EPIS X DIA
+                            foreach (var precio in episXDia)
+                            {
+                                montoPxDia += Convert.ToInt32(precio.A.M.PrecioEpi);
+                            }
+
+                            //SUMA DE PRECIOS PAGADOS EPIS X DIA
+                            foreach (var precio in episXDiaP)
+                            {
+                                montoPxDiaP += Convert.ToInt32(precio.A.M.PrecioEpi);
+                            }
+
+                            saldoTotalImporte += montoPxDia;
+                            saldoTotalP += montoPxDiaP;
+                            totalEpisP = (from i in modeloNormal where (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+
+                            foreach (var pagos in pagoGestor)
+                            {
+                                pagoVisual += Convert.ToInt32(pagos.PagoIngresado);
+                                fechadePago = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
+                            }
+
+                            totalPago += pagoVisual;
+                            diferenciaTotal = saldoTotalImporte - (saldoTotalP);
+
+                            <tr style="height: auto">
+
+                                @*FECHA DE CITA*@
+                                <td>
+                                    <span>@fechaTabla</span>
+                                </td>
+
+                                @*NUMERO DE EPIS X DIA EN FECHA*@
+                                @{
+                                    var fechaTablaInicioDia = Convert.ToDateTime(fechaTabla);
+                                    var fechaTablaFinalDia = Convert.ToDateTime(fechaTabla).AddMinutes(-1);
+                                    <td>
+                                        <div>
+                                            <a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaTablaInicioDia, fechaFinal = fechaTablaFinalDia, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
+                                                <span>@conteoEpisTotales</span>
+                                            </a>
+                                            <span class="visible-print" hidden>@conteoEpisTotales</span>
+                                        </div>
+                                    </td>
+                                }
+
+                                @*IMPORTE*@
+                                <td>
+                                    <span>$@montoPxDia.ToString("###,###,###,###")</span>
+                                </td>
+
+                                @*EPIS PAGADOS*@
+
+                                @{
+                                    if (conteoEpisPTotales != 0)
+                                    {
+                                        <td>
+                                            <span>@conteoEpisPTotales</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
+                                }
+
+                                @*IMPORTE EPIS PAGADOS*@
+
+                                @{
+                                    if (conteoEpisPTotales != 0)
+                                    {
+                                        <td>
+                                            <span>$@montoPxDiaP.ToString("###,###,###,###")</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
+                                }
+
+                                @*IMPORTE MODULO DE PAGOS*@
+
+                                @{
+                                    if (fechaTabla == fechadePago)
+                                    {
+                                        <td>
+                                            <span>$@pagoVisual.ToString("###,###,###,###")</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                        </td>
+                                    }
+
+                                }
+
+                                @*SALDOS*@
+                                @{
+                                    var sumaPositivos = montoPxDiaP;
+                                    var saldoensaldos = sumaPositivos - montoPxDia;
+
+                                    if (saldoRowAnterior == 0)
+                                    {
+                                        saldoRowAnterior = saldoensaldos;
+                                    }
+
+                                    else if (saldoRowAnterior < 0)
+                                    {
+                                        if (saldoensaldos < 0)
+                                        {
+                                            saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                        }
+                                        else
+                                        {
+                                            saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                        }
+                                    }
+
+                                    else
+                                    {
+                                        if (saldoensaldos < 0)
+                                        {
+                                            saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                        }
+                                        else
+                                        {
+                                            saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                        }
+                                    }
+
+                                    if (saldoRowAnterior < 0)
+                                    {
+                                        var muestradesaldo = saldoRowAnterior * (-1);
+                                        <td>
+                                            <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>
+                                            <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                        </td>
+                                    }
+
+                                    saldoensaldos = 0;
+
+                                }
+                            </tr>
+
+                            fechaTablaAnterior = fechaTabla;
+                            montoPxDia = 0;
+                            montoPxDiaP = 0;
+                            precioVisual = 0;
+                            pagoVisual = 0;
+                            totalPago += pagodeRow;
+                        }
+                    }
+
+                    //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
+                    var fechaUEPI = Convert.ToDateTime(fechadeultimoepi).ToString("dd-MMMM-yy");
+                    DateTime fechaUEPI2 = Convert.ToDateTime(fechaUEPI);
+                    var fechaUPAGO = Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy");
+                    DateTime fechaUPAGO2 = Convert.ToDateTime(fechaUPAGO);
+
+                    if (fechaUEPI2 < fechaUPAGO2)
+                    {
+                        var fechasDePagosjaja = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha > fechadeultimoepi && i.Fecha <= fechadeultimopago select i);
+
+                        foreach (var i in fechasDePagosjaja)
+                        {
+                            preciodesumasnofechas += Convert.ToInt32(i.PagoIngresado);
+                        }
+
+                        <tr style="height: auto">
 
                             @*FECHA DE CITA*@
                             <td>
+                                <span>@Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy")</span>
                             </td>
 
                             @*NUMERO DE EPIS X DIA EN FECHA*@
@@ -1054,6 +995,7 @@
                             </td>
 
                             @*EPIS PAGADOS*@
+
                             <td>
                             </td>
 
@@ -1065,240 +1007,352 @@
                             @*IMPORTE MODULO DE PAGOS*@
 
                             <td>
+                                <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
                             </td>
 
-                            @*BANCOS*@
+                            @*SALDO*@
+                            @{
 
-                            <td>
-                            </td>
-
+                                if (saldoRowAnterior < 0)
+                                {
+                                    var muestrasaldo = saldoRowAnterior * (-1);
+                                    <td>
+                                        <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
+                                    </td>
+                                }
+                                else if (saldoRowAnterior == 0)
+                                {
+                                    <td>
+                                        <span>$0</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                    </td>
+                                }
+                            }
                         </tr>
-                 }
-                </tbody>
-            </table>
 
-            @{
-                if (fechaTabla != null && fechaTabla != "")
-                {
+                        totalPago += preciodesumasnofechas;
+                        diferenciaTotal = saldoTotalImporte - (saldoTotalP);
+                        preciodesumasnofechas = 0;
+                    }
 
-                    var episAereoAT = (from i in modeloNormal where i.A.M.ReferidoPor == referido &&  i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && i.A.M.TipoLicencia == "AEREO" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-                    var episAereoAP = (from i in modeloNormal where i.A.M.ReferidoPor == referido &&  i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && i.A.M.TipoLicencia == "AEREO_PISTA" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
-                    var episN = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && (i.A.M.TipoLicencia != "AEREO" && i.A.M.TipoLicencia != "AEREO_PISTA") && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                    <tr>
 
+                        @*FECHA DE CITA*@
+                        <td>
+                        </td>
 
-                    <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="background-color:transparent; border-color:transparent">
-                        <thead style="border: none; background-color:transparent">
-                                        <tr style="border: none; background-color:transparent">
+                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                        <td>
+                        </td>
 
-                                            @*FOOTTER  MES ACTUAL*@
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
+                        @*IMPORTE*@
+                        <td>
+                        </td>
 
+                        @*EPIS PAGADOS*@
+                        <td>
+                        </td>
 
-                                            @*FOOTTER  EPIS TOTALES*@
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent">
-                                                <b style="color:aliceblue; font-size: @Letra">@totalEpis</b>
-                                            </th>
+                        @*IMPORTE EPIS PAGADOS*@
 
+                        <td>
+                        </td>
 
-                                            @*FOOTTER  IMPORTE TOTAL*@
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent">
-                                                <b style="color:aliceblue; font-size: @Letra">$@saldoTotalImporte.ToString("###,###,###,###")</b>
-                                            </th>
+                        @*IMPORTE MODULO DE PAGOS*@
 
-                                            @*FOOTTER  EPIS CONCILIADOS TOTALES*@
-                                            @{
-                                                if (totalEpisP != 0)
-                                                {
-                                                                                        <th style="border: none; background-color:transparent">
-                                                                                                                                        <span class="field-tip">
-                                                                                                                                            <b style="color:whitesmoke; font-size: @Letra">@totalEpisP</b>
-                                                                                                                                            @{
-                                                                                                                                                if (episN != 0)
-                                                                                                                                                {
-                                                                                                                                                    <span class="tip-content">
-                                                                                                                                                        <b>
-                                                                                                                                                            Epis Terrestres/ Maritimos:
-                                                                                                                                                        </b>
-                                                                                                                                                        <b>
-                                                                                                                                                            &nbsp @episN
-                                                                                                                                                        </b>
-                                                                                                                                                    </span>
-                                                                                                                                                }
-                                                                                                                                                if (episAereoAP != 0)
-                                                                                                                                                {
-                                                                                                                                                    <span class="tip-content">
-                                                                                                                                                        <b>
-                                                                                                                                                            Epis Pista:
-                                                                                                                                                        </b>
-                                                                                                                                                        <b>
-                                                                                                                                                            &nbsp @episAereoAP
-                                                                                                                                                        </b>
-                                                                                                                                                    </span>
-                                                                                                                                                }
-                                                                                                                                                if (episAereoAT != 0)
-                                                                                                                                                {
-                                                                                                                                                    <span class="tip-content">
-                                                                                                                                                        <b>
-                                                                                                                                                            Epis Tripulación:
-                                                                                                                                                        </b>
-                                                                                                                                                        <b>
-                                                                                                                                                            &nbsp @episAereoAT
-                                                                                                                                                        </b>
-                                                                                                                                                    </span>
-                                                                                                                                                }
-                                                                                                                                            }
-                                                                                                                                        </span>
-                                                                                        </th>
-                                                }
-                                                else
-                                                {
-                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                                }
-                                            }
+                        <td>
+                        </td>
 
-                                            @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES*@
-                                            @{
-                                                if (saldoTotalP != 0)
-                                                {
-                                                    <td style="background-color: aliceblue; border: none; background-color:transparent">
-                                                            <b style="color:aliceblue; font-size: @Letra">$@saldoTotalP.ToString("###,###,###,###")</b>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></td>
-                                                }
-                                            }
+                        @*BANCOS*@
 
-                                            @*FOOTTER  PAGOS INGRESADOS TOTALES*@
+                        <td>
+                        </td>
 
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
-
-                                            @*@{
-                                                        if (totalPago != 0)
-                                                        {
-                                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
-                                                        }
-                                                        else
-                                                        {
-                                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                                        }
-                                                    }*@
-
-                                            @*FOOTTER  DIFERENCIA DE PAGOS*@
-                                            @{
-
-                                                diferenciaTotal = saldoTotalImporte - saldoTotalP;
-
-                                                if (diferenciaTotal != 0)
-                                                {
-                                                    if (diferenciaTotal > 0)
-                                                    {
-                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
-                                                    }
-                                                    else if (diferenciaTotal < 0)
-                                                    {
-                                                        diferenciaTotal = diferenciaTotal * (-1);
-                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                                }
-                                            }
-                                        </tr>
-                        </thead>
-
-                        @*DIFERENCIAS DE MES*@
-                        <tbody>
-                            <tr style="border: none; background-color:transparent">
-
-                                @*FOOTTER  MES PASADO*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">Sumas:</b></th>
-
-
-                                @*FOOTTER  EPIS TOTALES PASADO*@
-
-                                @{var finalTotal = totalEpis + totalEpisMA;
-                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@finalTotal</b></th>
-                                }
-
-                                @*FOOTTER  IMPORTE TOTAL PASADO*@
-
-                                @{var importeTotal = saldoTotalImporte + saldoTotalImporteMA;
-                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@importeTotal.ToString("###,###,###,###")</b></th>
-                                }
-
-                                @*FOOTTER  EPIS CONCILIADOS TOTALES PASADO*@
-                                @{var episPTotales = totalEpisP + totalEpisPMA;
-                                    if (totalEpisP != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@episPTotales</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-
-                                @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES PASADO*@
-                                @{
-                                    var totalPagado = saldoTotalP + montoTotalMaP;
-                                    if (saldoTotalP != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@totalPagado.ToString("###,###,###,###")</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-
-                                @*FOOTTER  PAGOS INGRESADOS TOTALES PASADO*@
-
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
-
-                                @*@{
-                                    if (totalPago != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }*@
-
-                                @*FOOTTER  DIFERENCIA DE PAGOS PASADO*@
-                                @{
-                                    if (diferenciaTotal != 0)
-                                    {
-                                        if (diferenciaTotal < 0)
-                                        {
-                                            diferenciaTotal = diferenciaTotal * (-1);
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
-                                        }
-                                        else if (diferenciaTotal < 0)
-                                        {
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-                            </tr>
-                        </tbody>
-                    </table>
+                    </tr>
                 }
-                else
-                {
-                    <h1 style="background-color: aliceblue; border: none; background-color:transparent; text-align:center"><b style="color:aliceblue;">NO HAY MOVIMIENTOS DE ESTE MES</b></h1>
-                }
+            </tbody>
+        </table>
+
+
+        @{
+            if (fechaTabla != null && fechaTabla != "")
+            {
+
+                var episAereoAT = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && i.A.M.TipoLicencia == "AEREO" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                var episAereoAP = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && i.A.M.TipoLicencia == "AEREO_PISTA" && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                var episN = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && (i.A.M.TipoLicencia != "AEREO" && i.A.M.TipoLicencia != "AEREO_PISTA") && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                var episT = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && (i.A.M.Cuenta == "BANCOS" || i.A.M.Cuenta == "CONEKTA") select i).Count();
+                var episAereoATNP = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && i.A.M.TipoLicencia == "AEREO" select i).Count();
+                var episAereoAPNP = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && i.A.M.TipoLicencia == "AEREO_PISTA" select i).Count();
+                var episNNP = (from i in modeloNormal where i.A.M.ReferidoPor == referido && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita <= fechaFinal && (i.A.M.TipoLicencia != "AEREO" && i.A.M.TipoLicencia != "AEREO_PISTA") select i).Count();
+
+                <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="background-color:transparent; border-color:transparent">
+                    <thead style="border: none; background-color:transparent">
+                        <tr style="border: none; background-color:transparent">
+
+
+                            @*FOOTTER  MES ACTUAL*@
+                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
+
+
+                            @*FOOTTER  EPIS TOTALES*@
+                            @{
+                                if (totalEpisP != 0)
+                                {
+                                    <th style="border: none; background-color:transparent">
+                                        <span class="field-tip">
+                                            <b style="color:whitesmoke; font-size: @Letra">@totalEpis</b>
+                                            @{
+                                                if (totalEpis != 0)
+                                                {
+                                                    <span class="tip-content">
+                                                        @{
+                                                            if (episNNP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Terrestres/ Maritimos:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episNNP
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoAPNP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Pista:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoAPNP
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoATNP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Tripulación:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoATNP
+                                                                </b>
+                                                            }
+                                                        }
+                                                    </span>
+                                                }
+
+                                            }
+                                        </span>
+                                    </th>
+                                }
+                            }
+
+                            @*FOOTTER  IMPORTE TOTAL*@
+                            <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%">$@saldoTotalImporte.ToString("###,###,###,###")</b></td>
+
+
+                            @*FOOTTER  EPIS CONCILIADOS TOTALES*@
+                            @{
+                                if (totalEpisP != 0)
+                                {
+                                    <th style="border: none; background-color:transparent">
+                                        <span class="field-tip">
+                                            <b style="color:whitesmoke; font-size: @Letra">@totalEpisP</b>
+                                            @{
+                                                if (episT != 0)
+                                                {
+                                                    <span class="tip-content">
+                                                        @{
+                                                            if (episN != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Terrestres/ Maritimos:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episN
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoAP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Pista:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoAP
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoAT != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Tripulación:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoAT
+                                                                </b>
+                                                            }
+                                                        }
+                                                    </span>
+                                                }
+
+                                            }
+                                        </span>
+                                    </th>
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }
+
+                            @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES*@
+                            @{
+                                if (saldoTotalP != 0)
+                                {
+                                    <td style="background-color: aliceblue; border: none; background-color:transparent">
+                                        <b style="color:aliceblue; font-size: 115%">$@saldoTotalP.ToString("###,###,###,###")</b>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%"></b></td>
+                                }
+                            }
+
+                            @*FOOTTER  PAGOS INGRESADOS TOTALES*@
+
+                            <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+
+                            @*@{
+                                if (totalPago != 0)
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }*@
+
+                            @*FOOTTER  DIFERENCIA DE PAGOS*@
+                            @{
+
+                                diferenciaTotal = saldoTotalImporte - saldoTotalP;
+
+                                if (diferenciaTotal != 0)
+                                {
+                                    if (diferenciaTotal > 0)
+                                    {
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
+                                    }
+                                    else if (diferenciaTotal < 0)
+                                    {
+                                        diferenciaTotal = diferenciaTotal * (-1);
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
+                                    }
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }
+                        </tr>
+                    </thead>
+
+                    @*DIFERENCIAS DE MES*@
+                    <tbody>
+                        <tr style="border: none; background-color:transparent">
+
+                            @*FOOTTER  MES PASADO*@
+                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">Sumas:</b></th>
+
+
+                            @*FOOTTER  EPIS TOTALES PASADO*@
+
+                            @{var finalTotal = totalEpis + totalEpisMA;
+                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@finalTotal</b></th>
+                            }
+
+                            @*FOOTTER  IMPORTE TOTAL PASADO*@
+
+                            @{var importeTotal = saldoTotalImporte + saldoTotalImporteMA;
+                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@importeTotal.ToString("###,###,###,###")</b></th>
+                            }
+
+                            @*FOOTTER  EPIS CONCILIADOS TOTALES PASADO*@
+                            @{var episPTotales = totalEpisP + totalEpisPMA;
+                                if (totalEpisP != 0)
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@episPTotales</b></th>
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }
+
+                            @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES PASADO*@
+                            @{
+                                var totalPagado = saldoTotalP + montoTotalMaP;
+                                if (saldoTotalP != 0)
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@totalPagado.ToString("###,###,###,###")</b></th>
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }
+
+                            @*FOOTTER  PAGOS INGRESADOS TOTALES PASADO*@
+
+                            <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+
+                            @*@{
+                                if (totalPago != 0)
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }*@
+
+                            @*FOOTTER  DIFERENCIA DE PAGOS PASADO*@
+                            @{
+                                if (diferenciaTotal != 0)
+                                {
+                                    if (diferenciaTotal < 0)
+                                    {
+                                        diferenciaTotal = diferenciaTotal * (-1);
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
+                                    }
+                                    else if (diferenciaTotal < 0)
+                                    {
+                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
+                                    }
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }
+                        </tr>
+                    </tbody>
+                </table>
             }
-        </div>
+            else
+            {
+                <h1 style="background-color: aliceblue; border: none; background-color:transparent; text-align:center"><b style="color:aliceblue;">NO HAY MOVIMIENTOS DE ESTE MES</b></h1>
+            }
+        }
+    </div>
 
         <br />
 
@@ -1396,343 +1450,93 @@
 
     else if (canal == "IN SITU" || canal == "GESTOR ALT" && canal != null && canal != "" && referido != null && referido != "")
     {
-        <div>
-            <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
-                <thead style="color:white">
-                    <tr>
-                        <th style="background-color: gray;" colspan="2"></th>
-                        <th style="background-color: gray; " colspan="3">Operaciones de @fechaInicio.ToString("MMMM")</th>
-                        <th style="background-color: gray; " colspan="2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        var ultimaFecha = (from i in modeloAlternativo select i).OrderByDescending(o => o.FechaCita).FirstOrDefault();
-                        DateTime fechadeultimoepi = FECHAI;
-                        if (ultimaFecha != null)
+<div>
+    <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="color: #2F2D6B">
+        <thead style="color:white">
+            <tr>
+                <th style="background-color: gray;" colspan="2"></th>
+                <th style="background-color: gray; " colspan="3">Operaciones de @fechaInicio.ToString("MMMM")</th>
+                <th style="background-color: gray; " colspan="2"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                var ultimaFecha = (from i in modeloAlternativo select i).OrderByDescending(o => o.FechaCita).FirstOrDefault();
+                DateTime fechadeultimoepi = FECHAI;
+                if (ultimaFecha != null)
+                {
+                    fechadeultimoepi = Convert.ToDateTime(ultimaFecha.FechaCita);
+                }
+                var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
+                var ultimaFechaPagos = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha >= fechaInicio && i.Fecha <= fechaFinal select i).OrderByDescending(o => o.Fecha).FirstOrDefault();
+                DateTime fechadeultimopago = FECHAI;
+                if (ultimaFechaPagos != null)
+                {
+                    fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
+                }
+                var preciodesumasnofechas = 0;
+                var saldoRowAnterior = 0;
+
+                foreach (var item in modeloAlternativo.OrderBy(q => q.FechaCita))
+                {
+                    //VARIABLES PARA FECHAS
+                    fechaTabla = Convert.ToDateTime(item.FechaCita).ToString("dd-MMMM-yy");
+                    var parseFechaInicial = DateTime.Parse(fechaTabla);
+                    var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
+
+                    //CONTEO DE EPIS TOTALES
+                    int conteoEpisTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i).Count();
+                    var episXDia = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i);
+                    var episXDiaP = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "COMEKTA") select i);
+
+                    //CONTEO DE EPIS TOTALES PAGADOS
+                    int conteoEpisPTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+
+                    //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
+                    var referidoPagos = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
+                    var pagoGestor = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
+                    var condicionante = "";
+                    var pagodeRow = 0;
+
+                    //VARIABLE PARA ROW DE PAGOS
+                    if (fechaTablaAnterior != "")
+                    {
+                        var fechaRow = DateTime.Parse(fechaTablaAnterior).AddDays(1);
+                        var pagoGestorRow = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).OrderBy(o => o.Fecha);
+                        var pagoGestorRowCount = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).Count();
+
+                        if (pagoGestorRowCount != 0)
                         {
-                            fechadeultimoepi = Convert.ToDateTime(ultimaFecha.FechaCita);
-                        }
-                        var findidRef = (from i in db.Referido where i.Nombre == referido && i.Tipo == canal select i).FirstOrDefault();
-                        var ultimaFechaPagos = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha >= fechaInicio && i.Fecha <= fechaFinal select i).OrderByDescending(o => o.Fecha).FirstOrDefault();
-                        DateTime fechadeultimopago = FECHAI;
-                        if (ultimaFechaPagos != null)
-                        {
-                            fechadeultimopago = Convert.ToDateTime(ultimaFechaPagos.Fecha);
-                        }
-                        var preciodesumasnofechas = 0;
-                        var saldoRowAnterior = 0;
+                            condicionante = "Si";
 
-                        foreach (var item in modeloAlternativo.OrderBy(q => q.FechaCita))
-                        {
-                            //VARIABLES PARA FECHAS
-                            fechaTabla = Convert.ToDateTime(item.FechaCita).ToString("dd-MMMM-yy");
-                            var parseFechaInicial = DateTime.Parse(fechaTabla);
-                            var parseFechaFinal = DateTime.Parse(fechaTabla).AddHours(23).AddMinutes(59);
-
-                            //CONTEO DE EPIS TOTALES
-                            int conteoEpisTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i).Count();
-                            var episXDia = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal select i);
-                            var episXDiaP = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "COMEKTA") select i);
-
-                            //CONTEO DE EPIS TOTALES PAGADOS
-                            int conteoEpisPTotales = (from i in modeloAlternativo where i.FechaCita >= parseFechaInicial && i.FechaCita <= parseFechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
-
-                            //VARIABLES PARA PAGOS EFECTUADOS EN MODULO DE PAGOS
-                            var referidoPagos = (from i in db.Referido where i.Nombre == item.ReferidoPor && i.Tipo == item.CanalTipo select i).FirstOrDefault();
-                            var pagoGestor = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= parseFechaInicial && i.Fecha <= parseFechaFinal select i);
-                            var condicionante = "";
-                            var pagodeRow = 0;
-
-                            //VARIABLE PARA ROW DE PAGOS
-                            if (fechaTablaAnterior != "")
+                            foreach (var i in pagoGestorRow)
                             {
-                                var fechaRow = DateTime.Parse(fechaTablaAnterior).AddDays(1);
-                                var pagoGestorRow = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).OrderBy(o => o.Fecha);
-                                var pagoGestorRowCount = (from i in pagosGestores where i.Gestor == item.ReferidoPor && i.idReferido == referidoPagos.idReferido && i.Fecha >= fechaRow && i.Fecha <= parseFechaInicial select i).Count();
-
-                                if (pagoGestorRowCount != 0)
-                                {
-                                    condicionante = "Si";
-
-                                    foreach (var i in pagoGestorRow)
-                                    {
-                                        var getFecha = Convert.ToDateTime(i.Fecha).ToString("dd-MMMM-yy");
-                                        fechaPagosRow = DateTime.Parse(getFecha);
-                                        pagodeRow += Convert.ToInt32(i.PagoIngresado);
-                                    }
-                                }
-                            }
-
-                            //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
-
-                            if (condicionante == "Si")
-                            {
-                                var comparacion = Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy");
-
-                                if (fechaTablaAnterior != comparacion)
-                                {
-                                        <tr style="height: auto">
-
-                                            @*FECHA DE CITA*@
-                                            <td>
-                                                <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
-                                            </td>
-
-                                            @*NUMERO DE EPIS X DIA EN FECHA*@
-                                            <td>
-                                            </td>
-
-                                            @*IMPORTE*@
-                                            <td>
-                                            </td>
-
-                                            @*EPIS PAGADOS*@
-
-                                            <td>
-                                            </td>
-
-                                            @*IMPORTE EPIS PAGADOS*@
-
-                                            <td>
-                                            </td>
-
-                                            @*IMPORTE MODULO DE PAGOS*@
-                                            <td>
-                                                <span>$@pagodeRow.ToString("###,###,###,###")</span>
-                                            </td>
-
-                                            @*SALDOS*@
-                                            @{
-
-                                                if (saldoRowAnterior < 0)
-                                                {
-                                                    var muestrasaldo = saldoRowAnterior * (-1);
-                                                    <td>
-                                                        <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
-                                                    </td>
-                                                }
-                                                else if (saldoRowAnterior == 0)
-                                                {
-                                                    <td>
-                                                        <span>$0</span>
-                                                    </td>
-                                                }
-                                                else
-                                                {
-                                                    <td>
-                                                        <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
-                                                    </td>
-                                                }
-                                            }
-                                        </tr>
-
-                                    montoPxDia = 0;
-                                    montoPxDiaP = 0;
-                                    precioVisual = 0;
-                                    pagoVisual = 0;
-                                    condicionante = "";
-                                    totalPago += pagodeRow;
-                                }
-                            }
-
-
-                            if (fechaTablaAnterior != fechaTabla)
-                            {
-                                totalEpis = (from i in modeloAlternativo select i).Count();
-
-                                //SUMA DE PRECIOS EPIS X DIA
-                                foreach (var precio in episXDia)
-                                {
-                                    montoPxDia += Convert.ToInt32(precio.PrecioEpi);
-                                }
-
-                                //SUMA DE PRECIOS PAGADOS EPIS X DIA
-                                foreach (var precio in episXDiaP)
-                                {
-                                    montoPxDiaP += Convert.ToInt32(precio.PrecioEpi);
-                                }
-
-                                saldoTotalImporte += montoPxDia;
-                                saldoTotalP += montoPxDiaP;
-                                totalEpisP = (from i in modeloAlternativo where (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
-
-                                foreach (var pagos in pagoGestor)
-                                {
-                                    pagoVisual += Convert.ToInt32(pagos.PagoIngresado);
-                                    fechadePago = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
-                                }
-
-                                totalPago += pagoVisual;
-                                diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
-
-                                <tr style="height: auto">
-
-                                    @*FECHA DE CITA*@
-                                    <td>
-                                        <span>@fechaTabla</span>
-                                    </td>
-
-                                    @*NUMERO DE EPIS X DIA EN FECHA*@
-                                    @{
-                                        var fechaTablaInicioDia = Convert.ToDateTime(fechaTabla);
-                                        var fechaTablaFinalDia = Convert.ToDateTime(fechaTabla).AddMinutes(-1);
-                                        <td>
-                                            <div>
-                                                <a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaTablaInicioDia, fechaFinal = fechaTablaFinalDia, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
-                                                    <span>@conteoEpisTotales</span>
-                                                </a>
-                                                <span class="visible-print" hidden>@conteoEpisTotales</span>
-                                            </div>
-                                        </td>
-                                    }
-
-                                    @*IMPORTE*@
-                                    <td>
-                                        <span>$@montoPxDia.ToString("###,###,###,###")</span>
-                                    </td>
-
-                                    @*EPIS PAGADOS*@
-
-                                    @{
-                                        if (conteoEpisPTotales != 0)
-                                        {
-                                            <td>
-                                                <span>@conteoEpisPTotales</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                            </td>
-                                        }
-                                    }
-
-                                    @*IMPORTE EPIS PAGADOS*@
-
-                                    @{
-                                        if (conteoEpisPTotales != 0)
-                                        {
-                                            <td>
-                                                <span>$@montoPxDiaP.ToString("###,###,###,###")</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                            </td>
-                                        }
-                                    }
-
-                                    @*IMPORTE MODULO DE PAGOS*@
-
-                                    @{
-                                        if (fechaTabla == fechadePago)
-                                        {
-                                            <td>
-                                                <span>$@pagoVisual.ToString("###,###,###,###")</span>
-                                            </td>
-                                        }
-                                        else
-                                        {
-                                            <td>
-                                            </td>
-                                        }
-
-                                    }
-
-                                    @*SALDOS*@
-                                    @{
-                                        var sumaPositivos = montoPxDiaP;
-                                        var saldoensaldos = sumaPositivos - montoPxDia;
-
-                                        if (saldoRowAnterior == 0)
-                                        {
-                                            saldoRowAnterior = saldoensaldos;
-                                        }
-
-                                        else if(saldoRowAnterior < 0)
-                                        {
-                                            if (saldoensaldos < 0)
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                            else
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                        }
-
-                                        else
-                                        {
-                                            if(saldoensaldos < 0)
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                            else
-                                            {
-                                                saldoRowAnterior = saldoRowAnterior + saldoensaldos;
-                                            }
-                                        }
-
-                                        if (saldoRowAnterior < 0)
-                                        {
-                                            var muestradesaldo = saldoRowAnterior * (-1);
-                                                <td>
-                                                    <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
-                                                </td>
-                                        }
-                                        else if (saldoRowAnterior == 0)
-                                        { 
-                                                <td>
-                                                    <span>$0</span>
-                                                </td>
-                                        }
-                                        else
-                                        {
-                                                <td>
-                                                    <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
-                                                </td>
-                                        }
-
-                                        saldoensaldos = 0;
-                                        }
-                                </tr>
-
-                                fechaTablaAnterior = fechaTabla;
-                                montoPxDia = 0;
-                                montoPxDiaP = 0;
-                                precioVisual = 0;
-                                pagoVisual = 0;
+                                var getFecha = Convert.ToDateTime(i.Fecha).ToString("dd-MMMM-yy");
+                                fechaPagosRow = DateTime.Parse(getFecha);
+                                pagodeRow += Convert.ToInt32(i.PagoIngresado);
                             }
                         }
+                    }
 
-                        //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
-                        var fechaUEPI = Convert.ToDateTime(fechadeultimoepi).ToString("dd-MMMM-yy");
-                        DateTime fechaUEPI2 = Convert.ToDateTime(fechaUEPI);
-                        var fechaUPAGO = Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy");
-                        DateTime fechaUPAGO2 = Convert.ToDateTime(fechaUPAGO);
+                    //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
 
-                        if (fechaUEPI2 < fechaUPAGO2 )
+                    if (condicionante == "Si")
+                    {
+                        var comparacion = Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy");
+
+                        if (fechaTablaAnterior != comparacion)
                         {
-                            var fechasDePagosjaja = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha > fechadeultimoepi && i.Fecha <= fechadeultimopago select i);
-
-                            foreach (var i in fechasDePagosjaja)
-                            {
-                                preciodesumasnofechas += Convert.ToInt32(i.PagoIngresado);
-                            }
-
                             <tr style="height: auto">
 
                                 @*FECHA DE CITA*@
                                 <td>
-                                    <span>@Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy")</span>
+                                    <span>@Convert.ToDateTime(fechaPagosRow).ToString("dd-MMMM-yy")</span>
                                 </td>
 
                                 @*NUMERO DE EPIS X DIA EN FECHA*@
                                 <td>
                                 </td>
-                                
+
                                 @*IMPORTE*@
                                 <td>
                                 </td>
@@ -1749,23 +1553,22 @@
 
                                 @*IMPORTE MODULO DE PAGOS*@
                                 <td>
-                                    <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
+                                    <span>$@pagodeRow.ToString("###,###,###,###")</span>
                                 </td>
 
-                                @*SALDO*@
-                                @{ 
+                                @*SALDOS*@
+                                @{
 
-                                    if(saldoRowAnterior < 0)
+                                    if (saldoRowAnterior < 0)
                                     {
                                         var muestrasaldo = saldoRowAnterior * (-1);
                                         <td>
                                             <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
                                         </td>
                                     }
-
                                     else if (saldoRowAnterior == 0)
-                                    { 
-                                         <td>
+                                    {
+                                        <td>
                                             <span>$0</span>
                                         </td>
                                     }
@@ -1778,219 +1581,574 @@
                                 }
                             </tr>
 
-                            totalPago += preciodesumasnofechas;
-                            diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
-                            preciodesumasnofechas = 0;
+                            montoPxDia = 0;
+                            montoPxDiaP = 0;
+                            precioVisual = 0;
+                            pagoVisual = 0;
+                            condicionante = "";
+                            totalPago += pagodeRow;
+                        }
+                    }
+
+
+                    if (fechaTablaAnterior != fechaTabla)
+                    {
+                        totalEpis = (from i in modeloAlternativo select i).Count();
+
+                        //SUMA DE PRECIOS EPIS X DIA
+                        foreach (var precio in episXDia)
+                        {
+                            montoPxDia += Convert.ToInt32(precio.PrecioEpi);
                         }
 
+                        //SUMA DE PRECIOS PAGADOS EPIS X DIA
+                        foreach (var precio in episXDiaP)
+                        {
+                            montoPxDiaP += Convert.ToInt32(precio.PrecioEpi);
+                        }
 
-                        <tr>
+                        saldoTotalImporte += montoPxDia;
+                        saldoTotalP += montoPxDiaP;
+                        totalEpisP = (from i in modeloAlternativo where (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+
+                        foreach (var pagos in pagoGestor)
+                        {
+                            pagoVisual += Convert.ToInt32(pagos.PagoIngresado);
+                            fechadePago = Convert.ToDateTime(pagos.Fecha).ToString("dd-MMMM-yy");
+                        }
+
+                        totalPago += pagoVisual;
+                        diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
+
+                        <tr style="height: auto">
 
                             @*FECHA DE CITA*@
                             <td>
+                                <span>@fechaTabla</span>
                             </td>
 
                             @*NUMERO DE EPIS X DIA EN FECHA*@
-                            <td>
-                            </td>
+                            @{
+                                var fechaTablaInicioDia = Convert.ToDateTime(fechaTabla);
+                                var fechaTablaFinalDia = Convert.ToDateTime(fechaTabla).AddMinutes(-1);
+                                <td>
+                                    <div>
+                                        <a class="hidden-print" href=@Url.Action("Index", "Contabilidad", new { canal = canal, fechaInicio = fechaTablaInicioDia, fechaFinal = fechaTablaFinalDia, referido = findidRef.idReferido }) style="color:navy; text-decoration:none">
+                                            <span>@conteoEpisTotales</span>
+                                        </a>
+                                        <span class="visible-print" hidden>@conteoEpisTotales</span>
+                                    </div>
+                                </td>
+                            }
 
                             @*IMPORTE*@
                             <td>
+                                <span>$@montoPxDia.ToString("###,###,###,###")</span>
                             </td>
 
                             @*EPIS PAGADOS*@
-                            <td>
-                            </td>
+
+                            @{
+                                if (conteoEpisPTotales != 0)
+                                {
+                                    <td>
+                                        <span>@conteoEpisPTotales</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                    </td>
+                                }
+                            }
 
                             @*IMPORTE EPIS PAGADOS*@
 
-                            <td>
-                            </td>
+                            @{
+                                if (conteoEpisPTotales != 0)
+                                {
+                                    <td>
+                                        <span>$@montoPxDiaP.ToString("###,###,###,###")</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                    </td>
+                                }
+                            }
 
                             @*IMPORTE MODULO DE PAGOS*@
 
-                            <td>
-                            </td>
+                            @{
+                                if (fechaTabla == fechadePago)
+                                {
+                                    <td>
+                                        <span>$@pagoVisual.ToString("###,###,###,###")</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                    </td>
+                                }
 
-                            @*SALDO*@
+                            }
 
-                            <td>
-                            </td>
+                            @*SALDOS*@
+                            @{
+                                var sumaPositivos = montoPxDiaP;
+                                var saldoensaldos = sumaPositivos - montoPxDia;
 
+                                if (saldoRowAnterior == 0)
+                                {
+                                    saldoRowAnterior = saldoensaldos;
+                                }
+
+                                else if (saldoRowAnterior < 0)
+                                {
+                                    if (saldoensaldos < 0)
+                                    {
+                                        saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                    }
+                                    else
+                                    {
+                                        saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                    }
+                                }
+
+                                else
+                                {
+                                    if (saldoensaldos < 0)
+                                    {
+                                        saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                    }
+                                    else
+                                    {
+                                        saldoRowAnterior = saldoRowAnterior + saldoensaldos;
+                                    }
+                                }
+
+                                if (saldoRowAnterior < 0)
+                                {
+                                    var muestradesaldo = saldoRowAnterior * (-1);
+                                    <td>
+                                        <span>$(@muestradesaldo.ToString("###,###,###,###"))</span>
+                                    </td>
+                                }
+                                else if (saldoRowAnterior == 0)
+                                {
+                                    <td>
+                                        <span>$0</span>
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td>
+                                        <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                    </td>
+                                }
+
+                                saldoensaldos = 0;
+                            }
                         </tr>
+
+                        fechaTablaAnterior = fechaTabla;
+                        montoPxDia = 0;
+                        montoPxDiaP = 0;
+                        precioVisual = 0;
+                        pagoVisual = 0;
                     }
-                </tbody>
-            </table>
-            @{
-                if (fechaTabla != null && fechaTabla != "")
-                {
-                    <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="background-color:transparent; border-color:transparent">
-                        <thead style="border: none; background-color:transparent">
-                            <tr style="border: none; background-color:transparent">
-
-                                @*FOOTTER  MES ACTUAL*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
-
-
-                                @*FOOTTER  EPIS TOTALES*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@totalEpis</b></th>
-
-
-                                @*FOOTTER  IMPORTE TOTAL*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalImporte.ToString("###,###,###,###")</b></th>
-
-
-                                @*FOOTTER  EPIS CONCILIADOS TOTALES*@
-                                @{
-                                    if (totalEpisP != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@totalEpisP</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-
-                                @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES*@
-                                @{
-                                    if (saldoTotalP != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalP.ToString("###,###,###,###")</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-
-                                @*FOOTTER  PAGOS INGRESADOS TOTALES*@
-
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
-                                @*@{
-                                    if (totalPago != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }*@
-
-                                @*FOOTTER  DIFERENCIA DE PAGOS*@
-
-                                @{
-
-                                    diferenciaTotal = saldoTotalImporte - saldoTotalP;
-
-                                    if (diferenciaTotal != 0)
-                                    {
-                                        if (diferenciaTotal > 0)
-                                        {
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
-                                        }
-                                        else if (diferenciaTotal < 0)
-                                        {
-                                            diferenciaTotal = diferenciaTotal * (-1);
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-                            </tr>
-                        </thead>
-
-                        @*DIFERENCIAS DE MES*@
-                        <tbody>
-                            <tr style="border: none; background-color:transparent">
-
-                                @*FOOTTER  MES PASADO*@
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">Sumas:</b></th>
-
-
-                                @*FOOTTER  EPIS TOTALES PASADO*@
-
-                                @{var finalTotal = totalEpis + totalEpisMA;
-                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@finalTotal</b></th>
-                                }
-
-                                @*FOOTTER  IMPORTE TOTAL PASADO*@
-
-                                @{var importeTotal = saldoTotalImporte + saldoTotalImporteMA;
-                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@importeTotal.ToString("###,###,###,###")</b></th>
-                                }
-
-                                @*FOOTTER  EPIS CONCILIADOS TOTALES PASADO*@
-                                @{var episPTotales = totalEpisP + totalEpisPMA;
-                                    if (totalEpisP != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@episPTotales</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-
-                                @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES PASADO*@
-                                @{
-                                    var totalPagado = saldoTotalP + montoTotalMaP;
-                                    if (saldoTotalP != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@totalPagado.ToString("###,###,###,###")</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-
-                                @*FOOTTER  PAGOS INGRESADOS TOTALES PASADO*@
-
-                                <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
-                                @*@{
-                                    if (totalPago != 0)
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }*@
-
-                                @*FOOTTER  DIFERENCIA DE PAGOS PASADO*@
-                                @{
-                                    if (diferenciaTotal != 0)
-                                    {
-                                        if (diferenciaTotal < 0)
-                                        {
-                                            diferenciaTotal = diferenciaTotal * (-1);
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
-                                        }
-                                        else if (diferenciaTotal < 0)
-                                        {
-                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
-                                        }
-                                    }
-                                    else
-                                    {
-                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
-                                    }
-                                }
-                            </tr>
-                        </tbody>
-                    </table>
                 }
-                else
+
+                //ROW DE PAGO SI ES DIFERENTE A FECHA TABLA PASADA
+                var fechaUEPI = Convert.ToDateTime(fechadeultimoepi).ToString("dd-MMMM-yy");
+                DateTime fechaUEPI2 = Convert.ToDateTime(fechaUEPI);
+                var fechaUPAGO = Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy");
+                DateTime fechaUPAGO2 = Convert.ToDateTime(fechaUPAGO);
+
+                if (fechaUEPI2 < fechaUPAGO2)
                 {
-                    <h1 style="background-color: aliceblue; border: none; background-color:transparent; text-align:center"><b style="color:aliceblue;">NO HAY MOVIMIENTOS EN ESTE RANGO DE FECHA</b></h1>
+                    var fechasDePagosjaja = (from i in pagosGestores where i.idReferido == findidRef.idReferido && i.Fecha > fechadeultimoepi && i.Fecha <= fechadeultimopago select i);
+
+                    foreach (var i in fechasDePagosjaja)
+                    {
+                        preciodesumasnofechas += Convert.ToInt32(i.PagoIngresado);
+                    }
+
+                    <tr style="height: auto">
+
+                        @*FECHA DE CITA*@
+                        <td>
+                            <span>@Convert.ToDateTime(fechadeultimopago).ToString("dd-MMMM-yy")</span>
+                        </td>
+
+                        @*NUMERO DE EPIS X DIA EN FECHA*@
+                        <td>
+                        </td>
+
+                        @*IMPORTE*@
+                        <td>
+                        </td>
+
+                        @*EPIS PAGADOS*@
+
+                        <td>
+                        </td>
+
+                        @*IMPORTE EPIS PAGADOS*@
+
+                        <td>
+                        </td>
+
+                        @*IMPORTE MODULO DE PAGOS*@
+                        <td>
+                            <span>$@preciodesumasnofechas.ToString("###,###,###,###")</span>
+                        </td>
+
+                        @*SALDO*@
+                        @{
+
+                            if (saldoRowAnterior < 0)
+                            {
+                                var muestrasaldo = saldoRowAnterior * (-1);
+                                <td>
+                                    <span>$(@muestrasaldo.ToString("###,###,###,###"))</span>
+                                </td>
+                            }
+
+                            else if (saldoRowAnterior == 0)
+                            {
+                                <td>
+                                    <span>$0</span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <span>$@saldoRowAnterior.ToString("###,###,###,###")</span>
+                                </td>
+                            }
+                        }
+                    </tr>
+
+                    totalPago += preciodesumasnofechas;
+                    diferenciaTotal = saldoTotalImporte - (saldoTotalP + totalPago);
+                    preciodesumasnofechas = 0;
                 }
+
+
+                <tr>
+
+                    @*FECHA DE CITA*@
+                    <td>
+                    </td>
+
+                    @*NUMERO DE EPIS X DIA EN FECHA*@
+                    <td>
+                    </td>
+
+                    @*IMPORTE*@
+                    <td>
+                    </td>
+
+                    @*EPIS PAGADOS*@
+                    <td>
+                    </td>
+
+                    @*IMPORTE EPIS PAGADOS*@
+
+                    <td>
+                    </td>
+
+                    @*IMPORTE MODULO DE PAGOS*@
+
+                    <td>
+                    </td>
+
+                    @*SALDO*@
+
+                    <td>
+                    </td>
+
+                </tr>
             }
+        </tbody>
+    </table>
+
+
+    @{
+            if (fechaTabla != null && fechaTabla != "")
+            {
+
+                var episAereoAT = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && i.TipoLicencia == "AEREO" && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+                var episAereoAP = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && i.TipoLicencia == "AEREO_PISTA" && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+                var episN = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && (i.TipoLicencia != "AEREO" && i.TipoLicencia != "AEREO_PISTA") && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+                var episT = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && (i.Cuenta == "BANCOS" || i.Cuenta == "CONEKTA") select i).Count();
+                var episAereoATNP = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && i.TipoLicencia == "AEREO" select i).Count();
+                var episAereoAPNP = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && i.TipoLicencia == "AEREO_PISTA" select i).Count();
+                var episNNP = (from i in modeloAlternativo where i.ReferidoPor == referido && i.FechaCita >= fechaInicio && i.FechaCita <= fechaFinal && (i.TipoLicencia != "AEREO" && i.TipoLicencia != "AEREO_PISTA") select i).Count();
+
+
+                <table cellpadding="0" cellspacing="0" class="table  table-hover tablas table-bordered" style="background-color:transparent; border-color:transparent">
+                    <thead style="border: none; background-color:transparent">
+                        <tr style="border: none; background-color:transparent">
+
+                            @*FOOTTER  MES ACTUAL*@
+                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@Convert.ToDateTime(fechaTabla).ToString("MMMM").ToUpper()</b></th>
+
+
+                            @*FOOTTER  EPIS TOTALES*@
+                            @{
+                                if (totalEpis != 0)
+                                {
+                                    <th style="border: none; background-color:transparent">
+                                        <span class="field-tip">
+                                            <b style="color:whitesmoke; font-size: @Letra">@totalEpis</b>
+                                            @{
+                                                if (totalEpis != 0)
+                                                {
+                                                    <span class="tip-content">
+                                                        @{
+                                                            if (episNNP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Terrestres/ Maritimos:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episNNP
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoAPNP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Pista:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoAPNP
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoATNP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Tripulación:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoATNP
+                                                                </b>
+                                                            }
+                                                        }
+                                                    </span>
+                                                }
+
+                                            }
+                                        </span>
+                                    </th>
+                                }
+                            }
+
+
+                            @*FOOTTER  IMPORTE TOTAL*@
+                            <td style="background-color: aliceblue; border: none; background-color:transparent">
+                                <b style="color:aliceblue; font-size: 115%">$@saldoTotalImporte.ToString("###,###,###,###")</b>
+                            </td>
+
+                            @*FOOTTER  EPIS CONCILIADOS TOTALES*@
+                            @{
+                                if (totalEpisP != 0)
+                                {
+                                    <th style="border: none; background-color:transparent">
+                                        <span class="field-tip">
+                                            <b style="color:whitesmoke; font-size: @Letra">@totalEpisP</b>
+                                            @{
+                                                if (episT != 0)
+                                                {
+                                                    <span class="tip-content">
+                                                        @{
+                                                            if (episN != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Terrestres/ Maritimos:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episN
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoAP != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Pista:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoAP
+                                                                </b>
+                                                                <br />
+                                                            }
+                                                            if (episAereoAT != 0)
+                                                            {
+                                                                <b>
+                                                                    Epis Tripulación:
+                                                                </b>
+                                                                <b>
+                                                                    &nbsp @episAereoAT
+                                                                </b>
+                                                            }
+                                                        }
+                                                    </span>
+                                                }
+
+                                            }
+                                        </span>
+                                    </th>
+                                }
+                                else
+                                {
+                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                }
+                            }
+
+                                            @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES*@
+                                            @{
+                                                if (saldoTotalP != 0)
+                                                {
+                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%">$@saldoTotalP.ToString("###,###,###,###")</b></td>
+                                                }
+                                                else
+                                                {
+                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%"></b></td>
+                                                }
+                                            }
+
+                                            @*FOOTTER  PAGOS INGRESADOS TOTALES*@
+
+                                            <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+                                            @*@{
+                                                    if (totalPago != 0)
+                                                    {
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
+                                                    }
+                                                    else
+                                                    {
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                                    }
+                                                }*@
+
+                                            @*FOOTTER  DIFERENCIA DE PAGOS*@
+
+                                            @{
+
+                                                diferenciaTotal = saldoTotalImporte - saldoTotalP;
+
+                                                if (diferenciaTotal != 0)
+                                                {
+                                                    if (diferenciaTotal > 0)
+                                                    {
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
+                                                    }
+                                                    else if (diferenciaTotal < 0)
+                                                    {
+                                                        diferenciaTotal = diferenciaTotal * (-1);
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                                }
+                                            }
+                                        </tr>
+                                    </thead>
+
+                                    @*DIFERENCIAS DE MES*@
+                                    <tbody>
+                                        <tr style="border: none; background-color:transparent">
+
+                                            @*FOOTTER  MES PASADO*@
+                                            <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">Sumas:</b></th>
+
+
+                                            @*FOOTTER  EPIS TOTALES PASADO*@
+
+                                            @{var finalTotal = totalEpis + totalEpisMA;
+                                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@finalTotal</b></th>
+                                            }
+
+                                            @*FOOTTER  IMPORTE TOTAL PASADO*@
+
+                                            @{var importeTotal = saldoTotalImporte + saldoTotalImporteMA;
+                                                <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@importeTotal.ToString("###,###,###,###")</b></th>
+                                            }
+
+                                            @*FOOTTER  EPIS CONCILIADOS TOTALES PASADO*@
+                                            @{var episPTotales = totalEpisP + totalEpisPMA;
+                                                if (totalEpisP != 0)
+                                                {
+                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">@episPTotales</b></th>
+                                                }
+                                                else
+                                                {
+                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                                }
+                                            }
+
+                                            @*FOOTTER IMPORTE DE  EPIS CONCILIADOS TOTALES PASADO*@
+                                            @{
+                                                var totalPagado = saldoTotalP + montoTotalMaP;
+                                                if (saldoTotalP != 0)
+                                                {
+                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@totalPagado.ToString("###,###,###,###")</b></th>
+                                                }
+                                                else
+                                                {
+                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                                }
+                                            }
+
+                                            @*FOOTTER  PAGOS INGRESADOS TOTALES PASADO*@
+
+                                            <th style="background-color: aliceblue; border: none; background-color:transparent"></th>
+                                            @*@{
+                                                    if (totalPago != 0)
+                                                    {
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@totalPago.ToString("###,###,###,###")</b></th>
+                                                    }
+                                                    else
+                                                    {
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                                    }
+                                                }*@
+
+                                            @*FOOTTER  DIFERENCIA DE PAGOS PASADO*@
+                                            @{
+                                                if (diferenciaTotal != 0)
+                                                {
+                                                    if (diferenciaTotal < 0)
+                                                    {
+                                                        diferenciaTotal = diferenciaTotal * (-1);
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">($@diferenciaTotal.ToString("###,###,###,###"))</b></th>
+                                                    }
+                                                    else if (diferenciaTotal < 0)
+                                                    {
+                                                        <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size:@Letra">$@diferenciaTotal.ToString("###,###,###,###")</b></th>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <th style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></th>
+                                                }
+                                            }
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            }
+                            else
+                            {
+                                <h1 style="background-color: aliceblue; border: none; background-color:transparent; text-align:center"><b style="color:aliceblue;">NO HAY MOVIMIENTOS EN ESTE RANGO DE FECHA</b></h1>
+                            }
+                        }
         </div>
         <br />
 

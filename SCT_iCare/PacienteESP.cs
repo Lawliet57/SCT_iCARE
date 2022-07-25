@@ -61,6 +61,7 @@ namespace SCT_iCare
         public string FormaPago { get; set; }
         public string PrecioEpi { get; set; }
         public string ConciliarPago { get; set; }
+        public string RastreoPagos { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartaNoAccidentesESP> CartaNoAccidentesESP { get; set; }

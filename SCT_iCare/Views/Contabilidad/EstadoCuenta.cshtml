@@ -266,7 +266,7 @@
 
 
         @*INPUT FILTRO REFERIDO*@
-        <select name="referido" style="font-size: 1.5vh; width: 120px" class="form-control">
+        <select name="referido" style="font-size: 1.5vh; width: 115px" class="form-control">
             @{
                 if (ViewBag.Referido == "" || ViewBag.Referido == null)
                 {
@@ -1152,7 +1152,7 @@
                             }
 
                             @*FOOTTER  IMPORTE TOTAL*@
-                            <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalImporte.ToString("###,###,###,###")</b></td>
+                            <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%">$@saldoTotalImporte.ToString("###,###,###,###")</b></td>
 
 
                             @*FOOTTER  EPIS CONCILIADOS TOTALES*@
@@ -1215,12 +1215,12 @@
                                 if (saldoTotalP != 0)
                                 {
                                     <td style="background-color: aliceblue; border: none; background-color:transparent">
-                                        <b style="color:aliceblue; font-size: @Letra">$@saldoTotalP.ToString("###,###,###,###")</b>
+                                        <b style="color:aliceblue; font-size: 115%">$@saldoTotalP.ToString("###,###,###,###")</b>
                                     </td>
                                 }
                                 else
                                 {
-                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></td>
+                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%"></b></td>
                                 }
                             }
 
@@ -1900,7 +1900,7 @@
 
                             @*FOOTTER  EPIS TOTALES*@
                             @{
-                                if (totalEpisP != 0)
+                                if (totalEpis != 0)
                                 {
                                     <th style="border: none; background-color:transparent">
                                         <span class="field-tip">
@@ -1952,7 +1952,7 @@
 
                             @*FOOTTER  IMPORTE TOTAL*@
                             <td style="background-color: aliceblue; border: none; background-color:transparent">
-                                <b style="color:aliceblue; font-size: @Letra">$@saldoTotalImporte.ToString("###,###,###,###")</b>
+                                <b style="color:aliceblue; font-size: 115%">$@saldoTotalImporte.ToString("###,###,###,###")</b>
                             </td>
 
                             @*FOOTTER  EPIS CONCILIADOS TOTALES*@
@@ -2014,11 +2014,11 @@
                                             @{
                                                 if (saldoTotalP != 0)
                                                 {
-                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra">$@saldoTotalP.ToString("###,###,###,###")</b></td>
+                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%">$@saldoTotalP.ToString("###,###,###,###")</b></td>
                                                 }
                                                 else
                                                 {
-                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: @Letra"></b></td>
+                                                    <td style="background-color: aliceblue; border: none; background-color:transparent"><b style="color:aliceblue; font-size: 115%"></b></td>
                                                 }
                                             }
 

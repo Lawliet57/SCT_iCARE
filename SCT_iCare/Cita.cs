@@ -47,6 +47,7 @@ namespace SCT_iCare
         public string FormaPago { get; set; }
         public string PrecioEpi { get; set; }
         public string ConciliarPago { get; set; }
+        public string RastreoPagos { get; set; }
     
         public virtual Canal Canal1 { get; set; }
         public virtual Paciente Paciente { get; set; }
