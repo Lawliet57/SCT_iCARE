@@ -208,7 +208,16 @@
           <Property Name="FormaPago" Type="varchar" MaxLength="40" />
           <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
           <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
-          <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
+          <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
+          <Property Name="Venta" Type="varchar" MaxLength="10" />
+          <Property Name="IVA" Type="varchar" MaxLength="10" />
+          <Property Name="CostoSeguro" Type="varchar" MaxLength="10" />
+          <Property Name="IvaSeguro" Type="varchar" MaxLength="10" />
+          <Property Name="TotalSeguro" Type="varchar" MaxLength="10" />
+          <Property Name="TotalVenta" Type="varchar" MaxLength="10" />
+          <Property Name="ventaSeguro" Type="varchar" MaxLength="5" />
+          <Property Name="TotalIVA" Type="varchar" MaxLength="10" />
+          <Property Name="TotalVentaIVA" Type="varchar" MaxLength="10" />
         </EntityType>
         <EntityType Name="CitaDS">
           <Key>
@@ -995,7 +1004,7 @@
           <Property Name="FormaPago" Type="varchar" MaxLength="40" />
           <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
           <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
-          <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
+          <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -2965,7 +2974,16 @@
           <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
           <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="RastreoPagos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Venta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="CostoSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IvaSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TotalSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TotalVenta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ventaSeguro" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="TotalIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="TotalVentaIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="CitaDS">
           <Key>
@@ -3824,7 +3842,7 @@
           <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
           <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <Property Name="RastreoPagos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -5095,6 +5113,15 @@
           <EntitySetMapping Name="Cita">
             <EntityTypeMapping TypeName="DevModel.Cita">
               <MappingFragment StoreEntitySet="Cita">
+                <ScalarProperty Name="TotalVentaIVA" ColumnName="TotalVentaIVA" />
+                <ScalarProperty Name="TotalIVA" ColumnName="TotalIVA" />
+                <ScalarProperty Name="ventaSeguro" ColumnName="ventaSeguro" />
+                <ScalarProperty Name="TotalVenta" ColumnName="TotalVenta" />
+                <ScalarProperty Name="TotalSeguro" ColumnName="TotalSeguro" />
+                <ScalarProperty Name="IvaSeguro" ColumnName="IvaSeguro" />
+                <ScalarProperty Name="CostoSeguro" ColumnName="CostoSeguro" />
+                <ScalarProperty Name="IVA" ColumnName="IVA" />
+                <ScalarProperty Name="Venta" ColumnName="Venta" />
                 <ScalarProperty Name="RastreoPagos" ColumnName="RastreoPagos" />
                 <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />
                 <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />

@@ -266,7 +266,7 @@ namespace SCT_iCare.Controllers.Recepcion
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create1(string nombre,  string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista,
-            string pago,string referencia, int? referido, DateTime? fecha, int precioIngresado)
+            string pago,string referencia, int? referido, DateTime? fecha, int precioIngresado, string cb_Seguro)
         {
             var findGestor = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
             var precioN = Convert.ToInt32(findGestor.PrecioNormal);
@@ -291,13 +291,14 @@ namespace SCT_iCare.Controllers.Recepcion
             ViewBag.precioPIVA = precioPIVA;
             var fechaEx = Convert.ToDateTime(fecha).AddYears(2);
             var tipoGestor = findGestor.Tipo;
+            var IVAS = "";            
 
             if (pago == "REFERENCIA OXXO" || pago == "Pago con Tarjeta" || pago == "Referencia OXXO" || pago == "Transferencia vía BanBajío"  || tipoGestor == "EMPRESA"
                                                  || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
             {
                 if (cantidadInt != 0)
                 {
-                    sumaEPISN = (cantidadInt * precioNIVA);
+                    sumaEPISN = (cantidadInt * precioNIVA);                    
                 }
                 if (cantidadATInt != 0)
                 {
@@ -314,6 +315,8 @@ namespace SCT_iCare.Controllers.Recepcion
                 {
                     condicionante = "Aprobado";
                 }
+
+                IVAS = "SI";
             }
             else
             {
@@ -336,6 +339,8 @@ namespace SCT_iCare.Controllers.Recepcion
                 {
                     condicionante = "Aprobado";
                 }
+
+                IVAS = "NO";
             }
 
             if (condicionante != "Aprobado")
@@ -537,6 +542,82 @@ namespace SCT_iCare.Controllers.Recepcion
                     cita.Canal = "Recepción";
                     cita.TipoPago = pago;
                     cita.FechaCreacion = DateTime.Now;
+
+                    var calculoIVA = 0;
+                    var precioSoloEpi = 0;
+                    double ventaTotal = 0;
+                    double IVATotal = 0;
+                    double ventaTotalIVA = 0;
+
+                    if (IVAS == "SI")
+                    {
+                        if (cantidadInt != 0)
+                        {
+                            calculoIVA = precioNIVA - precioN;
+                            precioSoloEpi = precioN;
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                            cita.IVA = Convert.ToString(calculoIVA);
+                        }
+                        if (cantidadATInt != 0)
+                        {
+                            calculoIVA = precioATIVA - precioAT;
+                            precioSoloEpi = precioAT;
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                            cita.IVA = Convert.ToString(calculoIVA);
+                        }
+                        if (cantidadAPInt != 0)
+                        {
+                            calculoIVA = precioPIVA - precioP;
+                            precioSoloEpi = precioP;
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                            cita.IVA = Convert.ToString(calculoIVA);
+                        }
+                    }
+                    else
+                    {
+                        if (cantidadInt != 0)
+                        {
+                            precioSoloEpi = precioN;
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                        }
+                        if (cantidadATInt != 0)
+                        {
+                            precioSoloEpi = precioN;
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                        }
+                        if (cantidadAPInt != 0)
+                        {
+                            precioSoloEpi = precioN;
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                        }
+                    }
+
+                    if (cb_Seguro != null)
+                    {
+                        cita.ventaSeguro = "SI";
+                        cita.CostoSeguro = "100";
+                        cita.IvaSeguro = "16";
+                        cita.TotalSeguro = "116";
+                        ventaTotal = precioSoloEpi + 100;
+                        cita.TotalVenta = Convert.ToString(ventaTotal);
+                        IVATotal = calculoIVA + 16;
+                        cita.TotalIVA = Convert.ToString(IVATotal);
+                        ventaTotalIVA = ventaTotal + IVATotal;
+                        cita.TotalVentaIVA = Convert.ToString(ventaTotalIVA);
+                    }
+                    else
+                    {
+                        cita.ventaSeguro = "NO";
+                        cita.CostoSeguro = "32";
+                        cita.IvaSeguro = "5.12";
+                        cita.TotalSeguro = "37.12";
+                        ventaTotal = precioSoloEpi + 32;
+                        cita.TotalVenta = Convert.ToString(ventaTotal);
+                        IVATotal = calculoIVA + 5.12;
+                        cita.TotalIVA = Convert.ToString(IVATotal);
+                        ventaTotalIVA = ventaTotal + IVATotal;
+                        cita.TotalVentaIVA = Convert.ToString(ventaTotalIVA);
+                    }
 
                     //Se usa el idCanal para poder hacer que en Recepción se tenga que editar el nombre si viene de gestor
                     cita.idCanal = 1;

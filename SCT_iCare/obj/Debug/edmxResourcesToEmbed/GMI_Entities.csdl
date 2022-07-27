@@ -575,7 +575,16 @@
     <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
     <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="RastreoPagos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Venta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CostoSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IvaSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalVenta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ventaSeguro" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="TotalIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalVentaIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="CitaDS">
     <Key>
@@ -1434,7 +1443,7 @@
     <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
     <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="RastreoPagos" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>

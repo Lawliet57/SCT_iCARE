@@ -183,6 +183,15 @@
     <EntitySetMapping Name="Cita">
       <EntityTypeMapping TypeName="DevModel.Cita">
         <MappingFragment StoreEntitySet="Cita">
+          <ScalarProperty Name="TotalVentaIVA" ColumnName="TotalVentaIVA" />
+          <ScalarProperty Name="TotalIVA" ColumnName="TotalIVA" />
+          <ScalarProperty Name="ventaSeguro" ColumnName="ventaSeguro" />
+          <ScalarProperty Name="TotalVenta" ColumnName="TotalVenta" />
+          <ScalarProperty Name="TotalSeguro" ColumnName="TotalSeguro" />
+          <ScalarProperty Name="IvaSeguro" ColumnName="IvaSeguro" />
+          <ScalarProperty Name="CostoSeguro" ColumnName="CostoSeguro" />
+          <ScalarProperty Name="IVA" ColumnName="IVA" />
+          <ScalarProperty Name="Venta" ColumnName="Venta" />
           <ScalarProperty Name="RastreoPagos" ColumnName="RastreoPagos" />
           <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />
           <ScalarProperty Name="PrecioEpi" ColumnName="PrecioEpi" />

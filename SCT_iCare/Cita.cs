@@ -48,6 +48,15 @@ namespace SCT_iCare
         public string PrecioEpi { get; set; }
         public string ConciliarPago { get; set; }
         public string RastreoPagos { get; set; }
+        public string Venta { get; set; }
+        public string IVA { get; set; }
+        public string CostoSeguro { get; set; }
+        public string IvaSeguro { get; set; }
+        public string TotalSeguro { get; set; }
+        public string TotalVenta { get; set; }
+        public string ventaSeguro { get; set; }
+        public string TotalIVA { get; set; }
+        public string TotalVentaIVA { get; set; }
     
         public virtual Canal Canal1 { get; set; }
         public virtual Paciente Paciente { get; set; }

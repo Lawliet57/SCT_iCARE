@@ -587,21 +587,19 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 </select>
                             </div>
 
-                            <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />                            
-                            <input id='cb_12meses' type='checkbox' />
+                            //PRECIO INGRESADO
+                            <label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
+                            <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
+                            <br/>
+
+                            <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                            <input id='cb_12meses' type='checkbox' name="cb_Seguro" value="SI" />
                             <label for='cb_12meses'>
                                 <span></span>
                                 Ampliar el seguro a 12 meses
                                 <ins><i>Ampliar el seguro a 12 meses</i></ins>
                             </label>
 
-
-
-
-
-                            //PRECIO INGRESADO
-                            @*<label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
-                <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />*@
                         }
                         else
                         {

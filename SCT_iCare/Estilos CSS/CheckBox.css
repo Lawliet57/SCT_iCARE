@@ -30,12 +30,12 @@ input[type='checkbox'] {
             transition: height 300ms cubic-bezier(.4,.0,.23,1);
         }
 
-        /*COLOR AL DAR CHECK*/
+        /*COLOR DE LAS LETRAS AL DAR CHECK*/
             input[type='checkbox'] + label > ins > i {
                 position: absolute;
                 bottom: 0;
                 font-style: normal;
-                color: lime;
+                color: limegreen;
             }
 
         input[type='checkbox'] + label > span {
