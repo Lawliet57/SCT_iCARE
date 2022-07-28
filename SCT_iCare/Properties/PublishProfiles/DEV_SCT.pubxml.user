@@ -288,10 +288,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:16</publishTime>
     </File>
     <File Include="bin/SCT_iCare.dll">
-      <publishTime>07/22/2022 11:59:01</publishTime>
+      <publishTime>07/27/2022 15:31:45</publishTime>
     </File>
     <File Include="bin/SCT_iCare.pdb">
-      <publishTime>07/22/2022 11:59:01</publishTime>
+      <publishTime>07/27/2022 15:31:45</publishTime>
     </File>
     <File Include="bin/SendGrid.dll">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -509,6 +509,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Estilo.css">
       <publishTime>06/23/2022 11:28:44</publishTime>
     </File>
+    <File Include="Estilos CSS/CheckBox.css">
+      <publishTime>07/27/2022 11:58:23</publishTime>
+    </File>
     <File Include="Estilos CSS/TablaAcumuladoALT.css">
       <publishTime>02/14/2022 09:19:57</publishTime>
     </File>
@@ -570,7 +573,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="GMI_Entities.edmx.diagram">
-      <publishTime>06/29/2022 12:39:34</publishTime>
+      <publishTime>07/27/2022 11:17:05</publishTime>
     </File>
     <File Include="Images/1.jpg">
       <publishTime>09/22/2021 09:57:12</publishTime>
@@ -1413,7 +1416,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/20/2021 12:53:39</publishTime>
     </File>
     <File Include="Views/Recepcion/Index.cshtml">
-      <publishTime>07/22/2022 11:42:45</publishTime>
+      <publishTime>07/27/2022 15:19:57</publishTime>
     </File>
     <File Include="Views/Recepcion/NextDay.cshtml">
       <publishTime>02/14/2022 09:19:57</publishTime>
@@ -1422,7 +1425,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>02/14/2022 09:19:57</publishTime>
     </File>
     <File Include="Views/Recepcion/OrdenSAM.cshtml">
-      <publishTime>06/29/2022 12:39:34</publishTime>
+      <publishTime>07/27/2022 15:11:35</publishTime>
     </File>
     <File Include="Views/Recepcion/OrdenScotiabank.cshtml">
       <publishTime>06/27/2022 09:40:40</publishTime>
@@ -1434,7 +1437,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/22/2022 11:56:45</publishTime>
     </File>
     <File Include="Views/Recepcion/VentanaPago.cshtml">
-      <publishTime>07/20/2022 16:36:49</publishTime>
+      <publishTime>07/22/2022 12:07:43</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>06/22/2022 14:00:18</publishTime>
@@ -1491,7 +1494,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/22/2021 09:57:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>07/22/2022 11:59:02</publishTime>
+      <publishTime>07/27/2022 13:45:02</publishTime>
     </File>
   </ItemGroup>
 </Project>

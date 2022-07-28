@@ -926,6 +926,13 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         </select>
                     </div>
 
+                            <input id='cb_12mesesOrden' type='checkbox' name="cb_Seguro" value="SI" />
+                            <label for='cb_12mesesOrden'>
+                                <span></span>
+                                Ampliar el seguro a 12 meses
+                                <ins><i>Ampliar el seguro a 12 meses</i></ins>
+                            </label>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -1221,6 +1228,13 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             }
                         </select>
                     </div>
+
+                        <input id='cb_12mesesTarjeta' type='checkbox' name="cb_Seguro" value="SI" />
+                            <label for='cb_12mesesTarjeta'>
+                                <span></span>
+                                Ampliar el seguro a 12 meses
+                                <ins><i>Ampliar el seguro a 12 meses</i></ins>
+                            </label>
 
             </div>
             <div class="modal-footer">
@@ -1528,6 +1542,18 @@ else
                                     @item.N.Email <br />
                                     <b>Folio:</b><br />
                                     @item.N.Folio <br />
+                                    @{
+                                        if (item.M.ventaSeguro == "SI")
+                                        {
+                                            <b>Tipo de Seguro:</b><br />
+                                            <span>Seguro a 12 Meses</span> <br />
+                                        }
+                                        else if (item.M.ventaSeguro == "NO")
+                                        {
+                                            <b>Tipo de Seguro:</b><br />
+                                            <span>Seguro a 3 Meses</span> <br />
+                                        }
+                                    }
                                 </h6>
                             </span>
                         </span>
@@ -1581,7 +1607,7 @@ else
                                 <b>Realiza la cita: </b>@item.M.Recepcionista <br />
                                 <b>Canal: </b>@item.M.Canal <br />
                                 <b>Referido por: </b>@item.M.ReferidoPor<br />
-                                <b>Pago: </b>@item.M.TipoPago
+                                <b>Pago: </b>@item.M.TipoPago<br />
                                 <b>Licencia: </b>@item.M.TipoLicencia
 
                                 @{

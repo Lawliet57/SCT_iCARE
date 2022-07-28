@@ -203,7 +203,16 @@
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
     <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
-    <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
+    <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
+    <Property Name="Venta" Type="varchar" MaxLength="10" />
+    <Property Name="IVA" Type="varchar" MaxLength="10" />
+    <Property Name="CostoSeguro" Type="varchar" MaxLength="10" />
+    <Property Name="IvaSeguro" Type="varchar" MaxLength="10" />
+    <Property Name="TotalSeguro" Type="varchar" MaxLength="10" />
+    <Property Name="TotalVenta" Type="varchar" MaxLength="10" />
+    <Property Name="ventaSeguro" Type="varchar" MaxLength="5" />
+    <Property Name="TotalIVA" Type="varchar" MaxLength="10" />
+    <Property Name="TotalVentaIVA" Type="varchar" MaxLength="10" />
   </EntityType>
   <EntityType Name="CitaDS">
     <Key>
@@ -990,7 +999,7 @@
     <Property Name="FormaPago" Type="varchar" MaxLength="40" />
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
     <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
-    <Property Name="RastreoPagos" Type="varchar" MaxLength="10" />
+    <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>
