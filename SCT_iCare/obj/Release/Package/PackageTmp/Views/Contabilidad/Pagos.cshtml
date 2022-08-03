@@ -76,20 +76,20 @@
 
     if (ViewBag.Referido == "" || ViewBag.Referido == null)
     {
-        referido = ViewBag.Referido;
+        referido = "";
     }
 
     else
     {
-        referido = "";
+        referido = ViewBag.Referido;
     }
 
     //QUERYS TABLA REGISTROS
 
     var modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(tipoReferido)
-&& s.A.M.ReferidoPor.Contains(referido) && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo == tipoReferido
+&& s.A.M.ReferidoPor == referido && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
 
     var pGestor = db.PagosGestores;
 
@@ -99,7 +99,7 @@ Where(z => z.Gestor.Contains(referido));
 
 
     var modelo1 = db.PacienteESP.
-Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.EstatusCaptura == "Terminado"
+Where(s => s.ReferidoPor == referido && s.CanalTipo == tipoReferido && s.EstatusCaptura == "Terminado"
 && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
 
 
@@ -112,10 +112,10 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
 
     var referidoAlt = db.Referido.
-        Where(s => s.Tipo == "GESTOR ALT" || s.Tipo == "IN SITU");
+        Where(s => s.Tipo == tipoReferido && s.Nombre == referido);
 
     var referidoN = db.Referido.
-        Where(s => s.Tipo != "GESTOR ALT" && s.Tipo != "IN SITU");
+        Where(s => s.Tipo == tipoReferido && s.Nombre == referido);
 
 }
 
@@ -159,13 +159,15 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                 }
                 else
                 {
-                    <option value="@referido">@referido.ToUpper()</option>
+                    var refe = db.Referido.Where(s => s.Nombre == referido).FirstOrDefault();
+
+                    <option value="@refe.idReferido">@referido.ToUpper()</option>
                 }
             }
             @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
-            {
-                <option value="@item.idReferido">@item.Nombre -- @item.Tipo</option>
-            }
+                {
+                    <option value="@item.idReferido">@item.Nombre -- @item.Tipo</option>
+                }
             <option value="">TODOS</option>
         </select>
 
@@ -254,732 +256,529 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                 <th>EPIs Totales</th>
                 <th>Importe</th>
                 <th>Conciliados</th>
-                <th>Ingresos del Mes</th>                
-                @*<th colspan="2">Epis conciliados con Ingresos</th>*@
+                <th>Ingresos del Mes</th>
                 <th>Saldo del Mes</th>
-                @*<th>Ingresos Totales</th>
-        <th>Saldo Total</th>
-        <th>Estatus</th>*@
                 <th></th>
             </tr>
         </thead>
 
         @*AQUI EMPIEZA LA TABLA DE EPIS ALTERNATIVOS*@
+
         @{
-            foreach (var itemd in referidoAlt.OrderBy(o => o.Orden).ThenBy(o => o.Tipo).ThenBy(o => o.Nombre))
+
+            if (referido != null && tipoReferido != null && referido != "" && tipoReferido != "")
             {
+                var itemd = (from findGestor in referidoAlt select findGestor).FirstOrDefault();
+
                 int gestoresNoNullosAlt = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
 
                 if (gestoresNoNullosAlt != 0)
                 {
 
-                <tr>
-                    <td>
-                        <b>@itemd.Nombre</b><span style="font-size:xx-small"> @itemd.Tipo</span>
-                    </td>
+                    <tr>
+                        <td>
+                            <b>@itemd.Nombre</b><span style="font-size:xx-small"> @itemd.Tipo</span>
+                        </td>
 
-                    @{
-                        var precioEpisGeneral = (from i in modelo1
-                                                 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado"
-                               && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal
-                                                 select i);
+                        @{
+                            var precioEpisGeneral = (from i in modelo1
+                                                     where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado"
+                                   && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal
+                                                     select i);
 
-                        foreach (var kalaka in precioEpisGeneral)
-                        {
-                            sumaDePrecios += Convert.ToInt32(kalaka.PrecioEpi);
+                            foreach (var kalaka in precioEpisGeneral)
+                            {
+                                sumaDePrecios += Convert.ToInt32(kalaka.PrecioEpi);
+                            }
+
+                            //NUMERO DE EPIS
+                            int episGestor = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
+
+                            <td><a href=@Url.Action("Index", "Contabilidad", new {canal = itemd.Tipo, fechaInicio = fechaInicio, fechaFinal = fechaFinal, referido = itemd.idReferido}) style="color:navy; text-decoration:none"><span>@episGestor</span></a></td>
+                            <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
+
                         }
 
-                        //NUMERO DE EPIS
-                        int episGestor = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
+                        @*CONCILIADOS*@
+                        <td>
+                            @{
+                                var precioEpisGeneralP = (from i in modelo1
+                                                          where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.ConciliarPago == null
+                                        && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal
+                                                          select i);
 
-                        <td><a href=@Url.Action("Index", "Contabilidad", new {canal = itemd.Tipo, fechaInicio = fechaInicio, fechaFinal = fechaFinal, referido = itemd.idReferido}) style="color:navy; text-decoration:none"><span>@episGestor</span></a></td>
-                        <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
-
-                    }
-
-                    @*CONCILIADOS*@
-                    <td>
-                        @{
-                            var precioEpisGeneralP = (from i in modelo1
-                                                      where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.ConciliarPago == null
-                                    && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal
-                                                      select i);
-
-                            foreach (var kalaka in precioEpisGeneralP)
-                            {
-                                sumaDePreciosP += Convert.ToInt32(kalaka.PrecioEpi);
-                            }
-
-                            if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
-                            {
-
-                                saldoMesN = sumaDePrecios;
-
-                                <span>$@saldoMesN.ToString("###,###,###,###")</span>
-
-                            }
-
-                            else
-                            {
-                                if (sumaDePreciosP == 0)
+                                foreach (var kalaka in precioEpisGeneralP)
                                 {
-                                    <span>$</span>
-                                    <span>-----</span>
+                                    sumaDePreciosP += Convert.ToInt32(kalaka.PrecioEpi);
                                 }
 
-                                else
+                                if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
                                 {
-                                    <span> $@sumaDePreciosP.ToString("###,###,###,###")</span>
-                                }
 
-                            }
-                        }
-                    </td>
+                                    saldoMesN = sumaDePrecios;
 
-                    @*INGRESO DEL MES*@
-                    <td>
-                        @{
-
-                            var pG = (from i in db.PagosGestores where i.idReferido == itemd.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
-
-                            foreach (var pagosGes in pG)
-                            {
-
-                                ingresoActualAlt += Convert.ToInt32(pagosGes.PagoIngresado);
-
-                            }
-
-                            <span>$@ingresoActualAlt.ToString("###,###,###,###")</span>
-
-                        }
-                    </td>
-
-                    @*EPIS CONCILIADOS CON INGRESOS*@
-                    <!--<td>
-                        @{
-
-                            var conciliadosIngresos = (from i in modelo1
-                                                       where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.ConciliarPago != null
-                   && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal
-                                                       select i).Count();
-
-                            <span>@conciliadosIngresos.ToString()</span>
-
-                        }
-                    </td>-->
-
-                    @*EFECTIVO USADO EN  CONCILIADOS CON INGRESOS*@
-                    <!--<td>
-                        @{
-
-                            var efectivoconciliadosIngresos = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.ConciliarPago != null
-                   && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i);
-                            var efectivoIngresos = 0;
-
-                            foreach(var i in efectivoconciliadosIngresos)
-                            {
-                                efectivoIngresos += Convert.ToInt32(i.PrecioEpi);
-                            }
-
-                            <span>$@efectivoIngresos.ToString("###,###,###,###")</span>
-
-                            efectivoIngresos = 0;
-                        }
-                    </td>-->
-
-                    @*SALDO DEL MES*@
-                    <td>
-                        @{
-                            saldoMesN = (ingresoActualAlt + sumaDePreciosP) - sumaDePrecios;
-
-                            if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
-                            {
-
-                                saldoMesN = 0;
-
-                                <span>$@saldoMesN.ToString("###,###,###,###")</span>
-
-                            }
-
-                            else
-                            {
-                                if (saldoMesN < 0)
-                                {
-                                    saldoMesN = saldoMesN * (-1);
-
-                                    <span>($@saldoMesN.ToString("###,###,###,###"))</span>
-                                }
-
-                                else
-                                {
                                     <span>$@saldoMesN.ToString("###,###,###,###")</span>
 
                                 }
 
+                                else
+                                {
+                                    if (sumaDePreciosP == 0)
+                                    {
+                                        <span>$</span>
+                                        <span>-----</span>
+                                    }
+
+                                    else
+                                    {
+                                        <span> $@sumaDePreciosP.ToString("###,###,###,###")</span>
+                                    }
+
+                                }
                             }
+                        </td>
 
-                            ingresoActualAlt = 0;
-                            sumaDePrecios = 0;
-                            sumaDePreciosP = 0;
-                            saldoTv1 = 0;
-                            sumaPagadosTAlt = 0;
+                        @*INGRESO DEL MES*@
+                        <td>
+                            @{
 
-                        }
-                    </td>
+                                var pG = (from i in db.PagosGestores where i.idReferido == itemd.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
 
-                    @*INGRESOS TOTALES*@
-                    @*<td>
-            @{
-                var ingresosTotalesAlt = (from i in db.Referido where i.idReferido == itemd.idReferido select i);
+                                foreach (var pagosGes in pG)
+                                {
 
-                foreach (var ingresosTALT in ingresosTotalesAlt)
-                {
+                                    ingresoActualAlt += Convert.ToInt32(pagosGes.PagoIngresado);
 
-                    ingresosTotalesA = Convert.ToInt32(ingresosTALT.Efectivo);
+                                }
 
-                }
+                                <span>$@ingresoActualAlt.ToString("###,###,###,###")</span>
 
-                <span>$@ingresosTotalesA.ToString("###,###,###,###")</span>
-                }
-        </td>*@
+                            }
+                        </td>
 
-                    @*SALDO TOTAL*@
-                    @*<td>
-            @{
-                var sT = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicioModulo select i);
+                        @*EPIS CONCILIADOS CON INGRESOS*@
+                        <!--<td>
+                         @{
 
-                foreach (var saldoTT in sT)
-                {
-                    saldoTv1 += Convert.ToInt32(saldoTT.PrecioEpi);
-                }
+                             var conciliadosIngresos = (from i in modelo1
+                                                        where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.ConciliarPago != null
+                    && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal
+                                                        select i).Count();
 
-                var precioEpisGeneralPTotales = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicioModulo select i);
+                             <span>@conciliadosIngresos.ToString()</span>
 
-                foreach (var kalaka in precioEpisGeneralPTotales)
-                {
-                    sumaPagadosTAlt += Convert.ToInt32(kalaka.PrecioEpi);
-                }
+                         }
+                     </td>-->
+                        @*EFECTIVO USADO EN  CONCILIADOS CON INGRESOS*@
+                        <!--<td>
+                         @{
 
-                saldoTotalA = (ingresosTotalesA + sumaPagadosTAlt) - saldoTv1 ;
+                             var efectivoconciliadosIngresos = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.ConciliarPago != null
+                    && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i);
+                             var efectivoIngresos = 0;
 
-                if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
-                {
+                             foreach(var i in efectivoconciliadosIngresos)
+                             {
+                                 efectivoIngresos += Convert.ToInt32(i.PrecioEpi);
+                             }
 
-                    saldoTotalA = 0;
+                             <span>$@efectivoIngresos.ToString("###,###,###,###")</span>
 
-                    <span>$@saldoTotalA.ToString("###,###,###,###")</span>
+                             efectivoIngresos = 0;
+                         }
+                     </td>-->
+                        @*SALDO DEL MES*@
+                        <td>
+                            @{
+                                saldoMesN = (ingresoActualAlt + sumaDePreciosP) - sumaDePrecios;
 
-                }
+                                if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
+                                {
 
-                else
-                {
-                    if (saldoTotalA < 0)
-                    {
-                        saldoTotalA = saldoTotalA * (-1);
-                        <span>($@saldoTotalA.ToString("###,###,###,###"))</span>
-                    }
+                                    saldoMesN = 0;
 
-                    else
-                    {
-                        <span>$@saldoTotalA.ToString("###,###,###,###")</span>
+                                    <span>$@saldoMesN.ToString("###,###,###,###")</span>
 
-                     }
+                                }
 
-                 }
+                                else
+                                {
+                                    if (saldoMesN < 0)
+                                    {
+                                        saldoMesN = saldoMesN * (-1);
 
-            }
-        </td>
+                                        <span>($@saldoMesN.ToString("###,###,###,###"))</span>
+                                    }
 
-        <td>
+                                    else
+                                    {
+                                        <span>$@saldoMesN.ToString("###,###,###,###")</span>
 
-            @{
-                var estatus = from i in db.PacienteESP where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.TipoPago == "Pendiente de Pago" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i;
+                                    }
 
-                string texto = "";
+                                }
 
-                foreach (var i in estatus)
-                {
-                    if (i.FechaCita < DateTime.Today.AddDays(-30))
-                    {
-                        texto = "text-danger";
-                        break;
-                    }
-                    else if (i.FechaCita < DateTime.Today.AddDays(-15))
-                    {
-                        texto = "text-warning";
-                        break;
-                    }
-                    else
-                    {
-                        texto = "text-success";
-                        break;
-                    }
-                }
+                                ingresoActualAlt = 0;
+                                sumaDePrecios = 0;
+                                sumaDePreciosP = 0;
+                                saldoTv1 = 0;
+                                sumaPagadosTAlt = 0;
 
-                <div style="width:2px;"></div>
-                <span class="@texto">•</span>
+                            }
+                        </td>
 
-                sumaDePrecios = 0;
-                sumaDePreciosP = 0;
-                saldoTv1 = 0;
-                sumaPagadosTAlt = 0;
 
-            }
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                </button>
 
-        </td>*@
-
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                            </button>
-
-                            <div class="dropdown-menu" style="padding:10px">
-                                <a href="#" data-toggle="modal" data-target="#Efectivo_@itemd.idReferido"><b>Ingresar Pago</b></a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" data-toggle="modal" data-target="#Conciliar_@itemd.idReferido"><b>Conciliar con Ingresos</b></a>
-                                <div class="dropdown-divider"></div>
-                            </div>
-
-                            @*ALERT INGRESAR EFECTIVO*@
-
-                            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EditarEfectivo")">
-                                @Html.AntiForgeryToken()
-                                <div class="modal fade" id="Efectivo_@itemd.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea ingresar PAGO a @itemd.Nombre?</b></h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group" style="width:60%; min-width:320px">
-                                                    <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
-                                                    <b>@itemd.Nombre</b><br />
-                                                    <label for="recipient-name" class="col-form-label">Cantidad: $</label>
-                                                    <input type="tel" class="form-control" name="efectivo" />
-                                                    <br />
-                                                    <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
-                                                    <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
-                                                    <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
-                                                    <input type="hidden" value="@FechaAhora" class="form-control" name="fechaAhora" />
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                <input type="submit" value="Guardar" class="btn btn-primary" />
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="dropdown-menu" style="padding:10px">
+                                    <a href="#" data-toggle="modal" data-target="#Efectivo_@itemd.idReferido"><b>Ingresar Pago</b></a>
+                                    <div class="dropdown-divider"></div>
+                                    <a href="#" data-toggle="modal" data-target="#Conciliar_@itemd.idReferido"><b>Conciliar con Ingresos</b></a>
+                                    <div class="dropdown-divider"></div>
                                 </div>
-                            </form>
 
-                            @*ALERT PARA CONCILIAR CON INGRESOS*@
-                            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresosAlt")">
-                                @Html.AntiForgeryToken()
-                                <div class="modal fade" id="Conciliar_@itemd.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel"><b>Usted conciliara epis de @itemd.Nombre</b></h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group" style="width:60%; min-width:320px">
-                                                    <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
-                                                    <b>@itemd.Nombre - @itemd.Tipo</b><br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de Pago:</label>
-                                                    <input type="date" class="form-control" name="fechadepago" />
-                                                    <br />
+                                @*ALERT INGRESAR EFECTIVO*@
 
-                                                    @*CAMPO REQUERIDO PARA SELECTORES*@
+                                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EditarEfectivo")">
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal fade" id="Efectivo_@itemd.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea ingresar PAGO a @itemd.Nombre?</b></h4>
+                                                </div>
+                                                <div class="modal-body">
                                                     <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="form-select" required>Metodo de Pago:</label>
-                                                        <select name="metododepago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-                                                            <option disabled selected value="">SELECCIONAR</option>
-                                                            <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                            <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                            <option value="Banorte">Banorte</option>
-                                                            <option value="Santander">Santander</option>
-                                                            <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                            <option value="BanCoppel LC">BanCoppel LC</option>
-                                                            <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                            <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                            <option value="Cuenta Externa">Cuenta Externa</option>
-                                                            <option value="Credito Empresas">Credito Empresas</option>
-                                                            <option value="Scotianbank">Scotianbank</option>
-                                                        </select>
+                                                        <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
+                                                        <b>@itemd.Nombre</b><br />
+                                                        <label for="recipient-name" class="col-form-label">Cantidad: $</label>
+                                                        <input type="tel" class="form-control" name="efectivo" />
+                                                        <br />
+                                                        <label for="recipient-name" class="col-form-label">Pago aplicable al mes de:</label>
+                                                        <input type="date" class="form-control" name="fechadepago" />
+                                                        <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
+                                                        <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
+                                                        <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
+                                                        <input type="hidden" value="@FechaAhora" class="form-control" name="fechaAhora" />
                                                     </div>
-
-                                                    <input type="hidden" value="@oUser.Nombre" class="form-control" name="usuario" />
-                                                    <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
-                                                    <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
-                                                    <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                <input type="submit" value="Guardar" class="btn btn-primary" />
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                }
-            }
-        }
-
-
-        @*AQUI EMPIEZA LA PARTE DE LA TABLA DE LOS EPIS NORMALES*@
-        @{
-
-            foreach (var item in referidoN.OrderBy(o => o.Orden).ThenBy(o => o.Tipo).ThenBy(o => o.Nombre))
-            {
-                int gestoresNoNullos = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
-
-                if (gestoresNoNullos != 0)
-                {
-                <tr>
-                    <td>
-                        <b>@item.Nombre</b><span style="font-size:xx-small"> @item.Tipo</span>
-                    </td>
-                    @{
-                        var precioEpisGeneral = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
-
-                        foreach (var kalaka in precioEpisGeneral)
-                        {
-                            sumaDePrecios += Convert.ToInt32(kalaka.A.M.PrecioEpi);
-                        }
-
-                        //NUMERO DE EPIS
-                        int episGestor = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
-
-                        <td><a href=@Url.Action("Index", "Contabilidad", new {canal = item.Tipo, fechaInicio = fechaInicio, fechaFinal = fechaFinal, referido = item.idReferido}) style="color:navy; text-decoration:none"><span>@episGestor</span></a></td>
-                        <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
-
-                    }
-
-
-                    @*CONCILIADOS*@
-                    <td>
-
-                        @{
-                            var precioEpisGeneralP = (from i in modelo
-                                                      where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.ConciliarPago == null
-                                     && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal
-                                                      select i);
-
-                            foreach (var kalaka in precioEpisGeneralP)
-                            {
-                                sumaDePreciosP += Convert.ToInt32(kalaka.A.M.PrecioEpi);
-                            }
-
-                            if (sumaDePreciosP == 0)
-                            {
-                                <span>$</span>
-                                <span>-----</span>
-                            }
-
-                            else
-                            {
-                                <span> $@sumaDePreciosP.ToString("###,###,###,###")</span>
-                            }
-                        }
-                    </td>
-
-
-                    @*INGRESO DEL MES*@
-                    <td>
-                        @{
-
-                            var pG = (from i in db.PagosGestores where i.idReferido == item.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
-
-                            foreach (var pagosGes in pG)
-                            {
-
-                                ingresoActual += Convert.ToInt32(pagosGes.PagoIngresado);
-
-                            }
-
-                            <span>$@ingresoActual.ToString("###,###,###,###")</span>
-
-                        }
-                    </td>
-
-                    @*EPIS CONCILIADOS CON INGRESOS*@
-                    <!--<td>
-                        @{
-                            var conciliadosIngresos = (from i in modelo
-                                                       where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.ConciliarPago != null
-&& i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal
-                                                       select i).Count();
-
-                            <span>@conciliadosIngresos.ToString()</span>
-
-                        }
-                    </td>-->
-
-                    @*EFECTIVO USADO EN  CONCILIADOS CON INGRESOS*@
-                    <!--<td>
-                        @{
-                            var efectivoconciliadosIngresos = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.ConciliarPago != null
-        && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
-
-                            var efectivoIngresos = 0;
-
-                            foreach (var i in efectivoconciliadosIngresos)
-                            {
-                                efectivoIngresos += Convert.ToInt32(i.A.M.PrecioEpi);
-                            }
-
-                            <span>$@efectivoIngresos.ToString("###,###,###,###")</span>
-
-                            efectivoIngresos = 0;
-                        }
-                    </td>-->
-
-                    @*SALDO DEL MES*@
-                    <td>
-                        @{
-                            saldoMesA = (ingresoActual + sumaDePreciosP) - sumaDePrecios;
-                            if (saldoMesA < 0)
-                            {
-                                saldoMesA = saldoMesA * (-1);
-
-                                <span>($@saldoMesA.ToString("###,###,###,###"))</span>
-                            }
-
-                            else
-                            {
-                                <span>$@saldoMesA.ToString("###,###,###,###")</span>
-
-                            }
-
-                            ingresoActual = 0;
-                            sumaDePrecios = 0;
-                            sumaDePreciosP = 0;
-                            saldoTv1N = 0;
-                            sumaPagadosTN = 0;
-
-                        }
-                    </td>
-
-
-                    @*INGRESOS TOTALES NORMALES*@
-                    @*<td>
-             @{
-                    var ingresosTotalesNormales = (from i in db.Referido where i.idReferido == item.idReferido select i);
-
-                    foreach (var ingresosTN in ingresosTotalesNormales)
-                    {
-
-                        ingresosTotalesN = Convert.ToInt32(ingresosTN.Efectivo);
-
-                    }
-
-                    <span>$@ingresosTotalesN.ToString("###,###,###,###")</span>
-
-                }
-        </td>*@
-
-
-                    @*SALDO TOTAL*@
-                    @*<td>
-            @{
-
-                var sTN = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicioModulo select i);
-
-                foreach (var saldoTT in sTN)
-                {
-                    saldoTv1N += Convert.ToInt32(saldoTT.A.M.PrecioEpi);
-                }
-
-                var precioEpisGeneralPTotales = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicioModulo select i);
-
-                foreach (var kalaka in precioEpisGeneralPTotales)
-                {
-                    sumaPagadosTN += Convert.ToInt32(kalaka.A.M.PrecioEpi);
-                }
-
-                saldoTotalN = (sumaPagadosTN + ingresosTotalesN) - saldoTv1N;
-
-                if (item.Tipo == "MEDIOS DIGITALES" || item.Tipo == "CALL CENTER" || item.Tipo == "OTRO")
-                {
-
-                    saldoTotalN = 0;
-
-                    <span>$@saldoTotalN.ToString("###,###,###,###")</span>
-
-                }
-
-                else
-                {
-                    if (saldoTotalN < 0)
-                    {
-                        saldoTotalN = saldoTotalN * (-1);
-                        <span>($@saldoTotalN.ToString("###,###,###,###"))</span>
-                    }
-
-                    else
-                    {
-                        <span>$@saldoTotalN.ToString("###,###,###,###")</span>
-
-                    }
-
-                }
-            }
-        </td>
-
-        <td>
-
-            @{
-                var estatus = from i in db.Cita where i.CanalTipo == item.Tipo && i.ReferidoPor == item.Nombre && i.TipoPago == "Pendiente de Pago" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i;
-
-                string texto = "";
-
-                foreach (var i in estatus)
-                {
-                    if (i.FechaCita < DateTime.Today.AddDays(-30))
-                    {
-                        texto = "text-danger";
-                        break;
-                    }
-                    else if (i.FechaCita < DateTime.Today.AddDays(-15))
-                    {
-                        texto = "text-warning";
-                        break;
-                    }
-                    else
-                    {
-                        texto = "text-success";
-                        break;
-                    }
-                }
-
-                <div style="width:2px;"></div>
-                <span class="@texto">•</span>
-
-                sumaDePrecios = 0;
-                sumaDePreciosP = 0;
-                saldoTv1N = 0;
-                sumaPagadosTN = 0;
-
-            }
-
-        </td>*@
-
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                            </button>
-
-                            <div class="dropdown-menu" style="padding:10px">
-                                <a href="#" data-toggle="modal" data-target="#Efectivo_@item.idReferido"><b>Ingresar Pago</b></a>
-                                <div class="dropdown-divider"></div>
-                                <a href="#" data-toggle="modal" data-target="#Conciliar_@item.idReferido"><b>Conciliar con Ingresos</b></a>
-                                <div class="dropdown-divider"></div>
-                            </div>
-
-
-                            @*ALERT INGRESAR EFECTIVO*@
-
-                            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EditarEfectivo")">
-                                @Html.AntiForgeryToken()
-                                <div class="modal fade" id="Efectivo_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea ingresar PAGO a @item.Nombre?</b></h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group" style="width:60%; min-width:320px">
-                                                    <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
-                                                    <b>@item.Nombre</b><br />
-
-                                                    <label for="recipient-name" class="col-form-label">Cantidad:</label>
-                                                    <input type="tel" class="form-control" name="efectivo" />
-                                                    <br />
-
-                                                    <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
-                                                    <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
-                                                    <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
-                                                    <input type="hidden" value="@FechaAhora" class="form-control" name="fechaAhora" />
+                                </form>
+
+                                @*ALERT PARA CONCILIAR CON INGRESOS*@
+                                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresosAlt")">
+                                    @Html.AntiForgeryToken()
+                                    <div class="modal fade" id="Conciliar_@itemd.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h4 class="modal-title" id="exampleModalLabel"><b>Usted conciliara epis de @itemd.Nombre</b></h4>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                <input type="submit" value="Guardar" class="btn btn-primary" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-
-
-
-                            @*ALERT PARA CONCILIAR CON INGRESOS*@
-                            <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresosNom")">
-                                @Html.AntiForgeryToken()
-                                <div class="modal fade" id="Conciliar_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h4 class="modal-title" id="exampleModalLabel"><b>Usted conciliara epis de @item.Nombre</b></h4>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="form-group" style="width:60%; min-width:320px">
-                                                    <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
-                                                    <b>@item.Nombre - @item.Tipo</b><br />
-                                                    <label for="recipient-name" class="col-form-label">Fecha de Pago:</label>
-                                                    <input type="date" class="form-control" name="fechadepago" />
-                                                    <br />
-
-                                                    @*CAMPO REQUERIDO PARA SELECTORES*@
+                                                <div class="modal-body">
                                                     <div class="form-group" style="width:60%; min-width:320px">
-                                                        <label for="recipient-name" class="form-select" required>Metodo de Pago:</label>
-                                                        <select name="metododepago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-                                                            <option disabled selected value="">SELECCIONAR</option>
-                                                            <option value="Referencía BanBajío">Referencía BanBajío</option>
-                                                            <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
-                                                            <option value="Banorte">Banorte</option>
-                                                            <option value="Santander">Santander</option>
-                                                            <option value="BanCoppel TLS">BanCoppel TLS</option>
-                                                            <option value="BanCoppel LC">BanCoppel LC</option>
-                                                            <option value="Banco Azteca TLS">Banco Azteca TLS</option>
-                                                            <option value="Banco Azteca LC">Banco Azteca LC</option>
-                                                            <option value="Cuenta Externa">Cuenta Externa</option>
-                                                            <option value="Credito Empresas">Credito Empresas</option>
-                                                            <option value="Scotianbank">Scotianbank</option>
-                                                        </select>
+                                                        <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
+                                                        <b>@itemd.Nombre - @itemd.Tipo</b><br />
+                                                        <label for="recipient-name" class="col-form-label">Fecha de Pago:</label>
+                                                        <input type="date" class="form-control" name="fechadepago" />
+                                                        <br />
+
+                                                        @*CAMPO REQUERIDO PARA SELECTORES*@
+                                                        <div class="form-group" style="width:60%; min-width:320px">
+                                                            <label for="recipient-name" class="form-select" required>Metodo de Pago:</label>
+                                                            <select name="metododepago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                                                <option disabled selected value="">SELECCIONAR</option>
+                                                                <option value="Referencía BanBajío">Referencía BanBajío</option>
+                                                                <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                                <option value="Banorte">Banorte</option>
+                                                                <option value="Santander">Santander</option>
+                                                                <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                                <option value="BanCoppel LC">BanCoppel LC</option>
+                                                                <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                                <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                                <option value="Cuenta Externa">Cuenta Externa</option>
+                                                                <option value="Credito Empresas">Credito Empresas</option>
+                                                                <option value="Scotianbank">Scotianbank</option>
+                                                            </select>
+                                                        </div>
+
+                                                        <input type="hidden" value="@oUser.Nombre" class="form-control" name="usuario" />
+                                                        <input type="hidden" value="@itemd.idReferido" class="form-control" name="id" />
+                                                        <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
+                                                        <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
                                                     </div>
-
-
-                                                    <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
-                                                    <input type="hidden" value="@oUser.Nombre" class="form-control" name="usuario" />
-                                                    <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
-                                                    <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                                <input type="submit" value="Guardar" class="btn btn-primary" />
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+         }
+
+
+            @*AQUI EMPIEZA LA PARTE DE LA TABLA DE LOS EPIS NORMALES*@
+            @{
+
+                if (referido != null && tipoReferido != null && referido != "" && tipoReferido != "")
+                {
+                    var item = (from findGestor in referidoN select findGestor).FirstOrDefault();
+
+                    int gestoresNoNullos = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
+
+                    if (gestoresNoNullos != 0)
+                    {
+                        <tr>
+                            <td>
+                                <b>@item.Nombre</b><span style="font-size:xx-small"> @item.Tipo</span>
+                            </td>
+                            @{
+                                var precioEpisGeneral = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
+
+                                foreach (var kalaka in precioEpisGeneral)
+                                {
+                                    sumaDePrecios += Convert.ToInt32(kalaka.A.M.PrecioEpi);
+                                }
+
+                                //NUMERO DE EPIS
+                                int episGestor = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
+
+                                <td><a href=@Url.Action("Index", "Contabilidad", new {canal = item.Tipo, fechaInicio = fechaInicio, fechaFinal = fechaFinal, referido = item.idReferido}) style="color:navy; text-decoration:none"><span>@episGestor</span></a></td>
+                                <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
+
+                            }
+
+
+                            @*CONCILIADOS*@
+                            <td>
+
+                                @{
+                                    var precioEpisGeneralP = (from i in modelo
+                                                              where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.ConciliarPago == null
+                                             && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal
+                                                              select i);
+
+                                    foreach (var kalaka in precioEpisGeneralP)
+                                    {
+                                        sumaDePreciosP += Convert.ToInt32(kalaka.A.M.PrecioEpi);
+                                    }
+
+                                    if (sumaDePreciosP == 0)
+                                    {
+                                        <span>$</span>
+                                        <span>-----</span>
+                                    }
+
+                                    else
+                                    {
+                                        <span> $@sumaDePreciosP.ToString("###,###,###,###")</span>
+                                    }
+                                }
+                            </td>
+
+
+                            @*INGRESO DEL MES*@
+                            <td>
+                                @{
+
+                                    var pG = (from i in db.PagosGestores where i.idReferido == item.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
+
+                                    foreach (var pagosGes in pG)
+                                    {
+
+                                        ingresoActual += Convert.ToInt32(pagosGes.PagoIngresado);
+
+                                    }
+
+                                    <span>$@ingresoActual.ToString("###,###,###,###")</span>
+
+                                }
+                            </td>
+
+                            @*EPIS CONCILIADOS CON INGRESOS*@
+                            <!--<td>
+                                                @{
+                                                    var conciliadosIngresos = (from i in modelo
+                                                                               where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.ConciliarPago != null
+                        && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal
+                                                                               select i).Count();
+
+                                                    <span>@conciliadosIngresos.ToString()</span>
+
+                                                }
+                                            </td>-->
+                            @*EFECTIVO USADO EN  CONCILIADOS CON INGRESOS*@
+                            <!--<td>
+                                        @{
+                                            var efectivoconciliadosIngresos = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.ConciliarPago != null
+                        && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
+
+                                            var efectivoIngresos = 0;
+
+                                            foreach (var i in efectivoconciliadosIngresos)
+                                            {
+                                                efectivoIngresos += Convert.ToInt32(i.A.M.PrecioEpi);
+                                            }
+
+                                            <span>$@efectivoIngresos.ToString("###,###,###,###")</span>
+
+                                            efectivoIngresos = 0;
+                                        }
+                                    </td>-->
+                            @*SALDO DEL MES*@
+                            <td>
+                                @{
+                                    saldoMesA = (ingresoActual + sumaDePreciosP) - sumaDePrecios;
+                                    if (saldoMesA < 0)
+                                    {
+                                        saldoMesA = saldoMesA * (-1);
+
+                                        <span>($@saldoMesA.ToString("###,###,###,###"))</span>
+                                    }
+
+                                    else
+                                    {
+                                        <span>$@saldoMesA.ToString("###,###,###,###")</span>
+
+                                    }
+
+                                    ingresoActual = 0;
+                                    sumaDePrecios = 0;
+                                    sumaDePreciosP = 0;
+                                    saldoTv1N = 0;
+                                    sumaPagadosTN = 0;
+
+                                }
+                            </td>
+
+
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                    </button>
+
+                                    <div class="dropdown-menu" style="padding:10px">
+                                        <a href="#" data-toggle="modal" data-target="#Efectivo_@item.idReferido"><b>Ingresar Pago</b></a>
+                                        <div class="dropdown-divider"></div>
+                                        <a href="#" data-toggle="modal" data-target="#Conciliar_@item.idReferido"><b>Conciliar con Ingresos</b></a>
+                                        <div class="dropdown-divider"></div>
+                                    </div>
+
+
+                                    @*ALERT INGRESAR EFECTIVO*@
+
+                                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/EditarEfectivo")">
+                                        @Html.AntiForgeryToken()
+                                        <div class="modal fade" id="Efectivo_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea ingresar PAGO a @item.Nombre?</b></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group" style="width:60%; min-width:320px">
+                                                            <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
+                                                            <b>@item.Nombre</b><br />
+
+                                                            <label for="recipient-name" class="col-form-label">Cantidad:</label>
+                                                            <input type="tel" class="form-control" name="efectivo" />
+                                                            <br />
+                                                            <label for="recipient-name" class="col-form-label">Pago aplicable al mes de:</label>
+                                                            <input type="date" class="form-control" name="fechadepago" />
+                                                            <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
+                                                            <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
+                                                            <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
+                                                            <input type="hidden" value="@FechaAhora" class="form-control" name="fechaAhora" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+
+                                    @*ALERT PARA CONCILIAR CON INGRESOS*@
+                                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Contabilidad/ConciliarIngresosNom")">
+                                        @Html.AntiForgeryToken()
+                                        <div class="modal fade" id="Conciliar_@item.idReferido" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title" id="exampleModalLabel"><b>Usted conciliara epis de @item.Nombre</b></h4>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group" style="width:60%; min-width:320px">
+                                                            <label for="recipient-name" class="col-form-label">Gestor/Canal:</label>
+                                                            <b>@item.Nombre - @item.Tipo</b><br />
+                                                            <label for="recipient-name" class="col-form-label">Fecha de Pago:</label>
+                                                            <input type="date" class="form-control" name="fechadepago" />
+                                                            <br />
+
+                                                            @*CAMPO REQUERIDO PARA SELECTORES*@
+                                                            <div class="form-group" style="width:60%; min-width:320px">
+                                                                <label for="recipient-name" class="form-select" required>Metodo de Pago:</label>
+                                                                <select name="metododepago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                                                    <option disabled selected value="">SELECCIONAR</option>
+                                                                    <option value="Referencía BanBajío">Referencía BanBajío</option>
+                                                                    <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                                    <option value="Banorte">Banorte</option>
+                                                                    <option value="Santander">Santander</option>
+                                                                    <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                                    <option value="BanCoppel LC">BanCoppel LC</option>
+                                                                    <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                                    <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                                    <option value="Cuenta Externa">Cuenta Externa</option>
+                                                                    <option value="Credito Empresas">Credito Empresas</option>
+                                                                    <option value="Scotianbank">Scotianbank</option>
+                                                                </select>
+                                                            </div>
+
+
+                                                            <input type="hidden" value="@item.idReferido" class="form-control" name="id" />
+                                                            <input type="hidden" value="@oUser.Nombre" class="form-control" name="usuario" />
+                                                            <input type="hidden" value="@fechaInicio" class="form-control" name="fecha1" />
+                                                            <input type="hidden" value="@FECHAFS" class="form-control" name="fecha2" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <input type="submit" value="Guardar" class="btn btn-primary" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
+                            </td>
+                        </tr>
+
+                    }
 
                 }
-
             }
-        }
-
-    </table>
+        </table>
 </div>
 
 
@@ -1003,337 +802,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
 
         @*AQUI EMPIEZA LA TABLA DE EPIS ALTERNATIVOS*@
         @{
-            foreach (var itemd in db.Referido.OrderBy(o => o.Orden).ThenBy(o => o.Tipo).ThenBy(o => o.Nombre))
-            {
-                int gestoresNoNullosAlt = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
-
-                if (gestoresNoNullosAlt != 0)
-                {
-
-                <tr>
-                    <td>
-                        <b>@itemd.Nombre</b><span style="font-size:xx-small"> @itemd.Tipo</span>
-                    </td>
-
-                    @*NUMERO DE EPIS Y IMPORTE*@
-                    @{
-                        var precioEpisGeneral = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i);
-
-                        foreach (var kalaka in precioEpisGeneral)
-                        {
-                            sumaDePrecios += Convert.ToInt32(kalaka.PrecioEpi);
-                        }
-
-                        //NUMERO DE EPIS
-                        int episGestor = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
-
-                        <td><span>@episGestor</span></td>
-                        <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
-
-                    }
-
-
-                    @*PAGO*@
-                    <td>
-                        @{
-                            var precioEpisGeneralP = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.Conciliado != null && (i.Cuenta == "CONEKTA" || i.Cuenta == "BANCOS") && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i);
-
-                            foreach (var kalaka in precioEpisGeneralP)
-                            {
-                                sumaDePreciosP += Convert.ToInt32(kalaka.PrecioEpi);
-                            }
-
-                            if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
-                            {
-
-                                saldoMesN = sumaDePrecios;
-
-                                <span>$@saldoMesN.ToString("###,###,###,###")</span>
-
-                            }
-
-                            else
-                            {
-                                if (sumaDePreciosP == 0)
-                                {
-                                    <span>$</span>
-                                    <span>-----</span>
-                                }
-
-                                else
-                                {
-                                    <span> $@sumaDePreciosP.ToString("###,###,###,###")</span>
-                                }
-
-                            }
-                        }
-                    </td>
-
-                    @*INGRESO DEL MES*@
-                    <td>
-                        @{
-
-                            var pG = (from i in db.PagosGestores where i.idReferido == itemd.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
-
-                            foreach (var pagosGes in pG)
-                            {
-
-                                ingresoActualAlt += Convert.ToInt32(pagosGes.PagoIngresado);
-
-                            }
-
-                            <span>$@ingresoActualAlt.ToString("###,###,###,###")</span>
-
-                        }
-                    </td>
-
-                    @*SALDO*@
-                    <td>
-                        @{
-                            saldoMesN = (ingresoActualAlt + sumaDePreciosP) - sumaDePrecios;
-
-                            if (itemd.Tipo == "MEDIOS DIGITALES" || itemd.Tipo == "CALL CENTER" || itemd.Tipo == "OTRO")
-                            {
-
-                                saldoMesN = 0;
-
-                                <span>$@saldoMesN.ToString("###,###,###,###")</span>
-
-                            }
-
-                            else
-                            {
-                                if (saldoMesN < 0)
-                                {
-                                    saldoMesN = saldoMesN * (-1);
-
-                                    <span>($@saldoMesN.ToString("###,###,###,###"))</span>
-                                }
-
-                                else
-                                {
-                                    <span>$@saldoMesN.ToString("###,###,###,###")</span>
-
-                                }
-
-                            }
-
-                            ingresoActualAlt = 0;
-
-                        }
-                    </td>
-
-                    @*ESTATUS*@
-                    <td>
-
-                        @{
-                            var estatus = from i in db.PacienteESP where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.TipoPago == "Pendiente de Pago" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i;
-
-                            string texto = "";
-
-                            foreach (var i in estatus)
-                            {
-                                if (i.FechaCita < DateTime.Today.AddDays(-30))
-                                {
-                                    texto = "text-danger";
-                                    break;
-                                }
-                                else if (i.FechaCita < DateTime.Today.AddDays(-15))
-                                {
-                                    texto = "text-warning";
-                                    break;
-                                }
-                                else
-                                {
-                                    texto = "text-success";
-                                    break;
-                                }
-                            }
-
-                            <div style="width:2px;"></div>
-                            <span class="@texto">•</span>
-
-                            sumaDePrecios = 0;
-                            sumaDePreciosP = 0;
-                            saldoTv1 = 0;
-                            sumaPagadosTAlt = 0;
-
-                        }
-
-                    </td>
-
-                </tr>
-                                }
-
-                            }
-        }
-
-
-        @*AQUI EMPIEZA LA PARTE DE LA TABLA DE LOS EPIS NORMALES*@
-        @{
-
-            foreach (var item in db.Referido.OrderBy(o => o.Orden).ThenBy(o => o.Tipo).ThenBy(o => o.Nombre))
-            {
-                int gestoresNoNullos = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
-
-                if (gestoresNoNullos != 0)
-                {
-                <tr>
-                    <td>
-                        <b>@item.Nombre</b><span style="font-size:xx-small"> @item.Tipo</span>
-                    </td>
-                    @{
-                        var precioEpisGeneral = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
-
-                        foreach (var kalaka in precioEpisGeneral)
-                        {
-                            sumaDePrecios += Convert.ToInt32(kalaka.A.M.PrecioEpi);
-                        }
-
-                        //NUMERO DE EPIS
-                        int episGestor = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i).Count();
-
-                        <td><span> @episGestor</span></td>
-                        <td><span> $@sumaDePrecios.ToString("###,###,###,###")</span></td>
-
-                    }
-
-
-                    @*PAGO*@
-
-                    <td>
-
-                        @{
-                            var precioEpisGeneralP = (from i in modelo where i.A.M.CanalTipo == item.Tipo && i.A.M.ReferidoPor == item.Nombre && i.B.EstatusCaptura == "Terminado" && i.A.M.Conciliado != null && (i.A.M.Cuenta == "CONEKTA" || i.A.M.Cuenta == "BANCOS") && i.A.M.FechaCita >= fechaInicio && i.A.M.FechaCita < fechaFinal select i);
-
-                            foreach (var kalaka in precioEpisGeneralP)
-                            {
-                                sumaDePreciosP += Convert.ToInt32(kalaka.A.M.PrecioEpi);
-                            }
-
-                            if (item.Tipo == "MEDIOS DIGITALES" || item.Tipo == "CALL CENTER" || item.Tipo == "OTRO")
-                            {
-
-                                saldoMesN = sumaDePrecios;
-
-                                <span>$@saldoMesN.ToString("###,###,###,###")</span>
-
-                            }
-
-                            else
-                            {
-                                if (sumaDePreciosP == 0)
-                                {
-                                    <span>$</span>
-                                    <span>-----</span>
-                                }
-
-                                else
-                                {
-                                    <span> $@sumaDePreciosP.ToString("###,###,###,###")</span>
-                                }
-
-                            }
-
-                        }
-                    </td>
-
-
-                    @*INGRESO DEL MES*@
-                    <td>
-                        @{
-
-                            var pG = (from i in db.PagosGestores where i.idReferido == item.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
-
-                            foreach (var pagosGes in pG)
-                            {
-
-                                ingresoActual += Convert.ToInt32(pagosGes.PagoIngresado);
-
-                            }
-
-                            <span>$@ingresoActual.ToString("###,###,###,###")</span>
-
-                        }
-                    </td>
-
-                    @*SALDO DEL MES*@
-                    <td>
-                        @{
-                            saldoMesA = (ingresoActual + sumaDePreciosP) - sumaDePrecios;
-
-                            if (item.Tipo == "MEDIOS DIGITALES" || item.Tipo == "CALL CENTER" || item.Tipo == "OTRO")
-                            {
-
-                                saldoMesA = 0;
-
-                                <span>$@saldoMesA.ToString("###,###,###,###")</span>
-
-                            }
-
-                            else
-                            {
-                                if (saldoMesA < 0)
-                                {
-                                    saldoMesA = saldoMesA * (-1);
-
-                                    <span>($@saldoMesA.ToString("###,###,###,###"))</span>
-                                }
-
-                                else
-                                {
-                                    <span>$@saldoMesA.ToString("###,###,###,###")</span>
-
-                                }
-
-                            }
-                            ingresoActual = 0;
-
-                        }
-                    </td>
-
-                    <td>
-
-                        @{
-                            var estatus = from i in db.Cita where i.CanalTipo == item.Tipo && i.ReferidoPor == item.Nombre && i.TipoPago == "Pendiente de Pago" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i;
-
-                            string texto = "";
-
-                            foreach (var i in estatus)
-                            {
-                                if (i.FechaCita < DateTime.Today.AddDays(-30))
-                                {
-                                    texto = "text-danger";
-                                    break;
-                                }
-                                else if (i.FechaCita < DateTime.Today.AddDays(-15))
-                                {
-                                    texto = "text-warning";
-                                    break;
-                                }
-                                else
-                                {
-                                    texto = "text-success";
-                                    break;
-                                }
-                            }
-
-                            <div style="width:2px;"></div>
-                            <span class="@texto">•</span>
-                            
-                                sumaDePrecios = 0;
-                                sumaDePreciosP = 0;
-                                saldoTv1N = 0;
-                                sumaPagadosTN = 0;
-
-                        }
-
-                    </td>
-                </tr>
-
-                }
-
-            }
+          
         }
 
     </table>

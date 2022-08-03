@@ -617,8 +617,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 <input id='cb_12meses' type='checkbox' name="cb_Seguro" value="SI" />
                                 <label for='cb_12meses'>
                                     <span></span>
-                                    Ampliar el seguro a 12 meses
-                                    <ins><i>Ampliar el seguro a 12 meses</i></ins>
+                                    Extender el seguro a 12 meses
+                                    <ins><i>Extender el seguro a 12 meses</i></ins>
                                 </label>
                              </div>
 
@@ -956,7 +956,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                     /* Para obtener el valor */
                                     var cod = document.getElementById("referidoPor_1").value;
 
-                                    if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168)
+                                    if(cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190)
                                     {
                                         cont_cb_seguro.style.display = 'block';
                                     }
@@ -972,8 +972,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 <input id='cb_12mesesOrden' type='checkbox' name="cb_Seguro" value="SI" />
                                 <label for='cb_12mesesOrden'>
                                     <span></span>
-                                    Ampliar el seguro a 12 meses
-                                    <ins><i>Ampliar el seguro a 12 meses</i></ins>
+                                    Extender el seguro a 12 meses
+                                    <ins><i>Extender el seguro a 12 meses</i></ins>
                                 </label>
                              </div>
 
@@ -1281,10 +1281,12 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             /* Para obtener el valor */
                             var cod = document.getElementById("referidoPor_2").value;
 
-                            if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168) {
+                            if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190)
+                            {
                                 cont_cb_seguro.style.display = 'block';
                             }
-                            else {
+                            else
+                            {
                                 cont_cb_seguro.style.display = 'none';
                             }
                         }
@@ -1295,8 +1297,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         <input id='cb_12mesesTarjeta' type='checkbox' name="cb_Seguro" value="SI" />
                         <label for='cb_12mesesTarjeta'>
                             <span></span>
-                            Ampliar el seguro a 12 meses
-                            <ins><i>Ampliar el seguro a 12 meses</i></ins>
+                            Extender el seguro a 12 meses
+                            <ins><i>Extender el seguro a 12 meses</i></ins>
                         </label>
                     </div>
                    
@@ -1721,12 +1723,19 @@ else
                                     }
                                 }
                                 @{
-                                    if (Sucursal == "TAPO" || Sucursal == "ASPA")
-                                    {
-                                        <br />
-                                        <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")
+                                        if (Sucursal == "TAPO" || Sucursal == "ASPA")
+                                        {
+                                            <br />
+                                            <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")
+                                        }
                                     }
-                                }
+                                @{ 
+                                        if (item.M.ventaSeguro == "SI")
+                                        {
+                                            <br />
+                                            <b>Precio del Seguro: </b>@item.M.TotalSeguro
+                                        }
+                                    }
                             </span>
                         </span>
                     </td>
@@ -2040,8 +2049,6 @@ else
                                             (from i in db.Expedientes where i.idPaciente == item.M.idPaciente select i.idPaciente).FirstOrDefault() == null)
                                         {
                                             <a href="#" data-toggle="modal" data-target="#Modal_@item.M.idPaciente"><b>Digitalizar</b></a>
-                                            @*<br/>
-                                            <a href="#" data-toggle="modal" data-target="#ticketSeguro_@item.M.idPaciente"><b>Ticket Seguro</b></a>*@
                                             <div class="dropdown-divider"></div>
                                         }
                                         if (item.M.Canal == "Recepción")
@@ -2467,7 +2474,7 @@ else
                                                 {
                                                     <div class="form-group">
                                                         <label for="ticket_Seguro" class="col-form-label">Ticket de Seguro:</label>
-                                                        <input type="file" name="ticket_Seguro" asp-for="file" class="" required value="ticket_Seguro" />
+                                                        <input type="file" name="fileSeguro" asp-for="file" class="" required value="ticket_Seguro" />
                                                     </div>
                                                 }
                                             }
@@ -2476,35 +2483,6 @@ else
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                             <input type="submit" value="Guardar" class="btn btn-primary" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-
-                        <!-- Modal Ticket Seguro-->
-                        <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Recepcion/TicketSeguro")">
-                            @Html.AntiForgeryToken()
-                            <div class="modal fade" id="ticketSeguro_@item.M.idPaciente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h4 class="modal-title" id="exampleModalLabel"><b>Subir Ticket de Seguro del Paciente:  <span class="text-danger">@item.N.Nombre</span>?</b></h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            @{
-                                                if (item.M.ventaSeguro == "SI")
-                                                {
-                                                    <div class="form-group">
-                                                        <label for="ticket_Seguro" class="col-form-label">Ticket de Seguro:</label>
-                                                        <input type="file" name="ticket_Seguro" asp-for="file" class="" required value="ticket_Seguro" />
-                                                    </div>
-                                                }
-                                            }
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                            <input type="submit" value="Enviar" class="btn btn-primary" />
                                         </div>
                                     </div>
                                 </div>

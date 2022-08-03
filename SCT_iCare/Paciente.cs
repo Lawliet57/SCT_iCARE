@@ -39,6 +39,7 @@ namespace SCT_iCare
             this.ExpedienteRevaloracion = new HashSet<ExpedienteRevaloracion>();
             this.Expedientes = new HashSet<Expedientes>();
             this.Tickets = new HashSet<Tickets>();
+            this.TicketSeguro = new HashSet<TicketSeguro>();
         }
     
         public int idPaciente { get; set; }
@@ -94,5 +95,7 @@ namespace SCT_iCare
         public virtual ICollection<Expedientes> Expedientes { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Tickets> Tickets { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TicketSeguro> TicketSeguro { get; set; }
     }
 }

@@ -107,5 +107,6 @@ namespace SCT_iCare
         public virtual DbSet<operaciones> operaciones { get; set; }
         public virtual DbSet<rol_operacion> rol_operacion { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<TicketSeguro> TicketSeguro { get; set; }
     }
 }

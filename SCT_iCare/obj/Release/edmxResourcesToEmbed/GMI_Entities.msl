@@ -1301,5 +1301,14 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TicketSeguro">
+      <EntityTypeMapping TypeName="DevModel.TicketSeguro">
+        <MappingFragment StoreEntitySet="TicketSeguro">
+          <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+          <ScalarProperty Name="FileTicketSeguro" ColumnName="FileTicketSeguro" />
+          <ScalarProperty Name="idTicketSeguro" ColumnName="idTicketSeguro" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

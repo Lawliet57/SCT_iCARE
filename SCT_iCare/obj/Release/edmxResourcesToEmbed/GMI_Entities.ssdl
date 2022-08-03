@@ -1189,6 +1189,14 @@
     <Property Name="FechaCarga" Type="datetime" />
     <Property Name="idPaciente" Type="int" />
   </EntityType>
+  <EntityType Name="TicketSeguro">
+    <Key>
+      <PropertyRef Name="idTicketSeguro" />
+    </Key>
+    <Property Name="idTicketSeguro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FileTicketSeguro" Type="varbinary(max)" />
+    <Property Name="idPaciente" Type="int" />
+  </EntityType>
   <EntityType Name="Tipificaciones">
     <Key>
       <PropertyRef Name="idTipificacion" />
@@ -2010,6 +2018,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_TicketSeguro_Paciente">
+    <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
+    <End Role="TicketSeguro" Type="Self.TicketSeguro" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Paciente">
+        <PropertyRef Name="idPaciente" />
+      </Principal>
+      <Dependent Role="TicketSeguro">
+        <PropertyRef Name="idPaciente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Tipificaciones_CallCenter">
     <End Role="CallCenter" Type="Self.CallCenter" Multiplicity="0..1" />
     <End Role="Tipificaciones" Type="Self.Tipificaciones" Multiplicity="*" />
@@ -2114,6 +2134,7 @@
     <EntitySet Name="Sucursales" EntityType="Self.Sucursales" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="TicketSeguro" EntityType="Self.TicketSeguro" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Tipificaciones" EntityType="Self.Tipificaciones" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UrgentesCount" EntityType="Self.UrgentesCount" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
@@ -2380,6 +2401,10 @@
     <AssociationSet Name="FK_Tickets_Paciente" Association="Self.FK_Tickets_Paciente">
       <End Role="Paciente" EntitySet="Paciente" />
       <End Role="Tickets" EntitySet="Tickets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_TicketSeguro_Paciente" Association="Self.FK_TicketSeguro_Paciente">
+      <End Role="Paciente" EntitySet="Paciente" />
+      <End Role="TicketSeguro" EntitySet="TicketSeguro" />
     </AssociationSet>
     <AssociationSet Name="FK_Tipificaciones_CallCenter" Association="Self.FK_Tipificaciones_CallCenter">
       <End Role="CallCenter" EntitySet="CallCenter" />

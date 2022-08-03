@@ -167,18 +167,9 @@ namespace SCT_iCare.Controllers.Contabilidad
             return View();
         }
 
-        public ActionResult Pagos(string canal, DateTime? fechaInicio, DateTime? fechaFinal, string cuenta, string tipoPago, string sucursal, int? referido, int? id)
+        public ActionResult Pagos(string canal, DateTime? fechaInicio, DateTime? fechaFinal, int? referido)
         {
             var Referido = db.Referido.Find(referido);
-
-            if (sucursal == "" || sucursal == null)
-            {
-                ViewBag.Sucursal = "";
-            }
-            else
-            {
-                ViewBag.Sucursal = sucursal;
-            }
 
             if (canal == "" || canal == null)
             {
@@ -187,24 +178,7 @@ namespace SCT_iCare.Controllers.Contabilidad
             else
             {
                 ViewBag.Canal = canal;
-            }
-
-            if (cuenta == "" || cuenta == null)
-            {
-                ViewBag.Cuenta = "";
-            }
-            else
-            {
-                ViewBag.Cuenta = cuenta;
-            }
-            if (tipoPago == "" || tipoPago == null)
-            {
-                ViewBag.Pago = "";
-            }
-            else
-            {
-                ViewBag.Pago = tipoPago;
-            }
+            }           
 
             if (referido == null)
             {
@@ -219,30 +193,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
             ViewBag.FechaInicio = fechaInicio != null ? fechaInicio : null;
             ViewBag.FechaFinal = fechaFinal != null ? fechaFinal : null;
-
-            if (tipoPago == "" || tipoPago == null)
-            {
-                ViewBag.Pago = "";
-            }
-            else
-            {
-                ViewBag.Pago = tipoPago;
-            }
-
-
-            if (referido == null)
-            {
-                ViewBag.Referido = "";
-                ViewBag.idReferido = 0;
-            }
-            else
-            {
-                ViewBag.Referido = Referido.Nombre;
-                ViewBag.idReferido = Referido.idReferido;
-            }
-
-            ViewBag.FechaInicio = fechaInicio != null ? fechaInicio : null;
-            ViewBag.FechaFinal = fechaFinal != null ? fechaFinal : null;
+                     
             return View();
         }
 
@@ -395,11 +346,16 @@ namespace SCT_iCare.Controllers.Contabilidad
         }
 
         public ActionResult AbrirTicket(int? idTicket, string cuenta, string canal, string sucursal, string tiporeferido, string tipopago,
-            DateTime? fechaInicio, DateTime? fechaFinal)
+            DateTime? fechaInicio, DateTime? fechaFinal, int? idTicketSeguro)
         {
             if (idTicket != 0)
             {
                 TempData["ID"] = idTicket;
+
+                if (idTicketSeguro != 0)
+                {
+                    TempData["IDTICKETSEGURO"] = idTicketSeguro;
+                }
                 return RedirectToAction("Index", new { fechaInicio = fechaInicio, fechaFinal = fechaFinal, sucursal = sucursal, cuenta = cuenta, canal = canal, referido = tiporeferido, tipopago = tipopago });
             }
             else
@@ -432,8 +388,6 @@ namespace SCT_iCare.Controllers.Contabilidad
 
         }
 
-
-
         public ActionResult AbrirTicket2(int id)
         {
             Tickets ticket = db.Tickets.Find(id);
@@ -444,6 +398,18 @@ namespace SCT_iCare.Controllers.Contabilidad
                 //return File(bytesBinary, "application/pdf");
                 //return File(bytesBinary, "application/vnd.visio");
             
+        }
+
+        public ActionResult AbrirTicketSeguro(int id)
+        {
+            TicketSeguro ticket = db.TicketSeguro.Find(id);
+
+            var bytesBinary = ticket.FileTicketSeguro;
+            TempData["IDTICKETSEGURO"] = null;
+            return File(bytesBinary, "DownloadName.pdf");
+            //return File(bytesBinary, "application/pdf");
+            //return File(bytesBinary, "application/vnd.visio");
+
         }
 
         public ActionResult Deuda(int? id, string deuda, string canal)
@@ -477,7 +443,7 @@ namespace SCT_iCare.Controllers.Contabilidad
 
 
         //METODO DE INGRESO DE PAGOS EN LA VISTA DE PAGOS
-        public ActionResult EditarEfectivo(int? id, int efectivo, string usuario, DateTime fechaAhora, DateTime? fecha1, DateTime? fecha2)
+        public ActionResult EditarEfectivo(int? id, int efectivo, string usuario, DateTime fechaAhora, DateTime? fecha1, DateTime? fecha2, DateTime fechadepago)
         {
 
             ViewBag.FechaInicio = fecha1 != null ? fecha1 : null;
@@ -507,7 +473,7 @@ namespace SCT_iCare.Controllers.Contabilidad
             pagosGestores.Gestor = referido.Nombre;
             pagosGestores.idReferido = referido.idReferido;
             pagosGestores.PagoIngresado = Convert.ToString(efectivo);
-            pagosGestores.Fecha = fechaAhora;
+            pagosGestores.Fecha = fechadepago;
 
             if (ModelState.IsValid)
             {

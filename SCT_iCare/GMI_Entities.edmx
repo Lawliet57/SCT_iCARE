@@ -1194,6 +1194,14 @@
           <Property Name="FechaCarga" Type="datetime" />
           <Property Name="idPaciente" Type="int" />
         </EntityType>
+        <EntityType Name="TicketSeguro">
+          <Key>
+            <PropertyRef Name="idTicketSeguro" />
+          </Key>
+          <Property Name="idTicketSeguro" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FileTicketSeguro" Type="varbinary(max)" />
+          <Property Name="idPaciente" Type="int" />
+        </EntityType>
         <EntityType Name="Tipificaciones">
           <Key>
             <PropertyRef Name="idTipificacion" />
@@ -2015,6 +2023,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_TicketSeguro_Paciente">
+          <End Role="Paciente" Type="Self.Paciente" Multiplicity="0..1" />
+          <End Role="TicketSeguro" Type="Self.TicketSeguro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="idPaciente" />
+            </Principal>
+            <Dependent Role="TicketSeguro">
+              <PropertyRef Name="idPaciente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Tipificaciones_CallCenter">
           <End Role="CallCenter" Type="Self.CallCenter" Multiplicity="0..1" />
           <End Role="Tipificaciones" Type="Self.Tipificaciones" Multiplicity="*" />
@@ -2119,6 +2139,7 @@
           <EntitySet Name="Sucursales" EntityType="Self.Sucursales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tickets" EntityType="Self.Tickets" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketSeguro" EntityType="Self.TicketSeguro" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tipificaciones" EntityType="Self.Tipificaciones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UrgentesCount" EntityType="Self.UrgentesCount" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Usuarios" EntityType="Self.Usuarios" Schema="dbo" store:Type="Tables" />
@@ -2385,6 +2406,10 @@
           <AssociationSet Name="FK_Tickets_Paciente" Association="Self.FK_Tickets_Paciente">
             <End Role="Paciente" EntitySet="Paciente" />
             <End Role="Tickets" EntitySet="Tickets" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TicketSeguro_Paciente" Association="Self.FK_TicketSeguro_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="TicketSeguro" EntitySet="TicketSeguro" />
           </AssociationSet>
           <AssociationSet Name="FK_Tipificaciones_CallCenter" Association="Self.FK_Tipificaciones_CallCenter">
             <End Role="CallCenter" EntitySet="CallCenter" />
@@ -2753,6 +2778,11 @@
           <AssociationSet Name="FK_Usuarios_Roles" Association="DevModel.FK_Usuarios_Roles">
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Usuarios" EntitySet="Usuarios" />
+          </AssociationSet>
+          <EntitySet Name="TicketSeguro" EntityType="DevModel.TicketSeguro" />
+          <AssociationSet Name="FK_TicketSeguro_Paciente" Association="DevModel.FK_TicketSeguro_Paciente">
+            <End Role="Paciente" EntitySet="Paciente" />
+            <End Role="TicketSeguro" EntitySet="TicketSeguro" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="Aptitud">
@@ -3772,6 +3802,7 @@
           <NavigationProperty Name="ExpedienteRevaloracion" Relationship="DevModel.FK_ExpedienteRevaloracion_Paciente" FromRole="Paciente" ToRole="ExpedienteRevaloracion" />
           <NavigationProperty Name="Expedientes" Relationship="DevModel.FK_Expedientes_Paciente" FromRole="Paciente" ToRole="Expedientes" />
           <NavigationProperty Name="Tickets" Relationship="DevModel.FK_Tickets_Paciente" FromRole="Paciente" ToRole="Tickets" />
+          <NavigationProperty Name="TicketSeguro" Relationship="DevModel.FK_TicketSeguro_Paciente" FromRole="Paciente" ToRole="TicketSeguro" />
         </EntityType>
         <EntityType Name="PacienteDS">
           <Key>
@@ -4922,6 +4953,27 @@
             </Principal>
             <Dependent Role="Usuarios">
               <PropertyRef Name="idRol" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TicketSeguro">
+          <Key>
+            <PropertyRef Name="idTicketSeguro" />
+          </Key>
+          <Property Name="idTicketSeguro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FileTicketSeguro" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="idPaciente" Type="Int32" />
+          <NavigationProperty Name="Paciente" Relationship="DevModel.FK_TicketSeguro_Paciente" FromRole="TicketSeguro" ToRole="Paciente" />
+        </EntityType>
+        <Association Name="FK_TicketSeguro_Paciente">
+          <End Type="DevModel.Paciente" Role="Paciente" Multiplicity="0..1" />
+          <End Type="DevModel.TicketSeguro" Role="TicketSeguro" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Paciente">
+              <PropertyRef Name="idPaciente" />
+            </Principal>
+            <Dependent Role="TicketSeguro">
+              <PropertyRef Name="idPaciente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -6228,6 +6280,15 @@
               <MappingFragment StoreEntitySet="Roles">
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="idRol" ColumnName="idRol" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TicketSeguro">
+            <EntityTypeMapping TypeName="DevModel.TicketSeguro">
+              <MappingFragment StoreEntitySet="TicketSeguro">
+                <ScalarProperty Name="idPaciente" ColumnName="idPaciente" />
+                <ScalarProperty Name="FileTicketSeguro" ColumnName="FileTicketSeguro" />
+                <ScalarProperty Name="idTicketSeguro" ColumnName="idTicketSeguro" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

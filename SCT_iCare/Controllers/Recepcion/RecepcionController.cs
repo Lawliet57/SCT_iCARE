@@ -416,6 +416,7 @@ namespace SCT_iCare.Controllers.Recepcion
                     paciente.Email = email;
 
 
+
                     string hash;
                     do
                     {
@@ -1096,7 +1097,8 @@ namespace SCT_iCare.Controllers.Recepcion
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Orden(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo, string cantidadPista, string checkbox, int? referido, DateTime? fecha, string cb_Seguro)
+        public ActionResult Orden(string nombre, string telefono, string email, string usuario, string sucursal, string cantidad, string cantidadAereo,
+            string cantidadPista, string checkbox, int? referido, DateTime? fecha, string cb_Seguro)
         {
             GetApiKey();
 
@@ -1351,21 +1353,22 @@ namespace SCT_iCare.Controllers.Recepcion
                 cita.FechaCita = fecha != null ? fecha : DateTime.Now;
                 cita.FechaCreacion = DateTime.Now;
 
-                if (tipoGestor == "OTRO")
+                if (cantidadATInt == 0 && cantidadAPInt == 0)
                 {
-                    double calculoIVA = 0;
-                    var precioSoloEpi = (precio / 1.16);
-                    double ventaTotal = 0;
-                    double IVATotal = 0;
-                    double ventaTotalIVA = 0;
 
-                    calculoIVA = precio - (precio / 1.16);
-                    precioSoloEpi = (precio / 1.16);
-                    cita.Venta = Convert.ToString(precioSoloEpi);
-                    cita.IVA = Convert.ToString(calculoIVA);
-
-                    if (cantidadATInt == 0 && cantidadAPInt == 0)
+                    if (tipoGestor == "OTRO")
                     {
+                        double calculoIVA = 0;
+                        var precioSoloEpi = (precio / 1.16);
+                        double ventaTotal = 0;
+                        double IVATotal = 0;
+                        double ventaTotalIVA = 0;
+
+                        calculoIVA = precio - (precio / 1.16);
+                        precioSoloEpi = (precio / 1.16);
+                        cita.Venta = Convert.ToString(precioSoloEpi);
+                        cita.IVA = Convert.ToString(calculoIVA);
+              
                         if (cb_Seguro != null)
                         {
                             cita.ventaSeguro = "SI";
@@ -2054,49 +2057,50 @@ namespace SCT_iCare.Controllers.Recepcion
                 cita.Referencia = Convert.ToString(card);
                 cita.FechaCreacion = DateTime.Now;
 
-                if (tipoGestor == "OTRO")
-                {
-                    double calculoIVA = 0;
-                    var precioSoloEpi = (ALV / 1.16);
-                    double ventaTotal = 0;
-                    double IVATotal = 0;
-                    double ventaTotalIVA = 0;
-
-                    calculoIVA = ALV - (ALV / 1.16);
-                    precioSoloEpi = (ALV / 1.16);
-                    cita.Venta = Convert.ToString(precioSoloEpi);
-                    cita.IVA = Convert.ToString(calculoIVA);
-
-                    if (cantidadATInt == 0 && cantidadAPInt == 0)
-                    {
-                        if (cb_Seguro != null)
+              if (cantidadATInt == 0 && cantidadAPInt == 0)
+              {
+                        if (tipoGestor == "OTRO")
                         {
-                            cita.ventaSeguro = "SI";
-                            cita.CostoSeguro = "100";
-                            cita.IvaSeguro = "16";
-                            cita.TotalSeguro = "116";
-                            ventaTotal = precioSoloEpi + 100;
-                            cita.TotalVenta = Convert.ToString(ventaTotal);
-                            IVATotal = calculoIVA + 16;
-                            cita.TotalIVA = Convert.ToString(IVATotal);
-                            ventaTotalIVA = ventaTotal + IVATotal;
-                            cita.TotalVentaIVA = Convert.ToString(ventaTotalIVA);
+                            double calculoIVA = 0;
+                            var precioSoloEpi = (ALV / 1.16);
+                            double ventaTotal = 0;
+                            double IVATotal = 0;
+                            double ventaTotalIVA = 0;
+
+                            calculoIVA = ALV - (ALV / 1.16);
+                            precioSoloEpi = (ALV / 1.16);
+                            cita.Venta = Convert.ToString(precioSoloEpi);
+                            cita.IVA = Convert.ToString(calculoIVA);
+
+              
+                            if (cb_Seguro != null)
+                            {
+                                cita.ventaSeguro = "SI";
+                                cita.CostoSeguro = "100";
+                                cita.IvaSeguro = "16";
+                                cita.TotalSeguro = "116";
+                                ventaTotal = precioSoloEpi + 100;
+                                cita.TotalVenta = Convert.ToString(ventaTotal);
+                                IVATotal = calculoIVA + 16;
+                                cita.TotalIVA = Convert.ToString(IVATotal);
+                                ventaTotalIVA = ventaTotal + IVATotal;
+                                cita.TotalVentaIVA = Convert.ToString(ventaTotalIVA);
+                            }
+                            else
+                            {
+                                cita.ventaSeguro = "NO";
+                                cita.CostoSeguro = "32";
+                                cita.IvaSeguro = "5.12";
+                                cita.TotalSeguro = "37.12";
+                                ventaTotal = precioSoloEpi + 32;
+                                cita.TotalVenta = Convert.ToString(ventaTotal);
+                                IVATotal = calculoIVA + 5.12;
+                                cita.TotalIVA = Convert.ToString(IVATotal);
+                                ventaTotalIVA = ventaTotal + IVATotal;
+                                cita.TotalVentaIVA = Convert.ToString(ventaTotalIVA);
+                            }
                         }
-                        else
-                        {
-                            cita.ventaSeguro = "NO";
-                            cita.CostoSeguro = "32";
-                            cita.IvaSeguro = "5.12";
-                            cita.TotalSeguro = "37.12";
-                            ventaTotal = precioSoloEpi + 32;
-                            cita.TotalVenta = Convert.ToString(ventaTotal);
-                            IVATotal = calculoIVA + 5.12;
-                            cita.TotalIVA = Convert.ToString(IVATotal);
-                            ventaTotalIVA = ventaTotal + IVATotal;
-                            cita.TotalVentaIVA = Convert.ToString(ventaTotalIVA);
-                        }
-                    }
-                }
+              }
 
                 //Se usa el idCanal para poder hacer que en Recepción se tenga que editar el nombre si viene de gestor
                 cita.idCanal = 1;
@@ -2670,7 +2674,7 @@ namespace SCT_iCare.Controllers.Recepcion
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Digitalizar(HttpPostedFileBase file, string id, string usuario, string nombre, string doctor, string numero, string tipoL,
-            string tipoT, string curp, DateTime? fecha, HttpPostedFileBase ticket, HttpPostedFileBase ticket_Seguro)
+            string tipoT, string curp, DateTime? fecha, HttpPostedFileBase ticket, HttpPostedFileBase ticket_Seguro, HttpPostedFileBase fileSeguro)
         {
 
             //var noExpedienteRepetido = (from i in db.Cita where i.NoExpediente == numero orderby i.idCita descending select i).FirstOrDefault();
@@ -2694,6 +2698,35 @@ namespace SCT_iCare.Controllers.Recepcion
             //        return Redirect("Index");
             //    }
             //}
+
+            //EPI epi = db.EPI.Find(id);
+            TicketSeguro ticketSeguro = new TicketSeguro();
+
+            byte[] bytesSeguroIn = null;
+
+            if (fileSeguro != null && fileSeguro.ContentLength > 0)
+            {
+                var fileName = Path.GetFileName(fileSeguro.FileName);
+
+                byte[] bytesSeguroOut;
+                using (BinaryReader br = new BinaryReader(fileSeguro.InputStream))
+                {
+                    bytesSeguroOut = br.ReadBytes(fileSeguro.ContentLength);
+
+                    bytesSeguroIn = bytesSeguroOut;
+                }
+
+                ticketSeguro.FileTicketSeguro = bytesSeguroIn;
+                ticketSeguro.idPaciente = Convert.ToInt32(id);
+
+                if (ModelState.IsValid)
+                {
+                    db.TicketSeguro.Add(ticketSeguro);
+                    db.SaveChanges();
+                }
+            }
+
+
 
 
             int ide = Convert.ToInt32(id);
@@ -4194,4 +4227,5 @@ namespace SCT_iCare.Controllers.Recepcion
         }
 
     }
+
 }
