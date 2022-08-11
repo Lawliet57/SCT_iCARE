@@ -157,6 +157,7 @@
         <AssociationConnector Association="DevModel.FK_Usuarios_Roles" />
         <EntityTypeShape EntityType="DevModel.TicketSeguro" Width="1.5" PointX="3" PointY="107" />
         <AssociationConnector Association="DevModel.FK_TicketSeguro_Paciente" />
+        <EntityTypeShape EntityType="DevModel.CondensadoPaciente" Width="1.5" PointX="20.375" PointY="26.75" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

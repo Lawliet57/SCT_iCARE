@@ -65,6 +65,7 @@
         Join(db.Captura, c => c.A.idPaciente, d => d.idPaciente, (c, d) => new { C = c, D = d }).
         Select(s => new
         {
+            s.C.B.idPaciente,
             s.C.B.FechaReferencia,
             s.C.B.FechaCita,
             s.C.A.Nombre,
@@ -90,7 +91,7 @@
             s.D.Aptitud,
             s.D.FechaVigencia,
             s.C.B.ReferidoPor
-        }).OrderBy(o => o.FechaReferencia) ;
+        }).OrderBy(o => o.FechaReferencia);
 
     string fila_1 = ""; //Background row de tabla invisible
 
@@ -171,19 +172,19 @@
     @*Script donde se incorporan los archivos zip*@
     @*<script>
 
-        function exportTableToCSV() {
-            var zip = new JSZip();
+            function exportTableToCSV() {
+                var zip = new JSZip();
 
-            zip.file("Hello.txt", "Hello World\n");
+                zip.file("Hello.txt", "Hello World\n");
 
-            // Generate the zip file asynchronously
-            zip.generateAsync({ type: "blob" })
-                .then(function (content) {
-                    // Force down of the Zip file
-                    saveAs(content, "archive.zip");
-                });
-        }
-    </script>*@
+                // Generate the zip file asynchronously
+                zip.generateAsync({ type: "blob" })
+                    .then(function (content) {
+                        // Force down of the Zip file
+                        saveAs(content, "archive.zip");
+                    });
+            }
+        </script>*@
 
     <script>
 
@@ -279,6 +280,13 @@
             <th>Aptitud</th>
             <th>Fecha de Vigencia</th>
             <th>Referido Por</th>
+            <th>Precio Seguro</th>
+            <th>IVA Seguro</th>
+            <th>Precio Total del Seguro</th>
+            <th>Precio EPI</th>
+            <th>IVA EPI</th>
+            <th>Precio Total del EPI</th>
+            <th>Precio Total del EPI + Seguro</th>
         </tr>
 
         @{ foreach (var n in tablaFinal)
@@ -292,6 +300,10 @@
                 {
                     fila_1 = "white";
                 }
+
+                var tablaCita = (from r in db.Cita where r.idPaciente == n.idPaciente select r).FirstOrDefault();
+                double superIVA = 0;
+                superIVA = Convert.ToInt32(tablaCita.PrecioEpi) - (Convert.ToInt32(tablaCita.PrecioEpi) / 1.16);
 
                 <tr style="background-color:@fila_1">
 
@@ -322,6 +334,85 @@
                     <td>@n.Aptitud</td>
                     <td>@Convert.ToDateTime(n.FechaVigencia)@*.AddDays(1).ToString("dd-MMMM-yyyy")*@</td>
                     <td>@n.ReferidoPor</td>
+                    @{
+                        if (tablaCita.ventaSeguro == null)
+                        {
+                            <td>N/A</td>
+                            <td>N/A</td>
+                            <td>N/A</td>
+
+                            if (tablaCita.TipoPago == "Pago con Tarjeta" || tablaCita.TipoPago == "Referencía BanBajío" || tablaCita.TipoPago == "Transferencia vía BanBajío" || tablaCita.TipoPago == "Referencia BanBajío"
+                                        || tablaCita.TipoPago == "Banorte" || tablaCita.TipoPago == "Credito Empresas" || tablaCita.TipoPago == "Referencia OXXO" || tablaCita.TipoPago == "CONEKTA")
+                            {
+                                var ahoraSi = Convert.ToInt32(tablaCita.PrecioEpi) / 1.16;
+                                <td>@ahoraSi</td>
+                            }
+                            else
+                            {
+                                <td>@tablaCita.PrecioEpi</td>
+                            }
+
+                            if (tablaCita.TipoPago == "Pago con Tarjeta" || tablaCita.TipoPago == "Referencía BanBajío" || tablaCita.TipoPago == "Transferencia vía BanBajío" || tablaCita.TipoPago == "Referencia BanBajío"
+                                || tablaCita.TipoPago == "Banorte" || tablaCita.TipoPago == "Credito Empresas" || tablaCita.TipoPago == "Referencia OXXO" || tablaCita.TipoPago == "CONEKTA")
+                            {
+                                <td>$@superIVA</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+
+                            <td>@tablaCita.PrecioEpi</td>
+
+                            if (tablaCita.Venta == "SI")
+                            {
+                                <td>@tablaCita.TotalVentaIVA</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                        }
+
+                        else
+                        {
+                            <td>@tablaCita.CostoSeguro</td>
+                            <td>@tablaCita.IvaSeguro</td>
+                            <td>@tablaCita.TotalSeguro</td>
+
+                            if (tablaCita.TipoPago == "Pago con Tarjeta" || tablaCita.TipoPago == "Referencía BanBajío" || tablaCita.TipoPago == "Transferencia vía BanBajío" || tablaCita.TipoPago == "Referencia BanBajío"
+                                       || tablaCita.TipoPago == "Banorte" || tablaCita.TipoPago == "Credito Empresas" || tablaCita.TipoPago == "Referencia OXXO" || tablaCita.TipoPago == "CONEKTA")
+                            {
+                                var ahoraSi = Convert.ToInt32(tablaCita.PrecioEpi) / 1.16;
+                                <td>@ahoraSi</td>
+                            }
+                            else
+                            {
+                                <td>@tablaCita.PrecioEpi</td>
+                            }
+
+                            if (tablaCita.TipoPago == "Pago con Tarjeta" || tablaCita.TipoPago == "Referencía BanBajío" || tablaCita.TipoPago == "Transferencia vía BanBajío" || tablaCita.TipoPago == "Referencia BanBajío"
+                                || tablaCita.TipoPago == "Banorte" || tablaCita.TipoPago == "Credito Empresas" || tablaCita.TipoPago == "Referencia OXXO" || tablaCita.TipoPago == "CONEKTA")
+                            {
+                                <td>$@superIVA</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+
+                            <td>@tablaCita.PrecioEpi</td>
+
+                            if (tablaCita.Venta == "SI")
+                            {
+                                <td>@tablaCita.TotalVentaIVA</td>
+                            }
+                            else
+                            {
+                                <td>N/A</td>
+                            }
+                        }
+                    }
                 </tr>
                 flag++;
             }
@@ -335,21 +426,21 @@
 
     @*<script>
 
-            const $btnExportar = document.querySelector("#btnExportar"),
-                $tabla = document.querySelector("#tabla");
+                const $btnExportar = document.querySelector("#btnExportar"),
+                    $tabla = document.querySelector("#tabla");
 
-            $btnExportar.addEventListener("click", function () {
-                let tableExport = new TableExport($tabla, {
-                    exportButtons: false, // No queremos botones
-                    filename: "Reporte del " + "@ViewBag.Inicio.ToString("dd-MMMM-yyyy") " + "al @ViewBag.Final.ToString("dd-MMMM-yyyy")" , //Nombre del archivo de Excel
-                    sheetname: "Reporte", //Título de la hoja
+                $btnExportar.addEventListener("click", function () {
+                    let tableExport = new TableExport($tabla, {
+                        exportButtons: false, // No queremos botones
+                        filename: "Reporte del " + "@ViewBag.Inicio.ToString("dd-MMMM-yyyy") " + "al @ViewBag.Final.ToString("dd-MMMM-yyyy")" , //Nombre del archivo de Excel
+                        sheetname: "Reporte", //Título de la hoja
+                    });
+                    let datos = tableExport.getExportData();
+                    let preferenciasDocumento = datos.tabla.xlsx;
+                    tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
                 });
-                let datos = tableExport.getExportData();
-                let preferenciasDocumento = datos.tabla.xlsx;
-                tableExport.export2file(preferenciasDocumento.data, preferenciasDocumento.mimeType, preferenciasDocumento.filename, preferenciasDocumento.fileExtension, preferenciasDocumento.merges, preferenciasDocumento.RTL, preferenciasDocumento.sheetname);
-            });
 
-    </script>*@
+        </script>*@
 
 }
 else

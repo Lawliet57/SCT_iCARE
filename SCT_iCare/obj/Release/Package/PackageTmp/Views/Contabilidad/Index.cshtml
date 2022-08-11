@@ -391,9 +391,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                 }
             }
             @foreach (var item in db.Referido.OrderBy(o => o.Tipo).ThenBy(o => o.Nombre))
-                {
-                    <option value="@item.idReferido">@item.Nombre -- @item.Tipo</option>
-                }
+            {
+                <option value="@item.idReferido">@item.Nombre -- @item.Tipo</option>
+            }
             <option value="">TODOS</option>
         </select>
 
@@ -695,13 +695,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                         <div class="dropdown-menu" style="padding:10px">
                                             @*@{
-                                    var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                                    var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                    if (consultaTicket != 0)
-                                    {
-                                        <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                    }
-                                }*@
+                                                    if (consultaTicket != 0)
+                                                    {
+                                                        <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                                    }
+                                                }*@
                                             <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                             <div class="dropdown-divider"></div>
                                             <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
@@ -713,7 +713,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                             <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
                                             <div class="dropdown-divider"></div>
                                             @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                <div class="dropdown-divider"></div>*@
+                                                <div class="dropdown-divider"></div>*@
                                             @{
                                                 if (item.A.M.Cuenta != "ACLARACIONES")
                                                 {
@@ -735,7 +735,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                             <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
                                             <div class="dropdown-divider"></div>
                                             @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                <div class="dropdown-divider"></div>*@
+                                                <div class="dropdown-divider"></div>*@
                                         </div>
                                     }
 
@@ -752,13 +752,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
                                         <div class="dropdown-menu" style="padding:10px">
                                             @*@{
-                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                                var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                if (consultaTicket != 0)
-                                {
-                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                }
-                                    }*@
+                                                if (consultaTicket != 0)
+                                                {
+                                                    <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                                }
+                                                    }*@
                                             <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                             <div class="dropdown-divider"></div>
                                             <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
@@ -770,13 +770,13 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                             <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
                                             <div class="dropdown-divider"></div>
                                             @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                <div class="dropdown-divider"></div>*@
+                                                <div class="dropdown-divider"></div>*@
                                             <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
                                             <div class="dropdown-divider"></div>
                                             <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
                                             <div class="dropdown-divider"></div>
                                             @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                <div class="dropdown-divider"></div>*@
+                                                <div class="dropdown-divider"></div>*@
 
                                         </div>
                                     }
@@ -2140,6 +2140,15 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     Precio Total
                 </th>
                 <th>
+                    Precio del Seguro
+                </th>
+                <th>
+                    IVA del Seguro
+                </th>
+                <th>
+                    Precio Total del Seguro
+                </th>
+                <th>
                     Recepcionista
                 </th>
                 <th>
@@ -2299,6 +2308,48 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         <b>$@item.A.M.PrecioEpi</b>
                     </td>
 
+                    @*PRECIO DEL SEGURO*@
+                    <td>
+                        @{
+                            if (item.A.M.ventaSeguro != null)
+                            {
+                                <b>$@item.A.M.CostoSeguro</b>
+                            }
+                            else
+                            {
+                                <b>N/A</b>
+                            }
+                        }
+                    </td>
+
+                    @*IVA DEL SEGURO*@
+                    <td>
+                        @{
+                            if (item.A.M.ventaSeguro != null)
+                            {
+                                <b>$@item.A.M.IvaSeguro</b>
+                            }
+                            else
+                            {
+                                <b>N/A</b>
+                            }
+                        }
+                    </td>
+
+                    @*SEGURO TOTAL*@
+                    <td>
+                        @{
+                            if (item.A.M.ventaSeguro != null)
+                            {
+                                <b>$@item.A.M.TotalSeguro</b>
+                            }
+                            else
+                            {
+                                <b>N/A</b>
+                            }
+                        }
+                    </td>
+
                     @*RECEPCIONISTA*@
                     <td>
                         @item.A.M.Recepcionista
@@ -2447,6 +2498,21 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                         <b>$@item.PrecioEpi</b>
                     </td>
 
+                    @*PRECIO DEL SEGURO*@
+                    <td>
+                        <b>N/A</b>
+                    </td>
+
+                    @*IVA DEL SEGURO*@
+                    <td>
+                        <b>N/A</b>
+                    </td>
+
+                    @*SEGURO TOTAL*@
+                    <td>
+                        <b>N/A</b>
+                    </td>
+
                     @*RECEPCIONISTA*@
                     <td>
                         @item.Solicita
@@ -2483,16 +2549,16 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 @section scripts
 {
     @if (TempData["ID"] != null)
-       {
-            <script>
+    {
+        <script>
                     window.open('@Url.Action("AbrirTicket2","Contabilidad", new { id = TempData["ID"] })');
-            </script>
-       }
+        </script>
+    }
 
     @if (TempData["IDTICKETSEGURO"] != null)
-       {
-            <script>
+    {
+        <script>
                     window.open('@Url.Action("AbrirTicketSeguro","Contabilidad", new { id = TempData["IDTICKETSEGURO"] })');
-            </script>
-       }
+        </script>
+    }
 }

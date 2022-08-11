@@ -248,6 +248,66 @@
     <Property Name="Ciudad" Type="varchar" MaxLength="100" />
     <Property Name="Estado" Type="varchar" MaxLength="100" />
   </EntityType>
+  <EntityType Name="CondensadoPaciente">
+    <Key>
+      <PropertyRef Name="idCondensado" />
+    </Key>
+    <Property Name="idCondensado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="200" />
+    <Property Name="Telefono" Type="varchar" MaxLength="50" />
+    <Property Name="Email" Type="varchar" MaxLength="100" />
+    <Property Name="Folio" Type="varchar" MaxLength="100" />
+    <Property Name="CURP" Type="varchar" MaxLength="20" />
+    <Property Name="idCita" Type="int" />
+    <Property Name="TipoPago" Type="varchar" MaxLength="100" />
+    <Property Name="FechaReferencia" Type="datetime" />
+    <Property Name="NoOrden" Type="varchar" MaxLength="100" />
+    <Property Name="EstatusPago" Type="varchar" MaxLength="50" />
+    <Property Name="TipoLicencia" Type="varchar" MaxLength="50" />
+    <Property Name="NoExpediente" Type="varchar" MaxLength="50" />
+    <Property Name="FechaCita" Type="datetime" />
+    <Property Name="Sucursal" Type="varchar" MaxLength="50" />
+    <Property Name="Doctor" Type="varchar" MaxLength="100" />
+    <Property Name="Recepcionista" Type="varchar" MaxLength="100" />
+    <Property Name="idPaciente" Type="int" />
+    <Property Name="TipoTramite" Type="varchar" MaxLength="100" />
+    <Property Name="Referencia" Type="varchar" MaxLength="50" />
+    <Property Name="Canal" Type="varchar" MaxLength="100" />
+    <Property Name="CC" Type="varchar" MaxLength="100" />
+    <Property Name="Asistencia" Type="varchar" MaxLength="50" />
+    <Property Name="CancelaComentario" Type="varchar" MaxLength="200" />
+    <Property Name="Entregado" Type="varchar" MaxLength="10" />
+    <Property Name="ReferidoPor" Type="varchar" MaxLength="50" />
+    <Property Name="FechaCreacion" Type="datetime" />
+    <Property Name="Cuenta" Type="varchar" MaxLength="30" />
+    <Property Name="CanalTipo" Type="varchar" MaxLength="30" />
+    <Property Name="CuentaComentario" Type="varchar(max)" />
+    <Property Name="Conciliado" Type="varchar" MaxLength="10" />
+    <Property Name="FechaContable" Type="datetime" />
+    <Property Name="UsarSaldo" Type="varchar" MaxLength="5" />
+    <Property Name="FormaPago" Type="varchar" MaxLength="40" />
+    <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
+    <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
+    <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
+    <Property Name="Venta" Type="varchar" MaxLength="10" />
+    <Property Name="IVA" Type="varchar" MaxLength="10" />
+    <Property Name="CostoSeguro" Type="varchar" MaxLength="10" />
+    <Property Name="IvaSeguro" Type="varchar" MaxLength="10" />
+    <Property Name="TotalSeguro" Type="varchar" MaxLength="10" />
+    <Property Name="TotalVenta" Type="varchar" MaxLength="10" />
+    <Property Name="ventaSeguro" Type="varchar" MaxLength="5" />
+    <Property Name="TotalIVA" Type="varchar" MaxLength="10" />
+    <Property Name="TotalVentaIVA" Type="varchar" MaxLength="10" />
+    <Property Name="idCaptura" Type="int" />
+    <Property Name="EstatusCaptura" Type="varchar" MaxLength="50" />
+    <Property Name="InicioCaptura" Type="datetime" />
+    <Property Name="FinalCaptura" Type="datetime" />
+    <Property Name="FechaExpdiente" Type="datetime" />
+    <Property Name="Duracion" Type="int" />
+    <Property Name="Aptitud" Type="varchar" MaxLength="10" />
+    <Property Name="ComentarioAptitud" Type="varchar" MaxLength="300" />
+    <Property Name="FechaVigencia" Type="datetime" />
+  </EntityType>
   <EntityType Name="ConteoDoctores2">
     <Key>
       <PropertyRef Name="idConteoDoctor" />
@@ -2054,6 +2114,10 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="buscarGestor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="consulta" Type="nvarchar" Mode="In" />
+    <Parameter Name="cantidad" Type="int" Mode="In" />
+  </Function>
   <EntityContainer Name="DevModelStoreContainer">
     <EntitySet Name="Aptitud" EntityType="Self.Aptitud" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Archivos" EntityType="Self.Archivos" Schema="dbo" store:Type="Tables" />
@@ -2071,6 +2135,7 @@
     <EntitySet Name="Cita" EntityType="Self.Cita" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CitaDS" EntityType="Self.CitaDS" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Ciudades" EntityType="Self.Ciudades" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CondensadoPaciente" EntityType="Self.CondensadoPaciente" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="ConteoDoctores2" EntityType="Self.ConteoDoctores2" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="DeclaracionSaludESP" EntityType="Self.DeclaracionSaludESP" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Dictamen" EntityType="Self.Dictamen" Schema="dbo" store:Type="Tables" />

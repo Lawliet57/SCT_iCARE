@@ -298,14 +298,85 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
     @*ABRIR VENTA APARTE*@
 
     @*@if (TempData["ID"] != null)
-    {        
-        <script>
-                window.open('@Url.Action("VentanaPago","Recepcion", new { id = TempData["ID"] })');
-        </script>
-    }*@
+        {
+            <script>
+                    window.open('@Url.Action("VentanaPago","Recepcion", new { id = TempData["ID"] })');
+            </script>
+        }*@
 }
 
 <br />
+
+<div class="container" id="root">
+    <h4 style="color:aliceblue">Busqueda del Gestor</h4>
+    <select id="referidoPor" class="form-control" v-model="txtBusqueda" v-on:change="getBusqueda()" list="listaNombres" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+        <option disabled selected value="">SELECCIONAR</option>
+        <option value="22">ELIZABETH</option>
+    </select>
+        @*<datalist id="listaNombres">
+                <option v-for="item in listaResultados">{{item.idReferido}} - {{item.Nombre}} - {{item.PrecioNormal}} - {{item.PrecioNormalconIVA}}</option>
+            </datalist>*@
+
+        <div class="list-group" style="width:31%; min-width:320px; color:aliceblue; background-color:transparent">
+            <b class="list-group-item" v-for="item in listaResultados" v-on:click="setearItem(item)" style="background-color:transparent; border:none">
+                Tipo de EPI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Precios sin IVA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Precios con IVA
+                <br />
+                <br />
+                EPI Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${{item.PrecioNormal}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${{item.PrecioNormalconIVA}}
+                <br />
+                EPI Aereo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${{item.PrecioAereosinIVA}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${{item.PrecioAereoPistaconIVA}}
+                <br />
+                EPI Pista &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${{item.PrecioAereoPista}}
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                ${{item.PrecioAereo}}
+            </b>
+        </div>
+        <br />
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    var app = new Vue({
+        el: "#root",
+        data: {
+            txtBusqueda: '',
+            listaResultados: [],
+            itemPersona: {}
+        },
+        methods: {
+            setear(item) {
+                app.listaResultados = [];
+                app.itemPresona = item;
+            },
+            getBusqueda() {
+                if (this.txtBusqueda !== '') {
+                    let cadena = this.txtBusqueda.trim();
+                    let cantidad = 1;
+
+                    axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)
+                        .then(function (response) {
+                            console.log(response.data);
+                            app.listaResultados = response.data;
+                        }).catch(function (error) {
+                            console.log(error);
+                        })
+                }
+                else {
+                    this.listaResultados = [];
+                }
+            }
+        }
+    });
+</script>
 
 <div class="modal fade" id="capturaRepetida" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -583,45 +654,70 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                                 <option value="@item.idReferido">@item.Nombre</option>
                                             }
                                         }
+
+
                                     }
                                 </select>
                             </div>
 
                             //PRECIO INGRESADO
+
+
                             @*<label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
-                            <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
-                            <br />*@
+                                <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
+                                <br />*@
 
                             //SCRIPT PARA OCULTAR CHECKBOX
+
+
                             <script type="text/javascript">
                                 function ShowSelected() {
 
                                     cont_cb_seguro = document.getElementById("content_checkbox_seguro");
+                                    cont_MPJS = document.getElementById("MP");
+                                    val_Input1 = document.getElementById("Input1");
 
                                     /* Para obtener el valor */
                                     var cod = document.getElementById("referidoPor").value;
 
-                                    if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190)
-                                    {
+                                    if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
                                         cont_cb_seguro.style.display = 'block';
                                     }
-                                    else 
-                                    {
+                                    else {
                                         cont_cb_seguro.style.display = 'none';
+                                    }
+
+
+                                    /* Para obtener el valor */
+                                    var MPJS = document.getElementById("referidoPor").value;
+
+                                    if (MPJS != null && MPJS != "") {
+                                        cont_MPJS.style.display = 'block';
+                                        val_Input1.value = cod;
+                                    }
+                                    else {
+                                        cont_MPJS.style.display = 'none';
                                     }
                                 }
                             </script>
 
+                            <div class="form-group" id="MP" style="display: none;">
+                                <input id='Input1' type="tel" hidden />
+                                <br />
+                                <label>
+                                    Los precios Actuales de este Gestor son los siguinetes:
+                                </label>
+                            </div>
+
                             <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
-                            <div class="form-group" id="content_checkbox_seguro" style="display: none;">                            
+                            <div class="form-group" id="content_checkbox_seguro" style="display: none;">
                                 <input id='cb_12meses' type='checkbox' name="cb_Seguro" value="SI" />
                                 <label for='cb_12meses'>
                                     <span></span>
                                     Extender el seguro a 12 meses
                                     <ins><i>Extender el seguro a 12 meses</i></ins>
                                 </label>
-                             </div>
-
+                            </div>
                         }
                         else
                         {
@@ -646,7 +742,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             </div>
                         }
                     }
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -948,34 +1044,32 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         </select>
                     </div>
 
-                            <script type="text/javascript">
-                                function ShowSelected_1() {
+                    <script type="text/javascript">
+                        function ShowSelected_1() {
 
-                                    cont_cb_seguro = document.getElementById("content_checkbox_seguro_1");
+                            cont_cb_seguro = document.getElementById("content_checkbox_seguro_1");
 
-                                    /* Para obtener el valor */
-                                    var cod = document.getElementById("referidoPor_1").value;
+                            /* Para obtener el valor */
+                            var cod = document.getElementById("referidoPor_1").value;
 
-                                    if(cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190)
-                                    {
-                                        cont_cb_seguro.style.display = 'block';
-                                    }
-                                    else 
-                                    {
-                                        cont_cb_seguro.style.display = 'none';
-                                    }
-                                }
-                            </script>
+                            if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
+                                cont_cb_seguro.style.display = 'block';
+                            }
+                            else {
+                                cont_cb_seguro.style.display = 'none';
+                            }
+                        }
+                    </script>
 
-                            <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
-                            <div class="form-group" id="content_checkbox_seguro_1" style="display: none;">                            
-                                <input id='cb_12mesesOrden' type='checkbox' name="cb_Seguro" value="SI" />
-                                <label for='cb_12mesesOrden'>
-                                    <span></span>
-                                    Extender el seguro a 12 meses
-                                    <ins><i>Extender el seguro a 12 meses</i></ins>
-                                </label>
-                             </div>
+                    <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                    <div class="form-group" id="content_checkbox_seguro_1" style="display: none;">
+                        <input id='cb_12mesesOrden' type='checkbox' name="cb_Seguro" value="SI" />
+                        <label for='cb_12mesesOrden'>
+                            <span></span>
+                            Extender el seguro a 12 meses
+                            <ins><i>Extender el seguro a 12 meses</i></ins>
+                        </label>
+                    </div>
 
             </div>
             <div class="modal-footer">
@@ -1236,7 +1330,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     @*CAMPO REQUERIDO PARA SELECTORES*@
                     <div class="form-group" style="width:60%; min-width:320px">
                         <label for="recipient-name" class="form-select" required>Referido por:</label>
-                        <select  id="referidoPor_2" onchange="ShowSelected_2();" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                        <select id="referidoPor_2" onchange="ShowSelected_2();" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
                             <option disabled selected value="">SELECCIONAR</option>
                             @{
                                 //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
@@ -1281,12 +1375,10 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             /* Para obtener el valor */
                             var cod = document.getElementById("referidoPor_2").value;
 
-                            if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190)
-                            {
+                            if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
                                 cont_cb_seguro.style.display = 'block';
                             }
-                            else
-                            {
+                            else {
                                 cont_cb_seguro.style.display = 'none';
                             }
                         }
@@ -1301,9 +1393,9 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             <ins><i>Extender el seguro a 12 meses</i></ins>
                         </label>
                     </div>
-                   
 
-</div>
+
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -1634,7 +1726,7 @@ else
                     </td>
 
                     <td>
-                        <b>@Html.DisplayFor(modelItem => item.M.NoExpediente)</b>
+                        <a href=@Url.Action("AbrirEpi", "Recepcion", new { id = item.M.idPaciente, fechaInicio = thisDate, fechaFinal = tomorrowDate }) style="color:navy; text-decoration:none"><b>@Html.DisplayFor(modelItem => item.M.NoExpediente)</b></a>
                     </td>
                     @{
                         if (idRol == 2)
@@ -1657,13 +1749,13 @@ else
                             </th>
 
 
-                                    }
-                                    else
-                                    {
+                        }
+                        else
+                        {
                             <td>
                                 @Html.DisplayFor(modelItem => item.M.Doctor)
                             </td>
-                                    }
+                        }
                     }
 
                     @*REFERENCIA TOOLTIP DE PRECIOS*@
@@ -1723,19 +1815,19 @@ else
                                     }
                                 }
                                 @{
-                                        if (Sucursal == "TAPO" || Sucursal == "ASPA")
-                                        {
-                                            <br />
-                                            <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")
-                                        }
+                                    if (Sucursal == "TAPO" || Sucursal == "ASPA")
+                                    {
+                                        <br />
+                                        <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")
                                     }
-                                @{ 
-                                        if (item.M.ventaSeguro == "SI")
-                                        {
-                                            <br />
-                                            <b>Precio del Seguro: </b>@item.M.TotalSeguro
-                                        }
+                                }
+                                @{
+                                    if (item.M.ventaSeguro == "SI")
+                                    {
+                                        <br />
+                                        <b>Precio del Seguro: </b>@item.M.TotalSeguro
                                     }
+                                }
                             </span>
                         </span>
                     </td>
@@ -1963,7 +2055,7 @@ else
 
                             }-->
 
-                                }
+                    }
 
                     <td style="font-size: smaller">
                         @{
@@ -2009,7 +2101,7 @@ else
 
                             <div class="dropdown-menu" style="padding:10px">
                                 @{
-                                    if (oUser.idRol == 2 && oUser.Nombre != "Flavio Rodrigo")
+                                    if (oUser.idRol == 2)
                                     {
                                         <a href="#" data-toggle="modal" data-target="#ModalGestor_@item.M.idPaciente"><b>Modificar Datos</b></a>
                                         <div class="dropdown-divider"></div>
@@ -2070,10 +2162,10 @@ else
 
                                         //Subir Archivo
                                         @*var revisionCarrusel = (from i in db.Cita where i.idPaciente == item.M.idPaciente && i.CarruselMedico == "SI" select i).FirstOrDefault();
-                        {
-                            <a href="#" data-toggle="modal" data-target="#subirArchivos_@item.M.idPaciente"><b>Subir Archivos</b></a>
-                            <div class="dropdown-divider"></div>
-                        }*@
+                                            {
+                                                <a href="#" data-toggle="modal" data-target="#subirArchivos_@item.M.idPaciente"><b>Subir Archivos</b></a>
+                                                <div class="dropdown-divider"></div>
+                                            }*@
 
 
                                         var entregado = (from e in db.Captura where e.idPaciente == item.M.idPaciente && e.EstatusCaptura == "Terminado" select e.EstatusCaptura).FirstOrDefault();
@@ -2870,4 +2962,9 @@ else
     </div>
 }
 
-
+@if (TempData["ID"] != null)
+{
+    <script>
+            window.open('@Url.Action("AbrirEPIVentana", "Recepcion", new { id = TempData["ID"] })');
+    </script>
+}

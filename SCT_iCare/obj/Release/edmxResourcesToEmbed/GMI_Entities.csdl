@@ -360,6 +360,11 @@
       <End Role="Paciente" EntitySet="Paciente" />
       <End Role="TicketSeguro" EntitySet="TicketSeguro" />
     </AssociationSet>
+    <EntitySet Name="CondensadoPaciente" EntityType="DevModel.CondensadoPaciente" />
+    <FunctionImport Name="buscarGestor" ReturnType="Collection(DevModel.buscarGestor_Result)">
+      <Parameter Name="consulta" Mode="In" Type="String" />
+      <Parameter Name="cantidad" Mode="In" Type="Int32" />
+    </FunctionImport>
   </EntityContainer>
   <EntityType Name="Aptitud">
     <Key>
@@ -2553,4 +2558,74 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <EntityType Name="CondensadoPaciente">
+    <Key>
+      <PropertyRef Name="idCondensado" />
+    </Key>
+    <Property Name="idCondensado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Folio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CURP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="idCita" Type="Int32" />
+    <Property Name="TipoPago" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="FechaReferencia" Type="DateTime" Precision="3" />
+    <Property Name="NoOrden" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="EstatusPago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TipoLicencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NoExpediente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FechaCita" Type="DateTime" Precision="3" />
+    <Property Name="Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Doctor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Recepcionista" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="idPaciente" Type="Int32" />
+    <Property Name="TipoTramite" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Referencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Canal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CC" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Asistencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CancelaComentario" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Entregado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ReferidoPor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Cuenta" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CanalTipo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CuentaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Conciliado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="FechaContable" Type="DateTime" Precision="3" />
+    <Property Name="UsarSaldo" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="FormaPago" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Venta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CostoSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IvaSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalVenta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ventaSeguro" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="TotalIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalVentaIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="idCaptura" Type="Int32" />
+    <Property Name="EstatusCaptura" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InicioCaptura" Type="DateTime" Precision="3" />
+    <Property Name="FinalCaptura" Type="DateTime" Precision="3" />
+    <Property Name="FechaExpdiente" Type="DateTime" Precision="3" />
+    <Property Name="Duracion" Type="Int32" />
+    <Property Name="Aptitud" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ComentarioAptitud" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="FechaVigencia" Type="DateTime" Precision="3" />
+  </EntityType>
+  <ComplexType Name="buscarGestor_Result">
+    <Property Type="Int32" Name="idReferido" Nullable="true" />
+    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PrecioNormal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="PrecioNormalconIVA" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PrecioAereosinIVA" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="PrecioAereo" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="PrecioAereoPista" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="PrecioAereoPistaconIVA" Nullable="true" MaxLength="10" />
+  </ComplexType>
 </Schema>

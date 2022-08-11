@@ -225,6 +225,9 @@
     <Compile Include="Biometricos.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
+    <Compile Include="buscarGestor_Result.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
     <Compile Include="CallCenter.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
@@ -259,6 +262,9 @@
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="Ciudades.cs">
+      <DependentUpon>GMI_Entities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CondensadoPaciente.cs">
       <DependentUpon>GMI_Entities.tt</DependentUpon>
     </Compile>
     <Compile Include="ConteoDoctores2.cs">

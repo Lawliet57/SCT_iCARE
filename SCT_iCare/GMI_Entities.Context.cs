@@ -12,6 +12,8 @@ namespace SCT_iCare
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class GMIEntities : DbContext
     {
@@ -108,5 +110,19 @@ namespace SCT_iCare
         public virtual DbSet<rol_operacion> rol_operacion { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<TicketSeguro> TicketSeguro { get; set; }
+        public virtual DbSet<CondensadoPaciente> CondensadoPaciente { get; set; }
+    
+        public virtual ObjectResult<buscarGestor_Result> buscarGestor(string consulta, Nullable<int> cantidad)
+        {
+            var consultaParameter = consulta != null ?
+                new ObjectParameter("consulta", consulta) :
+                new ObjectParameter("consulta", typeof(string));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("cantidad", cantidad) :
+                new ObjectParameter("cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<buscarGestor_Result>("buscarGestor", consultaParameter, cantidadParameter);
+        }
     }
 }
