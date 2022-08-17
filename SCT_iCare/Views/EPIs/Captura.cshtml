@@ -685,7 +685,7 @@
                                         <b>@Html.ActionLink("Abrir EPI", "PreDictamen", new { id = item.idPaciente })</b>
                                         <div class="dropdown-divider"></div>
                                     }
-                                    else if (item.EstatusCaptura == "En captura..." || item.EstatusCaptura == "Pendiente")
+                                    else if (item.EstatusCaptura == "En captura..." || item.EstatusCaptura == "Pendiente" || item.EstatusCaptura == "Pausado")
                                     {
                                         <div class="btn-group">
                                             @*<a href=@Url.Action("SubirDictamen", "EPIs", new { id = item.idCaptura})><button type="button" class="btn btn-warning">Dictaminar</button></a>*@

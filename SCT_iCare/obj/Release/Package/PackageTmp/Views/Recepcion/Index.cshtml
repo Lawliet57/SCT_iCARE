@@ -212,9 +212,42 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 
 
 
-
-
 @section scripts{
+    <script>
+        function usarCheck() {
+            cont_textoSeguro = document.getElementById("textoSeguro");
+            cont_checkBox = document.getElementById("cb_12meses");
+            cont_controlador = document.getElementById("controlador");
+
+            if (cont_checkBox.checked) {
+                cont_textoSeguro.value = "SI";                
+                cont_controlador.click();
+            }
+            else {
+                cont_textoSeguro.value  = "NO";
+                cont_controlador.click();
+            }            
+        }      
+    </script>
+
+    <script>
+        $(function () {
+            $(".controlador").click(function () {
+                var url = "@Url.Action("totalCita", "Recepcion")";
+                var episN = $("#contador").val();
+                var episAT = $("#contador0").val();
+                var episAP = $("#contador00").val();
+                var gestorId = $("#referidoPor").val();
+                var tipoPago = $("#pago").val();
+                var seguro = $("#textoSeguro").val();
+                var data = { episN: episN, episAT: episAT, episAP: episAP, gestorId: gestorId, tipoPago: tipoPago, seguro: seguro };
+
+                $.post(url, data).done(function (data) {
+                    $("#resultado").html(data);
+                });
+            });
+        });
+    </script>
 
     <script>
         var input = document.getElementById("buscador");
@@ -224,13 +257,12 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                 document.getElementById("buscar").click();
             }
         });
-
     </script>
 
     <script>
     $(function () {
         $(".buscar").click(function () {
-            var url = "@Url.Action("Buscar", "Recepcion")";
+            var url = "@Url.Action("buscar", "Recepcion")";
             var dato = $("#buscador").val();
             var data = { dato: dato };
 
@@ -304,79 +336,6 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
             </script>
         }*@
 }
-
-<br />
-
-<div class="container" id="root">
-    <h4 style="color:aliceblue">Busqueda del Gestor</h4>
-    <select id="referidoPor" class="form-control" v-model="txtBusqueda" v-on:change="getBusqueda()" list="listaNombres" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-        <option disabled selected value="">SELECCIONAR</option>
-        <option value="22">ELIZABETH</option>
-    </select>
-        @*<datalist id="listaNombres">
-                <option v-for="item in listaResultados">{{item.idReferido}} - {{item.Nombre}} - {{item.PrecioNormal}} - {{item.PrecioNormalconIVA}}</option>
-            </datalist>*@
-
-        <div class="list-group" style="width:31%; min-width:320px; color:aliceblue; background-color:transparent">
-            <b class="list-group-item" v-for="item in listaResultados" v-on:click="setearItem(item)" style="background-color:transparent; border:none">
-                Tipo de EPI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Precios sin IVA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Precios con IVA
-                <br />
-                <br />
-                EPI Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${{item.PrecioNormal}}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${{item.PrecioNormalconIVA}}
-                <br />
-                EPI Aereo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${{item.PrecioAereosinIVA}}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${{item.PrecioAereoPistaconIVA}}
-                <br />
-                EPI Pista &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${{item.PrecioAereoPista}}
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                ${{item.PrecioAereo}}
-            </b>
-        </div>
-        <br />
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-<script>
-    var app = new Vue({
-        el: "#root",
-        data: {
-            txtBusqueda: '',
-            listaResultados: [],
-            itemPersona: {}
-        },
-        methods: {
-            setear(item) {
-                app.listaResultados = [];
-                app.itemPresona = item;
-            },
-            getBusqueda() {
-                if (this.txtBusqueda !== '') {
-                    let cadena = this.txtBusqueda.trim();
-                    let cantidad = 1;
-
-                    axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)
-                        .then(function (response) {
-                            console.log(response.data);
-                            app.listaResultados = response.data;
-                        }).catch(function (error) {
-                            console.log(error);
-                        })
-                }
-                else {
-                    this.listaResultados = [];
-                }
-            }
-        }
-    });
-</script>
 
 <div class="modal fade" id="capturaRepetida" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -601,9 +560,9 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             </div>
 
                             @*CAMPO REQUERIDO PARA SELECTORES*@
-                            <div class="form-group" style="width:60%; min-width:320px">
+                            <div class="form-group" id="root" style="width:60%; min-width:320px">
                                 <label for="recipient-name" class="form-select" required>Referido por:</label>
-                                <select id="referidoPor" onchange="ShowSelected();" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
+                                <select id="referidoPor" onchange="triggerListaPrecios()" v-model="txtBusqueda" v-on:change="getBusqueda()" list="listaNombres" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
                                     <option disabled selected value="">SELECCIONAR</option>
                                     @{
                                         //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
@@ -658,66 +617,142 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 
                                     }
                                 </select>
+
+                                <br/>
+
+                               <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                                <div class="form-group" id="content_checkbox_seguro" style="display: none;">
+                                    <label>Usted cuenta con un seguro de 3 meses</label>
+                                    <input id='cb_12meses' onclick="usarCheck()" type='checkbox' name="cb_Seguro" value="SI" />
+                                    <label for='cb_12meses'>
+                                        <span></span>
+                                        Extender el seguro a 12 meses
+                                        <ins><i>Extender el seguro a 12 meses</i></ins>
+                                    </label>
+                                </div>
+
+                                @*//PRECIO INGRESADO*@
+
+                                @*<label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
+                                    <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
+                                    <br />*@
+
+                                @*//SCRIPT PARA OCULTAR CHECKBOX*@
+
+                                <script type="text/javascript">
+                                    function triggerListaPrecios() {
+
+                                        cont_cb_seguro = document.getElementById("content_checkbox_seguro");
+                                        cont_precioTotal = document.getElementById("precioTotal");
+                                        cont_MPJS = document.getElementById("MP");
+                                        val_Input1 = document.getElementById("Input1");
+                                        cont_controlador = document.getElementById("controlador");
+                                        cont_controlador.click();
+
+                                        /* Para obtener el valor */
+                                        var cod = document.getElementById("referidoPor").value;
+
+                                        if (cod != null) {
+                                            cont_precioTotal.style.display = 'block';
+                                        }
+                                        else {
+                                            cont_precioTotal.style.display = 'none';
+                                        }
+
+                                        if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
+                                            cont_cb_seguro.style.display = 'block';
+                                        }
+                                        else {
+                                            cont_cb_seguro.style.display = 'none';
+                                        }
+
+                                        /* Para obtener el valor */
+                                        var MPJS = document.getElementById("referidoPor").value;
+
+                                        if (MPJS != null && MPJS != "") {
+                                            cont_MPJS.style.display = 'block';
+                                            val_Input1.value = cod;
+                                        }
+                                        else {
+                                            cont_MPJS.style.display = 'none';
+                                        }
+                                    }
+                                </script>
+
+                                <div class="list-group" style="width:120%; min-width:320px; background-color:transparent">
+                                    <b class="list-group-item" v-for="item in listaResultados" style="background-color:transparent; border:none">
+                                        Precios Actuales del Gestor:
+                                        <br />
+                                        <br />
+                                        Tipo de EPI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Precios sin IVA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Precios con IVA
+                                        <br />
+                                        <br />
+                                        EPI Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        ${{item.PrecioNormal}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        ${{item.PrecioNormalconIVA}}
+                                        <br />
+                                        EPI Aereo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        ${{item.PrecioAereosinIVA}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        ${{item.PrecioAereoPistaconIVA}}
+                                        <br />
+                                        EPI Pista &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        ${{item.PrecioAereoPista}}
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        ${{item.PrecioAereo}}
+                                    </b>
+                                </div>
                             </div>
 
-                            //PRECIO INGRESADO
+                            <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+                            <script>
+                                var app = new Vue({
+                                    el: "#root",
+                                    data: {
+                                        txtBusqueda: '',
+                                        listaResultados: []
+                                    },
+                                    methods: {
+                                        getBusqueda() {
+                                            if (this.txtBusqueda !== '') {
+                                                let cadena = this.txtBusqueda.trim();
+                                                let cantidad = 1;
 
-                            @*<label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
-                                <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
-                                <br />*@
-
-                            //SCRIPT PARA OCULTAR CHECKBOX
-
-
-                            <script type="text/javascript">
-                                function ShowSelected() {
-
-                                    cont_cb_seguro = document.getElementById("content_checkbox_seguro");
-                                    cont_MPJS = document.getElementById("MP");
-                                    val_Input1 = document.getElementById("Input1");
-
-                                    /* Para obtener el valor */
-                                    var cod = document.getElementById("referidoPor").value;
-
-                                    if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
-                                        cont_cb_seguro.style.display = 'block';
+                                                //PRODUCCION
+                                                axios.get("https://qasct.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)    
+                                                //DESARROLLO
+                                                //axios.get("https://devsct1.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)  
+                                                //LOCAL
+                                                /*axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)*/
+                                                    .then(function (response) {
+                                                        console.log(response.data);
+                                                        app.listaResultados = response.data;
+                                                    }).catch(function (error) {
+                                                        console.log(error);
+                                                    })
+                                            }
+                                            else {
+                                                this.listaResultados = [];
+                                            }
+                                        }
                                     }
-                                    else {
-                                        cont_cb_seguro.style.display = 'none';
-                                    }
-
-
-                                    /* Para obtener el valor */
-                                    var MPJS = document.getElementById("referidoPor").value;
-
-                                    if (MPJS != null && MPJS != "") {
-                                        cont_MPJS.style.display = 'block';
-                                        val_Input1.value = cod;
-                                    }
-                                    else {
-                                        cont_MPJS.style.display = 'none';
-                                    }
-                                }
+                                });
                             </script>
 
-                            <div class="form-group" id="MP" style="display: none;">
-                                <input id='Input1' type="tel" hidden />
-                                <br />
-                                <label>
-                                    Los precios Actuales de este Gestor son los siguinetes:
-                                </label>
+                            <div class="form-group" id="precioTotal" style="display: none;">
+                                <h2><b>El importe total es de:</b></h2>
+                                <h3><b style="color:mediumblue" id="resultado"></b></h3>
                             </div>
 
-                            <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
-                            <div class="form-group" id="content_checkbox_seguro" style="display: none;">
-                                <input id='cb_12meses' type='checkbox' name="cb_Seguro" value="SI" />
-                                <label for='cb_12meses'>
-                                    <span></span>
-                                    Extender el seguro a 12 meses
-                                    <ins><i>Extender el seguro a 12 meses</i></ins>
-                                </label>
-                            </div>
+                            <button hidden style="display:none" class="btn btn-info controlador" id="controlador" type="button"></button>
+                            <input hidden type="text" id="textoSeguro">
+
+                            @*<input type="select" id="mamon">
+                                <br />
+                                <span id="spanDuplicado"></span>*@
                         }
                         else
                         {

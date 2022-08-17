@@ -17,6 +17,9 @@ using System.Text;
 using System.Globalization;
 using MessagingToolkit.QRCode.Codec;
 using System.Drawing;
+using System.IO.Compression;
+using PagedList;
+
 
 namespace SCT_iCare.Controllers.Recepcion
 {
@@ -4033,6 +4036,70 @@ namespace SCT_iCare.Controllers.Recepcion
             return Redirect("Index");
         }
 
+        //CODIGO PARA EL CALCULO DEL TOTAL DE UNA CITA EN RECEPCION
+        public JsonResult totalCita(string episN, string episAT, string episAP, int gestorId , string tipoPago, string seguro)
+        {
+            var findGestor = (from c in db.Referido where c.idReferido == gestorId select c).FirstOrDefault();
+
+            int episNC = 0;
+            int episATC = 0;
+            int episAPC = 0;
+            string IVA = "";
+            double totalN;
+            double totalAT;
+            double totalAP;
+            double sumaTotal;
+            double sumaEpis;
+            double costoSeguro = 0;
+            string resultado;
+
+            if (episN != "")
+            {
+                episNC = Convert.ToInt32(episN);
+            }
+
+            if (episAT != "")
+            {
+                episATC = Convert.ToInt32(episAT);
+            }
+
+            if (episAP != "")
+            {
+                episAPC = Convert.ToInt32(episAP);
+            }
+
+            sumaEpis = episNC + episATC + episAPC;
+
+            if (tipoPago == "REFERENCIA OXXO" || tipoPago == "Pago con Tarjeta" || tipoPago == "Referencia OXXO" || tipoPago == "Transferencia vía BanBajío" 
+                || tipoPago == "Credito Empresas" || tipoPago == "Referencia BanBajío" || tipoPago == "Referencía BanBajío" || tipoPago == "Banorte")
+            {
+                IVA = "Si";
+            }
+
+            if(IVA == "Si")
+            {
+                totalN = Convert.ToDouble(findGestor.PrecioNormalconIVA) * episNC;
+                totalAT = Convert.ToDouble(findGestor.PrecioAereo) * episATC;
+                totalAP = Convert.ToDouble(findGestor.PrecioAereoPistaconIVA) * episAPC;
+            }
+            else
+            {
+                totalN = Convert.ToDouble(findGestor.PrecioNormal) * episNC;
+                totalAT = Convert.ToDouble(findGestor.PrecioAereosinIVA) * episATC;
+                totalAP = Convert.ToDouble(findGestor.PrecioAereoPista) * episAPC;
+            }
+
+            if(seguro == "SI")
+            {
+                costoSeguro = sumaEpis * 116;
+            }
+
+            sumaTotal = totalN + totalAT + totalAP + costoSeguro;
+
+            resultado = "$" + Convert.ToString(sumaTotal); 
+
+            return Json(resultado);
+        }
 
         public JsonResult Buscar(string dato)
         {
@@ -4664,5 +4731,4 @@ namespace SCT_iCare.Controllers.Recepcion
             }
         }
     }
-
 }
