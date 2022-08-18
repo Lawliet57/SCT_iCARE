@@ -172,14 +172,15 @@ namespace SCT_iCare.Controllers.Recepcion
             var referidoTipo = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
             cita.CC = referidoTipo.Tipo;
             cita.CanalTipo = referidoTipo.Tipo;
-
             cita.ReferidoPor = referidoTipo.Nombre;
-
-            cita.CancelaComentario = cita.CancelaComentario + " + " + usuario + " cambió de " + gestorAnterior + " a " + referidoTipo.Nombre + " el " + DateTime.Now.ToString("dd-MM-yy");
-
+            string cambioReferido = referidoTipo.Nombre == gestorAnterior ? null : " Modifico el Gestor de " + gestorAnterior + " a " + referidoTipo.Nombre;
             cita.TipoPago = tipoPago;
-
+            string cambiotipoPago = cita.TipoPago == tipoPago ? null : " Modifico el tipo de pago de " + cita.TipoPago + " a " + tipoPago;
             cita.Referencia = referencia == "" ? cita.Referencia : referencia;
+            string cambioReferencia = referencia == "" ? null : " Modifico la referencia de " + cita.Referencia + " a " + referencia;
+            string cadenaFinal = cambioReferido + cambiotipoPago + cambioReferencia;
+
+            cita.CancelaComentario = cita.CancelaComentario + " + " + usuario + cadenaFinal + " Modifico el ticket de pago el día " + DateTime.Now.ToString("dd-MM-yy");       
 
             if (ModelState.IsValid)
             {

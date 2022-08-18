@@ -1737,15 +1737,10 @@ else
                                     <b>Folio:</b><br />
                                     @item.N.Folio <br />
                                     @{
-                                        if (item.M.ventaSeguro == "SI")
+                                        if (item.M.CancelaComentario != null)
                                         {
-                                            <b>Tipo de Seguro:</b><br />
-                                            <span>Seguro a 12 Meses</span> <br />
-                                        }
-                                        else if (item.M.ventaSeguro == "NO")
-                                        {
-                                            <b>Tipo de Seguro:</b><br />
-                                            <span>Seguro a 3 Meses</span> <br />
+                                            <b>Historial de cambios:</b><br />
+                                            @item.M.CancelaComentario <br />
                                         }
                                     }
                                 </h6>
@@ -1802,7 +1797,19 @@ else
                                 <b>Canal: </b>@item.M.Canal <br />
                                 <b>Referido por: </b>@item.M.ReferidoPor<br />
                                 <b>Pago: </b>@item.M.TipoPago<br />
-                                <b>Licencia: </b>@item.M.TipoLicencia
+                                <b>Licencia: </b>@item.M.TipoLicencia<br />
+                                @{
+                                    if (item.M.ventaSeguro == "SI")
+                                    {
+                                        <b>Tipo de Seguro:</b><br />
+                                        <span>Seguro a 12 Meses</span> <br />
+                                    }
+                                    else if (item.M.ventaSeguro == "NO")
+                                    {
+                                        <b>Tipo de Seguro:</b><br />
+                                        <span>Seguro a 3 Meses</span> <br />
+                                    }
+                                }
 
                                 @{
                                     var findPrecio = (from r in db.Referido where r.Nombre == item.M.ReferidoPor && (r.Tipo != "GESTOR ALT" && r.Tipo != "IN SITU") select r).FirstOrDefault();
@@ -1815,18 +1822,15 @@ else
 
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br/>
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereoPistaconIVA).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereoPistaconIVA).ToString("####.##")<br />
                                         }
                                         else
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioNormalconIVA).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioNormalconIVA).ToString("####.##")<br />
                                         }
                                     }
 
@@ -1834,33 +1838,28 @@ else
                                     {
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereosinIVA).ToString("####.##")
+                                            <b>Precio EPI: $</b>@Convert.ToDouble(findPrecio.PrecioAereosinIVA).ToString("####.##")<br />
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereoPista).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereoPista).ToString("####.##")<br />
                                         }
                                         else
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioNormal).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioNormal).ToString("####.##")<br />
                                         }
                                     }
                                 }
                                 @{
                                     if (Sucursal == "TAPO" || Sucursal == "ASPA")
                                     {
-                                        <br />
-                                        <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")
+                                        <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")<br />
                                     }
                                 }
                                 @{
                                     if (item.M.ventaSeguro == "SI")
                                     {
-                                        <br />
-                                        <b>Precio del Seguro: </b>@item.M.TotalSeguro
+                                        <b>Precio del Seguro: $  </b>@item.M.TotalSeguro<br />
                                     }
                                 }
                             </span>

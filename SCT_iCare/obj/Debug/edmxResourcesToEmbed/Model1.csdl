@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="QA_bakModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="QA_bakEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Paciente" EntityType="QA_bakModel.Paciente" />
+  </EntityContainer>
+  <EntityType Name="Paciente">
+    <Key>
+      <PropertyRef Name="idPaciente" />
+    </Key>
+    <Property Name="idPaciente" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Folio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CURP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="HASH" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Genero" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
+</Schema>
