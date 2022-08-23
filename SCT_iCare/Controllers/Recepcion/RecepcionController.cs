@@ -212,14 +212,14 @@ namespace SCT_iCare.Controllers.Recepcion
             cita.CC = referidoTipo.Tipo;
             cita.CanalTipo = referidoTipo.Tipo;            
             cita.ReferidoPor = referidoTipo.Nombre;
-            string cambiaReferido = gestorAnterior == referidoTipo.Nombre ? null : " Gestor de " + gestorAnterior + " a" + referidoTipo.Nombre;
+            string cambiaReferido = gestorAnterior == referidoTipo.Nombre ? null : " Gestor de " + gestorAnterior + " a " + referidoTipo.Nombre;
             cita.TipoPago = tipoPago == "" || tipoPago == cita.TipoPago ? cita.TipoPago : tipoPago;
-            string cambiaPago = pagoAnterior == tipoPago ? null : " Tipo de pago de " + pagoAnterior + " a" + tipoPago;
+            string cambiaPago = pagoAnterior == tipoPago ? null : " Tipo de pago de " + pagoAnterior + " a " + tipoPago;
             cita.Referencia = referencia == "" ? cita.Referencia : referencia;
-            string cambioReferencia = refrenciaAnterior == referencia ? null : " Referencia de pago de " + refrenciaAnterior + " a" + referencia;
+            string cambioReferencia = (refrenciaAnterior == referencia) || (referencia == "") ? null : " Referencia de pago de " + refrenciaAnterior + " a " + referencia;
             string cadenaFinal = cambiaReferido + cambiaPago + cambioReferencia;
 
-            cita.CancelaComentario = cita.CancelaComentario + " + " + usuario  + " Modifico los siguientes datos; " + cadenaFinal + "Ticket de pago el día " + DateTime.Now.ToString("dd-MM-yy");       
+            cita.CancelaComentario = cita.CancelaComentario + " + " + usuario + " Modifico los siguientes datos; " + cadenaFinal + " Ticket de pago el día " + DateTime.Now.ToString("dd-MM-yy");       
 
             if (ModelState.IsValid)
             {
