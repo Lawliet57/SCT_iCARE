@@ -524,6 +524,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                             <option value="Banorte">Banorte</option>
                                             <option value="Scotianbank">Scotianbank</option>
+                                            <option value="Mercado Pago" required>Mercado Pago</option>
                                             <option value="BanCoppel TLS">BanCoppel TLS</option>
                                             <option value="BanCoppel LC">BanCoppel LC</option>
                                             <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -541,6 +542,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             <option value="Referencia BanBajío" required>Referencia BanBajío</option>
                                             <option value="Banorte" required>Banorte</option>
                                             <option value="Scotianbank">Scotianbank</option>
+                                            <option value="Mercado Pago" required>Mercado Pago</option>
                                             <option value="BanCoppel TLS" required>BanCoppel TLS</option>
                                             <option value="BanCoppel LC" required>BanCoppel LC</option>
                                             <option value="Banco Azteca TLS" required>Banco Azteca TLS</option>
@@ -726,7 +728,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                                 //DESARROLLO
                                                 //axios.get("https://devsct1.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)  
                                                 //LOCAL
-                                                /*axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)*/
+                                                //axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)
                                                     .then(function (response) {
                                                         console.log(response.data);
                                                         app.listaResultados = response.data;
@@ -743,16 +745,13 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             </script>
 
                             <div class="form-group" id="precioTotal" style="display: none;">
-                                <h2><b>El importe total es de:</b></h2>
+                                <h2><b>El importe total:</b></h2>
                                 <h3><b style="color:mediumblue" id="resultado"></b></h3>
                             </div>
 
                             <button hidden style="display:none" class="btn btn-info controlador" id="controlador" type="button"></button>
                             <input hidden type="text" id="textoSeguro">
 
-                            @*<input type="select" id="mamon">
-                                <br />
-                                <span id="spanDuplicado"></span>*@
                         }
                         else
                         {
@@ -1737,15 +1736,10 @@ else
                                     <b>Folio:</b><br />
                                     @item.N.Folio <br />
                                     @{
-                                        if (item.M.ventaSeguro == "SI")
+                                        if (item.M.CancelaComentario != null)
                                         {
-                                            <b>Tipo de Seguro:</b><br />
-                                            <span>Seguro a 12 Meses</span> <br />
-                                        }
-                                        else if (item.M.ventaSeguro == "NO")
-                                        {
-                                            <b>Tipo de Seguro:</b><br />
-                                            <span>Seguro a 3 Meses</span> <br />
+                                            <b>Historial de cambios:</b><br />
+                                            @item.M.CancelaComentario <br />
                                         }
                                     }
                                 </h6>
@@ -1802,7 +1796,19 @@ else
                                 <b>Canal: </b>@item.M.Canal <br />
                                 <b>Referido por: </b>@item.M.ReferidoPor<br />
                                 <b>Pago: </b>@item.M.TipoPago<br />
-                                <b>Licencia: </b>@item.M.TipoLicencia
+                                <b>Licencia: </b>@item.M.TipoLicencia<br />
+                                @{
+                                    if (item.M.ventaSeguro == "SI")
+                                    {
+                                        <b>Tipo de Seguro:</b><br />
+                                        <span>Seguro a 12 Meses</span> <br />
+                                    }
+                                    else if (item.M.ventaSeguro == "NO")
+                                    {
+                                        <b>Tipo de Seguro:</b><br />
+                                        <span>Seguro a 3 Meses</span> <br />
+                                    }
+                                }
 
                                 @{
                                     var findPrecio = (from r in db.Referido where r.Nombre == item.M.ReferidoPor && (r.Tipo != "GESTOR ALT" && r.Tipo != "IN SITU") select r).FirstOrDefault();
@@ -1810,23 +1816,20 @@ else
 
 
                                     if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Transferencia vía BanBajío"
-                                                  || item.M.TipoPago == "Credito Empresas" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
+                                                 || item.M.TipoPago == "Mercado Pago" || item.M.TipoPago == "Credito Empresas" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
                                     {
 
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br/>
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereoPistaconIVA).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereoPistaconIVA).ToString("####.##")<br />
                                         }
                                         else
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioNormalconIVA).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioNormalconIVA).ToString("####.##")<br />
                                         }
                                     }
 
@@ -1834,33 +1837,28 @@ else
                                     {
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereosinIVA).ToString("####.##")
+                                            <b>Precio EPI: $</b>@Convert.ToDouble(findPrecio.PrecioAereosinIVA).ToString("####.##")<br />
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioAereoPista).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereoPista).ToString("####.##")<br />
                                         }
                                         else
                                         {
-                                            <br />
-                                            <b>Precio: </b> @Convert.ToDouble(findPrecio.PrecioNormal).ToString("####.##")
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioNormal).ToString("####.##")<br />
                                         }
                                     }
                                 }
                                 @{
                                     if (Sucursal == "TAPO" || Sucursal == "ASPA")
                                     {
-                                        <br />
-                                        <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")
+                                        <b>Cita: </b>@Convert.ToDateTime(item.M.FechaCita).ToString("dd-MMMM-yyyy")<br />
                                     }
                                 }
                                 @{
                                     if (item.M.ventaSeguro == "SI")
                                     {
-                                        <br />
-                                        <b>Precio del Seguro: </b>@item.M.TotalSeguro
+                                        <b>Precio del Seguro: $  </b>@item.M.TotalSeguro<br />
                                     }
                                 }
                             </span>
@@ -2246,6 +2244,7 @@ else
                                                                     <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                                     <option value="Banorte">Banorte</option>
                                                                     <option value="Scotianbank">Scotianbank</option>
+                                                                    <option value="Mercado Pago" required>Mercado Pago</option>
                                                                     <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                                     <option value="BanCoppel LC">BanCoppel LC</option>
                                                                     <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2261,6 +2260,7 @@ else
                                                                     <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                                     <option value="Banorte">Banorte</option>
                                                                     <option value="Scotianbank">Scotianbank</option>
+                                                                    <option value="Mercado Pago" required>Mercado Pago</option>
                                                                     <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                                     <option value="BanCoppel LC">BanCoppel LC</option>
                                                                     <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2395,6 +2395,7 @@ else
                                                     <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                     <option value="Banorte">Banorte</option>
                                                     <option value="Scotianbank">Scotianbank</option>
+                                                    <option value="Mercado Pago" required>Mercado Pago</option>
                                                     <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                     <option value="BanCoppel LC">BanCoppel LC</option>
                                                     <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2859,6 +2860,7 @@ else
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Scotianbank">Scotianbank</option>
+                                                        <option value="Mercado Pago" required>Mercado Pago</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>

@@ -170,17 +170,50 @@ namespace SCT_iCare.Controllers.Recepcion
             Cita cita = db.Cita.Find(id);
 
             var referidoTipo = (from r in db.Referido where r.idReferido == referido select r).FirstOrDefault();
-            cita.CC = referidoTipo.Tipo;
-            cita.CanalTipo = referidoTipo.Tipo;
-            cita.ReferidoPor = referidoTipo.Nombre;
-            string cambioReferido = referidoTipo.Nombre == gestorAnterior ? null : " Modifico el Gestor de " + gestorAnterior + " a " + referidoTipo.Nombre;
-            cita.TipoPago = tipoPago;
-            string cambiotipoPago = cita.TipoPago == tipoPago ? null : " Modifico el tipo de pago de " + cita.TipoPago + " a " + tipoPago;
-            cita.Referencia = referencia == "" ? cita.Referencia : referencia;
-            string cambioReferencia = referencia == "" ? null : " Modifico la referencia de " + cita.Referencia + " a " + referencia;
-            string cadenaFinal = cambioReferido + cambiotipoPago + cambioReferencia;
+            string precioEstablecido;
 
-            cita.CancelaComentario = cita.CancelaComentario + " + " + usuario + cadenaFinal + " Modifico el ticket de pago el día " + DateTime.Now.ToString("dd-MM-yy");       
+            if (tipoPago == "REFERENCIA OXXO" || tipoPago == "Pago con Tarjeta" || tipoPago == "Referencia OXXO" || tipoPago == "Transferencia vía BanBajío" 
+                || tipoPago == "Mercado Pago" || tipoPago == "Credito Empresas" || tipoPago == "Referencia BanBajío" || tipoPago == "Referencía BanBajío" || tipoPago == "Banorte")
+            {
+                if (cita.TipoTramite == "AEREO")
+                {
+                    precioEstablecido = referidoTipo.PrecioAereo;
+                }
+                else if (cita.TipoTramite == "AEREO_PISTA")
+                {
+                    precioEstablecido = referidoTipo.PrecioAereoPistaconIVA;
+                }
+                else
+                {
+                    precioEstablecido = referidoTipo.PrecioNormalconIVA;
+                }
+
+                precioEstablecido = (Convert.ToDouble(precioEstablecido) / 1.16).ToString("####.##");
+            }
+            else
+            {
+                if (cita.TipoTramite == "AEREO")
+                {
+                    precioEstablecido = referidoTipo.PrecioAereosinIVA;
+                }
+                else if (cita.TipoTramite == "AEREO_PISTA")
+                {
+                    precioEstablecido = referidoTipo.PrecioAereoPista;
+                }
+                else
+                {
+                    precioEstablecido = referidoTipo.PrecioNormal;
+                }
+            }
+
+            cita.Venta = precioEstablecido;
+            cita.CC = referidoTipo.Tipo;
+            cita.CanalTipo = referidoTipo.Tipo;            
+            cita.ReferidoPor = referidoTipo.Nombre;
+            cita.TipoPago = tipoPago == "" || tipoPago == cita.TipoPago ? cita.TipoPago : tipoPago;            
+            cita.Referencia = referencia == "" ? cita.Referencia : referencia;
+
+            cita.CancelaComentario = cita.CancelaComentario + " + " + usuario  + " Modifico el ticket de pago el día " + DateTime.Now.ToString("dd-MM-yy");       
 
             if (ModelState.IsValid)
             {
@@ -318,7 +351,7 @@ namespace SCT_iCare.Controllers.Recepcion
             var IVAS = "";
 
             if (pago == "REFERENCIA OXXO" || pago == "Pago con Tarjeta" || pago == "Referencia OXXO" || pago == "Transferencia vía BanBajío" || tipoGestor == "EMPRESA"
-                                                 || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
+                || pago == "Mercado Pago" || pago == "Credito Empresas" || pago == "Referencia BanBajío" || pago == "Referencía BanBajío" || pago == "Banorte")
             {
                 //if (cantidadInt != 0)
                 //{
@@ -3265,7 +3298,7 @@ namespace SCT_iCare.Controllers.Recepcion
 
             if (cita.TipoPago == "Referencía BanBajío" || cita.TipoPago == "Transferencia vía BanBajío" || cita.TipoPago == "Credito Empresas"
             || cita.TipoPago == "Referencia BanBajío" || cita.TipoPago == "Banorte" || cita.TipoPago == "REFERENCIA OXXO" || cita.TipoPago == "Referencia OXXO"
-            || cita.TipoPago == "Pago con Tarjeta" || findPrecio.Tipo == "EMPRESA")
+            || cita.TipoPago == "Pago con Tarjeta" || findPrecio.Tipo == "EMPRESA" || cita.TipoPago == "Mercado Pago")
             {
                 if (tipoL == "AEREO")
                 {
@@ -4072,7 +4105,7 @@ namespace SCT_iCare.Controllers.Recepcion
             sumaEpis = episNC + episATC + episAPC;
 
             if (tipoPago == "REFERENCIA OXXO" || tipoPago == "Pago con Tarjeta" || tipoPago == "Referencia OXXO" || tipoPago == "Transferencia vía BanBajío" 
-                || tipoPago == "Credito Empresas" || tipoPago == "Referencia BanBajío" || tipoPago == "Referencía BanBajío" || tipoPago == "Banorte")
+                || tipoPago == "Credito Empresas" || tipoPago == "Referencia BanBajío" || tipoPago == "Referencía BanBajío" || tipoPago == "Banorte" || tipoPago == "Mercado Pago")
             {
                 IVA = "Si";
             }

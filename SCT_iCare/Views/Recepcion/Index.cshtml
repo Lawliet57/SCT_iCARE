@@ -524,6 +524,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                             <option value="Banorte">Banorte</option>
                                             <option value="Scotianbank">Scotianbank</option>
+                                            <option value="Mercado Pago" required>Mercado Pago</option>
                                             <option value="BanCoppel TLS">BanCoppel TLS</option>
                                             <option value="BanCoppel LC">BanCoppel LC</option>
                                             <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -541,6 +542,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             <option value="Referencia BanBajío" required>Referencia BanBajío</option>
                                             <option value="Banorte" required>Banorte</option>
                                             <option value="Scotianbank">Scotianbank</option>
+                                            <option value="Mercado Pago" required>Mercado Pago</option>
                                             <option value="BanCoppel TLS" required>BanCoppel TLS</option>
                                             <option value="BanCoppel LC" required>BanCoppel LC</option>
                                             <option value="Banco Azteca TLS" required>Banco Azteca TLS</option>
@@ -677,70 +679,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             cont_MPJS.style.display = 'none';
                                         }
                                     }
-                                </script>
-
-                                <div class="list-group" style="width:120%; min-width:320px; background-color:transparent">
-                                    <b class="list-group-item" v-for="item in listaResultados" style="background-color:transparent; border:none">
-                                        Precios Actuales del Gestor:
-                                        <br />
-                                        <br />
-                                        Tipo de EPI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Precios sin IVA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Precios con IVA
-                                        <br />
-                                        <br />
-                                        EPI Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioNormal}}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioNormalconIVA}}
-                                        <br />
-                                        EPI Aereo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereosinIVA}}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereoPistaconIVA}}
-                                        <br />
-                                        EPI Pista &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereoPista}}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereo}}
-                                    </b>
-                                </div>
+                                </script>                           
                             </div>
-
-                            <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-                            <script>
-                                var app = new Vue({
-                                    el: "#root",
-                                    data: {
-                                        txtBusqueda: '',
-                                        listaResultados: []
-                                    },
-                                    methods: {
-                                        getBusqueda() {
-                                            if (this.txtBusqueda !== '') {
-                                                let cadena = this.txtBusqueda.trim();
-                                                let cantidad = 1;
-
-                                                //PRODUCCION
-                                                //axios.get("https://qasct.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)    
-                                                //DESARROLLO
-                                                //axios.get("https://devsct1.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)  
-                                                //LOCAL
-                                                axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)
-                                                    .then(function (response) {
-                                                        console.log(response.data);
-                                                        app.listaResultados = response.data;
-                                                    }).catch(function (error) {
-                                                        console.log(error);
-                                                    })
-                                            }
-                                            else {
-                                                this.listaResultados = [];
-                                            }
-                                        }
-                                    }
-                                });
-                            </script>
 
                             <div class="form-group" id="precioTotal" style="display: none;">
                                 <h2><b>El importe total:</b></h2>
@@ -750,9 +690,6 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             <button hidden style="display:none" class="btn btn-info controlador" id="controlador" type="button"></button>
                             <input hidden type="text" id="textoSeguro">
 
-                            @*<input type="select" id="mamon">
-                                <br />
-                                <span id="spanDuplicado"></span>*@
                         }
                         else
                         {
@@ -1761,13 +1698,13 @@ else
                     @{
                         if (idRol == 2)
                         {
-                            <th>
+                            <td>
                                 @{
                                     if (item.M.Doctor != null)
                                     {
                                         <span class="field-tip">
                                             <b>@Html.DisplayFor(modelItem => item.M.Sucursal)</b>
-                                            <span class="tip-content">@item.M.Doctor</span>
+                                            <span class="tip-content" style="position:absolute">@item.M.Doctor</span>
                                         </span>
                                     }
                                     else
@@ -1775,9 +1712,7 @@ else
                                         <b>@Html.DisplayFor(modelItem => item.M.Sucursal)</b>
                                     }
                                 }
-
-                            </th>
-
+                            </td>
 
                         }
                         else
@@ -1790,7 +1725,7 @@ else
 
                     @*REFERENCIA TOOLTIP DE PRECIOS*@
                     <td>
-                        <span class="field-tip">
+                        <span class="field-tip" style="position:relative">
                             <b>@item.M.Canal</b>
                             <span class="tip-content">
                                 <b>Realiza la cita: </b>@item.M.Recepcionista <br />
@@ -1817,7 +1752,7 @@ else
 
 
                                     if (item.M.TipoPago == "REFERENCIA OXXO" || item.M.TipoPago == "Pago con Tarjeta" || item.M.TipoPago == "Referencia OXXO" || item.M.TipoPago == "Transferencia vía BanBajío"
-                                                  || item.M.TipoPago == "Credito Empresas" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
+                                                 || item.M.TipoPago == "Mercado Pago" || item.M.TipoPago == "Credito Empresas" || item.M.TipoPago == "Referencia BanBajío" || item.M.TipoPago == "Referencía BanBajío" || item.M.TipoPago == "Banorte")
                                     {
 
                                         if (item.M.TipoLicencia == "AEREO")
@@ -2245,6 +2180,7 @@ else
                                                                     <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                                     <option value="Banorte">Banorte</option>
                                                                     <option value="Scotianbank">Scotianbank</option>
+                                                                    <option value="Mercado Pago" required>Mercado Pago</option>
                                                                     <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                                     <option value="BanCoppel LC">BanCoppel LC</option>
                                                                     <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2260,6 +2196,7 @@ else
                                                                     <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                                     <option value="Banorte">Banorte</option>
                                                                     <option value="Scotianbank">Scotianbank</option>
+                                                                    <option value="Mercado Pago" required>Mercado Pago</option>
                                                                     <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                                     <option value="BanCoppel LC">BanCoppel LC</option>
                                                                     <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2394,6 +2331,7 @@ else
                                                     <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                     <option value="Banorte">Banorte</option>
                                                     <option value="Scotianbank">Scotianbank</option>
+                                                    <option value="Mercado Pago" required>Mercado Pago</option>
                                                     <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                     <option value="BanCoppel LC">BanCoppel LC</option>
                                                     <option value="Banco Azteca TLS">Banco Azteca TLS</option>
@@ -2858,6 +2796,7 @@ else
                                                         <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
                                                         <option value="Banorte">Banorte</option>
                                                         <option value="Scotianbank">Scotianbank</option>
+                                                        <option value="Mercado Pago" required>Mercado Pago</option>
                                                         <option value="BanCoppel TLS">BanCoppel TLS</option>
                                                         <option value="BanCoppel LC">BanCoppel LC</option>
                                                         <option value="Banco Azteca TLS">Banco Azteca TLS</option>
