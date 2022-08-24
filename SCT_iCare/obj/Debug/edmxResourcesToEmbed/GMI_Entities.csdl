@@ -569,7 +569,7 @@
     <Property Name="Canal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="CC" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Asistencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CancelaComentario" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CancelaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="Entregado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="ReferidoPor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CarruselMedico" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
@@ -2585,7 +2585,7 @@
     <Property Name="Canal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="CC" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Asistencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CancelaComentario" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CancelaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
     <Property Name="Entregado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="ReferidoPor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="FechaCreacion" Type="DateTime" Precision="3" />

@@ -173,6 +173,14 @@ namespace SCT_iCare.Controllers.Recepcion
             string precioEstablecido;
             var pagoAnterior = cita.TipoPago;
             var refrenciaAnterior = cita.Referencia;
+            string IVA;
+            string totalVentasIVA;
+            string haySeguro = cita.ventaSeguro != "SI" ? cita.CostoSeguro : null;
+            string totalIVA;
+            string epiIVA = cita.IVA == null ? null : cita.IVA;
+            string IVASeguro = cita.IvaSeguro != null ? cita.IvaSeguro : null;
+            string totalVentacIVA = null;
+            string totalSeguro = cita.TotalSeguro == null ? null : cita.TotalSeguro;
 
             if (tipoPago == "REFERENCIA OXXO" || tipoPago == "Pago con Tarjeta" || tipoPago == "Referencia OXXO" || tipoPago == "Transferencia vía BanBajío" 
                 || tipoPago == "Mercado Pago" || tipoPago == "Credito Empresas" || tipoPago == "Referencia BanBajío" || tipoPago == "Referencía BanBajío" || tipoPago == "Banorte")
@@ -190,6 +198,8 @@ namespace SCT_iCare.Controllers.Recepcion
                     precioEstablecido = referidoTipo.PrecioNormalconIVA;
                 }
 
+                IVA = (Convert.ToDouble(precioEstablecido) - (Convert.ToDouble(precioEstablecido) / 1.16)).ToString("####.##");
+                epiIVA = IVA;
                 precioEstablecido = (Convert.ToDouble(precioEstablecido) / 1.16).ToString("####.##");
             }
             else
@@ -206,8 +216,43 @@ namespace SCT_iCare.Controllers.Recepcion
                 {
                     precioEstablecido = referidoTipo.PrecioNormal;
                 }
+
+                IVA = null;
+                epiIVA = IVA;
             }
 
+            if (haySeguro == null)
+            {
+                totalVentasIVA = precioEstablecido;
+            }
+            else
+            {
+                totalVentasIVA = (Convert.ToDouble(precioEstablecido) + Convert.ToDouble(haySeguro)).ToString("####.##");
+            }
+
+            if (epiIVA == null && IVASeguro == null)
+            {
+                totalIVA = null;
+                totalVentacIVA =  (Convert.ToDouble(totalVentasIVA) + Convert.ToDouble(IVA)).ToString("####.##");
+            }
+            else
+            {
+                totalIVA = (Convert.ToDouble(IVA) + Convert.ToDouble(IVASeguro)).ToString("####.##");
+                totalVentacIVA = (Convert.ToDouble(precioEstablecido) + Convert.ToDouble(IVA) + Convert.ToDouble(totalSeguro)).ToString("####.##");
+            }
+
+            if (referidoTipo.Tipo != "OTRO")
+            {
+                cita.CostoSeguro = null;
+                cita.ventaSeguro = null;
+                cita.TotalSeguro = null;
+                cita.IvaSeguro = null;
+            }
+
+            cita.TotalIVA = totalIVA; 
+            cita.TotalVentaIVA = totalVentacIVA;
+            cita.TotalVenta = totalVentasIVA;
+            cita.IVA = IVA;
             cita.Venta = precioEstablecido;
             cita.CC = referidoTipo.Tipo;
             cita.CanalTipo = referidoTipo.Tipo;            
@@ -233,6 +278,15 @@ namespace SCT_iCare.Controllers.Recepcion
 
             if (condensadoPaciente != null)
             {
+                condensadoPaciente.CostoSeguro = tablaCita.CostoSeguro;
+                condensadoPaciente.ventaSeguro = tablaCita.ventaSeguro;
+                condensadoPaciente.TotalSeguro = tablaCita.TotalSeguro;
+                condensadoPaciente.IvaSeguro = tablaCita.IvaSeguro;
+                condensadoPaciente.TotalIVA = tablaCita.TotalIVA;
+                condensadoPaciente.TotalVentaIVA = tablaCita.TotalVentaIVA;
+                condensadoPaciente.TotalVenta = tablaCita.TotalVenta;
+                condensadoPaciente.IVA = tablaCita.IVA;
+                condensadoPaciente.Venta = tablaCita.Venta;
                 condensadoPaciente.CC = tablaCita.CC;
                 condensadoPaciente.CanalTipo = tablaCita.CanalTipo;
                 condensadoPaciente.ReferidoPor = tablaCita.ReferidoPor;

@@ -294,15 +294,22 @@
                     </td>
 
                     @*PLAN*@
-                    <td style="text-align: center; border-right: none">
-                        @{
-                            metaMuestra = (Convert.ToDouble(Convert.ToDouble(metaTotal) / 30) * fechaPlan.Day);
-                            metaPorcentaje = 100 / metaAs;
-                            metaVisual = Convert.ToInt32((Convert.ToInt32(metaMuestra) / metaAs));
-                        }
-                        <b class="pull-right">@metaVisual</b>@*<span class="pull-right" style="font-size:small">@metaPorcentaje.ToString("##.##")%</span>*@
+                <td style="text-align: center; border-right: none">
+                    @{
+                        metaMuestra = (Convert.ToDouble(Convert.ToDouble(metaTotal) / 30) * fechaPlan.Day);
+                        metaPorcentaje = 100 / metaAs;
+                        metaVisual = Convert.ToInt32((Convert.ToInt32(metaMuestra) / metaAs));
+                        metaMuestra = 0;
 
-                    </td>
+                        int metaCero = 0;
+
+                        @*META REAL DIVIDIDA*@
+                        @*<b class="pull-right">@metaVisual</b>*@
+
+                        @*META AJUSTADA A 0*@
+                        <b class="pull-right"> @metaCero</b>
+                    }
+                </td>
 
                     <td style="text-align: center; border-right: none; border-left: none">
                         <span style="font-size:small; text-align:center">@Convert.ToDouble(metaPorcentaje).ToString("##.##")&zwnj;</span>
