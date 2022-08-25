@@ -220,14 +220,14 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
             cont_controlador = document.getElementById("controlador");
 
             if (cont_checkBox.checked) {
-                cont_textoSeguro.value = "SI";                
+                cont_textoSeguro.value = "SI";
                 cont_controlador.click();
             }
             else {
-                cont_textoSeguro.value  = "NO";
+                cont_textoSeguro.value = "NO";
                 cont_controlador.click();
-            }            
-        }      
+            }
+        }
     </script>
 
     <script>
@@ -620,9 +620,9 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                     }
                                 </select>
 
-                                <br/>
+                                <br />
 
-                               <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                                <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
                                 <div class="form-group" id="content_checkbox_seguro" style="display: none;">
                                     <label>Usted cuenta con un seguro de 3 meses</label>
                                     <input id='cb_12meses' onclick="usarCheck()" type='checkbox' name="cb_Seguro" value="SI" />
@@ -680,69 +680,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                         }
                                     }
                                 </script>
-
-                                <div class="list-group" style="width:120%; min-width:320px; background-color:transparent">
-                                    <b class="list-group-item" v-for="item in listaResultados" style="background-color:transparent; border:none">
-                                        Precios Actuales del Gestor:
-                                        <br />
-                                        <br />
-                                        Tipo de EPI &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Precios sin IVA &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  Precios con IVA
-                                        <br />
-                                        <br />
-                                        EPI Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioNormal}}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioNormalconIVA}}
-                                        <br />
-                                        EPI Aereo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereosinIVA}}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereoPistaconIVA}}
-                                        <br />
-                                        EPI Pista &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereoPista}}
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                        ${{item.PrecioAereo}}
-                                    </b>
-                                </div>
                             </div>
-
-                            <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js" integrity="sha512-odNmoc1XJy5x1TMVMdC7EMs3IVdItLPlCeL5vSUPN2llYKMJ2eByTTAIiiuqLg+GdNr9hF6z81p27DArRFKT7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-                            <script>
-                                var app = new Vue({
-                                    el: "#root",
-                                    data: {
-                                        txtBusqueda: '',
-                                        listaResultados: []
-                                    },
-                                    methods: {
-                                        getBusqueda() {
-                                            if (this.txtBusqueda !== '') {
-                                                let cadena = this.txtBusqueda.trim();
-                                                let cantidad = 1;
-
-                                                //PRODUCCION
-                                                axios.get("https://qasct.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)    
-                                                //DESARROLLO
-                                                //axios.get("https://devsct1.medicinagmi.mx/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)  
-                                                //LOCAL
-                                                //axios.get("https://localhost:44385/Recepcion/buscarGestor?nombre=" + cadena + "&cantidad=" + cantidad)
-                                                    .then(function (response) {
-                                                        console.log(response.data);
-                                                        app.listaResultados = response.data;
-                                                    }).catch(function (error) {
-                                                        console.log(error);
-                                                    })
-                                            }
-                                            else {
-                                                this.listaResultados = [];
-                                            }
-                                        }
-                                    }
-                                });
-                            </script>
 
                             <div class="form-group" id="precioTotal" style="display: none;">
                                 <h2><b>El importe total:</b></h2>
@@ -1760,13 +1698,13 @@ else
                     @{
                         if (idRol == 2)
                         {
-                            <th>
+                            <td>
                                 @{
                                     if (item.M.Doctor != null)
                                     {
                                         <span class="field-tip">
                                             <b>@Html.DisplayFor(modelItem => item.M.Sucursal)</b>
-                                            <span class="tip-content">@item.M.Doctor</span>
+                                            <span class="tip-content" style="position:absolute">@item.M.Doctor</span>
                                         </span>
                                     }
                                     else
@@ -1774,9 +1712,7 @@ else
                                         <b>@Html.DisplayFor(modelItem => item.M.Sucursal)</b>
                                     }
                                 }
-
-                            </th>
-
+                            </td>
 
                         }
                         else
@@ -1789,7 +1725,7 @@ else
 
                     @*REFERENCIA TOOLTIP DE PRECIOS*@
                     <td>
-                        <span class="field-tip">
+                        <span class="field-tip" style="position:relative">
                             <b>@item.M.Canal</b>
                             <span class="tip-content">
                                 <b>Realiza la cita: </b>@item.M.Recepcionista <br />
@@ -1821,7 +1757,7 @@ else
 
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br/>
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br />
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {

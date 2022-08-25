@@ -73,7 +73,7 @@
     //}
 
     var canales = db.Canales.Where(w => w.NombreCanal != "GESTOR ALT" && w.NombreCanal != "IN SITU");
-    var canales1 = db.Canales.Where(w => w.NombreCanal == "GESTOR ALT" || w.NombreCanal == "IN SITU");
+    var canales1 = db.Canales.Where(w => w.NombreCanal == "GESTOR ALT");
 
     int metaTotal = 0;
     int realizadoTotal = 0;
