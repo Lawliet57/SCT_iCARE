@@ -273,7 +273,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     miResultado = "<h3>No se encontraron registros!!</h3>"
                 }
                 else {
-                    miResultado +=  "<tr class=\"bg-primary\"><th>Nombre</th><th>Sucursal</th><th>Tipo Tramite</th><th>Tipo Licencia</th><th>Estatus Dictamen</th><th>Fecha Cita</th><th></th></tr>"
+                    miResultado +=  "<tr class=\"bg-primary\"><th>Nombre</th><th>Sucursal</th><th>Tipo Tramite</th><th>Tipo Licencia</th><th>Estatus Dictamen</th><th>Fecha Cita</th><th>Acciones</th></tr>"
                     for (let i = 0; i < data.length; i++) {
 
                         if (data[i].EstatusDictamen == null) {
@@ -284,6 +284,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 "<td><b>" + data[i].TipoLicencia + "</b></td>" +
                                 "<td><b>Pendiente</b></td>" +
                                 "<td><b>" + data[i].FechaCita + "</b></td>" +
+                                "<td><button type=\"button\" class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">Acciones<span class=\"glyphicon glyphicon-triangle-bottom\"></span></button ></td > " +
                                 "</tr>"
 
                         } else {
@@ -294,6 +295,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 "<td><b>" + data[i].TipoLicencia + "</b></td>" +
                                 "<td><b>" + data[i].EstatusDictamen + "</b></td>" +
                                 "<td><b>" + data[i].FechaCita + "</b></td>" +
+                                 "<td><button type=\"button\" class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">Acciones<span class=\"glyphicon glyphicon-triangle-bottom\"></span></button ></td > " +
                                 "</tr>"
 
                         }
@@ -2350,8 +2352,8 @@ else
                                                 <input type="text" class="form-control" name="referencia" placeholder="@item.M.Referencia" />
                                             </div>
                                             <div class="form-group">
-                                                <input type="hidden" name="id" value="@item.M.idCita" />
                                                 <input type="hidden" name="ide" value="@item.M.idPaciente" />
+                                                <input type="hidden" name="id" value="@item.M.idCita" />
                                                 <input type="hidden" name="gestorAnterior" value="@item.M.ReferidoPor" />
                                                 <input type="hidden" name="usuario" value="@nombreUsuario" />
                                             </div>

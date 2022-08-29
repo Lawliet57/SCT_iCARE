@@ -220,14 +220,14 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
             cont_controlador = document.getElementById("controlador");
 
             if (cont_checkBox.checked) {
-                cont_textoSeguro.value = "SI";
+                cont_textoSeguro.value = "SI";                
                 cont_controlador.click();
             }
             else {
-                cont_textoSeguro.value = "NO";
+                cont_textoSeguro.value  = "NO";
                 cont_controlador.click();
-            }
-        }
+            }            
+        }      
     </script>
 
     <script>
@@ -237,7 +237,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                 var episN = $("#contador").val();
                 var episAT = $("#contador0").val();
                 var episAP = $("#contador00").val();
-                var gestorId = $("#referidoPor").val();
+                var gestorId = $("#numeroGestor").val();
                 var tipoPago = $("#pago").val();
                 var seguro = $("#textoSeguro").val();
                 var data = { episN: episN, episAT: episAT, episAP: episAP, gestorId: gestorId, tipoPago: tipoPago, seguro: seguro };
@@ -562,10 +562,12 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             </div>
 
                             @*CAMPO REQUERIDO PARA SELECTORES*@
-                            <div class="form-group" id="root" style="width:60%; min-width:320px">
+                            <div class="form-group" style="width:60%; min-width:320px">
                                 <label for="recipient-name" class="form-select" required>Referido por:</label>
-                                <select id="referidoPor" onchange="triggerListaPrecios()" v-model="txtBusqueda" v-on:change="getBusqueda()" list="listaNombres" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-                                    <option disabled selected value="">SELECCIONAR</option>
+                                <br/>
+                                <input id="datalistReferido" onchange="triggerListaPrecios()" list="lista" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" required/>
+                                <datalist id="lista">
+                                    
                                     @{
                                         //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
                                         var referidosGestor = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
@@ -574,55 +576,57 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                         var referidosOtro = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
                                         var referidosSindicato = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
 
-                                        <option disabled>--------GESTORES--------</option>
                                         foreach (var item in referidosGestor)
                                         {
-                                            <option value="@item.idReferido">@item.Nombre</option>
+                                            <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (GESTOR)"></option>
                                         }
 
-                                        <option disabled><b>--------EMPRESAS--------</b></option>
                                         foreach (var item in referidosEmpresa)
                                         {
-                                            <option value="@item.idReferido">@item.Nombre</option>
+                                            <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (EMPRESA)"></option>
                                         }
 
-                                        <option disabled><b>--------SINDICATOS--------</b></option>
                                         foreach (var item in referidosSindicato)
                                         {
-                                            <option value="@item.idReferido">@item.Nombre</option>
+                                            <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (SINDICATO)"></option>
                                         }
 
-                                        <option disabled><b>----MEDIOS DIGITALES----</b></option>
                                         foreach (var item in referidosMD)
                                         {
-                                            <option value="@item.idReferido">@item.Nombre</option>
+                                            <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (MEDIOS DIGITALES)"></option>
                                         }
 
                                         if (Recepcion == 2)
                                         {
-                                            <option disabled><b>--------OTROS--------</b></option>
-                                            <option value="167">FUERZA DE VENTAS BB</option>
-                                            <option value="6">PUBLICIDAD</option>
-                                            <option value="5">RECOMENDADO</option>
-                                            <option value="168">SUCURSAL SATELITE</option>
+                                            <option data-ejemplo="167" value="FUERZA DE VENTAS BB &nbsp; (OTROS)"></option>
+                                            <option data-ejemplo="6" value="PUBLICIDAD &nbsp; (OTROS)"></option>
+                                            <option data-ejemplo="5" value="RECOMENDADO &nbsp; (OTROS)"></option>
+                                            <option data-ejemplo="168" value="SUCURSAL SATELITE &nbsp; (OTROS)"></option>
 
                                         }
                                         else
                                         {
-                                            <option disabled><b>--------OTROS--------</b></option>
                                             foreach (var item in referidosOtro)
                                             {
-                                                <option value="@item.idReferido">@item.Nombre</option>
+                                                <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (OTROS)"></option>
                                             }
                                         }
-
-
                                     }
-                                </select>
+                                </datalist>
 
-                                <br />
+                                <input hidden type="text" id="numeroGestor" name="referido"  value="">
 
-                                <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                                <script>
+                                    $("#datalistReferido").on('input', function () {
+                                        var val = $('#datalistReferido').val();
+                                        var ejemplo = $('#lista').find('option[value="' + val + '"]').data('ejemplo');
+                                        var estaSi = $('#numeroGestor').val(ejemplo);
+                                    });
+                                </script>
+
+                                <br/>
+
+                               <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
                                 <div class="form-group" id="content_checkbox_seguro" style="display: none;">
                                     <label>Usted cuenta con un seguro de 3 meses</label>
                                     <input id='cb_12meses' onclick="usarCheck()" type='checkbox' name="cb_Seguro" value="SI" />
@@ -652,7 +656,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                         cont_controlador.click();
 
                                         /* Para obtener el valor */
-                                        var cod = document.getElementById("referidoPor").value;
+                                        var cod = document.getElementById("numeroGestor").value;
 
                                         if (cod != null) {
                                             cont_precioTotal.style.display = 'block';
@@ -669,7 +673,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                         }
 
                                         /* Para obtener el valor */
-                                        var MPJS = document.getElementById("referidoPor").value;
+                                        var MPJS = document.getElementById("numeroGestor").value;
 
                                         if (MPJS != null && MPJS != "") {
                                             cont_MPJS.style.display = 'block';
@@ -679,7 +683,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             cont_MPJS.style.display = 'none';
                                         }
                                     }
-                                </script>
+                                </script>                           
                             </div>
 
                             <div class="form-group" id="precioTotal" style="display: none;">
@@ -1757,7 +1761,7 @@ else
 
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br />
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br/>
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {
@@ -2346,8 +2350,8 @@ else
                                                 <input type="text" class="form-control" name="referencia" placeholder="@item.M.Referencia" />
                                             </div>
                                             <div class="form-group">
-                                                <input type="hidden" name="id" value="@item.M.idCita" />
                                                 <input type="hidden" name="ide" value="@item.M.idPaciente" />
+                                                <input type="hidden" name="id" value="@item.M.idCita" />
                                                 <input type="hidden" name="gestorAnterior" value="@item.M.ReferidoPor" />
                                                 <input type="hidden" name="usuario" value="@nombreUsuario" />
                                             </div>

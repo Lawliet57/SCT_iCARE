@@ -301,7 +301,10 @@ namespace SCT_iCare.Controllers.Recepcion
                 }
             }
 
-            byte[] bytesTicket = null;
+
+            Tickets ticketP = new Tickets();
+
+            byte[] bytes = null;
 
             var consultaTicket = db.Tickets.Where(w => w.idPaciente == ide).Select(s => new { s.idPaciente, s.idTicket }).FirstOrDefault();
 
@@ -309,43 +312,27 @@ namespace SCT_iCare.Controllers.Recepcion
             {
                 var fileName = Path.GetFileName(ticket.FileName);
 
-                byte[] bytes;
+                byte[] bytes2;
+
                 using (BinaryReader br = new BinaryReader(ticket.InputStream))
                 {
-                    bytes = br.ReadBytes(ticket.ContentLength);
+                    bytes2 = br.ReadBytes(ticket.ContentLength);
+
+                    bytes = bytes2;
                 }
 
-                bytesTicket = bytes;
+                ticketP.Ticket = bytes;
+                ticketP.idPaciente = Convert.ToInt32(ide);
+                ticketP.FechaCarga = DateTime.Now;
 
-                if (consultaTicket != null)
+                if(consultaTicket == null)
                 {
-                    Tickets ticketArchivo = db.Tickets.Find(consultaTicket.idTicket);
-
-                    ticketArchivo.FechaCarga = DateTime.Now;
-                    ticketArchivo.idPaciente = Convert.ToInt32(id);
-                    ticketArchivo.Ticket = bytesTicket;
-
                     if (ModelState.IsValid)
                     {
-                        db.Entry(ticketArchivo).State = EntityState.Modified;
+                        db.Tickets.Add(ticketP);
                         db.SaveChanges();
                     }
-                }
-                else
-                {
-                    Tickets ticketArchivo = new Tickets();
-
-                    ticketArchivo.FechaCarga = DateTime.Now;
-                    ticketArchivo.idPaciente = Convert.ToInt32(id);
-                    ticketArchivo.Ticket = bytesTicket;
-
-                    if (ModelState.IsValid)
-                    {
-                        db.Tickets.Add(ticketArchivo);
-                        db.SaveChanges();
-                    }
-                }
-
+                }             
             }
 
             return Redirect("Index");
@@ -3170,29 +3157,6 @@ namespace SCT_iCare.Controllers.Recepcion
             string tipoT, string curp, DateTime? fecha, HttpPostedFileBase ticket, HttpPostedFileBase ticket_Seguro, HttpPostedFileBase fileSeguro)
         {
 
-            //var noExpedienteRepetido = (from i in db.Cita where i.NoExpediente == numero orderby i.idCita descending select i).FirstOrDefault();
-
-            //if (noExpedienteRepetido != null && noExpedienteRepetido.CancelaComentario != "Sobreescrito")
-            //{
-            //    var capturaRepetida = (from i in db.Captura where i.idPaciente == noExpedienteRepetido.idPaciente orderby i.idCaptura descending select i).FirstOrDefault();
-
-            //    if (capturaRepetida != null && capturaRepetida.EstatusCaptura != "Terminado")
-            //    {
-            //        TempData["idCaptura"] = capturaRepetida.idCaptura;
-            //        return Redirect("Index");
-            //    }
-            //    else
-            //    {
-            //        TempData["idPaciente"] = id;
-            //        TempData["Doctor"] = doctor;
-            //        TempData["TipoLicencia"] = tipoL;
-            //        TempData["TipoTramite"] = tipoT;
-
-            //        return Redirect("Index");
-            //    }
-            //}
-
-            //EPI epi = db.EPI.Find(id);
             TicketSeguro ticketSeguro = new TicketSeguro();
 
             byte[] bytesSeguroIn = null;
@@ -3202,6 +3166,7 @@ namespace SCT_iCare.Controllers.Recepcion
                 var fileName = Path.GetFileName(fileSeguro.FileName);
 
                 byte[] bytesSeguroOut;
+
                 using (BinaryReader br = new BinaryReader(fileSeguro.InputStream))
                 {
                     bytesSeguroOut = br.ReadBytes(fileSeguro.ContentLength);
@@ -3219,11 +3184,13 @@ namespace SCT_iCare.Controllers.Recepcion
                 }
             }
 
+
             int ide = Convert.ToInt32(id);
 
             SCT_iCare.Expedientes exp = new SCT_iCare.Expedientes();
             var cita = (from c in db.Cita where c.idPaciente == ide select c).FirstOrDefault();
             var paciente = (from p in db.Paciente where p.idPaciente == ide select p).FirstOrDefault();
+
             Captura captura = new Captura();
 
             byte[] bytes2 = null;
@@ -3239,12 +3206,6 @@ namespace SCT_iCare.Controllers.Recepcion
                 }
 
                 bytes2 = bytes;
-
-                //var bytesBinary = bytes;
-                //Response.ContentType = "application/pdf";
-                //Response.AddHeader("content-disposition", "attachment;filename=MyPDF.pdf");
-                //Response.BinaryWrite(bytesBinary);
-                //Response.End();
             }
 
             byte[] bytesTicket = null;
