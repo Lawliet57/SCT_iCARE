@@ -639,12 +639,6 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                     </label>
                                 </div>
 
-                                @*//PRECIO INGRESADO*@
-
-                                @*<label for="recipient-name" class="form-select" required>Ingrese el total Pagado por el cliente:</label>
-                                    <input type="number" min="0" max="9999" class="form-control" id="precioIng" name="precioIngresado" required />
-                                    <br />*@
-
                                 @*//SCRIPT PARA OCULTAR CHECKBOX*@
 
                                 <script type="text/javascript">
@@ -867,6 +861,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
     calcular00();
 </script>
 
+
+@*CREAR REFEENCIA*@
 <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -979,8 +975,9 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     @*CAMPO REQUERIDO PARA SELECTORES*@
                     <div class="form-group" style="width:60%; min-width:320px">
                         <label for="recipient-name" class="form-select" required>Referido por:</label>
-                        <select id="referidoPor_1" onchange="ShowSelected_1();" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-                            <option disabled selected value="">SELECCIONAR</option>
+                        <br />
+                        <input id="datalistReferido_1" onchange="ShowSelected_1()" list="lista_1" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" required />
+                        <datalist id="lista_1">
                             @{
                                 //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
                                 var referidosGestor1 = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
@@ -989,38 +986,66 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                 var referidosOtro1 = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
                                 var referidosSindicato1 = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
 
-                                <option disabled>--------GESTORES--------</option>
                                 foreach (var item in referidosGestor1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (GESTOR)"></option>
                                 }
 
-                                <option disabled><b>--------EMPRESAS--------</b></option>
                                 foreach (var item in referidosEmpresa1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (EMPRESA)"></option>
                                 }
 
-                                <option disabled><b>--------SINDICATOS--------</b></option>
                                 foreach (var item in referidosSindicato1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (SINDICATO)"></option>
                                 }
 
-                                <option disabled><b>----MEDIOS DIGITALES----</b></option>
                                 foreach (var item in referidosMD1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (MEDIOS DIGITALES)"></option>
                                 }
 
-                                <option disabled><b>--------OTROS--------</b></option>
-                                foreach (var item in referidosOtro1)
+                                if (Recepcion == 2)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="167" value="FUERZA DE VENTAS BB &nbsp; (OTROS)"></option>
+                                    <option data-ejemplo="6" value="PUBLICIDAD &nbsp; (OTROS)"></option>
+                                    <option data-ejemplo="5" value="RECOMENDADO &nbsp; (OTROS)"></option>
+                                    <option data-ejemplo="168" value="SUCURSAL SATELITE &nbsp; (OTROS)"></option>
+
+                                }
+                                else
+                                {
+                                    foreach (var item in referidosOtro1)
+                                    {
+                                        <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (OTROS)"></option>
+                                    }
                                 }
                             }
-                        </select>
+                        </datalist>
+
+                        <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                        <div class="form-group" id="content_checkbox_seguro_1" style="display: none;">
+                            <input id='cb_12mesesOrden' type='checkbox' name="cb_Seguro" value="SI" />
+                            <label for='cb_12mesesOrden'>
+                                <span></span>
+                                Extender el seguro a 12 meses
+                                <ins><i>Extender el seguro a 12 meses</i></ins>
+                            </label>
+                        </div>
                     </div>
+
+                    <input hidden type="text" id="numeroGestor_1" name="referido" value="">
+
+                    <script>
+                        $("#datalistReferido_1").on('input', function () {
+                            var val = $('#datalistReferido_1').val();
+                            var ejemplo = $('#lista_1').find('option[value="' + val + '"]').data('ejemplo');
+                            var estaSi = $('#numeroGestor_1').val(ejemplo);
+                        });
+                    </script>
+
+                    <br />
 
                     <script type="text/javascript">
                         function ShowSelected_1() {
@@ -1028,7 +1053,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             cont_cb_seguro = document.getElementById("content_checkbox_seguro_1");
 
                             /* Para obtener el valor */
-                            var cod = document.getElementById("referidoPor_1").value;
+                            var cod = document.getElementById("numeroGestor_1").value;
 
                             if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
                                 cont_cb_seguro.style.display = 'block';
@@ -1039,24 +1064,15 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         }
                     </script>
 
-                    <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
-                    <div class="form-group" id="content_checkbox_seguro_1" style="display: none;">
-                        <input id='cb_12mesesOrden' type='checkbox' name="cb_Seguro" value="SI" />
-                        <label for='cb_12mesesOrden'>
-                            <span></span>
-                            Extender el seguro a 12 meses
-                            <ins><i>Extender el seguro a 12 meses</i></ins>
-                        </label>
-                    </div>
-
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                <input type="submit" value="Enviar" class="btn btn-primary" />
-            </div></form>
+                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <input type="submit" value="Enviar" class="btn btn-primary" />
+                </div>
         </div>
     </div>
 </div>
+</form>
 
 
 <script type="text/javascript">
@@ -1194,6 +1210,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
     calcular111();
 </script>
 
+
+@*PAGO CON TARJETA*@
 <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -1308,42 +1326,71 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     @*CAMPO REQUERIDO PARA SELECTORES*@
                     <div class="form-group" style="width:60%; min-width:320px">
                         <label for="recipient-name" class="form-select" required>Referido por:</label>
-                        <select id="referidoPor_2" onchange="ShowSelected_2();" name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-control" required>
-                            <option disabled selected value="">SELECCIONAR</option>
+                        <br />
+                        <input id="datalistReferido_2" onchange="ShowSelected_2()" list="lista_2" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" required />
+                        <datalist id="lista_2">
                             @{
-                                //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
-                                <option disabled>--------GESTORES--------</option>
+
                                 foreach (var item in referidosGestor1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (GESTOR)"></option>
                                 }
 
-                                <option disabled><b>--------EMPRESAS--------</b></option>
                                 foreach (var item in referidosEmpresa1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (EMPRESA)"></option>
                                 }
 
-                                <option disabled><b>--------SINDICATOS--------</b></option>
                                 foreach (var item in referidosSindicato1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (SINDICATO)"></option>
                                 }
 
-                                <option disabled><b>----MEDIOS DIGITALES----</b></option>
                                 foreach (var item in referidosMD1)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (MEDIOS DIGITALES)"></option>
                                 }
 
-                                <option disabled><b>--------OTROS--------</b></option>
-                                foreach (var item in referidosOtro1)
+                                if (Recepcion == 2)
                                 {
-                                    <option value="@item.idReferido">@item.Nombre</option>
+                                    <option data-ejemplo="167" value="FUERZA DE VENTAS BB &nbsp; (OTROS)"></option>
+                                    <option data-ejemplo="6" value="PUBLICIDAD &nbsp; (OTROS)"></option>
+                                    <option data-ejemplo="5" value="RECOMENDADO &nbsp; (OTROS)"></option>
+                                    <option data-ejemplo="168" value="SUCURSAL SATELITE &nbsp; (OTROS)"></option>
+
+                                }
+                                else
+                                {
+                                    foreach (var item in referidosOtro1)
+                                    {
+                                        <option data-ejemplo="@item.idReferido" value="@item.Nombre &nbsp; (OTROS)"></option>
+                                    }
                                 }
                             }
-                        </select>
+                        </datalist>
+
+                        <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                        <div class="form-group" id="content_checkbox_seguro_2" style="display: none;">
+                            <input id='cb_12mesesTarjeta' type='checkbox' name="cb_Seguro" value="SI" />
+                            <label for='cb_12mesesTarjeta'>
+                                <span></span>
+                                Extender el seguro a 12 meses
+                                <ins><i>Extender el seguro a 12 meses</i></ins>
+                            </label>
+                        </div>
                     </div>
+
+                    <input hidden type="text" id="numeroGestor_2" name="referido" value="">
+
+                    <script>
+                        $("#datalistReferido_2").on('input', function () {
+                            var val = $('#datalistReferido_2').val();
+                            var ejemplo = $('#lista_2').find('option[value="' + val + '"]').data('ejemplo');
+                            var estaSi = $('#numeroGestor_2').val(ejemplo);
+                        });
+                    </script>
+
+                    <br />
 
                     <script type="text/javascript">
                         function ShowSelected_2() {
@@ -1351,7 +1398,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             cont_cb_seguro = document.getElementById("content_checkbox_seguro_2");
 
                             /* Para obtener el valor */
-                            var cod = document.getElementById("referidoPor_2").value;
+                            var cod = document.getElementById("numeroGestor_2").value;
 
                             if (cod == 4 || cod == 5 || cod == 6 || cod == 167 || cod == 168 || cod == 190) {
                                 cont_cb_seguro.style.display = 'block';
@@ -1362,18 +1409,8 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         }
                     </script>
 
-                    <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
-                    <div class="form-group" id="content_checkbox_seguro_2" style="display: none;">
-                        <input id='cb_12mesesTarjeta' type='checkbox' name="cb_Seguro" value="SI" />
-                        <label for='cb_12mesesTarjeta'>
-                            <span></span>
-                            Extender el seguro a 12 meses
-                            <ins><i>Extender el seguro a 12 meses</i></ins>
-                        </label>
-                    </div>
 
-
-            </div>
+</div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
