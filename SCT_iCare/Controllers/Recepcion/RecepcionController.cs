@@ -181,6 +181,7 @@ namespace SCT_iCare.Controllers.Recepcion
             string IVASeguro = cita.IvaSeguro != null ? cita.IvaSeguro : null;
             string totalVentacIVA = null;
             string totalSeguro = cita.TotalSeguro == null ? null : cita.TotalSeguro;
+            string precioEpiCompleto;
 
             if (tipoPago == "REFERENCIA OXXO" || tipoPago == "Pago con Tarjeta" || tipoPago == "Referencia OXXO" || tipoPago == "Transferencia vía BanBajío" 
                 || tipoPago == "Mercado Pago" || tipoPago == "Credito Empresas" || tipoPago == "Referencia BanBajío" || tipoPago == "Referencía BanBajío" || tipoPago == "Banorte")
@@ -198,6 +199,7 @@ namespace SCT_iCare.Controllers.Recepcion
                     precioEstablecido = referidoTipo.PrecioNormalconIVA;
                 }
 
+                precioEpiCompleto = precioEstablecido;
                 IVA = (Convert.ToDouble(precioEstablecido) - (Convert.ToDouble(precioEstablecido) / 1.16)).ToString("####.##");
                 epiIVA = IVA;
                 precioEstablecido = (Convert.ToDouble(precioEstablecido) / 1.16).ToString("####.##");
@@ -217,6 +219,7 @@ namespace SCT_iCare.Controllers.Recepcion
                     precioEstablecido = referidoTipo.PrecioNormal;
                 }
 
+                precioEpiCompleto = precioEstablecido;
                 IVA = null;
                 epiIVA = IVA;
             }
@@ -253,6 +256,7 @@ namespace SCT_iCare.Controllers.Recepcion
             cita.TotalVentaIVA = totalVentacIVA;
             cita.TotalVenta = totalVentasIVA;
             cita.IVA = IVA;
+            cita.PrecioEpi = precioEpiCompleto;
             cita.Venta = precioEstablecido;
             cita.CC = referidoTipo.Tipo;
             cita.CanalTipo = referidoTipo.Tipo;            

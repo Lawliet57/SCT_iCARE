@@ -270,6 +270,8 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
             {
                 var itemd = (from findGestor in referidoAlt select findGestor).FirstOrDefault();
 
+                fechaFinal = fechaFinal.AddDays(1).AddMinutes(-1);
+
                 int gestoresNoNullosAlt = (from i in modelo1 where i.CanalTipo == itemd.Tipo && i.ReferidoPor == itemd.Nombre && i.EstatusCaptura == "Terminado" && i.FechaCita >= fechaInicio && i.FechaCita < fechaFinal select i).Count();
 
                 if (gestoresNoNullosAlt != 0)
@@ -341,6 +343,7 @@ Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido
                         @*INGRESO DEL MES*@
                         <td>
                             @{
+                                fechaFinal = fechaFinal.AddDays(1).AddMinutes(-1);
 
                                 var pG = (from i in db.PagosGestores where i.idReferido == itemd.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal select i);
 

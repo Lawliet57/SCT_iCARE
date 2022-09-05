@@ -506,13 +506,15 @@ namespace SCT_iCare.Controllers.Contabilidad
 
             var modelonNormal = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null && s.A.M.TipoPago == "Pendiente de pago"
-&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Cuenta == "CUENTAS X COBRAR" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).OrderBy(o => o.A.M.FechaCita);
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null && (s.A.M.TipoPago == "Pendiente de pago" || s.A.M.TipoPago == "Credito Empresas")
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && (s.A.M.Cuenta == "CUENTAS X COBRAR"  || s.A.M.Cuenta == "CORPORATIVO")
+&& s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).OrderBy(o => o.A.M.FechaCita);
 
             var modelonNormalCount = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
 Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null && s.A.M.TipoPago == "Pendiente de pago"
-&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Cuenta == "CUENTAS X COBRAR" && s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).Count();
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.CanalTipo.Contains(referido.Tipo) && s.A.M.ConciliarPago == null && (s.A.M.TipoPago == "Pendiente de pago" || s.A.M.TipoPago == "Credito Empresas")
+&& s.A.M.ReferidoPor.Contains(referido.Nombre) && s.A.M.TipoTramite != "REVALORACIÓN" && (s.A.M.Cuenta == "CUENTAS X COBRAR" || s.A.M.Cuenta == "CORPORATIVO")
+&& s.A.M.FechaCita >= fecha1 && s.A.M.FechaCita <= fecha2).Count();
 
             var pG = (from i in db.PagosGestores where i.idReferido == referido.idReferido && i.Fecha >= fechaInicio && i.Fecha < fechaFinal && i.EfectivoUsado == null select i);
             var saldoTotal = 0;
