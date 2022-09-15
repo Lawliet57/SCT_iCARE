@@ -1,0 +1,196 @@
+﻿@model IEnumerable<SCT_iCare.Controllers.Recepcion.RecepcionController.Persona>
+
+@{
+    GMIEntities db = new GMIEntities();
+
+    var oUser = (Usuarios)HttpContext.Current.Session["User"];
+
+    string nombreUsuario = null;
+    int idUser = 14;
+    int? idRol = 0;
+
+    if (oUser != null)
+    {
+        idUser = oUser.idUsuario;
+        nombreUsuario = oUser.Nombre;
+        idRol = oUser.idRol;
+    }
+}
+
+<table class="table tablas table-responsive" style="color:#2F2D6B">
+    <tr class="bg-primary">
+        <th>
+            <label>Nombre</label>
+        </th>
+        <th>
+            <label>Sucursal</label>
+        </th>
+        <th>
+            <label>Tipo Tramite</label>
+        </th>
+        <th>
+            <label>Tipo Licencia</label>
+        </th>
+        <th>
+            <label>Estatus Dictamen</label>
+        </th>
+        <th>
+            <label>Fecha Cita</label>
+        </th>
+        <th>
+            <label>Acciones</label>
+        </th>
+        <th></th>
+    </tr>
+
+    @{
+        foreach (var item in Model)
+        {
+            <tr style="border:1px solid gray">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Sucursal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoTramite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoLicencia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EstatusDictamen)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaCita)
+                </td>
+                <td>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                        </button>
+
+                        <div class="dropdown-menu" style="padding:10px">
+                            <a href="#" data-toggle="modal" data-target="#ModalGestor"><b>Modificar Datos</b></a>
+                            <div class="dropdown-divider"></div>
+                    </div>
+                </td>
+                <td>
+                    <form method="post" enctype="multipart/form-data" action="@Url.Content("~/Recepcion/cambiarGestor")">
+                        @Html.AntiForgeryToken()
+                        <div class="modal fade" id="ModalGestor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabel"><b>¿Desea cambiar datos de <span class="text-danger">@Html.DisplayFor(modelItem => item.Nombre)</span>?</b></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group" style="width:60%; min-width:320px">
+                                            <label for="recipient-name" class="col-form-label">Seleccionar nuevo gestor:</label>
+                                            <select name="referido" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
+                                                @{
+                                                    var IDREFERIDO = (from i in db.Referido where i.Tipo == item.canalTipo && i.Nombre == item.referidoPor select i.idReferido).FirstOrDefault();
+                                                }
+                                                <option selected value="@IDREFERIDO">@item.referidoPor</option>
+                                                @{
+                                                    //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
+                                                    var referidosGestor = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
+                                                    var referidosMD = (from r in db.Referido where r.Tipo == "MEDIOS DIGITALES" select r).OrderBy(o => o.Nombre);
+                                                    var referidosEmpresa = (from r in db.Referido where r.Tipo == "EMPRESA" select r).OrderBy(o => o.Nombre);
+                                                    var referidosOtro = (from r in db.Referido where r.Tipo == "OTRO" select r).OrderBy(o => o.Nombre);
+                                                    var referidosSindicato = (from r in db.Referido where r.Tipo == "SINDICATO" select r).OrderBy(o => o.Nombre);
+
+                                                    <option disabled>--------GESTORES--------</option>
+                                                    foreach (var i in referidosGestor)
+                                                    {
+                                                        <option value="@i.idReferido">@i.Nombre</option>
+                                                    }
+
+                                                    <option disabled><b>--------EMPRESAS--------</b></option>
+                                                    foreach (var i in referidosEmpresa)
+                                                    {
+                                                        <option value="@i.idReferido">@i.Nombre</option>
+                                                    }
+
+                                                    <option disabled><b>--------SINDICATOS--------</b></option>
+                                                    foreach (var i in referidosSindicato)
+                                                    {
+                                                        <option value="@i.idReferido">@i.Nombre</option>
+                                                    }
+
+                                                    <option disabled><b>----MEDIOS DIGITALES----</b></option>
+                                                    foreach (var i in referidosMD)
+                                                    {
+                                                        <option value="@i.idReferido">@i.Nombre</option>
+                                                    }
+
+                                                    <option disabled><b>--------OTROS--------</b></option>
+                                                    foreach (var i in referidosOtro)
+                                                    {
+                                                        <option value="@i.idReferido">@i.Nombre</option>
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="form-group" style="width:60%; min-width:320px">
+                                            <label for="recipient-name" class="col-form-label">Seleccionar nuevo Tipo de Pago:</label>
+                                            <select name="tipoPago" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select" required>
+                                                <option selected value="@item.tipoPago">@item.tipoPago</option>
+                                                <option value="Referencia OXXO">Referencia OXXO</option>
+                                                <option value="Referencia BanBajío">Referencia BanBajío</option>
+                                                <option value="Transferencia vía BanBajío">Transferencia vía BanBajío</option>
+                                                <option value="Banorte">Banorte</option>
+                                                <option value="Scotianbank">Scotianbank</option>
+                                                <option value="Mercado Pago" required>Mercado Pago</option>
+                                                <option value="BanCoppel TLS">BanCoppel TLS</option>
+                                                <option value="BanCoppel LC">BanCoppel LC</option>
+                                                <option value="Banco Azteca TLS">Banco Azteca TLS</option>
+                                                <option value="Banco Azteca LC">Banco Azteca LC</option>
+                                                <option value="Credito Empresas">Credito Empresas</option>
+                                                <option disabled>----------------------------------</option>
+                                                <option value="Pendiente de Pago">Pendiente de Pago</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="recipient-name" class="col-form-label">Referencia:</label>
+                                            <input type="text" class="form-control" name="referencia" placeholder="@item.referencia" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" name="ide" value="@item.idPaciente" />
+                                            <input type="hidden" name="id" value="@item.idCita" />
+                                            <input type="hidden" name="gestorAnterior" value="@item.referidoPor" />
+                                            <input type="hidden" name="usuario" value="@nombreUsuario" />
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ticket" class="col-form-label">Ticket de Pago:</label>
+                                            @{
+                                                var consultaTicket = (from c in db.Cita where c.idPaciente == item.idPaciente select c.TipoPago).FirstOrDefault();
+
+                                                if (consultaTicket == "Pendiente de Pago" || consultaTicket == "Credito Empresas")
+                                                {
+                                                    <input type="file" name="ticket" asp-for="file" class="" value="ticket" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="file" name="ticket" asp-for="file" class="" required value="ticket" />
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <input type="submit" value="Enviar" class="btn btn-primary" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        }
+    }
+</table>
+
+
+

@@ -676,89 +676,91 @@ else
 
 
             @foreach (var item in episHoy)
-            {
-                <tr>
-                    <td>
-                        <b>@item.Nombre</b>
-                    </td>
+               {
+                    <tr>
+                        <td>
+                            <b>@item.Nombre</b>
+                        </td>
 
-                    <td>
-                        <b>@item.CURP</b>
-                    </td>
+                        <td>
+                            <b>@item.CURP</b>
+                        </td>
 
-                    <td>
-                        <b>@item.NoExpediente</b>
-                    </td>
+                        <td>
+                            <b>@item.NoExpediente</b>
+                        </td>
 
-                    <td>
-                        <b>@item.TipoTramite</b>
-                    </td>
+                        <td>
+                            <b>@item.TipoTramite</b>
+                        </td>
 
-                    <td>
-                        <b>@item.TipoLicencia</b>
-                    </td>
+                        <td>
+                            <b>@item.TipoLicencia</b>
+                        </td>
 
-                    <td>
-                        <b>@item.Doctor</b>
-                    </td>
+                        <td>
+                            <b>@item.Doctor</b>
+                        </td>
 
-                    <td>
-                        <b>@item.Usuario</b>
-                    </td>
+                        <td>
+                            <b>@item.Usuario</b>
+                        </td>
 
-                    <td>
-                        <b>@item.ReferidoPor</b>
-                    </td>
+                        <td>
+                            <b>@item.ReferidoPor</b>
+                        </td>
 
-                    <td>
-                        @{
-                            if (item.EstatusCaptura == null)
-                            {
-                                <mark style="background-color: #FFFF00; padding:5px; border-radius:7px">Pendiente</mark>
+                        <td>
+                            @{
+                                if (item.EstatusCaptura == null)
+                                {
+                                    <mark style="background-color: #FFFF00; padding:5px; border-radius:7px">Pendiente</mark>
 
+                                }
+                                else
+                                {
+                                    if (item.EstatusCaptura == "En Proceso")
+                                    {
+                                        <b><mark style="background-color: dodgerblue; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>
+                                    }
+                                    else if (item.EstatusCaptura == "Pausado")
+                                    {
+                                        <b><mark style="background-color: darkorange; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>
+                                        @*<b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>*@
+                                    }
+                                    else if (item.EstatusCaptura == "Cancelado")
+                                    {
+                                        <b><mark style="background-color: red; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>
+                                        @*<b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>*@
+                                    }
+                                    else if (item.EstatusCaptura == "Terminado")
+                                    {
+                                        <a href=@Url.Action("DescargarPDF", "Dictamenes", new { id = item.idPacienteESP })><b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b></a>
+                                        @*<b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>*@
+                                    }
+                                }
                             }
-                            else
-                            {
-                                if (item.EstatusCaptura == "En Proceso")
-                                {
-                                    <b><mark style="background-color: dodgerblue; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>
+
+                        </td>
+                        <td style="font-size:smaller">
+                            @item.Capturista
+                        </td>
+
+                        <td style="font-size:smaller">
+                            @item.CanalTipo
+                        </td>
+
+                        <td>
+                            @{ 
+                                var fechaPlasmada = Convert.ToDateTime(item.FechaCaptura);
+                            <b>@fechaPlasmada</b> 
                                 }
-                                else if (item.EstatusCaptura == "Pausado")
-                                {
-                                    <b><mark style="background-color: darkorange; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>
-                                    @*<b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>*@
-                                }
-                                else if (item.EstatusCaptura == "Cancelado")
-                                {
-                                    <b><mark style="background-color: red; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>
-                                    @*<b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>*@
-                                }
-                                else if (item.EstatusCaptura == "Terminado")
-                                {
-                                    <a href=@Url.Action("DescargarPDF", "Dictamenes", new { id = item.idPacienteESP })><b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b></a>
-                                    @*<b><mark style="background-color: #41F51A; padding:5px; border-radius:7px">@item.EstatusCaptura</mark></b>*@
-                                }
-                            }
-                        }
+                        </td>
 
-                    </td>
-                    <td style="font-size:smaller">
-                        @item.Capturista
-                    </td>
+                    </tr>
 
-                    <td style="font-size:smaller">
-                        @item.CanalTipo
-                    </td>
-
-                    <td>
-                        <b>@Convert.ToDateTime(item.FechaCaptura).ToString("dd-MMMM-yyyy")</b> 
-                    </td>
-
-                </tr>
-
-                flag += 1;
-
-            }
+                    flag += 1;
+                }
 
         </table>
     </div>

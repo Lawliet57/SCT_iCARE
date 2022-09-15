@@ -926,6 +926,8 @@
     <Content Include="Views\Contabilidad\FaltaTicket.cshtml" />
     <Content Include="Views\Recepcion\PrecioIncorrecto.cshtml" />
     <Content Include="Views\Recepcion\VentanaPago.cshtml" />
+    <Content Include="Views\Recepcion\_Modificacion.cshtml" />
+    <Content Include="Views\Recepcion\_NoEncontrados.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="DevModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="GMIEntities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="buscarGestor" ReturnType="Collection(DevModel.buscarGestor_Result)">
+      <Parameter Name="consulta" Mode="In" Type="String" />
+      <Parameter Name="cantidad" Mode="In" Type="Int32" />
+    </FunctionImport>
     <EntitySet Name="Aptitud" EntityType="DevModel.Aptitud" />
     <EntitySet Name="Archivos" EntityType="DevModel.Archivos" />
     <EntitySet Name="AudioGA" EntityType="DevModel.AudioGA" />
@@ -17,6 +21,7 @@
     <EntitySet Name="Cita" EntityType="DevModel.Cita" />
     <EntitySet Name="CitaDS" EntityType="DevModel.CitaDS" />
     <EntitySet Name="Ciudades" EntityType="DevModel.Ciudades" />
+    <EntitySet Name="CondensadoPaciente" EntityType="DevModel.CondensadoPaciente" />
     <EntitySet Name="ConteoDoctores2" EntityType="DevModel.ConteoDoctores2" />
     <EntitySet Name="DeclaracionSaludESP" EntityType="DevModel.DeclaracionSaludESP" />
     <EntitySet Name="Dictamen" EntityType="DevModel.Dictamen" />
@@ -57,23 +62,30 @@
     <EntitySet Name="log_Movimientos" EntityType="DevModel.log_Movimientos" />
     <EntitySet Name="MedicinaInterna" EntityType="DevModel.MedicinaInterna" />
     <EntitySet Name="Menu" EntityType="DevModel.Menu" />
+    <EntitySet Name="modulo" EntityType="DevModel.modulo" />
     <EntitySet Name="Modulos" EntityType="DevModel.Modulos" />
     <EntitySet Name="MovimientosAudio" EntityType="DevModel.MovimientosAudio" />
     <EntitySet Name="Nutriologo" EntityType="DevModel.Nutriologo" />
     <EntitySet Name="Oftalmologo" EntityType="DevModel.Oftalmologo" />
+    <EntitySet Name="operaciones" EntityType="DevModel.operaciones" />
     <EntitySet Name="Paciente" EntityType="DevModel.Paciente" />
     <EntitySet Name="PacienteDS" EntityType="DevModel.PacienteDS" />
     <EntitySet Name="PacienteESP" EntityType="DevModel.PacienteESP" />
     <EntitySet Name="PacienteGA" EntityType="DevModel.PacienteGA" />
+    <EntitySet Name="PagosGestores" EntityType="DevModel.PagosGestores" />
     <EntitySet Name="Recepcionista" EntityType="DevModel.Recepcionista" />
     <EntitySet Name="RecepcionistaDS" EntityType="DevModel.RecepcionistaDS" />
     <EntitySet Name="ReferenciasSB" EntityType="DevModel.ReferenciasSB" />
+    <EntitySet Name="Referido" EntityType="DevModel.Referido" />
+    <EntitySet Name="rol_operacion" EntityType="DevModel.rol_operacion" />
+    <EntitySet Name="Roles" EntityType="DevModel.Roles" />
     <EntitySet Name="RolMenu" EntityType="DevModel.RolMenu" />
     <EntitySet Name="SignosVitalesDS" EntityType="DevModel.SignosVitalesDS" />
     <EntitySet Name="SucursalDS" EntityType="DevModel.SucursalDS" />
     <EntitySet Name="Sucursales" EntityType="DevModel.Sucursales" />
     <EntitySet Name="sysdiagrams" EntityType="DevModel.sysdiagrams" />
     <EntitySet Name="Tickets" EntityType="DevModel.Tickets" />
+    <EntitySet Name="TicketSeguro" EntityType="DevModel.TicketSeguro" />
     <EntitySet Name="Tipificaciones" EntityType="DevModel.Tipificaciones" />
     <EntitySet Name="UrgentesCount" EntityType="DevModel.UrgentesCount" />
     <EntitySet Name="Usuarios" EntityType="DevModel.Usuarios" />
@@ -289,6 +301,10 @@
       <End Role="Menu" EntitySet="Menu" />
       <End Role="RolMenu" EntitySet="RolMenu" />
     </AssociationSet>
+    <AssociationSet Name="FK_operaciones_modulo" Association="DevModel.FK_operaciones_modulo">
+      <End Role="modulo" EntitySet="modulo" />
+      <End Role="operaciones" EntitySet="operaciones" />
+    </AssociationSet>
     <AssociationSet Name="FK_MovimientosAudio_PacienteESP" Association="DevModel.FK_MovimientosAudio_PacienteESP">
       <End Role="PacienteESP" EntitySet="PacienteESP" />
       <End Role="MovimientosAudio" EntitySet="MovimientosAudio" />
@@ -301,13 +317,25 @@
       <End Role="PacienteDS" EntitySet="PacienteDS" />
       <End Role="Oftalmologo" EntitySet="Oftalmologo" />
     </AssociationSet>
+    <AssociationSet Name="FK_rol_operacion_operaciones" Association="DevModel.FK_rol_operacion_operaciones">
+      <End Role="operaciones" EntitySet="operaciones" />
+      <End Role="rol_operacion" EntitySet="rol_operacion" />
+    </AssociationSet>
     <AssociationSet Name="FK_Tickets_Paciente" Association="DevModel.FK_Tickets_Paciente">
       <End Role="Paciente" EntitySet="Paciente" />
       <End Role="Tickets" EntitySet="Tickets" />
     </AssociationSet>
+    <AssociationSet Name="FK_TicketSeguro_Paciente" Association="DevModel.FK_TicketSeguro_Paciente">
+      <End Role="Paciente" EntitySet="Paciente" />
+      <End Role="TicketSeguro" EntitySet="TicketSeguro" />
+    </AssociationSet>
     <AssociationSet Name="FK_SignosVitalesDS_PacienteDS" Association="DevModel.FK_SignosVitalesDS_PacienteDS">
       <End Role="PacienteDS" EntitySet="PacienteDS" />
       <End Role="SignosVitalesDS" EntitySet="SignosVitalesDS" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PagosGestores_Referido" Association="DevModel.FK_PagosGestores_Referido">
+      <End Role="Referido" EntitySet="Referido" />
+      <End Role="PagosGestores" EntitySet="PagosGestores" />
     </AssociationSet>
     <AssociationSet Name="FK_Recepcionista_Sucursales" Association="DevModel.FK_Recepcionista_Sucursales">
       <End Role="Sucursales" EntitySet="Sucursales" />
@@ -325,24 +353,6 @@
       <End Role="Usuarios" EntitySet="Usuarios" />
       <End Role="RecepcionistaDS" EntitySet="RecepcionistaDS" />
     </AssociationSet>
-    <EntitySet Name="PagosGestores" EntityType="DevModel.PagosGestores" />
-    <EntitySet Name="Referido" EntityType="DevModel.Referido" />
-    <AssociationSet Name="FK_PagosGestores_Referido" Association="DevModel.FK_PagosGestores_Referido">
-      <End Role="Referido" EntitySet="Referido" />
-      <End Role="PagosGestores" EntitySet="PagosGestores" />
-    </AssociationSet>
-    <EntitySet Name="modulo" EntityType="DevModel.modulo" />
-    <EntitySet Name="operaciones" EntityType="DevModel.operaciones" />
-    <EntitySet Name="rol_operacion" EntityType="DevModel.rol_operacion" />
-    <AssociationSet Name="FK_operaciones_modulo" Association="DevModel.FK_operaciones_modulo">
-      <End Role="modulo" EntitySet="modulo" />
-      <End Role="operaciones" EntitySet="operaciones" />
-    </AssociationSet>
-    <AssociationSet Name="FK_rol_operacion_operaciones" Association="DevModel.FK_rol_operacion_operaciones">
-      <End Role="operaciones" EntitySet="operaciones" />
-      <End Role="rol_operacion" EntitySet="rol_operacion" />
-    </AssociationSet>
-    <EntitySet Name="Roles" EntityType="DevModel.Roles" />
     <AssociationSet Name="FK_rol_operacion_Roles" Association="DevModel.FK_rol_operacion_Roles">
       <End Role="Roles" EntitySet="Roles" />
       <End Role="rol_operacion" EntitySet="rol_operacion" />
@@ -355,17 +365,17 @@
       <End Role="Roles" EntitySet="Roles" />
       <End Role="Usuarios" EntitySet="Usuarios" />
     </AssociationSet>
-    <EntitySet Name="TicketSeguro" EntityType="DevModel.TicketSeguro" />
-    <AssociationSet Name="FK_TicketSeguro_Paciente" Association="DevModel.FK_TicketSeguro_Paciente">
-      <End Role="Paciente" EntitySet="Paciente" />
-      <End Role="TicketSeguro" EntitySet="TicketSeguro" />
-    </AssociationSet>
-    <EntitySet Name="CondensadoPaciente" EntityType="DevModel.CondensadoPaciente" />
-    <FunctionImport Name="buscarGestor" ReturnType="Collection(DevModel.buscarGestor_Result)">
-      <Parameter Name="consulta" Mode="In" Type="String" />
-      <Parameter Name="cantidad" Mode="In" Type="Int32" />
-    </FunctionImport>
   </EntityContainer>
+  <ComplexType Name="buscarGestor_Result">
+    <Property Type="Int32" Name="idReferido" Nullable="true" />
+    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="PrecioNormal" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="PrecioNormalconIVA" Nullable="true" MaxLength="50" />
+    <Property Type="String" Name="PrecioAereosinIVA" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="PrecioAereo" Nullable="true" MaxLength="20" />
+    <Property Type="String" Name="PrecioAereoPista" Nullable="true" MaxLength="10" />
+    <Property Type="String" Name="PrecioAereoPistaconIVA" Nullable="true" MaxLength="10" />
+  </ComplexType>
   <EntityType Name="Aptitud">
     <Key>
       <PropertyRef Name="idAptitud" />
@@ -581,8 +591,6 @@
     <Property Name="FechaContable" Type="DateTime" Precision="3" />
     <Property Name="UsarSaldo" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
     <Property Name="FormaPago" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="Canal1" Relationship="DevModel.FK_Cita_Canal" FromRole="Cita" ToRole="Canal" />
-    <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
     <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
     <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
@@ -595,6 +603,8 @@
     <Property Name="ventaSeguro" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
     <Property Name="TotalIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
     <Property Name="TotalVentaIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Canal1" Relationship="DevModel.FK_Cita_Canal" FromRole="Cita" ToRole="Canal" />
+    <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Cita_Paciente" FromRole="Cita" ToRole="Paciente" />
   </EntityType>
   <EntityType Name="CitaDS">
     <Key>
@@ -631,6 +641,66 @@
     <Property Name="Ciudad" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Estado" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="Sucursales" Relationship="DevModel.FK_Sucursales_Ciudades" FromRole="Ciudades" ToRole="Sucursales" />
+  </EntityType>
+  <EntityType Name="CondensadoPaciente">
+    <Key>
+      <PropertyRef Name="idCondensado" />
+    </Key>
+    <Property Name="idCondensado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Folio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CURP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="idCita" Type="Int32" />
+    <Property Name="TipoPago" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="FechaReferencia" Type="DateTime" Precision="3" />
+    <Property Name="NoOrden" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="EstatusPago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TipoLicencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="NoExpediente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FechaCita" Type="DateTime" Precision="3" />
+    <Property Name="Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Doctor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Recepcionista" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="idPaciente" Type="Int32" />
+    <Property Name="TipoTramite" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Referencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Canal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CC" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Asistencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CancelaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Entregado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ReferidoPor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
+    <Property Name="Cuenta" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CanalTipo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="CuentaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="Conciliado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="FechaContable" Type="DateTime" Precision="3" />
+    <Property Name="UsarSaldo" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="FormaPago" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Venta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CostoSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="IvaSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalVenta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ventaSeguro" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="TotalIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="TotalVentaIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="idCaptura" Type="Int32" />
+    <Property Name="EstatusCaptura" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InicioCaptura" Type="DateTime" Precision="3" />
+    <Property Name="FinalCaptura" Type="DateTime" Precision="3" />
+    <Property Name="FechaExpdiente" Type="DateTime" Precision="3" />
+    <Property Name="Duracion" Type="Int32" />
+    <Property Name="Aptitud" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ComentarioAptitud" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
+    <Property Name="FechaVigencia" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="ConteoDoctores2">
     <Key>
@@ -1292,6 +1362,14 @@
     <Property Name="Accion" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Menu" FromRole="Menu" ToRole="RolMenu" />
   </EntityType>
+  <EntityType Name="modulo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="operaciones" Relationship="DevModel.FK_operaciones_modulo" FromRole="modulo" ToRole="operaciones" />
+  </EntityType>
   <EntityType Name="Modulos">
     <Key>
       <PropertyRef Name="idModulo" />
@@ -1348,6 +1426,16 @@
     <Property Name="Medicamento" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
     <Property Name="Seguimiento" Type="DateTime" Precision="3" />
     <NavigationProperty Name="PacienteDS" Relationship="DevModel.FK_Oftalmologo_PacienteDS" FromRole="Oftalmologo" ToRole="PacienteDS" />
+  </EntityType>
+  <EntityType Name="operaciones">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="idModulo" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="modulo" Relationship="DevModel.FK_operaciones_modulo" FromRole="operaciones" ToRole="modulo" />
+    <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="operaciones" ToRole="rol_operacion" />
   </EntityType>
   <EntityType Name="Paciente">
     <Key>
@@ -1442,6 +1530,10 @@
     <Property Name="TipoPago" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="FechaContable" Type="DateTime" Precision="3" />
     <Property Name="FormaPago" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FechaDictamen" Type="DateTime" Precision="3" />
     <NavigationProperty Name="CartaNoAccidentesESP" Relationship="DevModel.FK_CartaNoAccidentesESP_PacienteESP" FromRole="PacienteESP" ToRole="CartaNoAccidentesESP" />
     <NavigationProperty Name="DeclaracionSaludESP" Relationship="DevModel.FK_DeclaracionSaludESP_PacienteESP" FromRole="PacienteESP" ToRole="DeclaracionSaludESP" />
     <NavigationProperty Name="DictamenESP" Relationship="DevModel.FK_DictamenESP_PacienteESP" FromRole="PacienteESP" ToRole="DictamenESP" />
@@ -1452,9 +1544,6 @@
     <NavigationProperty Name="HemoglobinaGlucosiladaESP" Relationship="DevModel.FK_HemoglobinaGlucosiladaESP_PacienteESP" FromRole="PacienteESP" ToRole="HemoglobinaGlucosiladaESP" />
     <NavigationProperty Name="HuellasESP" Relationship="DevModel.FK_HuellasESP_PacienteESP" FromRole="PacienteESP" ToRole="HuellasESP" />
     <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
-    <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>
@@ -1507,6 +1596,18 @@
     <NavigationProperty Name="AudioGA" Relationship="DevModel.FK_AudioGA_PacienteGA" FromRole="PacienteGA" ToRole="AudioGA" />
     <NavigationProperty Name="EPI_GA" Relationship="DevModel.FK_EPI_GA_PacienteGA" FromRole="PacienteGA" ToRole="EPI_GA" />
   </EntityType>
+  <EntityType Name="PagosGestores">
+    <Key>
+      <PropertyRef Name="idPagoGestor" />
+    </Key>
+    <Property Name="idPagoGestor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Gestor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Fecha" Type="DateTime" Precision="3" />
+    <Property Name="PagoIngresado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="idReferido" Type="Int32" />
+    <Property Name="EfectivoUsado" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Referido" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="PagosGestores" ToRole="Referido" />
+  </EntityType>
   <EntityType Name="Recepcionista">
     <Key>
       <PropertyRef Name="idRecepcionista" />
@@ -1535,6 +1636,50 @@
     <Property Name="ReferenciaSB" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="EstatusReferencia" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="idPaciente" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Referido">
+    <Key>
+      <PropertyRef Name="idReferido" />
+    </Key>
+    <Property Name="idReferido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Saldo" Type="Int32" />
+    <Property Name="PrecioNormal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioALT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioALTIS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="HistorialPrecios" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioNormalconIVA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Deuda" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Efectivo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="Orden" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Meta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereoPista" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereoPistaconIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PrecioAereosinIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Residual" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="PagosGestores" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="Referido" ToRole="PagosGestores" />
+  </EntityType>
+  <EntityType Name="rol_operacion">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idRol" Type="Int32" Nullable="false" />
+    <Property Name="idOperacion" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="operaciones" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="rol_operacion" ToRole="operaciones" />
+    <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="rol_operacion" ToRole="Roles" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="idRol" />
+    </Key>
+    <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="Roles" ToRole="rol_operacion" />
+    <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Roles" FromRole="Roles" ToRole="RolMenu" />
+    <NavigationProperty Name="Usuarios" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
   </EntityType>
   <EntityType Name="RolMenu">
     <Key>
@@ -1610,6 +1755,15 @@
     <Property Name="FechaCarga" Type="DateTime" Precision="3" />
     <Property Name="idPaciente" Type="Int32" />
     <NavigationProperty Name="Paciente" Relationship="DevModel.FK_Tickets_Paciente" FromRole="Tickets" ToRole="Paciente" />
+  </EntityType>
+  <EntityType Name="TicketSeguro">
+    <Key>
+      <PropertyRef Name="idTicketSeguro" />
+    </Key>
+    <Property Name="idTicketSeguro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FileTicketSeguro" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="idPaciente" Type="Int32" />
+    <NavigationProperty Name="Paciente" Relationship="DevModel.FK_TicketSeguro_Paciente" FromRole="TicketSeguro" ToRole="Paciente" />
   </EntityType>
   <EntityType Name="Tipificaciones">
     <Key>
@@ -2283,6 +2437,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_operaciones_modulo">
+    <End Type="DevModel.modulo" Role="modulo" Multiplicity="1" />
+    <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="modulo">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="operaciones">
+        <PropertyRef Name="idModulo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_MovimientosAudio_PacienteESP">
     <End Type="DevModel.PacienteESP" Role="PacienteESP" Multiplicity="0..1" />
     <End Type="DevModel.MovimientosAudio" Role="MovimientosAudio" Multiplicity="*" />
@@ -2319,6 +2485,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_rol_operacion_operaciones">
+    <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="1" />
+    <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="operaciones">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="rol_operacion">
+        <PropertyRef Name="idOperacion" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Tickets_Paciente">
     <End Type="DevModel.Paciente" Role="Paciente" Multiplicity="0..1" />
     <End Type="DevModel.Tickets" Role="Tickets" Multiplicity="*" />
@@ -2327,6 +2505,18 @@
         <PropertyRef Name="idPaciente" />
       </Principal>
       <Dependent Role="Tickets">
+        <PropertyRef Name="idPaciente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_TicketSeguro_Paciente">
+    <End Type="DevModel.Paciente" Role="Paciente" Multiplicity="0..1" />
+    <End Type="DevModel.TicketSeguro" Role="TicketSeguro" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Paciente">
+        <PropertyRef Name="idPaciente" />
+      </Principal>
+      <Dependent Role="TicketSeguro">
         <PropertyRef Name="idPaciente" />
       </Dependent>
     </ReferentialConstraint>
@@ -2340,6 +2530,18 @@
       </Principal>
       <Dependent Role="SignosVitalesDS">
         <PropertyRef Name="idPacienteDS" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PagosGestores_Referido">
+    <End Type="DevModel.Referido" Role="Referido" Multiplicity="0..1" />
+    <End Type="DevModel.PagosGestores" Role="PagosGestores" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Referido">
+        <PropertyRef Name="idReferido" />
+      </Principal>
+      <Dependent Role="PagosGestores">
+        <PropertyRef Name="idReferido" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -2391,116 +2593,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="PagosGestores">
-    <Key>
-      <PropertyRef Name="idPagoGestor" />
-    </Key>
-    <Property Name="idPagoGestor" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Gestor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Fecha" Type="DateTime" Precision="3" />
-    <Property Name="PagoIngresado" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="idReferido" Type="Int32" />
-    <NavigationProperty Name="Referido" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="PagosGestores" ToRole="Referido" />
-    <Property Name="EfectivoUsado" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="Referido">
-    <Key>
-      <PropertyRef Name="idReferido" />
-    </Key>
-    <Property Name="idReferido" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Tipo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Saldo" Type="Int32" />
-    <Property Name="PrecioNormal" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioAereo" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioALT" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioALTIS" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="HistorialPrecios" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioNormalconIVA" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Deuda" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Efectivo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Orden" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="Meta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioAereoPista" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioAereoPistaconIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioAereosinIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="PagosGestores" Relationship="DevModel.FK_PagosGestores_Referido" FromRole="Referido" ToRole="PagosGestores" />
-    <Property Name="Residual" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <Association Name="FK_PagosGestores_Referido">
-    <End Type="DevModel.Referido" Role="Referido" Multiplicity="0..1" />
-    <End Type="DevModel.PagosGestores" Role="PagosGestores" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Referido">
-        <PropertyRef Name="idReferido" />
-      </Principal>
-      <Dependent Role="PagosGestores">
-        <PropertyRef Name="idReferido" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="modulo">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="operaciones" Relationship="DevModel.FK_operaciones_modulo" FromRole="modulo" ToRole="operaciones" />
-  </EntityType>
-  <EntityType Name="operaciones">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="idModulo" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="modulo" Relationship="DevModel.FK_operaciones_modulo" FromRole="operaciones" ToRole="modulo" />
-    <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="operaciones" ToRole="rol_operacion" />
-  </EntityType>
-  <EntityType Name="rol_operacion">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="idRol" Type="Int32" Nullable="false" />
-    <Property Name="idOperacion" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="operaciones" Relationship="DevModel.FK_rol_operacion_operaciones" FromRole="rol_operacion" ToRole="operaciones" />
-    <NavigationProperty Name="Roles" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="rol_operacion" ToRole="Roles" />
-  </EntityType>
-  <Association Name="FK_operaciones_modulo">
-    <End Type="DevModel.modulo" Role="modulo" Multiplicity="1" />
-    <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="modulo">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="operaciones">
-        <PropertyRef Name="idModulo" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_rol_operacion_operaciones">
-    <End Type="DevModel.operaciones" Role="operaciones" Multiplicity="1" />
-    <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="operaciones">
-        <PropertyRef Name="id" />
-      </Principal>
-      <Dependent Role="rol_operacion">
-        <PropertyRef Name="idOperacion" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="Roles">
-    <Key>
-      <PropertyRef Name="idRol" />
-    </Key>
-    <Property Name="idRol" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="rol_operacion" Relationship="DevModel.FK_rol_operacion_Roles" FromRole="Roles" ToRole="rol_operacion" />
-    <NavigationProperty Name="RolMenu" Relationship="DevModel.FK_RolMenu_Roles" FromRole="Roles" ToRole="RolMenu" />
-    <NavigationProperty Name="Usuarios" Relationship="DevModel.FK_Usuarios_Roles" FromRole="Roles" ToRole="Usuarios" />
-  </EntityType>
   <Association Name="FK_rol_operacion_Roles">
     <End Type="DevModel.Roles" Role="Roles" Multiplicity="1" />
     <End Type="DevModel.rol_operacion" Role="rol_operacion" Multiplicity="*" />
@@ -2537,95 +2629,4 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="TicketSeguro">
-    <Key>
-      <PropertyRef Name="idTicketSeguro" />
-    </Key>
-    <Property Name="idTicketSeguro" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FileTicketSeguro" Type="Binary" MaxLength="Max" FixedLength="false" />
-    <Property Name="idPaciente" Type="Int32" />
-    <NavigationProperty Name="Paciente" Relationship="DevModel.FK_TicketSeguro_Paciente" FromRole="TicketSeguro" ToRole="Paciente" />
-  </EntityType>
-  <Association Name="FK_TicketSeguro_Paciente">
-    <End Type="DevModel.Paciente" Role="Paciente" Multiplicity="0..1" />
-    <End Type="DevModel.TicketSeguro" Role="TicketSeguro" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="Paciente">
-        <PropertyRef Name="idPaciente" />
-      </Principal>
-      <Dependent Role="TicketSeguro">
-        <PropertyRef Name="idPaciente" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <EntityType Name="CondensadoPaciente">
-    <Key>
-      <PropertyRef Name="idCondensado" />
-    </Key>
-    <Property Name="idCondensado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="Nombre" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="Telefono" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Folio" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="CURP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="idCita" Type="Int32" />
-    <Property Name="TipoPago" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="FechaReferencia" Type="DateTime" Precision="3" />
-    <Property Name="NoOrden" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="EstatusPago" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="TipoLicencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="NoExpediente" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="FechaCita" Type="DateTime" Precision="3" />
-    <Property Name="Sucursal" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Doctor" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Recepcionista" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="idPaciente" Type="Int32" />
-    <Property Name="TipoTramite" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Referencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Canal" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="CC" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Asistencia" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CancelaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="Entregado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="ReferidoPor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="FechaCreacion" Type="DateTime" Precision="3" />
-    <Property Name="Cuenta" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="CanalTipo" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="CuentaComentario" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <Property Name="Conciliado" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="FechaContable" Type="DateTime" Precision="3" />
-    <Property Name="UsarSaldo" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="FormaPago" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
-    <Property Name="PrecioEpi" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="ConciliarPago" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="RastreoPagos" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Venta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="IVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="CostoSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="IvaSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="TotalSeguro" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="TotalVenta" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="ventaSeguro" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="TotalIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="TotalVentaIVA" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="idCaptura" Type="Int32" />
-    <Property Name="EstatusCaptura" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InicioCaptura" Type="DateTime" Precision="3" />
-    <Property Name="FinalCaptura" Type="DateTime" Precision="3" />
-    <Property Name="FechaExpdiente" Type="DateTime" Precision="3" />
-    <Property Name="Duracion" Type="Int32" />
-    <Property Name="Aptitud" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="ComentarioAptitud" Type="String" MaxLength="300" FixedLength="false" Unicode="false" />
-    <Property Name="FechaVigencia" Type="DateTime" Precision="3" />
-  </EntityType>
-  <ComplexType Name="buscarGestor_Result">
-    <Property Type="Int32" Name="idReferido" Nullable="true" />
-    <Property Type="String" Name="Nombre" Nullable="true" MaxLength="100" />
-    <Property Type="String" Name="PrecioNormal" Nullable="true" MaxLength="20" />
-    <Property Type="String" Name="PrecioNormalconIVA" Nullable="true" MaxLength="50" />
-    <Property Type="String" Name="PrecioAereosinIVA" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="PrecioAereo" Nullable="true" MaxLength="20" />
-    <Property Type="String" Name="PrecioAereoPista" Nullable="true" MaxLength="10" />
-    <Property Type="String" Name="PrecioAereoPistaconIVA" Nullable="true" MaxLength="10" />
-  </ComplexType>
 </Schema>

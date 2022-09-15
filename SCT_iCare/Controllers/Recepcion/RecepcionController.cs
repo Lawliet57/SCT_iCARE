@@ -336,10 +336,61 @@ namespace SCT_iCare.Controllers.Recepcion
                         db.Tickets.Add(ticketP);
                         db.SaveChanges();
                     }
-                }             
+                }
+                else 
+                {
+                    Tickets removeT = db.Tickets.Find(consultaTicket.idTicket);
+                    db.Tickets.Remove(removeT);
+                    db.SaveChanges();
+
+                    if (ModelState.IsValid)
+                    {
+                        db.Tickets.Add(ticketP);
+                        db.SaveChanges();
+                    }
+                }
             }
 
             return Redirect("Index");
+        }
+
+        public PartialViewResult modificacionBuscador(string expediente)               //CONTROLADOR Y METODO A EJECUTAR CON AJAX
+        {
+            var paciente = (from r in db.Cita where r.NoExpediente == expediente select r).FirstOrDefault();
+            var pacienteCap = (from r in db.Captura where r.NoExpediente == expediente select r).FirstOrDefault();
+
+            if (paciente == null || pacienteCap == null)
+            {
+                return PartialView("_NoEncontrados");
+            }
+
+            else
+            {
+                var personas = new List<Persona>()
+                {
+                    new Persona() {Nombre = pacienteCap.NombrePaciente, Sucursal = paciente.Sucursal, TipoTramite = paciente.TipoTramite, TipoLicencia = paciente.TipoLicencia,
+                       canalTipo = paciente.CanalTipo, referidoPor = paciente.ReferidoPor, tipoPago = paciente.TipoPago, referencia = paciente.Referencia,
+                       idPaciente = Convert.ToInt32(paciente.idPaciente), idCita = Convert.ToInt32(paciente.idCita),  FechaCita = Convert.ToDateTime(paciente.FechaCita).ToString("dd-MMMM-yyyy")}
+                };
+
+                return PartialView("_Modificacion", personas);            //VISTA PARCIAL LA CUAL SERA AGREGADA A LA VISTA
+            }
+        }
+
+        public class Persona   //METODO PARA BUSCAR A LA PERSONA Y SUS DATOS
+        {
+            public string Nombre { get; set; }
+            public string Sucursal { get; set; }
+            public string TipoTramite { get; set; }
+            public string TipoLicencia { get; set; }
+            public string EstatusDictamen { get; set; }
+            public string FechaCita { get; set; }
+            public string canalTipo { get; set; }
+            public string referidoPor { get; set; }
+            public string tipoPago { get; set; }
+            public string referencia { get; set; }
+            public int idPaciente { get; set; }
+            public int idCita { get; set; }
         }
 
         // POST: Pacientes/Create

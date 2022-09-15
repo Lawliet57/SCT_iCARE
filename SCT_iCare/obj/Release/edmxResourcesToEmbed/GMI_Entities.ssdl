@@ -51,6 +51,13 @@
     <Property Name="Foto" Type="varbinary(max)" />
     <Property Name="idPaciente" Type="int" />
   </EntityType>
+  <!--Errores durante la generación:
+advertencia 6013: La tabla o vista 'Dev.dbo.Cadena' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
+        <EntityType Name="Cadena">
+          <Property Name="Cadena" Type="varchar(max)" />
+        </EntityType>-->
+  <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="CallCenter">
     <Key>
       <PropertyRef Name="idCallCenter" />
@@ -1060,6 +1067,7 @@
     <Property Name="PrecioEpi" Type="varchar" MaxLength="10" />
     <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
     <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
+    <Property Name="FechaDictamen" Type="datetime" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>
@@ -2114,10 +2122,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Function Name="buscarGestor" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-    <Parameter Name="consulta" Type="nvarchar" Mode="In" />
-    <Parameter Name="cantidad" Type="int" Mode="In" />
-  </Function>
   <EntityContainer Name="DevModelStoreContainer">
     <EntitySet Name="Aptitud" EntityType="Self.Aptitud" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Archivos" EntityType="Self.Archivos" Schema="dbo" store:Type="Tables" />

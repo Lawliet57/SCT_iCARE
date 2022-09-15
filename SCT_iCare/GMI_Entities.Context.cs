@@ -43,6 +43,7 @@ namespace SCT_iCare
         public virtual DbSet<Cita> Cita { get; set; }
         public virtual DbSet<CitaDS> CitaDS { get; set; }
         public virtual DbSet<Ciudades> Ciudades { get; set; }
+        public virtual DbSet<CondensadoPaciente> CondensadoPaciente { get; set; }
         public virtual DbSet<ConteoDoctores2> ConteoDoctores2 { get; set; }
         public virtual DbSet<DeclaracionSaludESP> DeclaracionSaludESP { get; set; }
         public virtual DbSet<Dictamen> Dictamen { get; set; }
@@ -83,34 +84,33 @@ namespace SCT_iCare
         public virtual DbSet<log_Movimientos> log_Movimientos { get; set; }
         public virtual DbSet<MedicinaInterna> MedicinaInterna { get; set; }
         public virtual DbSet<Menu> Menu { get; set; }
+        public virtual DbSet<modulo> modulo { get; set; }
         public virtual DbSet<Modulos> Modulos { get; set; }
         public virtual DbSet<MovimientosAudio> MovimientosAudio { get; set; }
         public virtual DbSet<Nutriologo> Nutriologo { get; set; }
         public virtual DbSet<Oftalmologo> Oftalmologo { get; set; }
+        public virtual DbSet<operaciones> operaciones { get; set; }
         public virtual DbSet<Paciente> Paciente { get; set; }
         public virtual DbSet<PacienteDS> PacienteDS { get; set; }
         public virtual DbSet<PacienteESP> PacienteESP { get; set; }
         public virtual DbSet<PacienteGA> PacienteGA { get; set; }
+        public virtual DbSet<PagosGestores> PagosGestores { get; set; }
         public virtual DbSet<Recepcionista> Recepcionista { get; set; }
         public virtual DbSet<RecepcionistaDS> RecepcionistaDS { get; set; }
         public virtual DbSet<ReferenciasSB> ReferenciasSB { get; set; }
+        public virtual DbSet<Referido> Referido { get; set; }
+        public virtual DbSet<rol_operacion> rol_operacion { get; set; }
+        public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<RolMenu> RolMenu { get; set; }
         public virtual DbSet<SignosVitalesDS> SignosVitalesDS { get; set; }
         public virtual DbSet<SucursalDS> SucursalDS { get; set; }
         public virtual DbSet<Sucursales> Sucursales { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Tickets> Tickets { get; set; }
+        public virtual DbSet<TicketSeguro> TicketSeguro { get; set; }
         public virtual DbSet<Tipificaciones> Tipificaciones { get; set; }
         public virtual DbSet<UrgentesCount> UrgentesCount { get; set; }
         public virtual DbSet<Usuarios> Usuarios { get; set; }
-        public virtual DbSet<PagosGestores> PagosGestores { get; set; }
-        public virtual DbSet<Referido> Referido { get; set; }
-        public virtual DbSet<modulo> modulo { get; set; }
-        public virtual DbSet<operaciones> operaciones { get; set; }
-        public virtual DbSet<rol_operacion> rol_operacion { get; set; }
-        public virtual DbSet<Roles> Roles { get; set; }
-        public virtual DbSet<TicketSeguro> TicketSeguro { get; set; }
-        public virtual DbSet<CondensadoPaciente> CondensadoPaciente { get; set; }
     
         public virtual ObjectResult<buscarGestor_Result> buscarGestor(string consulta, Nullable<int> cantidad)
         {

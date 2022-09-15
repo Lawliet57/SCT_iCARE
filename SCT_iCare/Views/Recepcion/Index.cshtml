@@ -58,54 +58,52 @@ idUser = oUser.idUsuario;
 nombreUsuario = oUser.Nombre;
 idRol = oUser.idRol;
 
-if (idUser != 14 && oUser.idRol != 2)
-{
-Recepcion = (from r in db.Recepcionista where r.idUsuario == idUser select r.idSucursal).FirstOrDefault();
-Hospital = (from h in db.Sucursales where h.idSucursal == Recepcion select h.Nombre).FirstOrDefault();
-idHospital = (from h in db.Sucursales where h.idSucursal == Recepcion select h.idSucursal).FirstOrDefault();
-Sucursal = Hospital.ToString();
+    if (idUser != 14 && oUser.idRol != 2)
+    {
+    Recepcion = (from r in db.Recepcionista where r.idUsuario == idUser select r.idSucursal).FirstOrDefault();
+    Hospital = (from h in db.Sucursales where h.idSucursal == Recepcion select h.Nombre).FirstOrDefault();
+    idHospital = (from h in db.Sucursales where h.idSucursal == Recepcion select h.idSucursal).FirstOrDefault();
+    Sucursal = Hospital.ToString();
 
-@*Sustituir el where para medicosgmi*@
-@*(s => ((s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate) || (s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)) && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario));*@
+    @*Sustituir el where para medicosgmi*@
+    @*(s => ((s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate) || (s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)) && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario));*@
 
-@*Sustituir el where para medicinagmi*@
-@*.Where(s => ((s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate)/* || (s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)*/) && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario));*@
-modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => ((s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate)/* || (s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)*/) && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario));
+    @*Sustituir el where para medicinagmi*@
+    @*.Where(s => ((s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate)/* || (s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)*/) && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario));*@
+    modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => ((s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate)/* || (s.M.FechaReferencia >= thisDate && s.M.FechaReferencia < tomorrowDate)*/) && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario));
 
-registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario)).Count();
+    registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && (s.M.Sucursal == Sucursal || s.M.Recepcionista == nombreUsuario)).Count();
 
-citasHoyConteo = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Sucursal == Sucursal).Count();
-episHoyConteo = (from c in db.Captura select c).Where(w => w.FechaExpdiente >= thisDate && w.FechaExpdiente < tomorrowDate && w.Sucursal == Sucursal).Count();
-dictamenHoyConteo = (from c in db.Captura select c).Where(w => w.FechaExpdiente >= thisDate && w.FechaExpdiente < tomorrowDate && w.EstatusCaptura == "Terminado" && w.Sucursal == Sucursal).Count();
-enProcesoHoyConteo = (from c in db.Captura select c).Where(w => w.FechaExpdiente >= thisDate && w.FechaExpdiente < tomorrowDate && (w.EstatusCaptura == "En captura..." || w.EstatusCaptura == "No iniciado") && w.Sucursal == Sucursal).Count();
-entregadosConteo = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Entregado == "SI" && w.Sucursal == Sucursal).Count();
-enviadosCount = db.Cita.Join(db.DictamenProblema, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
-.Where(w => w.N.FechaCita >= thisDate && w.N.FechaCita < tomorrowDate && w.M.EstatusEnvio == "SI" && w.N.Sucursal == Sucursal)
-.Select(S => new
-{
-    S.N.Sucursal,
-    S.N.FechaCita
-}).Count();
+    citasHoyConteo = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Sucursal == Sucursal).Count();
+    episHoyConteo = (from c in db.Captura select c).Where(w => w.FechaExpdiente >= thisDate && w.FechaExpdiente < tomorrowDate && w.Sucursal == Sucursal).Count();
+    dictamenHoyConteo = (from c in db.Captura select c).Where(w => w.FechaExpdiente >= thisDate && w.FechaExpdiente < tomorrowDate && w.EstatusCaptura == "Terminado" && w.Sucursal == Sucursal).Count();
+    enProcesoHoyConteo = (from c in db.Captura select c).Where(w => w.FechaExpdiente >= thisDate && w.FechaExpdiente < tomorrowDate && (w.EstatusCaptura == "En captura..." || w.EstatusCaptura == "No iniciado") && w.Sucursal == Sucursal).Count();
+    entregadosConteo = (from c in db.Cita select c).Where(w => w.FechaCita >= thisDate && w.FechaCita < tomorrowDate && w.Entregado == "SI" && w.Sucursal == Sucursal).Count();
+    enviadosCount = db.Cita.Join(db.DictamenProblema, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m })
+    .Where(w => w.N.FechaCita >= thisDate && w.N.FechaCita < tomorrowDate && w.M.EstatusEnvio == "SI" && w.N.Sucursal == Sucursal)
+    .Select(S => new
+    {
+        S.N.Sucursal,
+        S.N.FechaCita
+    }).Count();
 
+    }
+    else
+    {
+    Hospital = "GENERAL";
+    Sucursal = Hospital.ToString();
+
+    modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate)/*.OrderByDescending(o => o.M.TipoTramite)*/;
+
+    if (sucursalParametro != null)
+    {
+        modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && s.M.Sucursal == sucursalParametro)/*.OrderByDescending(o => o.M.TipoTramite)*/;
+    }
+
+    registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate).Count();
+
+    }
 }
-else
-{
-Hospital = "GENERAL";
-Sucursal = Hospital.ToString();
-
-modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate)/*.OrderByDescending(o => o.M.TipoTramite)*/;
-
-if (sucursalParametro != null)
-{
-    modelo = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate && s.M.Sucursal == sucursalParametro)/*.OrderByDescending(o => o.M.TipoTramite)*/;
-}
-
-registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new { N = n, M = m }).Where(s => s.M.FechaCita >= thisDate && s.M.FechaCita < tomorrowDate).Count();
-
-}
-}
-
-
 
 }
 
@@ -175,7 +173,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                 <div class="input-group">
                     <input type="text" class="form-control input-g" id="buscador" name="dato" placeholder="Paciente o Expediente">
                     <span class="input-group-btn">
-                        <button class="btn btn-info buscar" id="buscar" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                        <button class="btn btn-info buscar" id="btnCargar" type="button"><span class="glyphicon glyphicon-search"></span></button>
                     </span>
                 </div>
             </div>
@@ -202,7 +200,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
             <div class="input-group pull-right">
                 <input type="text" class="form-control" id="buscador" name="dato" placeholder="Paciente o Expediente">
                 <span class="input-group-btn">
-                    <button class="btn btn-info buscar" id="buscar" type="button"><span class="glyphicon glyphicon-search"></span></button>
+                    <button class="btn btn-info buscar" id="btnCargar" type="button"><span class="glyphicon glyphicon-search"></span></button>
                 </span>
             </div>
         </div>
@@ -220,14 +218,14 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
             cont_controlador = document.getElementById("controlador");
 
             if (cont_checkBox.checked) {
-                cont_textoSeguro.value = "SI";                
+                cont_textoSeguro.value = "SI";
                 cont_controlador.click();
             }
             else {
-                cont_textoSeguro.value  = "NO";
+                cont_textoSeguro.value = "NO";
                 cont_controlador.click();
-            }            
-        }      
+            }
+        }
     </script>
 
     <script>
@@ -254,63 +252,29 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
         input.addEventListener("keydown", function (event) {
             if (event.keyCode === 13) {
                 event.preventDefault();
-                document.getElementById("buscar").click();
+                document.getElementById("btnCargar").click();
             }
         });
     </script>
 
     <script>
-    $(function () {
-        $(".buscar").click(function () {
-            var url = "@Url.Action("buscar", "Recepcion")";
-            var dato = $("#buscador").val();
-            var data = { dato: dato };
+            $(function () {
+                $("#btnCargar").click(function () { //REFERENCIA AL ID DEL BOTON
+                    var url = "@Url.Action("modificacionBuscador", "Recepcion")"; //URL DEL CONTROLADOR Y SU CARPETA A LA CUAL LE VAMOS A PEGAR
+                    var expediente = $("#buscador").val(); //TOMA EL VALOR DEL INPUT CON EL ID BUSCADOR
+                    var ref = { expediente: expediente }; //VARIABLE LOCAL CREADA PARA MANDAR LOS PARAMETROS AL CONTROLADOR
+                    $.get(url, ref).done(function (data) { //MANDA LOS DATOS A LA URL PRESTABLECIDA ANTERIORMENTE CON LOS DATOS (SI ES QUE LOS NECESITA) DE LA VARIABLE CREADA COMO REF, ESTA VARIABLE DEBE CONTENER TODOS LOS PARAMETROS PEDIDOS POR EL CONTROLADOR
+                        $('#tablaEjemploSS').empty();   //ESTA LINEA BORRA LOS DATOS DEL MODAL PARA QUE NO SE DUPLIQUE CADA QUE CONSULTAS
+                        $("#tablaEjemploSS").append(data); //AQUI AGREGAMOS LO ENCONTRADO CON EL CONTROLADOR AL ELEMENTO CON EL ID TABLAEJEMPLOSS
+                        $('#exampleModal5').modal('show'); //EJECUTAMOS EL MODAL CON ID EXAMPLE MODAL5
+                    }).fail(manejarErrorAjax).always(function () { //FUNCION POR SI SE GENERA UN ERROR (ACTUALMENTE SOLO TE MANDA A CONSOLA EL MENSAJE DEL ERROR)
 
-            $.post(url, data).done(function (data) {
-                console.log(data);
-                let miResultado = "";
-                if ($.isEmptyObject(data)) {
-                    miResultado = "<h3>No se encontraron registros!!</h3>"
+                    });
+                });
+                function manejarErrorAjax(err) {
+                    console.log(err.responseText);
                 }
-                else {
-                    miResultado +=  "<tr class=\"bg-primary\"><th>Nombre</th><th>Sucursal</th><th>Tipo Tramite</th><th>Tipo Licencia</th><th>Estatus Dictamen</th><th>Fecha Cita</th><th>Acciones</th></tr>"
-                    for (let i = 0; i < data.length; i++) {
-
-                        if (data[i].EstatusDictamen == null) {
-                            miResultado += "<tr style=\"border:1px solid gray\">" +
-                                "<td><b>" + data[i].Nombre + "</b></td>" +
-                                "<td><b>" + data[i].Sucursal + "</b></td>" +
-                                "<td><b>" + data[i].TipoTramite + "</b></td>" +
-                                "<td><b>" + data[i].TipoLicencia + "</b></td>" +
-                                "<td><b>Pendiente</b></td>" +
-                                "<td><b>" + data[i].FechaCita + "</b></td>" +
-                                "<td><button type=\"button\" class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">Acciones<span class=\"glyphicon glyphicon-triangle-bottom\"></span></button ></td > " +
-                                "</tr>"
-
-                        } else {
-                            miResultado += "<tr style=\"border:1px solid gray\">" +
-                                "<td><b>" + data[i].Nombre + "</b></td>" +
-                                "<td><b>" + data[i].Sucursal + "</b></td>" +
-                                "<td><b>" + data[i].TipoTramite + "</b></td>" +
-                                "<td><b>" + data[i].TipoLicencia + "</b></td>" +
-                                "<td><b>" + data[i].EstatusDictamen + "</b></td>" +
-                                "<td><b>" + data[i].FechaCita + "</b></td>" +
-                                 "<td><button type=\"button\" class=\"btn btn-info dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">Acciones<span class=\"glyphicon glyphicon-triangle-bottom\"></span></button ></td > " +
-                                "</tr>"
-
-                        }
-
-                    }
-                }
-
-                $('#exampleModal5').modal('show');
-                document.getElementById("tablaEjemploSS").innerHTML = miResultado;
-
-            }).fail().always(function () {
-
             });
-        });
-    });
     </script>
 
     @if (TempData["Link"] != null)
@@ -380,7 +344,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 </div>
 
 <div class="modal fade" id="exampleModal5" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="width:70%">
+    <div class="modal-dialog" role="document" style="width:70%; min-height:800px">
         <div class="modal-content">
             <div class="modal-header">
                 <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Resultado de la búsqueda:</b></h3>
@@ -566,10 +530,10 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                             @*CAMPO REQUERIDO PARA SELECTORES*@
                             <div class="form-group" style="width:60%; min-width:320px">
                                 <label for="recipient-name" class="form-select" required>Referido por:</label>
-                                <br/>
-                                <input id="datalistReferido" onchange="triggerListaPrecios()" list="lista" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" required/>
+                                <br />
+                                <input id="datalistReferido" onchange="triggerListaPrecios()" list="lista" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" required />
                                 <datalist id="lista">
-                                    
+
                                     @{
                                         //var gestores2 = from g in db.Usuarios where g.idRol == 10 select g.Nombre;
                                         var referidosGestor = (from r in db.Referido where r.Tipo == "GESTOR" select r).OrderBy(o => o.Nombre);
@@ -616,7 +580,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                     }
                                 </datalist>
 
-                                <input hidden type="text" id="numeroGestor" name="referido"  value="">
+                                <input hidden type="text" id="numeroGestor" name="referido" value="">
 
                                 <script>
                                     $("#datalistReferido").on('input', function () {
@@ -626,9 +590,9 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                     });
                                 </script>
 
-                                <br/>
+                                <br />
 
-                               <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                                <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
                                 <div class="form-group" id="content_checkbox_seguro" style="display: none;">
                                     <label>Usted cuenta con un seguro de 3 meses</label>
                                     <input id='cb_12meses' onclick="usarCheck()" type='checkbox' name="cb_Seguro" value="SI" />
@@ -679,7 +643,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                                             cont_MPJS.style.display = 'none';
                                         }
                                     }
-                                </script>                           
+                                </script>
                             </div>
 
                             <div class="form-group" id="precioTotal" style="display: none;">
@@ -1064,11 +1028,11 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                         }
                     </script>
 
-                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <input type="submit" value="Enviar" class="btn btn-primary" />
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Enviar" class="btn btn-primary" />
+            </div>
         </div>
     </div>
 </div>
@@ -1410,7 +1374,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
                     </script>
 
 
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -1800,7 +1764,7 @@ else
 
                                         if (item.M.TipoLicencia == "AEREO")
                                         {
-                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br/>
+                                            <b>Precio EPI: $</b> @Convert.ToDouble(findPrecio.PrecioAereo).ToString("####.##")<br />
                                         }
                                         else if (item.M.TipoLicencia == "AEREO_PISTA")
                                         {

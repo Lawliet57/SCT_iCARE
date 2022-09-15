@@ -2413,6 +2413,7 @@ namespace SCT_iCare.Controllers.Dictamenes
             PacienteESP paciente = db.PacienteESP.Find(id);
             paciente.EstatusCaptura = "Terminado";
             paciente.Capturista = usuario;
+            paciente.FechaDictamen = DateTime.Now;
 
             if(ModelState.IsValid)
             {
