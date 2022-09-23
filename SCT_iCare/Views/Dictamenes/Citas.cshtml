@@ -356,14 +356,26 @@
                                 }
                             }
                             @*<option disabled>---------IN SITU--------</option>
-                            @{
-                                foreach (var referido in (from i in db.Referido where i.Tipo == "IN SITU" orderby i.Nombre select i))
-                                {
-                                    <option style="font-weight:bold" value="@referido.idReferido">@referido.Nombre</option>
-                                }
-                            }*@
+                @{
+                    foreach (var referido in (from i in db.Referido where i.Tipo == "IN SITU" orderby i.Nombre select i))
+                    {
+                        <option style="font-weight:bold" value="@referido.idReferido">@referido.Nombre</option>
+                    }
+                }*@
 
                         </select>
+
+                    </div>
+
+                    <link href="~/Estilos CSS/CheckBox.css" rel="stylesheet" />
+                    <div class="form-group" id="content_checkbox_IN_SITU">
+                        <label>El paciente es IN SITU?</label>
+                        <input id='cb_IN_SITU' onclick="usarCheck()" type='checkbox' name="cb_IN_SITU" value="SI" />
+                        <label for='cb_IN_SITU'>
+                            <span></span>
+                            IN SITU
+                            <ins><i>IN SITU</i></ins>
+                        </label>
                     </div>
 </div>
             <div class="modal-footer">

@@ -259,7 +259,7 @@ namespace SCT_iCare.Controllers.Dictamenes
         }
 
         [HttpPost]
-        public ActionResult Create1(string nombre, string usuario, /*string sucursal, */string cantidad, string cantidadAereo, int? referido)
+        public ActionResult Create1(string nombre, string usuario, /*string sucursal, */string cantidad, string cantidadAereo, int? referido, string cb_IN_SITU)
         {
             PacienteESP paciente1 = new PacienteESP();
 
@@ -293,6 +293,7 @@ namespace SCT_iCare.Controllers.Dictamenes
                 paciente.FechaSolicitud = DateTime.Now;
                 //paciente.Sucursal = sucursal;
                 paciente.Solicita = usuario;
+                paciente.
 
 
                 string TIPOLIC = null;
