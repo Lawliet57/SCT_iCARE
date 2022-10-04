@@ -63,6 +63,7 @@ namespace SCT_iCare
         public string ConciliarPago { get; set; }
         public string RastreoPagos { get; set; }
         public Nullable<System.DateTime> FechaDictamen { get; set; }
+        public string IN_SITU_BOOL { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartaNoAccidentesESP> CartaNoAccidentesESP { get; set; }

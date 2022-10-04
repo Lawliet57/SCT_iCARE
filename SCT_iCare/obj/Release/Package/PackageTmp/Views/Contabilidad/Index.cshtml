@@ -2106,6 +2106,9 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     Fecha de Captura
                 </th>
                 <th>
+                    Fecha de Dictamen
+                </th>
+                <th>
                     Fecha de Pago Contable
                 </th>
                 <th>
@@ -2185,6 +2188,11 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     @*FECHA DE CAPTURA*@
                     <td>
                         <b>@item.B.FechaExpdiente</b>
+                    </td>
+
+                    @*FECHA DE DICTAMEN*@
+                    <td>
+                        <b>@item.B.FinalCaptura</b>
                     </td>
 
                     @*FECHA DE PAGO CONTABLE*@
@@ -2403,6 +2411,12 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                     <td>
                         <b>@item.FechaCaptura</b>
                     </td>
+
+                    @*FECHA DE DICTAMEN*@
+                    <td>
+                        <b>@item.FechaDictamen</b>
+                    </td>
+
 
                     @*FECHA DE PAGO CONTABLE*@
                     <td>

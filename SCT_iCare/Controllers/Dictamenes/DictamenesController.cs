@@ -293,8 +293,12 @@ namespace SCT_iCare.Controllers.Dictamenes
                 paciente.FechaSolicitud = DateTime.Now;
                 //paciente.Sucursal = sucursal;
                 paciente.Solicita = usuario;
-                paciente.
-
+                paciente.Sucursal = "ALTERNATIVO";
+                
+                if(cb_IN_SITU == "SI")
+                {
+                    paciente.IN_SITU_BOOL = "SI";
+                }
 
                 string TIPOLIC = null;
                 if (cantidadA != 0)

@@ -1066,6 +1066,7 @@
           <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
           <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
           <Property Name="FechaDictamen" Type="datetime" />
+          <Property Name="IN_SITU_BOOL" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -4030,6 +4031,7 @@
           <NavigationProperty Name="HemoglobinaGlucosiladaESP" Relationship="DevModel.FK_HemoglobinaGlucosiladaESP_PacienteESP" FromRole="PacienteESP" ToRole="HemoglobinaGlucosiladaESP" />
           <NavigationProperty Name="HuellasESP" Relationship="DevModel.FK_HuellasESP_PacienteESP" FromRole="PacienteESP" ToRole="HuellasESP" />
           <NavigationProperty Name="MovimientosAudio" Relationship="DevModel.FK_MovimientosAudio_PacienteESP" FromRole="PacienteESP" ToRole="MovimientosAudio" />
+          <Property Name="IN_SITU_BOOL" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="PacienteGA">
           <Key>
@@ -6212,6 +6214,7 @@
           <EntitySetMapping Name="PacienteESP">
             <EntityTypeMapping TypeName="DevModel.PacienteESP">
               <MappingFragment StoreEntitySet="PacienteESP">
+                <ScalarProperty Name="IN_SITU_BOOL" ColumnName="IN_SITU_BOOL" />
                 <ScalarProperty Name="FechaDictamen" ColumnName="FechaDictamen" />
                 <ScalarProperty Name="RastreoPagos" ColumnName="RastreoPagos" />
                 <ScalarProperty Name="ConciliarPago" ColumnName="ConciliarPago" />

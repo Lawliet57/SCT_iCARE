@@ -671,12 +671,20 @@ else
                         Fecha Cap
                     </th>
 
+                    <th>
+                        Fecha Dictamen
+                    </th>
+
+                    <th>
+                        IN SITU
+                    </th>
+
                 </tr>
             </thead>
 
 
             @foreach (var item in episHoy)
-               {
+            {
                     <tr>
                         <td>
                             <b>@item.Nombre</b>
@@ -755,6 +763,28 @@ else
                                 var fechaPlasmada = Convert.ToDateTime(item.FechaCaptura);
                             <b>@fechaPlasmada</b> 
                                 }
+                        </td>
+
+                        @{
+                                if (item.FechaDictamen != null)
+                                {
+                                    <td>   
+                                        @{ 
+                                            var fechadictamen = Convert.ToDateTime(item.FechaDictamen);
+                                                <b>@fechadictamen</b>
+                                            }
+                                    </td>
+                                }
+
+                                 else
+                                 {
+                                       <td>
+
+                                       </td>         
+                                 }
+                            }
+                        <td>
+                            <b>@item.IN_SITU_BOOL</b>
                         </td>
 
                     </tr>

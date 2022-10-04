@@ -51,13 +51,6 @@
     <Property Name="Foto" Type="varbinary(max)" />
     <Property Name="idPaciente" Type="int" />
   </EntityType>
-  <!--Errores durante la generación:
-advertencia 6013: La tabla o vista 'Dev.dbo.Cadena' no tiene definida una clave principal y no es posible inferir ninguna clave principal válida. Esta tabla o vista se ha excluido. Para usar la entidad, necesitará revisar el esquema, agregar las claves correctas y quitar sus comentarios.
-        <EntityType Name="Cadena">
-          <Property Name="Cadena" Type="varchar(max)" />
-        </EntityType>-->
-  <!--Errores durante la generación:
-advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
   <EntityType Name="CallCenter">
     <Key>
       <PropertyRef Name="idCallCenter" />
@@ -1068,6 +1061,7 @@ advertencia 6002: La tabla o vista 'Dev.dbo.CadenaSplit' no tiene definida ningu
     <Property Name="ConciliarPago" Type="varchar" MaxLength="5" />
     <Property Name="RastreoPagos" Type="varchar" MaxLength="50" />
     <Property Name="FechaDictamen" Type="datetime" />
+    <Property Name="IN_SITU_BOOL" Type="varchar" MaxLength="5" />
   </EntityType>
   <EntityType Name="PacienteGA">
     <Key>
