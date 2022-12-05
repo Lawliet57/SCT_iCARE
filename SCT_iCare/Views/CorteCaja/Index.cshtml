@@ -1,0 +1,208 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+
+    var oUser = (Usuarios)HttpContext.Current.Session["User"];
+
+    GMIEntities db = new GMIEntities();
+    System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+
+    string sucursalParametro = ViewBag.Sucursal;
+
+    var Recepcion = new int?();
+    var Hospital = "";
+    var idHospital = 0;
+    string Sucursal = null;
+    int idUser = 14;
+    string nombreUsuario = null;
+    string fila = "";
+    int registros;
+    int? idRol = 0;
+    DateTime fechaHoy = DateTime.Now;
+    DateTime fechaInicioDia = DateTime.Today.AddMinutes(-1);
+    DateTime fechaFinalDia = DateTime.Today.AddDays(1);
+
+    var modelo = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.FechaCita >= fechaInicioDia &&
+s.A.M.FechaCita <= fechaFinalDia).OrderBy(o => o.A.M.Cuenta);
+
+    int modelocount = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
+Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+Where(s => s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.FechaCita >= fechaInicioDia &&
+s.A.M.FechaCita <= fechaFinalDia).Count();
+
+    if (oUser != null)
+    {
+        idUser = oUser.idUsuario;
+        nombreUsuario = oUser.Nombre;
+        idRol = oUser.idRol;
+
+        if (idUser != 14 && oUser.idRol != 2)
+        {
+            Recepcion = (from r in db.Recepcionista where r.idUsuario == idUser select r.idSucursal).FirstOrDefault();
+            Hospital = (from h in db.Sucursales where h.idSucursal == Recepcion select h.Nombre).FirstOrDefault();
+            idHospital = (from h in db.Sucursales where h.idSucursal == Recepcion select h.idSucursal).FirstOrDefault();
+            Sucursal = Hospital.ToString();
+
+
+        }
+        else
+        {
+            Hospital = "GENERAL";
+            Sucursal = Hospital.ToString();
+        }
+    }
+}
+
+<br />
+<h3 style="color:#AC9070" class="text-center">@Sucursal, <span style="color:white"><a style="text-decoration:none; color:white; cursor:pointer" onclick="location.href='@Url.Action("NextDay", "Recepcion")'">@DateTime.Now.ToString("dd-MMMM-yyyy")</a></span></h3>
+<h2 style="color: white">Corte de Caja</h2>
+<br />
+
+<button type="button" class="btn btn-success" data-toggle="modal" data-target="#CorteCaja"><span class="glyphicon glyphicon-plus"></span> Generar Corte de Caja</button>
+
+@*REGISTRAR CITA*@
+<div class="modal fade" id="CorteCaja" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title text-primary" id="exampleModalLabel"><b>Generar corte de caja del día @fechaHoy.ToString("dd-MMMM-yyyy")</b></h3>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" enctype="multipart/form-data" action="@Url.Content("~/CorteCaja/GenerarCorte")">
+                    @Html.AntiForgeryToken()
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: Transferencia BanBajio</label>
+                    </div>
+                    @*T BB*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: Referencia BanBajio</label>
+                    </div>
+                    @*R BB*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: Referencia OXXO</label>
+                    </div>
+                    @*Referencia OXXO*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: BANORTE</label>
+                    </div>
+                    @*BANORTE*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: SCOTIABANK</label>
+                    </div>
+                    @*SCOTIANBANK*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: MERCADO PAGO</label>
+                    </div>
+                    @*MERCADO PAGO*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: BANCOPPEL TLS</label>
+                    </div>
+                    @*BANCOPPEL TLS*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: BANCOPPEL LS</label>
+                    </div>
+                    @*BANCOPPEL LS*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: BANCO AZTECA TLS</label>
+                    </div>
+                    @*BANCO AZTECA TLS*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                    <div class="form-inline">
+                        <label for="recipient-name" class="col-form-label">Tipo de pago: BANCO AZTECA LS</label>
+                    </div>
+                    @*BANCO AZTECA LS*@
+                    <div class="form-inline">
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa cantidad de EPI´s">
+                        <br />
+                        <br />
+                        <input style="display:inline-block; min-width:220px" type="number" class="form-control" id="contador" min="0" name="cantidad" placeholder="Ingresa monto de EPI´s">
+                        <br />
+                    </div>
+                    <br />
+                </form>
+             </div>
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <input type="submit" value="Enviar" class="btn btn-primary" />
+            </div>
+
+        </div>
+    </div>
+</div>

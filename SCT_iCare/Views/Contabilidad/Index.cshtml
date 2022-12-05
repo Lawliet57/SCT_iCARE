@@ -44,11 +44,15 @@
         Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
         && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).OrderBy(o => o.Cuenta);
 
+    var modelo1c = db.PacienteESP.
+      Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
+      && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null).Count();
+
 
     var modeloExcel = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
-        Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-        Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
-        && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
+Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+&& s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN").OrderBy(o => o.A.M.Cuenta);
 
     var modeloExcel1 = db.PacienteESP.
         Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
@@ -88,15 +92,21 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
 
 
-        modelo1 = db.PacienteESP.
-           Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
-           && s.TipoTramite != "REVALORACIÓN" && s.Asistencia == null && s.Conciliado == null).OrderBy(o => o.Cuenta);
+        modelo1 = (from e in db.PacienteESP
+                   where e.ReferidoPor == referido && (e.FechaCita >= fechaInicio || e.FechaCaptura >= fechaInicio)
+              && e.FechaCita < fechaFinal && e.EstatusCaptura == "Terminado" && e.TipoTramite != "Revaloración"
+                   select e).OrderBy(o => o.Cuenta);
+
+        modelo1c = (from e in db.PacienteESP
+                    where e.ReferidoPor == referido && (e.FechaCita >= fechaInicio || e.FechaCaptura >= fechaInicio)
+               && e.FechaCita < fechaFinal && e.EstatusCaptura == "Terminado" && e.TipoTramite != "Revaloración"
+                    select e).Count();
 
 
         modeloExcel = db.Paciente.Join(db.Cita, n => n.idPaciente, m => m.idPaciente, (n, m) => new { N = n, M = m }).
-           Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
-           Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
-           && s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
+Join(db.Captura, a => a.M.idPaciente, b => b.idPaciente, (a, b) => new { A = a, B = b }).
+Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B.EstatusCaptura == "Terminado" && s.A.M.Asistencia == null
+&& s.A.M.Asistencia == null && s.A.M.TipoTramite != "REVALORACIÓN" && s.A.M.Conciliado == null).OrderBy(o => o.A.M.Cuenta);
 
         modeloExcel1 = db.PacienteESP.
            Where(s => s.ReferidoPor.Contains(referido) && s.CanalTipo.Contains(tipoReferido) && s.FechaCaptura >= fechaInicio && s.FechaCaptura < fechaFinal && s.EstatusCaptura == "Terminado"
@@ -172,6 +182,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         modelo = modelo.Where(w => w.A.M.CanalTipo == canal).OrderBy(o => o.A.M.Cuenta);
         modelo1 = modelo1.Where(w => w.CanalTipo == canal).OrderBy(o => o.Cuenta);
+        modelo1c = modelo1.Where(w => w.CanalTipo == canal).Count();
         modeloExcel = modeloExcel.Where(w => w.A.M.CanalTipo == canal).OrderBy(o => o.A.M.Cuenta);
         modeloExcel1 = modeloExcel1.Where(w => w.CanalTipo == canal).OrderBy(o => o.Cuenta);
     }
@@ -210,6 +221,7 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
 
         modelo = modelo.Where(w => w.A.M.ReferidoPor.Contains(referido)).OrderBy(o => o.A.M.Cuenta);
         modelo1 = modelo1.Where(w => w.ReferidoPor.Contains(referido)).OrderBy(o => o.Cuenta);
+        modelo1c = modelo1.Where(w => w.ReferidoPor == "ELIZABETH").Count();
         modeloExcel = modeloExcel.Where(w => w.A.M.ReferidoPor.Contains(referido)).OrderBy(o => o.A.M.Cuenta);
         modeloExcel1 = modeloExcel1.Where(w => w.ReferidoPor.Contains(referido)).OrderBy(o => o.Cuenta);
 
@@ -688,57 +700,61 @@ Where(s => s.A.M.FechaCita >= fechaInicio && s.A.M.FechaCita < fechaFinal && s.B
                                 if (oUser.Nombre != "Maribel Hernandez")
                                 {
 
-                                    if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora" || oUser.Nombre == "Jessica Bustos" || oUser.Nombre == "Teresa Lozano " || oUser.Nombre == "Ramon Reyna")
-                                    {
-                                        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
-                                        </button>
+                                    if(item.A.M.Conciliado == null)
+                                    { 
+                                            if (oUser.idRol == 2 || oUser.Nombre == "José Luis Mora" || oUser.Nombre == "Jessica Bustos" || oUser.Nombre == "Teresa Lozano " || oUser.Nombre == "Ramon Reyna")
+                                            {
+                                                <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Acciones <span class="glyphicon glyphicon-triangle-bottom"></span>
+                                                </button>
 
-                                        <div class="dropdown-menu" style="padding:10px">
-                                            @*@{
-                                                    var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
+                                                <div class="dropdown-menu" style="padding:10px">
+                                                    @*@{
+                                                            var consultaTicket = (from i in db.Tickets where i.idPaciente == item.A.M.idPaciente select i.idTicket).FirstOrDefault();
 
-                                                    if (consultaTicket != 0)
-                                                    {
-                                                        <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
-                                                    }
-                                                }*@
-                                            <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" data-toggle="modal" data-target="#Conekta_@item.A.M.idCita"><b>Conekta</b></a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" data-toggle="modal" data-target="#Anticipos_@item.A.M.idCita"><b>Anticipos</b></a>
-                                            <div class="dropdown-divider"></div>
-                                            <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
-                                            <div class="dropdown-divider"></div>
-                                            @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
-                                                <div class="dropdown-divider"></div>*@
-                                            @{
-                                                if (item.A.M.Cuenta != "ACLARACIONES")
-                                                {
-                                                    <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
+                                                            if (consultaTicket != 0)
+                                                            {
+                                                                <b>@Html.ActionLink("Ticket de Pago", "AbrirTicket", new { id = consultaTicket }, new { style = "color: crimson; text-decoration: none" })</b>
+                                                            }
+                                                        }*@
+                                                    <a href="#" data-toggle="modal" data-target="#Prueba_@item.A.M.idCita"><b style="color:red">Abrir Ticket</b></a>
                                                     <div class="dropdown-divider"></div>
-                                                }
-                                            }
-
-                                            @{
-                                                if (oUser.idRol == 2 || oUser.Nombre == "Flavio Rodrigo")
-                                                {
-                                                    if (item.A.M.Cuenta == "ACLARACIONES")
-                                                    {
-                                                        <a href="#" data-toggle="modal" data-target="#Aclaraciones_Resueltas_@item.A.M.idCita"><b>Aclaraciones Resueltas</b></a>
-                                                        <div class="dropdown-divider"></div>
+                                                    <a href="#" data-toggle="modal" data-target="#Efectivo_@item.A.M.idCita"><b>Bancos</b></a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a href="#" data-toggle="modal" data-target="#Conekta_@item.A.M.idCita"><b>Conekta</b></a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a href="#" data-toggle="modal" data-target="#Anticipos_@item.A.M.idCita"><b>Anticipos</b></a>
+                                                    <div class="dropdown-divider"></div>
+                                                    <a href="#" data-toggle="modal" data-target="#CXC_@item.A.M.idCita"><b>CuentasXCobrar</b></a>
+                                                    <div class="dropdown-divider"></div>
+                                                    @*<a href="#" data-toggle="modal" data-target="#Corporativo_@item.A.M.idCita"><b>Corporativo</b></a>
+                                                        <div class="dropdown-divider"></div>*@
+                                                    @{
+                                                        if (item.A.M.Cuenta != "ACLARACIONES")
+                                                        {
+                                                            <a href="#" data-toggle="modal" data-target="#Aclaracion_@item.A.M.idCita"><b>Aclaracion</b></a>
+                                                            <div class="dropdown-divider"></div>
+                                                        }
                                                     }
-                                                }
+
+                                                    @{
+                                                        if (oUser.idRol == 2 || oUser.Nombre == "Flavio Rodrigo")
+                                                        {
+                                                            if (item.A.M.Cuenta == "ACLARACIONES")
+                                                            {
+                                                                <a href="#" data-toggle="modal" data-target="#Aclaraciones_Resueltas_@item.A.M.idCita"><b>Aclaraciones Resueltas</b></a>
+                                                                <div class="dropdown-divider"></div>
+                                                            }
+                                                        }
+                                                    }
+                                                    <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
+                                                    <div class="dropdown-divider"></div>
+                                                    @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
+                                                        <div class="dropdown-divider"></div>*@
+                                                </div>
                                             }
-                                            <a href="#" data-toggle="modal" data-target="#Devoluciones_@item.A.M.idCita"><b>Devoluciones</b></a>
-                                            <div class="dropdown-divider"></div>
-                                            @*<a href="#" data-toggle="modal" data-target="#CONCILIADO_@item.A.M.idPaciente"><b>CONCILIADO</b></a>
-                                                <div class="dropdown-divider"></div>*@
-                                        </div>
                                     }
+
 
                                     else if (item.A.M.Conciliado != null && (item.A.M.Cuenta == "BANCOS" || item.A.M.Cuenta == "CONEKTA"))
                                     {

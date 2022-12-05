@@ -283,6 +283,7 @@
     <Compile Include="Controllers\ConsultaDictamenController.cs" />
     <Compile Include="Controllers\Contabilidad\ContabilidadController.cs" />
     <Compile Include="Controllers\ControlDictamen\ControlDictamenController.cs" />
+    <Compile Include="Controllers\CorteCaja\CorteCajaController.cs" />
     <Compile Include="Controllers\Dictamenes\DictamenesController.cs" />
     <Compile Include="Controllers\DoctorSalud\DoctorSaludController.cs" />
     <Compile Include="Controllers\EPICenter\CapturaIncidenciaController.cs" />
@@ -928,6 +929,7 @@
     <Content Include="Views\Recepcion\VentanaPago.cshtml" />
     <Content Include="Views\Recepcion\_Modificacion.cshtml" />
     <Content Include="Views\Recepcion\_NoEncontrados.cshtml" />
+    <Content Include="Views\CorteCaja\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
