@@ -23,7 +23,6 @@
     {
         noExpediente = TempData["Expediente"].ToString();
         idRepetido = TempData["id"].ToString();
-
     }
 
     int flag = 1; //contador de la tabla
@@ -332,17 +331,17 @@
                         <input type="text" class="form-control" id="nombre" name="nombre" required />
                     </div>
                     @*<div class="form-group" style="width:60%; min-width:320px">
-            <label for="recipient-name" class="col-form-label">Sucursal:</label>
-            <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
-                @{
-                    var sucursalesOption = from s in db.Sucursales select s.Nombre;
-                    foreach (var opcion in sucursalesOption)
-                    {
-                        <option value="@opcion">@opcion</option>
-                    }
-                }
-            </select>
-        </div>*@
+                            <label for="recipient-name" class="col-form-label">Sucursal:</label>
+                            <select name="sucursal" style="width:100%; min-height:5vh; min-width:99%; font-size:2vh" class="form-select">
+                                @{
+                                    var sucursalesOption = from s in db.Sucursales select s.Nombre;
+                                    foreach (var opcion in sucursalesOption)
+                                    {
+                                        <option value="@opcion">@opcion</option>
+                                    }
+                                }
+                            </select>
+                        </div>*@
                     <input type="hidden" value="@nombreUsuario" name="usuario" />
                     <div class="form-group" style="width:60%; min-width:320px">
                         <label for="recipient-name" class="col-form-label">Referido Por:</label>
@@ -356,12 +355,12 @@
                                 }
                             }
                             @*<option disabled>---------IN SITU--------</option>
-                @{
-                    foreach (var referido in (from i in db.Referido where i.Tipo == "IN SITU" orderby i.Nombre select i))
-                    {
-                        <option style="font-weight:bold" value="@referido.idReferido">@referido.Nombre</option>
-                    }
-                }*@
+                                @{
+                                    foreach (var referido in (from i in db.Referido where i.Tipo == "IN SITU" orderby i.Nombre select i))
+                                    {
+                                        <option style="font-weight:bold" value="@referido.idReferido">@referido.Nombre</option>
+                                    }
+                                }*@
 
                         </select>
 
@@ -377,7 +376,7 @@
                             <ins><i>IN SITU</i></ins>
                         </label>
                     </div>
-</div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <input type="submit" value="Enviar" class="btn btn-primary" />
@@ -474,7 +473,32 @@
     };
 
     calcular0();
+
+
 </script>
+
+<script>
+    function pruebas() {
+        alert("Hola Mundo");
+
+        //Code to Test
+
+        alert("Adios Mundo Cruel");
+    }
+
+    function inicioSCRL() {
+        document.getElementById('tbscrol').scrollTop = 0;
+    }
+
+    function middleSCRL() {
+        document.getElementById('tbscrol').scrollTop = document.getElementById('tbscrol').scrollHeight / 2;
+    }
+
+    function finSCRL() {
+        document.getElementById('tbscrol').scrollTop = document.getElementById('tbscrol').scrollHeight;
+    }
+</script>
+
 
 
 @if (modelo.FirstOrDefault() == null)
@@ -484,9 +508,15 @@
 }
 else
 {
-    <div class="tablaScroll">
+    <!--
+    <input type="button" value="Inicio" onclick="inicioSCRL();">
+    <input type="button" value="Medio" onclick="middleSCRL();">
+    <input type="button" value="Fin" onclick="finSCRL();"> -->
+
+    <div class="tablaScroll" name="tbscrol" id="tbscrol">
         <br />
         <table class="table tablas" style="color: #2F2D6B">
+
             <thead>
                 <tr class="bg-primary" style="border-top-color: black; font-size:smaller">
                     <th>
@@ -770,27 +800,27 @@ else
                                             <a href="#" data-toggle="modal" data-target="#CompletarDatos_@item.idPacienteESP"><b>Editar Datos</b></a>
                                             <div class="dropdown-divider"></div>
                                             @*<a href="#" data-toggle="modal" data-target="#DescargarEPI_@item.idPacienteESP"><b>Descargar EPI</b></a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" data-toggle="modal" data-target="#DescargarEKG_@item.idPacienteESP">Electrocardiograma</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" data-toggle="modal" data-target="#DescargarDocumentos_@item.idPacienteESP">Documentación</a>
-                        <div class="dropdown-divider"></div>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" data-toggle="modal" data-target="#DescargarEKG_@item.idPacienteESP">Electrocardiograma</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="#" data-toggle="modal" data-target="#DescargarDocumentos_@item.idPacienteESP">Documentación</a>
+                                                <div class="dropdown-divider"></div>
 
-                        if (revisionCartaNO2 != null)
-                        {
-                            <a href="#" data-toggle="modal" data-target="#DescargarNoAccidentes_@item.idPacienteESP">Carta NoAccidentes</a>
-                            <div class="dropdown-divider"></div>
-                        }
-                        if (revisionDeclaracion2 != null)
-                        {
-                            <a href="#" data-toggle="modal" data-target="#DescargarDeclaracionSalud_@item.idPacienteESP">Declaración Salud</a>
-                            <div class="dropdown-divider"></div>
-                        }
-                        if (revisionGlucosilada2 != null)
-                        {
-                            <a href="#" data-toggle="modal" data-target="#DescargarGlucosilada_@item.idPacienteESP">H. Glucosilada</a>
-                            <div class="dropdown-divider"></div>
-                        }*@
+                                                if (revisionCartaNO2 != null)
+                                                {
+                                                    <a href="#" data-toggle="modal" data-target="#DescargarNoAccidentes_@item.idPacienteESP">Carta NoAccidentes</a>
+                                                    <div class="dropdown-divider"></div>
+                                                }
+                                                if (revisionDeclaracion2 != null)
+                                                {
+                                                    <a href="#" data-toggle="modal" data-target="#DescargarDeclaracionSalud_@item.idPacienteESP">Declaración Salud</a>
+                                                    <div class="dropdown-divider"></div>
+                                                }
+                                                if (revisionGlucosilada2 != null)
+                                                {
+                                                    <a href="#" data-toggle="modal" data-target="#DescargarGlucosilada_@item.idPacienteESP">H. Glucosilada</a>
+                                                    <div class="dropdown-divider"></div>
+                                                }*@
 
                                             if (item.Metra == null)
                                             {
@@ -1132,10 +1162,10 @@ else
                                             </div>
                                         </div>
                                     </form>
-                                                            }
-                                                            else if (TempData["Expediente"] != null)
-                                                            {
-                                                                var pacienteRepetido = (from i in db.PacienteESP where i.NoExpediente == noExpediente orderby i.idPacienteESP descending select i).FirstOrDefault();
+                                }
+                                else if (TempData["Expediente"] != null)
+                                {
+                                    var pacienteRepetido = (from i in db.PacienteESP where i.NoExpediente == noExpediente orderby i.idPacienteESP descending select i).FirstOrDefault();
                                     <div class="modal fade" id="repetido2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                             <div class="modal-content">

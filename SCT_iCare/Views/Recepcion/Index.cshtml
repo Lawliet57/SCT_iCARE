@@ -114,7 +114,7 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
     <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#exampleModal2"><span class="glyphicon glyphicon-plus"></span> Crear Referecia de Pago</button>*@
 
 @{
-    if (idRol == 2)
+    if (idRol == 2 || nombreUsuario == "Monserrat Morones")
     {
         if (ViewBag.Estado == 1)
         {
@@ -125,20 +125,27 @@ registros = db.Paciente.Join(db.Cita, n => n.Folio, m => m.Folio, (n, m) => new 
 
                 <select name="sucursal" style="font-size:2vh" class="form-select">
                     @{
-                        if (sucursalParametro != null)
+
+                        if (idRol == 2)
                         {
+                            if (sucursalParametro != null)
+                            {
                             <option style="font-weight:bold" value="@sucursalParametro" selected>@sucursalParametro</option>
+                            }
+                            else
+                            {
+                                <option style="font-weight:bold" value="" selected disabled>Sucursal</option>
+                            }                            
+                        
+                            foreach (var item in db.Sucursales)
+                            {
+                                <option style="font-weight:bold" value="@item.Nombre" selected>@item.Nombre</option>
+                            }
                         }
                         else
                         {
-                            <option style="font-weight:bold" value="" selected disabled>Sucursal</option>
+                            <option style="font-weight:bold" value="@Sucursal">@Sucursal</option>
                         }
-
-                        foreach (var item in db.Sucursales)
-                        {
-                            <option style="font-weight:bold" value="@item.Nombre">@item.Nombre</option>
-                        }
-
                     }
                 </select>
                 &nbsp;
@@ -2105,7 +2112,7 @@ else
 
                             <div class="dropdown-menu" style="padding:10px">
                                 @{
-                                    if (oUser.idRol == 2)
+                                    if (oUser.idRol == 2 || oUser.Nombre == "Monserrat Morones")
                                     {
                                         <a href="#" data-toggle="modal" data-target="#ModalGestor_@item.M.idPaciente"><b>Modificar Datos</b></a>
                                         <div class="dropdown-divider"></div>
